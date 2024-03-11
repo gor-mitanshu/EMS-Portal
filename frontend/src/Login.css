@@ -1,0 +1,41 @@
+/* full conatiner */
+.login-container {
+  width: 100%;
+  height: 100vh;
+}
+
+/* Form */
+.login-form {
+  width: 25%;
+  height: 100%;
+  position: relative;
+}
+
+.login-box {
+  padding: 3rem;
+  background: white;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Background */
+.login-bg-wrapper {
+  position: relative;
+  height: 100%;
+  width: 75%;
+}
+.login-bg {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-image: url("./assets/authbg.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.background-color {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.5);
+}
