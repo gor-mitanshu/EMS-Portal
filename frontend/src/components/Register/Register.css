@@ -1,17 +1,17 @@
-/* full conatiner */
-.login-container {
+/* full container */
+.register-container {
   width: 100%;
   height: 100vh;
 }
 
 /* Form */
-.login-form {
-  width: 25%;
+.register-form {
+  width: 30%;
   height: 100%;
   position: relative;
 }
 
-.login-box {
+.register-box {
   padding: 3rem;
   background: white;
   display: flex;
@@ -19,16 +19,16 @@
 }
 
 /* Background */
-.login-bg-wrapper {
+.register-bg-wrapper {
   position: relative;
-  height: 100%;
-  width: 75%;
+  width: 70%;
 }
-.login-bg {
+
+.register-bg {
   position: absolute;
   width: 100%;
   height: 100%;
-  background-image: url("./assets/authbg.jpg");
+  background-image: url("../../assets/authbg.jpg");
   background-size: cover;
   background-repeat: no-repeat;
 }
@@ -37,5 +37,5 @@
   width: 100%;
   height: 100%;
   position: absolute;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.4);
 }
