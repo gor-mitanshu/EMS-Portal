@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import axios from "axios";
 
 const StepOne = ({
@@ -9,8 +9,11 @@ const StepOne = ({
   setErrors,
 }) => {
   const { firstName, lastName, email, phone, password } = formDataStep1;
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const validateStep1 = async () => {
+    setIsSubmitting(true);
+
     let formIsValid = true;
     const newErrors = { ...errors };
 
@@ -64,6 +67,7 @@ const StepOne = ({
     }
 
     setErrors(newErrors);
+    setIsSubmitting(false);
   };
 
   const handleFieldFocus = (fieldName) => {
@@ -167,10 +171,10 @@ const StepOne = ({
             <button
               type="button"
               className="btn btn-primary"
-              // disabled={!isStep1Valid}
+              disabled={isSubmitting}
               onClick={validateStep1}
             >
-              Next
+              {isSubmitting ? "Submitting..." : "Next"}
             </button>
           </div>
         </form>

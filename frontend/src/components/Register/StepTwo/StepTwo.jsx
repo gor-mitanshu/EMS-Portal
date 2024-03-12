@@ -1,6 +1,7 @@
+import React, { useState } from "react";
 import axios from "axios";
-import React from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const StepTwo = ({
   formDataStep2,
@@ -11,10 +12,12 @@ const StepTwo = ({
 }) => {
   const { companyName, companySize, employeeStrength } = formDataStep2;
   const navigate = useNavigate();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const validateStep2 = async (e) => {
     e.preventDefault();
-    debugger;
+    setIsSubmitting(true);
+
     let formIsValid = true;
     const newErrors = { ...errors };
 
@@ -38,11 +41,10 @@ const StepTwo = ({
     } else {
       newErrors.employeeStrength = "";
     }
-    console.log(formIsValid);
+
     if (formIsValid) {
       try {
         const user_id = localStorage.getItem("user_id");
-        console.log(user_id);
         const body = { companyName, companySize, employeeStrength, user_id };
         const res = await axios.post(
           `${process.env.REACT_APP_API}/company/signup`,
@@ -51,11 +53,13 @@ const StepTwo = ({
         if (res && res.data.success === true) {
           console.log(res);
           navigate("/login");
+          toast.success(res.data.message);
         }
       } catch (error) {}
     }
 
     setErrors(newErrors);
+    setIsSubmitting(false);
   };
 
   const handleFieldFocus = (fieldName) => {
@@ -81,6 +85,7 @@ const StepTwo = ({
               onFocus={() => handleFieldFocus("companyName")}
               placeholder="Enter Your Company Name"
             />
+            <div className="invalid-feedback">{errors.companyName}</div>
           </div>
           <div className="mb-3">
             <label htmlFor="exampleInputCompanySize">Company Size</label>
@@ -96,6 +101,7 @@ const StepTwo = ({
               onFocus={() => handleFieldFocus("companySize")}
               placeholder="Enter Your Company Size"
             />
+            <div className="invalid-feedback">{errors.companySize}</div>
           </div>
           <div className="mb-3">
             <label htmlFor="exampleInputEmployeeStrength">
@@ -113,6 +119,7 @@ const StepTwo = ({
               onFocus={() => handleFieldFocus("employeeStrength")}
               placeholder="Enter Your Employee Strength"
             />
+            <div className="invalid-feedback">{errors.employeeStrength}</div>
           </div>
           <div className="mb-3">
             <button
@@ -123,8 +130,12 @@ const StepTwo = ({
             >
               Back
             </button>
-            <button type="submit" className="btn btn-primary">
-              Submit
+            <button
+              type="submit"
+              className="btn btn-primary"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? "Submitting..." : "Submit"}
             </button>
           </div>
         </form>
