@@ -7,6 +7,7 @@
 /* Form */
 .login-form {
   width: 25%;
+  min-width: 330px;
   height: 100%;
   position: relative;
 }
@@ -23,6 +24,7 @@
   position: relative;
   height: 100%;
   width: 75%;
+  max-width: calc(100% - 330px);
 }
 .login-bg {
   position: absolute;

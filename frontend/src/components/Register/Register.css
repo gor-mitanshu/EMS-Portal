@@ -6,7 +6,8 @@
 
 /* Form */
 .register-form {
-  width: 30%;
+  width: 25%;
+  min-width: 330px;
   height: 100%;
   position: relative;
 }
@@ -21,7 +22,9 @@
 /* Background */
 .register-bg-wrapper {
   position: relative;
-  width: 70%;
+  height: 100%;
+  width: 75%;
+  max-width: calc(100% - 330px);
 }
 
 .register-bg {
