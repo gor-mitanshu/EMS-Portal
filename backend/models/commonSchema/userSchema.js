@@ -11,13 +11,11 @@ const UserRole = {
 
 // Schema setup
 const User = new mongoose.Schema({
-     name: { type: String, required: true },
+     firstName: { type: String, required: true },
+     lastName: { type: String, required: true },
      email: { type: String, required: true, unique: true },
      phone: { type: String },
-     is_verified: {
-          email: { type: Boolean, default: false },
-          phone: { type: Boolean, default: false }
-     },
+     is_email_verified: { type: Boolean, default: false },
      verification_token: { type: String },
      role: { type: String, enum: ['company', 'employee', 'hr', 'admin'], required: true },
      password: { type: String, required: true },

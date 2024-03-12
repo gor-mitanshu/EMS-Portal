@@ -1,23 +1,16 @@
-import React, { useState } from "react";
+import React from "react";
+import axios from "axios";
 
 const StepOne = ({
   formDataStep1,
   handleChangeStep1,
-  // handleEmailVerify,
-  // emailVerified,
-  isStep1Valid,
   handleNextStep,
+  errors,
+  setErrors,
 }) => {
-  const [errors, setErrors] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: "",
-  });
+  const { firstName, lastName, email, phone, password } = formDataStep1;
 
-  const { firstName, lastName, email, phone } = formDataStep1;
-
-  const validateStep1 = () => {
+  const validateStep1 = async () => {
     let formIsValid = true;
     const newErrors = { ...errors };
 
@@ -49,15 +42,32 @@ const StepOne = ({
       newErrors.phone = "";
     }
 
-    // if (!emailVerified) {
-    //   newErrors.email = "Please Verify Your Email";
-    //   formIsValid = false;
-    // }
-
-    if (formIsValid) {
-      handleNextStep();
+    if (!password) {
+      newErrors.password = "Please Enter a Password";
+      formIsValid = false;
+    } else {
+      newErrors.password = "";
     }
 
+    if (formIsValid) {
+      try {
+        const body = { firstName, lastName, email, phone, password };
+        const res = await axios.post(
+          `${process.env.REACT_APP_API}/company/signup`,
+          body
+        );
+        if (res && res.data.success === true) {
+          localStorage.setItem("user_id", res.data.userData._id);
+          handleNextStep();
+        }
+      } catch (error) {}
+    }
+
+    setErrors(newErrors);
+  };
+
+  const handleFieldFocus = (fieldName) => {
+    const newErrors = { ...errors, [fieldName]: "" };
     setErrors(newErrors);
   };
 
@@ -69,58 +79,50 @@ const StepOne = ({
             <label htmlFor="exampleInputFirstName">First Name</label>
             <input
               type="text"
-              className="form-control"
+              className={`form-control ${errors.firstName ? "is-invalid" : ""}`}
               id="exampleInputFirstName"
               name="firstName"
               value={firstName}
               onChange={handleChangeStep1}
+              onFocus={() => handleFieldFocus("firstName")}
               placeholder="Enter Your First Name"
             />
-            <div className="text-danger">{errors.firstName}</div>
+            <div className="invalid-feedback">{errors.firstName}</div>
           </div>
+
           <div className="mb-3">
             <label htmlFor="exampleInputLastName">Last Name</label>
             <input
               type="text"
-              className="form-control"
+              className={`form-control ${errors.lastName ? "is-invalid" : ""}`}
               id="exampleInputLastName"
               name="lastName"
               value={lastName}
               onChange={handleChangeStep1}
+              onFocus={() => handleFieldFocus("lastName")}
               placeholder="Enter Your Last Name"
             />
-            <div className="text-danger">{errors.lastName}</div>
+            <div className="invalid-feedback">{errors.lastName}</div>
           </div>
+
           <div className="mb-3">
             <label htmlFor="exampleInputEmail1">Email</label>
             <div className="input-group">
               <input
                 type="email"
-                className="form-control"
+                className={`form-control ${errors.email ? "is-invalid" : ""}`}
                 id="exampleInputEmail1"
                 aria-describedby="emailHelp"
                 name="email"
                 value={email}
                 onChange={handleChangeStep1}
+                onFocus={() => handleFieldFocus("email")}
                 placeholder="Enter Your Email"
               />
-              {/* {!emailVerified && email && (
-                <button
-                  className="btn btn-outline-secondary"
-                  type="button"
-                  onClick={handleEmailVerify}
-                >
-                  Verify
-                </button>
-              )} */}
+              <div className="invalid-feedback">{errors.email}</div>
             </div>
-            {/* {!emailVerified && email && (
-              <p style={{ fontSize: "12px", color: "grey" }}>
-                Verify your email to proceed
-              </p>
-            )} */}
-            <div className="text-danger">{errors.email}</div>
           </div>
+
           <div className="mb-3">
             <label htmlFor="exampleInputPhone" className="form-label">
               Phone Number
@@ -128,21 +130,44 @@ const StepOne = ({
             <div className="input-group">
               <input
                 type="number"
-                className="form-control"
+                className={`form-control ${errors.phone ? "is-invalid" : ""}`}
                 id="exampleInputPhone"
                 name="phone"
                 value={phone}
                 onChange={handleChangeStep1}
+                onFocus={() => handleFieldFocus("phone")}
                 placeholder="Enter Your Phone Number"
               />
+              <div className="invalid-feedback">{errors.phone}</div>
             </div>
-            <div className="text-danger">{errors.phone}</div>
           </div>
+
+          <div className="mb-3">
+            <label htmlFor="exampleInputPassword" className="form-label">
+              Password
+            </label>
+            <div className="input-group">
+              <input
+                type="text"
+                className={`form-control ${
+                  errors.password ? "is-invalid" : ""
+                }`}
+                id="exampleInputPassword"
+                name="password"
+                value={password}
+                onChange={handleChangeStep1}
+                onFocus={() => handleFieldFocus("password")}
+                placeholder="Enter a Strong Password"
+              />
+              <div className="invalid-feedback">{errors.password}</div>
+            </div>
+          </div>
+
           <div className="mb-3 text-center">
             <button
               type="button"
               className="btn btn-primary"
-              disabled={!isStep1Valid}
+              // disabled={!isStep1Valid}
               onClick={validateStep1}
             >
               Next

@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 
 // Schema setup
 const Company = new mongoose.Schema({
-     user_id: { type: mongoose.Schema.ObjectId, required: true },
+     user_id: { type: mongoose.Schema.ObjectId },
 
      company_name: { type: String },
      register_office: { type: String },

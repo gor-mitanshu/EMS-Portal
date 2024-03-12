@@ -6,23 +6,27 @@ import Step1Register from "./StepOne/StepOne";
 
 const Register = () => {
   const [step, setStep] = useState(1);
-  // const [emailVerified, setEmailVerified] = useState(false);
   const [formDataStep1, setFormDataStep1] = useState({
     firstName: "",
     lastName: "",
     email: "",
     phone: "",
+    password: "",
   });
   const [formDataStep2, setFormDataStep2] = useState({
     companyName: "",
     companySize: "",
     employeeStrength: "",
   });
-
-  // const handleEmailVerify = () => {
-  // Implement email verification logic here
-  // setEmailVerified(true);
-  // };
+  const [errors, setErrors] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    companyName: "",
+    companySize: "",
+    employeeStrength: "",
+  });
 
   const handleNextStep = () => {
     setStep(step + 1);
@@ -46,8 +50,8 @@ const Register = () => {
     formDataStep1.firstName !== "" &&
     formDataStep1.lastName !== "" &&
     formDataStep1.email !== "" &&
-    formDataStep1.phone !== "";
-  // emailVerified;
+    formDataStep1.phone !== "" &&
+    formDataStep1.password !== "";
 
   return (
     <div className="container-fluid d-flex flex-wrap w-100 p-0 vh-100">
@@ -72,10 +76,10 @@ const Register = () => {
                 <Step1Register
                   formDataStep1={formDataStep1}
                   handleChangeStep1={handleChangeStep1}
-                  // handleEmailVerify={handleEmailVerify}
-                  // emailVerified={emailVerified}
                   isStep1Valid={isStep1Valid}
                   handleNextStep={handleNextStep}
+                  errors={errors}
+                  setErrors={setErrors}
                 />
               )}
               {step === 2 && (
@@ -83,6 +87,8 @@ const Register = () => {
                   formDataStep2={formDataStep2}
                   handleChangeStep2={handleChangeStep2}
                   handleBackStep={handleBackStep}
+                  errors={errors}
+                  setErrors={setErrors}
                 />
               )}
             </div>

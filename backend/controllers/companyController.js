@@ -35,42 +35,51 @@ const companyController = {
      signup: async (req, res) => {
           try {
                // getting the body part from request
-               let { name, email, phone, password, birth_date, gender, blood_group, marital_status } = req.body;
-               let { company_name, register_office, company_size, employee_no, inTime, out_time, garce_time, working_hours } = req.body;
+               let { firstName, lastName, email, phone, password, birth_date, gender, blood_group, marital_status } = req.body;
+               let { companyName, register_office, companySize, employeeStrength, inTime, out_time, garce_time, working_hours, user_id } = req.body;
 
-               // Check if user already exists
-               const oldUser = await CommonSchema.findOne({ email })
-               if (!!oldUser) {
-                    return res.status(409).send({
-                         message: "Already Registered",
-                         success: false,
-                         data: null
+               if (password !== undefined) {
+                    // Check if user already exists
+                    const oldUser = await CommonSchema.findOne({ email })
+                    if (!!oldUser) {
+                         return res.status(409).send({
+                              message: "Already Registered",
+                              success: false,
+                              data: null
+                         });
+                    }
+                    const hashedPassword = await bcrypt.hash(password, 10);
+                    let image = '';
+                    if (req.file) {
+                         image = req.file.filename;
+                    }
+
+                    // Create a new user in the CommonSchema
+                    const newUserCommonSchema = new CommonSchema({
+                         firstName, lastName, email, phone, password: hashedPassword, birth_date, gender, blood_group, marital_status, image, role: "company"
+                    });
+                    await newUserCommonSchema.save();
+
+                    res.status(201).send({
+                         userData: newUserCommonSchema,
+                         success: true,
                     });
                }
-               const hashedPassword = await bcrypt.hash(password, 10);
-               let image = '';
-               if (req.file) {
-                    image = req.file.filename;
-               }
-
-               // Create a new user in the CommonSchema
-               const newUserCommonSchema = new CommonSchema({
-                    name, email, phone, password: hashedPassword, birth_date, gender, blood_group, marital_status, image, role: "company"
-               });
-               await newUserCommonSchema.save();
 
                // Create a new user in the CompanySchema
-               const newUserCompanyUser = new CompanySchema({
-                    user_id: newUserCommonSchema._id, // Assign the user ID from CommonSchema
-                    company_name, register_office, company_size, employee_no, set_time_shift: { inTime, out_time, garce_time, working_hours }
-               });
-               await newUserCompanyUser.save();
+               if (!!companyName && companyName !== undefined) {
+                    const newUserCompanyUser = new CompanySchema({
+                         user_id, company_name: companyName, register_office, company_size: companySize, employee_no: employeeStrength, set_time_shift: { inTime, out_time, garce_time, working_hours }
+                    });
+                    await newUserCompanyUser.save();
 
-               res.status(201).send({
-                    message: "Registered Successfully",
-                    success: true,
-                    data: { newUserCommonSchema, newUserCompanyUser }
-               });
+                    res.status(201).send({
+                         message: "Registered Successfully",
+                         success: true,
+                         // data: { newUserCommonSchema }
+                    });
+               }
+
 
           } catch (error) {
                console.error(error);
