@@ -1,22 +1,12 @@
 import React, { useState } from "react";
 import "./Register.css";
 import KarmDigitech from "../../assets/karmdigitech.png";
+import { Link } from "react-router-dom";
 
 const Register = () => {
   const [step, setStep] = useState(1);
   const [emailVerified, setEmailVerified] = useState(false);
   const [phoneVerified, setPhoneVerified] = useState(false);
-  const [formDataStep1, setFormDataStep1] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: "",
-  });
-  const [formDataStep2, setFormDataStep2] = useState({
-    companyName: "",
-    companySize: "",
-    employeeStrength: "",
-  });
 
   const handleEmailVerify = () => {
     // Implement email verification logic here
@@ -32,22 +22,8 @@ const Register = () => {
     setStep(step + 1);
   };
 
-  const handleBackStep = () => {
-    setStep(step - 1);
-  };
-
-  const handleChangeStep1 = (e) => {
-    const { name, value } = e.target;
-    setFormDataStep1({ ...formDataStep1, [name]: value });
-  };
-
-  const handleChangeStep2 = (e) => {
-    const { name, value } = e.target;
-    setFormDataStep2({ ...formDataStep2, [name]: value });
-  };
-
   return (
-    <div className="container-fluid d-flex flex-wrap w-100 p-0 vh-100">
+    <div className="container-fluid d-flex flex-wrap w-100 p-0">
       {/* form */}
       <div className="register-form">
         <div className="register-box">
@@ -100,9 +76,6 @@ const Register = () => {
                           type="text"
                           className="form-control"
                           id="exampleInputFirstName"
-                          name="firstName"
-                          value={formDataStep1.firstName}
-                          onChange={handleChangeStep1}
                           placeholder="Enter Your First Name"
                         />
                       </div>
@@ -117,9 +90,6 @@ const Register = () => {
                           type="text"
                           className="form-control"
                           id="exampleInputLastName"
-                          name="lastName"
-                          value={formDataStep1.lastName}
-                          onChange={handleChangeStep1}
                           placeholder="Enter Your Last Name"
                         />
                       </div>
@@ -136,9 +106,6 @@ const Register = () => {
                             className="form-control"
                             id="exampleInputEmail1"
                             aria-describedby="emailHelp"
-                            name="email"
-                            value={formDataStep1.email}
-                            onChange={handleChangeStep1}
                             placeholder="Enter Your Email"
                           />
                           {!emailVerified && (
@@ -173,9 +140,6 @@ const Register = () => {
                             type="text"
                             className="form-control"
                             id="exampleInputPhone"
-                            name="phone"
-                            value={formDataStep1.phone}
-                            onChange={handleChangeStep1}
                             placeholder="Enter Your Phone Number"
                           />
                           {!phoneVerified && (
@@ -250,9 +214,6 @@ const Register = () => {
                           type="text"
                           className="form-control"
                           id="exampleInputCompanyName"
-                          name="companyName"
-                          value={formDataStep2.companyName}
-                          onChange={handleChangeStep2}
                           placeholder="Enter Your Company Name"
                         />
                       </div>
@@ -267,9 +228,6 @@ const Register = () => {
                           type="text"
                           className="form-control"
                           id="exampleInputCompanySize"
-                          name="companySize"
-                          value={formDataStep2.companySize}
-                          onChange={handleChangeStep2}
                           placeholder="Enter Your Company Size"
                         />
                       </div>
@@ -284,24 +242,18 @@ const Register = () => {
                           type="text"
                           className="form-control"
                           id="exampleInputEmployeeStrength"
-                          name="employeeStrength"
-                          value={formDataStep2.employeeStrength}
-                          onChange={handleChangeStep2}
                           placeholder="Enter Your Employee Strength"
                         />
                       </div>
 
-                      <button
-                        type="button"
-                        className="btn btn-primary"
-                        onClick={handleBackStep}
-                        style={{ marginRight: "6px" }}
-                      >
+                      <button type="submit" className="btn btn-primary">
                         Back
                       </button>
-                      <button type="submit" className="btn btn-primary">
-                        Submit
-                      </button>
+                      <Link to={"/nextstep"}>
+                        <button type="submit" className="btn btn-primary">
+                          Submit
+                        </button>
+                      </Link>
                     </form>
                   </div>
                 </>

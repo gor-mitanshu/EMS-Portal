@@ -2,11 +2,33 @@
 require('dotenv').config();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const nodemailer = require('nodemailer');
 
-const jwtSecret = process.env.JWT_SECRET;
 // Importing models
 const CommonSchema = require('../models/commonSchema/userSchema').UserModel;
 const CompanySchema = require('../models/companySchema/companySchema');
+
+// jwt secret
+const jwtSecret = process.env.JWT_SECRET;
+
+// Configure Nodemailer transporter
+const transporter = nodemailer.createTransport({
+     service: 'gmail',
+     auth: {
+          user: 'your-email@gmail.com',
+          pass: 'your-email-password'
+     }
+});
+
+// OTP Generation thing
+function generateOTP () {
+     let digits = '0123456789';
+     let OTP = '';
+     for (let i = 0; i < 4; i++) {
+          OTP += digits[Math.floor(Math.random() * 10)];
+     }
+     return OTP;
+}
 
 // List of the controllers
 const companyController = {

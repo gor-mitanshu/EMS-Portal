@@ -18,6 +18,7 @@ const User = new mongoose.Schema({
           email: { type: Boolean, default: false },
           phone: { type: Boolean, default: false }
      },
+     verification_token: { type: String },
      role: { type: String, enum: ['company', 'employee', 'hr', 'admin'], required: true },
      password: { type: String, required: true },
      birth_date: { type: Date },
