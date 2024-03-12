@@ -12,7 +12,7 @@
 }
 
 .register-box {
-  padding: 3rem;
+  padding: 3rem 3rem 0 3rem;
   background: white;
   display: flex;
   flex-direction: column;
