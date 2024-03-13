@@ -38,6 +38,7 @@ const companyController = {
                let { firstName, lastName, email, phone, password, birth_date, gender, blood_group, marital_status } = req.body;
                let { companyName, register_office, companySize, employeeStrength, inTime, out_time, garce_time, working_hours, user_id } = req.body;
 
+               // creating the new user in the CommonSchema model
                if (password !== undefined) {
                     // Check if user already exists
                     const oldUser = await CommonSchema.findOne({ email })
@@ -54,6 +55,23 @@ const companyController = {
                          image = req.file.filename;
                     }
 
+                    // Validations
+                    if (!firstName) {
+                         return res.status(400).json({ message: "Firstname is required", success: false });
+                    }
+                    if (!lastName) {
+                         return res.status(400).json({ message: "Lastname is required", success: false });
+                    }
+                    if (!email) {
+                         return res.status(400).json({ message: "Email is required", success: false });
+                    }
+                    if (!phone) {
+                         return res.status(400).json({ message: "Phone is required", success: false });
+                    }
+                    if (!password) {
+                         return res.status(400).json({ message: "Password is required", success: false });
+                    }
+
                     // Create a new user in the CommonSchema
                     const newUserCommonSchema = new CommonSchema({
                          firstName, lastName, email, phone, password: hashedPassword, birth_date, gender, blood_group, marital_status, image, role: "company"
@@ -66,8 +84,23 @@ const companyController = {
                     });
                }
 
-               // Create a new user in the CompanySchema
+               // Create a new user in the CompanySchema model
                if (!!companyName && companyName !== undefined) {
+                    // Validations
+                    if (!user_id) {
+                         return res.status(400).json({ message: "User Id is missing", success: false });
+                    }
+                    if (!companyName) {
+                         return res.status(400).json({ message: "Company name is required", success: false });
+                    }
+                    if (!companySize) {
+                         return res.status(400).json({ message: "Company Size is required", success: false });
+                    }
+                    if (!employeeStrength) {
+                         return res.status(400).json({ message: "Employee Strength is required", success: false });
+                    }
+
+
                     const newUserCompanyUser = new CompanySchema({
                          user_id, company_name: companyName, register_office, company_size: companySize, employee_no: employeeStrength, set_time_shift: { inTime, out_time, garce_time, working_hours }
                     });
@@ -79,7 +112,6 @@ const companyController = {
                          // data: { newUserCommonSchema }
                     });
                }
-
 
           } catch (error) {
                console.error(error);

@@ -1,6 +1,7 @@
 import Login from "./components/Login/Login";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import Register from "./components/Register/Register";
+import Dashboard from "./components/Dashboard/Dashboard";
 
 function App() {
   return (
@@ -9,7 +10,11 @@ function App() {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          {/* <Route path="/nextstep" element={<NextRegister />} /> */}
+
+          <Route path="/" element={<Dashboard />}>
+            <Route index element={<Navigate to="dashboard" replace />} />
+            <Route path={"/dashboard"} element={<Dashboard />} />
+          </Route>
         </Routes>
       </BrowserRouter>
     </>
