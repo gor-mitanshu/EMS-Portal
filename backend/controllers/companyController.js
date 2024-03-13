@@ -65,18 +65,63 @@ const companyController = {
                          });
                     }
 
-                    // const requiredFields = ["FirstName", "LastName", "Email", "Phone", "Password"];
-                    // const missingFields = requiredFields.filter(field => !req.body[field]);
-                    // if (missingFields.length > 0) {
-                    //      return res.status(400).json({
-                    //           message: "All Fields are required",
-                    //           success: false,
-                    //           fieldname: missingFields.reduce((acc, curr) => {
-                    //                acc[curr] = `${curr} is required`;
-                    //                return acc;
-                    //           }, {})
-                    //      });
-                    // }
+                    // Regex pattern for first name and last name: should be 2 to 30 characters long and can contain letters and spaces
+                    const nameRegex = /^[a-zA-Z ]{2,30}$/;
+                    if (!firstName.match(nameRegex)) {
+                         return res.status(400).send({
+                              message: "Invalid First Name",
+                              success: false,
+                              errors: {
+                                   firstName: "Please enter a valid First Name (2-30 characters, letters only)"
+                              }
+                         });
+                    }
+
+                    if (!lastName.match(nameRegex)) {
+                         return res.status(400).send({
+                              message: "Invalid Last Name",
+                              success: false,
+                              errors: {
+                                   lastName: "Please enter a valid Last Name (2-30 characters, letters only)"
+                              }
+                         });
+                    }
+
+                    // Regex pattern for email: should match the typical email format
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!email.match(emailRegex)) {
+                         return res.status(400).send({
+                              message: "Invalid Email",
+                              success: false,
+                              errors: {
+                                   email: "Please enter a valid Email Address"
+                              }
+                         });
+                    }
+
+                    // Regex pattern for phone number: should be exactly 10 digits long
+                    const phoneRegex = /^[0-9]{10}$/;
+                    if (!phone.match(phoneRegex)) {
+                         return res.status(400).send({
+                              message: "Invalid Phone Number",
+                              success: false,
+                              errors: {
+                                   phone: "Please enter a valid 10-digit Phone Number"
+                              }
+                         });
+                    }
+
+                    // Regex pattern for password: should be 5 to 10 characters long and can contain letters, digits, and some special characters
+                    const passwordRegex = /^[a-zA-Z0-9!@#$%^&*()_+]{5,10}$/;
+                    if (!password.match(passwordRegex)) {
+                         return res.status(400).send({
+                              message: "Invalid Password",
+                              success: false,
+                              errors: {
+                                   password: "Please enter a valid Password (5-10 characters, may include special characters)"
+                              }
+                         });
+                    }
 
                     // Create a new user in the CommonSchema
                     const newUserCommonSchema = new CommonSchema({

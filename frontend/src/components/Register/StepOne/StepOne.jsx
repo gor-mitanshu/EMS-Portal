@@ -12,6 +12,13 @@ const StepOne = ({ formDataStep1, handleChangeStep1, handleNextStep }) => {
     password: "",
   });
 
+  const regex = {
+    name: /^[a-zA-Z ]{2,30}$/,
+    email: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+    phone: /^\d{10}$/,
+    password: /^[\w@-]{5,10}$/,
+  };
+
   const validateStep1 = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -25,27 +32,50 @@ const StepOne = ({ formDataStep1, handleChangeStep1, handleNextStep }) => {
     });
 
     // Validations
-    // if (!firstName) {
-    //   newErrors.firstName = "Please Enter Your First Name";
-    //   formIsValid = false;
-    // }
-    // if (!lastName) {
-    //   newErrors.lastName = "Please Enter Your Last Name";
-    //   formIsValid = false;
-    // }
-    // if (!email) {
-    //   newErrors.email = "Please Enter Your Email";
-    //   formIsValid = false;
-    // }
-    // if (!phone) {
-    //   newErrors.phone = "Please Enter Your Phone Number";
-    //   formIsValid = false;
-    // }
-    // if (!password) {
-    //   newErrors.password = "Please Enter a Password";
-    //   formIsValid = false;
-    // }
-    // setErrors(newErrors);
+    if (!firstName) {
+      newErrors.firstName = "Please Enter Your First Name";
+      formIsValid = false;
+    } else if (!regex.name.test(firstName)) {
+      newErrors.firstName =
+        "Please enter a valid First Name (2-30 characters, letters only)";
+      formIsValid = false;
+    }
+
+    if (!lastName) {
+      newErrors.lastName = "Please Enter Your Last Name";
+      formIsValid = false;
+    } else if (!regex.name.test(lastName)) {
+      newErrors.lastName =
+        "Please enter a valid Last Name (2-30 characters, letters only)";
+      formIsValid = false;
+    }
+
+    if (!email) {
+      newErrors.email = "Please Enter Your Email";
+      formIsValid = false;
+    } else if (!regex.email.test(email)) {
+      newErrors.email = "Please Enter a Valid Email";
+      formIsValid = false;
+    }
+
+    if (!phone) {
+      newErrors.phone = "Please Enter Your Phone Number";
+      formIsValid = false;
+    } else if (!regex.phone.test(phone)) {
+      newErrors.phone = "Phone Number should be exactly 10 digits long";
+      formIsValid = false;
+    }
+
+    if (!password) {
+      newErrors.password = "Please Enter a Password";
+      formIsValid = false;
+    } else if (!regex.password.test(password)) {
+      newErrors.password =
+        "Password should be 5 to 10 characters long and can contain letters, digits, and some special characters";
+      formIsValid = false;
+    }
+
+    setErrors(newErrors);
     if (formIsValid) {
       try {
         const body = { firstName, lastName, email, phone, password };

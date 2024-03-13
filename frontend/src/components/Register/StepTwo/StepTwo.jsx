@@ -27,27 +27,27 @@ const StepTwo = ({ formDataStep2, handleChangeStep2, handleBackStep }) => {
     });
 
     // Validations
-    // if (!companyName) {
-    //   newErrors.companyName = "Please Enter Your Company Name";
-    //   formIsValid = false;
-    // } else {
-    //   newErrors.companyName = "";
-    // }
+    if (!companyName) {
+      newErrors.companyName = "Please Enter Your Company Name";
+      formIsValid = false;
+    } else {
+      newErrors.companyName = "";
+    }
 
-    // if (!companySize) {
-    //   newErrors.companySize = "Please Enter Your Company Size";
-    //   formIsValid = false;
-    // } else {
-    //   newErrors.companySize = "";
-    // }
+    if (!companySize) {
+      newErrors.companySize = "Please Enter Your Company Size";
+      formIsValid = false;
+    } else {
+      newErrors.companySize = "";
+    }
 
-    // if (!employeeStrength) {
-    //   newErrors.employeeStrength = "Please Enter Your Company Strength";
-    //   formIsValid = false;
-    // } else {
-    //   newErrors.employeeStrength = "";
-    // }
-    // setErrors(newErrors);
+    if (!employeeStrength) {
+      newErrors.employeeStrength = "Please Enter Your Company Strength";
+      formIsValid = false;
+    } else {
+      newErrors.employeeStrength = "";
+    }
+    setErrors(newErrors);
 
     if (formIsValid) {
       try {
