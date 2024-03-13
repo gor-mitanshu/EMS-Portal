@@ -35,8 +35,8 @@ const companyController = {
      signup: async (req, res) => {
           try {
                // getting the body part from request
-               let { firstName, lastName, email, phone, password, birth_date, gender, blood_group, marital_status } = req.body;
-               let { companyName, register_office, companySize, employeeStrength, inTime, out_time, garce_time, working_hours, user_id } = req.body;
+               let { firstName, lastName, email, phone, password } = req.body;
+               let { companyName, companySize, employeeStrength, user_id } = req.body;
 
                // creating the new user in the CommonSchema model
                if (password !== undefined) {
@@ -50,31 +50,37 @@ const companyController = {
                          });
                     }
                     const hashedPassword = await bcrypt.hash(password, 10);
-                    let image = '';
-                    if (req.file) {
-                         image = req.file.filename;
+                    // Validations
+                    if (!firstName || !lastName || !email || !phone || !password) {
+                         return res.status(400).send({
+                              message: "All Fields are required",
+                              success: false,
+                              errors: {
+                                   firstName: !firstName ? "Firstname is required" : "",
+                                   lastName: !lastName ? "Lastname is required" : "",
+                                   email: !email ? "Email is required" : "",
+                                   phone: !phone ? "Phone is required" : "",
+                                   password: !password ? "Password is required" : "",
+                              }
+                         });
                     }
 
-                    // Validations
-                    if (!firstName) {
-                         return res.status(400).json({ message: "Firstname is required", success: false });
-                    }
-                    if (!lastName) {
-                         return res.status(400).json({ message: "Lastname is required", success: false });
-                    }
-                    if (!email) {
-                         return res.status(400).json({ message: "Email is required", success: false });
-                    }
-                    if (!phone) {
-                         return res.status(400).json({ message: "Phone is required", success: false });
-                    }
-                    if (!password) {
-                         return res.status(400).json({ message: "Password is required", success: false });
-                    }
+                    // const requiredFields = ["FirstName", "LastName", "Email", "Phone", "Password"];
+                    // const missingFields = requiredFields.filter(field => !req.body[field]);
+                    // if (missingFields.length > 0) {
+                    //      return res.status(400).json({
+                    //           message: "All Fields are required",
+                    //           success: false,
+                    //           fieldname: missingFields.reduce((acc, curr) => {
+                    //                acc[curr] = `${curr} is required`;
+                    //                return acc;
+                    //           }, {})
+                    //      });
+                    // }
 
                     // Create a new user in the CommonSchema
                     const newUserCommonSchema = new CommonSchema({
-                         firstName, lastName, email, phone, password: hashedPassword, birth_date, gender, blood_group, marital_status, image, role: "company"
+                         firstName, lastName, email, phone, password: hashedPassword, role: "company"
                     });
                     await newUserCommonSchema.save();
 
@@ -85,24 +91,23 @@ const companyController = {
                }
 
                // Create a new user in the CompanySchema model
-               if (!!companyName && companyName !== undefined) {
+               if (companyName !== undefined) {
                     // Validations
-                    if (!user_id) {
-                         return res.status(400).json({ message: "User Id is missing", success: false });
+                    if (!user_id || !companyName || !companySize || !employeeStrength) {
+                         return res.status(400).send({
+                              message: "All Fields are required",
+                              success: false,
+                              errors: {
+                                   user_id: !user_id ? "user_id is requierd" : "",
+                                   companyName: !companyName ? "Company name is required" : "",
+                                   companySize: !companySize ? "Company Size is required" : "",
+                                   employeeStrength: !employeeStrength ? "Employee Strength is required" : "",
+                              }
+                         });
                     }
-                    if (!companyName) {
-                         return res.status(400).json({ message: "Company name is required", success: false });
-                    }
-                    if (!companySize) {
-                         return res.status(400).json({ message: "Company Size is required", success: false });
-                    }
-                    if (!employeeStrength) {
-                         return res.status(400).json({ message: "Employee Strength is required", success: false });
-                    }
-
 
                     const newUserCompanyUser = new CompanySchema({
-                         user_id, company_name: companyName, register_office, company_size: companySize, employee_no: employeeStrength, set_time_shift: { inTime, out_time, garce_time, working_hours }
+                         user_id, company_name: companyName, company_size: companySize, employee_no: employeeStrength,
                     });
                     await newUserCompanyUser.save();
 

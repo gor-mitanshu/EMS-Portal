@@ -1,57 +1,51 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-const StepOne = ({
-  formDataStep1,
-  handleChangeStep1,
-  handleNextStep,
-  errors,
-  setErrors,
-}) => {
+const StepOne = ({ formDataStep1, handleChangeStep1, handleNextStep }) => {
   const { firstName, lastName, email, phone, password } = formDataStep1;
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errors, setErrors] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    password: "",
+  });
 
-  const validateStep1 = async () => {
+  const validateStep1 = async (e) => {
+    e.preventDefault();
     setIsSubmitting(true);
 
     let formIsValid = true;
     const newErrors = { ...errors };
 
-    if (!firstName) {
-      newErrors.firstName = "Please Enter Your First Name";
-      formIsValid = false;
-    } else {
-      newErrors.firstName = "";
-    }
+    // Reset errors
+    Object.keys(newErrors).forEach((key) => {
+      newErrors[key] = "";
+    });
 
-    if (!lastName) {
-      newErrors.lastName = "Please Enter Your Last Name";
-      formIsValid = false;
-    } else {
-      newErrors.lastName = "";
-    }
-
-    if (!email) {
-      newErrors.email = "Please Enter Your Email";
-      formIsValid = false;
-    } else {
-      newErrors.email = "";
-    }
-
-    if (!phone) {
-      newErrors.phone = "Please Enter Your Phone Number";
-      formIsValid = false;
-    } else {
-      newErrors.phone = "";
-    }
-
-    if (!password) {
-      newErrors.password = "Please Enter a Password";
-      formIsValid = false;
-    } else {
-      newErrors.password = "";
-    }
-
+    // Validations
+    // if (!firstName) {
+    //   newErrors.firstName = "Please Enter Your First Name";
+    //   formIsValid = false;
+    // }
+    // if (!lastName) {
+    //   newErrors.lastName = "Please Enter Your Last Name";
+    //   formIsValid = false;
+    // }
+    // if (!email) {
+    //   newErrors.email = "Please Enter Your Email";
+    //   formIsValid = false;
+    // }
+    // if (!phone) {
+    //   newErrors.phone = "Please Enter Your Phone Number";
+    //   formIsValid = false;
+    // }
+    // if (!password) {
+    //   newErrors.password = "Please Enter a Password";
+    //   formIsValid = false;
+    // }
+    // setErrors(newErrors);
     if (formIsValid) {
       try {
         const body = { firstName, lastName, email, phone, password };
@@ -63,10 +57,14 @@ const StepOne = ({
           localStorage.setItem("user_id", res.data.userData._id);
           handleNextStep();
         }
-      } catch (error) {}
+      } catch (error) {
+        if (error.response && error.response.data) {
+          setErrors(error.response.data.errors);
+        } else {
+          console.error("An error occurred:", error.message);
+        }
+      }
     }
-
-    setErrors(newErrors);
     setIsSubmitting(false);
   };
 
@@ -74,7 +72,6 @@ const StepOne = ({
     const newErrors = { ...errors, [fieldName]: "" };
     setErrors(newErrors);
   };
-
   return (
     <>
       <div className="d-flex flex-column">

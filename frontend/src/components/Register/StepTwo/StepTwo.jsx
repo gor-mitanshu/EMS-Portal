@@ -3,16 +3,16 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
-const StepTwo = ({
-  formDataStep2,
-  handleChangeStep2,
-  handleBackStep,
-  errors,
-  setErrors,
-}) => {
+const StepTwo = ({ formDataStep2, handleChangeStep2, handleBackStep }) => {
   const { companyName, companySize, employeeStrength } = formDataStep2;
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errors, setErrors] = useState({
+    user_id: "",
+    companyName: "",
+    companySize: "",
+    employeeStrength: "",
+  });
 
   const validateStep2 = async (e) => {
     e.preventDefault();
@@ -21,44 +21,64 @@ const StepTwo = ({
     let formIsValid = true;
     const newErrors = { ...errors };
 
-    if (!companyName) {
-      newErrors.companyName = "Please Enter Your Company Name";
-      formIsValid = false;
-    } else {
-      newErrors.companyName = "";
-    }
+    // Reset errors
+    Object.keys(newErrors).forEach((key) => {
+      newErrors[key] = "";
+    });
 
-    if (!companySize) {
-      newErrors.companySize = "Please Enter Your Company Size";
-      formIsValid = false;
-    } else {
-      newErrors.companySize = "";
-    }
+    // Validations
+    // if (!companyName) {
+    //   newErrors.companyName = "Please Enter Your Company Name";
+    //   formIsValid = false;
+    // } else {
+    //   newErrors.companyName = "";
+    // }
 
-    if (!employeeStrength) {
-      newErrors.employeeStrength = "Please Enter Your Company Strength";
-      formIsValid = false;
-    } else {
-      newErrors.employeeStrength = "";
-    }
+    // if (!companySize) {
+    //   newErrors.companySize = "Please Enter Your Company Size";
+    //   formIsValid = false;
+    // } else {
+    //   newErrors.companySize = "";
+    // }
+
+    // if (!employeeStrength) {
+    //   newErrors.employeeStrength = "Please Enter Your Company Strength";
+    //   formIsValid = false;
+    // } else {
+    //   newErrors.employeeStrength = "";
+    // }
+    // setErrors(newErrors);
 
     if (formIsValid) {
       try {
         const user_id = localStorage.getItem("user_id");
+        console.log(user_id);
         const body = { companyName, companySize, employeeStrength, user_id };
         const res = await axios.post(
           `${process.env.REACT_APP_API}/company/signup`,
           body
         );
         if (res && res.data.success === true) {
-          console.log(res);
           navigate("/login");
           toast.success(res.data.message);
+          localStorage.clear();
+        } else {
+          console.log(res);
         }
-      } catch (error) {}
+      } catch (error) {
+        console.log(error.response.data.errors);
+        if (
+          error.response &&
+          error.response.data &&
+          error.response.data.errors
+        ) {
+          const { errors } = error.response.data;
+          setErrors(errors);
+        } else {
+          console.error("An error occurred:", error.message);
+        }
+      }
     }
-
-    setErrors(newErrors);
     setIsSubmitting(false);
   };
 
@@ -66,7 +86,6 @@ const StepTwo = ({
     const newErrors = { ...errors, [fieldName]: "" };
     setErrors(newErrors);
   };
-
   return (
     <>
       <div className="d-flex flex-column">
@@ -80,7 +99,7 @@ const StepTwo = ({
               }`}
               id="exampleInputCompanyName"
               name="companyName"
-              value={formDataStep2.companyName}
+              value={companyName}
               onChange={handleChangeStep2}
               onFocus={() => handleFieldFocus("companyName")}
               placeholder="Enter Your Company Name"
@@ -96,7 +115,7 @@ const StepTwo = ({
               }`}
               id="exampleInputCompanySize"
               name="companySize"
-              value={formDataStep2.companySize}
+              value={companySize}
               onChange={handleChangeStep2}
               onFocus={() => handleFieldFocus("companySize")}
               placeholder="Enter Your Company Size"
@@ -114,7 +133,7 @@ const StepTwo = ({
               }`}
               id="exampleInputEmployeeStrength"
               name="employeeStrength"
-              value={formDataStep2.employeeStrength}
+              value={employeeStrength}
               onChange={handleChangeStep2}
               onFocus={() => handleFieldFocus("employeeStrength")}
               placeholder="Enter Your Employee Strength"
