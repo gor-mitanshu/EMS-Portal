@@ -1,13 +1,23 @@
 import React, { useState } from "react";
 import "./Login.css";
 import KarmDigitech from "../../assets/karmdigitech.png";
-import { Link } from "react-router-dom";
+import {
+  Link,
+  // useLocation,
+  useNavigate,
+} from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const Login = () => {
+  const navigate = useNavigate();
+  // const { state } = useLocation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState({
+    email: "",
+    password: "",
+  });
 
   const validateForm = () => {
     let formIsValid = true;
@@ -42,8 +52,21 @@ const Login = () => {
         );
         if (res) {
           console.log(res);
+          const data = res.data.token;
+          localStorage.setItem("token", JSON.stringify(data));
+          // navigate(state?.path || "/dashboard", { replace: true });
+          navigate("/dashboard");
+          toast.success(res.message);
         }
-      } catch (error) {}
+      } catch (error) {
+        console.log(error);
+        if (error && error.response.data) {
+          toast.error(error.response.data.errors);
+          setErrors(error.response.data.errors);
+        } else {
+          setErrors("Something went wrong");
+        }
+      }
       console.log("Submitting form...");
     }
   };

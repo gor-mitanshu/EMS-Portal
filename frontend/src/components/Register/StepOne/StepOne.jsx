@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const StepOne = ({ formDataStep1, handleChangeStep1, handleNextStep }) => {
   const { firstName, lastName, email, phone, password } = formDataStep1;
@@ -86,6 +87,9 @@ const StepOne = ({ formDataStep1, handleChangeStep1, handleNextStep }) => {
         if (res && res.data.success === true) {
           localStorage.setItem("user_id", res.data.userData._id);
           handleNextStep();
+          setTimeout(() => {
+            toast.warn("Check your email for a verification link.");
+          }, 1000);
         }
       } catch (error) {
         if (error.response && error.response.data) {
