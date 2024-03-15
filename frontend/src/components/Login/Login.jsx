@@ -60,14 +60,20 @@ const Login = () => {
         }
       } catch (error) {
         console.log(error);
-        if (error && error.response.data) {
-          toast.error(error.response.data.errors);
-          setErrors(error.response.data.errors);
+        if (error && error.response && error.response.data) {
+          const { errors } = error.response.data;
+          if (errors) {
+            setErrors(errors);
+          } else {
+            const { message } = error.response.data;
+            console.log(error);
+            toast.error(message);
+          }
         } else {
-          setErrors("Something went wrong");
+          console.log(error);
+          setErrors({ general: "Something went wrong" });
         }
       }
-      console.log("Submitting form...");
     }
   };
 

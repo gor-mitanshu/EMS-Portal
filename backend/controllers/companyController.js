@@ -40,7 +40,7 @@ const companyController = {
         // Check if user already exists
         const oldUser = await CommonSchema.findOne({ email })
         if (!!oldUser) {
-          return res.status(409).send({
+          return res.status(403).send({
             message: "Already Registered",
             success: false,
             data: null
@@ -52,7 +52,7 @@ const companyController = {
         const hashedPassword = await bcrypt.hash(password, 10);
         // Validations
         if (!firstName || !lastName || !email || !phone || !password) {
-          return res.status(400).send({
+          return res.status(409).send({
             message: "All Fields are required",
             success: false,
             errors: {
@@ -376,7 +376,7 @@ const companyController = {
           if (error) {
             console.error('Error sending email:', error);
           } else {
-            return res.status(200).send({
+            return res.status(250).send({
               success: true,
               message: 'Email sent successfully',
               technicalMessage: 'Email sent: ' + info.response
@@ -394,7 +394,7 @@ const companyController = {
       if (companyName !== undefined) {
         // Validations
         if (!user_id || !companyName || !companySize || !employeeStrength) {
-          return res.status(400).send({
+          return res.status(409).send({
             message: "All Fields are required",
             success: false,
             errors: {
@@ -491,7 +491,7 @@ const companyController = {
 
       const compareHashedPassword = await bcrypt.compare(password, user.password);
       if (!compareHashedPassword) {
-        return res.status(401).send({ message: "Password does not match", success: false });
+        return res.status(401).send({ errors: { password: "Password does not match" }, success: false });
       }
 
       if (user.is_email_verified) {
@@ -506,6 +506,7 @@ const companyController = {
         });
       } else {
         return res.status(401).send({
+          status: 300,
           errors: "Email not verified. Please verify your email to log in.",
           success: false,
         });
