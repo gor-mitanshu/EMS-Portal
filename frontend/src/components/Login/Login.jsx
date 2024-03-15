@@ -63,6 +63,7 @@ const Login = () => {
         if (error && error.response && error.response.data) {
           const { errors } = error.response.data;
           if (errors) {
+            toast.error(errors);
             setErrors(errors);
           } else {
             const { message } = error.response.data;
