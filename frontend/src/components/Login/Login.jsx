@@ -155,16 +155,20 @@ const Login = () => {
                     />
                     <div className="invalid-feedback">{errors.password}</div>
                   </div>
-                  <button type="submit" className="btn btn-primary">
-                    Submit
-                  </button>
-                  <div className="mt-4">
+
+                  <div className="text-center">
+                    <button type="submit" className="btn btn-primary w-75">
+                      Submit
+                    </button>
+                  </div>
+
+                  <div className="mt-3 text-center">
                     <Link to="/" className="text-decoration-none">
                       Forgot Password?
                     </Link>
                   </div>
 
-                  <div className="mt-3">
+                  <div className="mt-3 text-center">
                     Don't have an account? <Link to="/register">Sign Up</Link>
                   </div>
                 </form>

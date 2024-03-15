@@ -84,17 +84,30 @@ const StepOne = ({ formDataStep1, handleChangeStep1, handleNextStep }) => {
           `${process.env.REACT_APP_API}/company/signup`,
           body
         );
+        console.log(res);
         if (res && res.data.success === true) {
           localStorage.setItem("user_id", res.data.userData._id);
           handleNextStep();
           setTimeout(() => {
             toast.warn("Check your email for a verification link.");
           }, 1000);
+        } else {
+          console.log(res);
         }
       } catch (error) {
-        if (error.response && error.response.data) {
-          setErrors(error.response.data.errors);
+        if (
+          error.response &&
+          error.response.data &&
+          error.response.data.errors
+        ) {
+          const backendErrors = error.response.data.errors;
+          Object.keys(backendErrors).forEach((key) => {
+            newErrors[key] = backendErrors[key];
+          });
+          setErrors(newErrors);
         } else {
+          toast.error(error.response.data.message);
+          console.log(error.response.data.message);
           console.error("An error occurred:", error.message);
         }
       }
@@ -114,7 +127,11 @@ const StepOne = ({ formDataStep1, handleChangeStep1, handleNextStep }) => {
             <label htmlFor="exampleInputFirstName">First Name</label>
             <input
               type="text"
-              className={`form-control ${errors.firstName ? "is-invalid" : ""}`}
+              className={
+                errors.firstName
+                  ? `form-control ${errors.firstName ? "is-invalid" : ""}`
+                  : "form-control"
+              }
               id="exampleInputFirstName"
               name="firstName"
               value={firstName}
@@ -122,14 +139,20 @@ const StepOne = ({ formDataStep1, handleChangeStep1, handleNextStep }) => {
               onFocus={() => handleFieldFocus("firstName")}
               placeholder="Enter Your First Name"
             />
-            <div className="invalid-feedback">{errors.firstName}</div>
+            {errors.firstName && (
+              <div className="invalid-feedback">{errors.firstName}</div>
+            )}
           </div>
 
           <div className="mb-3">
             <label htmlFor="exampleInputLastName">Last Name</label>
             <input
               type="text"
-              className={`form-control ${errors.lastName ? "is-invalid" : ""}`}
+              className={
+                errors.lastName
+                  ? `form-control ${errors.lastName ? "is-invalid" : ""}`
+                  : "form-control"
+              }
               id="exampleInputLastName"
               name="lastName"
               value={lastName}
@@ -137,7 +160,9 @@ const StepOne = ({ formDataStep1, handleChangeStep1, handleNextStep }) => {
               onFocus={() => handleFieldFocus("lastName")}
               placeholder="Enter Your Last Name"
             />
-            <div className="invalid-feedback">{errors.lastName}</div>
+            {errors.lastName && (
+              <div className="invalid-feedback">{errors.lastName}</div>
+            )}
           </div>
 
           <div className="mb-3">
@@ -145,7 +170,11 @@ const StepOne = ({ formDataStep1, handleChangeStep1, handleNextStep }) => {
             <div className="input-group">
               <input
                 type="email"
-                className={`form-control ${errors.email ? "is-invalid" : ""}`}
+                className={
+                  errors.email
+                    ? `form-control ${errors.email ? "is-invalid" : ""}`
+                    : "form-control"
+                }
                 id="exampleInputEmail1"
                 aria-describedby="emailHelp"
                 name="email"
@@ -154,7 +183,9 @@ const StepOne = ({ formDataStep1, handleChangeStep1, handleNextStep }) => {
                 onFocus={() => handleFieldFocus("email")}
                 placeholder="Enter Your Email"
               />
-              <div className="invalid-feedback">{errors.email}</div>
+              {errors.email && (
+                <div className="invalid-feedback">{errors.email}</div>
+              )}
             </div>
           </div>
 
@@ -165,7 +196,11 @@ const StepOne = ({ formDataStep1, handleChangeStep1, handleNextStep }) => {
             <div className="input-group">
               <input
                 type="number"
-                className={`form-control ${errors.phone ? "is-invalid" : ""}`}
+                className={
+                  errors.phone
+                    ? `form-control ${errors.phone ? "is-invalid" : ""}`
+                    : "form-control"
+                }
                 id="exampleInputPhone"
                 name="phone"
                 value={phone}
@@ -173,7 +208,9 @@ const StepOne = ({ formDataStep1, handleChangeStep1, handleNextStep }) => {
                 onFocus={() => handleFieldFocus("phone")}
                 placeholder="Enter Your Phone Number"
               />
-              <div className="invalid-feedback">{errors.phone}</div>
+              {errors.phone && (
+                <div className="invalid-feedback">{errors.phone}</div>
+              )}
             </div>
           </div>
 
@@ -184,9 +221,11 @@ const StepOne = ({ formDataStep1, handleChangeStep1, handleNextStep }) => {
             <div className="input-group">
               <input
                 type="text"
-                className={`form-control ${
-                  errors.password ? "is-invalid" : ""
-                }`}
+                className={
+                  errors.password
+                    ? `form-control ${errors.password ? "is-invalid" : ""}`
+                    : "form-control"
+                }
                 id="exampleInputPassword"
                 name="password"
                 value={password}
@@ -194,7 +233,9 @@ const StepOne = ({ formDataStep1, handleChangeStep1, handleNextStep }) => {
                 onFocus={() => handleFieldFocus("password")}
                 placeholder="Enter a Strong Password"
               />
-              <div className="invalid-feedback">{errors.password}</div>
+              {errors.password && (
+                <div className="invalid-feedback">{errors.password}</div>
+              )}
             </div>
           </div>
 

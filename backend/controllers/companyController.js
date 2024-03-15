@@ -134,7 +134,7 @@ const companyController = {
         const mailOptions = {
           from: process.env.EMAIL_URL,
           to: email,
-          subject: 'Registration Successful.',
+          subject: 'Registration in Process...',
           html: `
         <!DOCTYPE html>
 <html>
@@ -376,7 +376,6 @@ const companyController = {
           if (error) {
             console.error('Error sending email:', error);
           } else {
-            // console.log('Email sent:', info.response);
             return res.status(200).send({
               success: true,
               message: 'Email sent successfully',

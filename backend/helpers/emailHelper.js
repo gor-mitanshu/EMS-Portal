@@ -1,4 +1,25 @@
-<!DOCTYPE html>
+const nodemailer = require('nodemailer');
+
+// Create transporter for sending emails
+const transporter = nodemailer.createTransport({
+     host: 'smtp.gmail.com',
+     port: 465,
+     secure: true,
+     service: 'gmail',
+     auth: {
+          user: process.env.EMAIL_URL,
+          pass: process.env.EMAIL_PASSWORD,
+     }
+});
+
+// Function to send verification email
+const sendVerificationEmail = async (firstName, lastName, email, verificationLink) => {
+     const mailOptions = {
+          from: process.env.EMAIL_URL,
+          to: email,
+          subject: 'Registration Successful.',
+          html: `
+      <!DOCTYPE html>
 <html>
   <head>
     <meta charset="UTF-8" />
@@ -96,18 +117,14 @@
       <a href="#" target="_blank" class="karm_digitech-a">
         <div class="karm_digitech">Karm Digitech</div>
       </a>
-      <div class="logo" style="text-align: center; width: 100%">
-        <div style="width: 100%">
-          <div align="center">
-            <img
-              style="display: block"
-              src="https://images.emlcdn.net/cdn/14/QHcab14c9/email.png"
-              alt="Facebook"
-              height="48"
-              width="48"
-            />
-          </div>
-        </div>
+      <div class="logo" style="text-align: center">
+        <img
+          style="display: block"
+          src="https://images.emlcdn.net/cdn/14/QHcab14c9/email.png"
+          alt="Facebook"
+          height="48"
+          width="48"
+        />
         <!-- <table cellpadding="0" cellspacing="0" border="0" width="100%">
           <tr>
             <td align="center">
@@ -127,7 +144,7 @@
         <p>
           <b class="success">
             Hii ${newUserCommonSchema.firstName + " " +
-            newUserCommonSchema.lastName} ,
+               newUserCommonSchema.lastName} ,
           </b>
         </p>
         <p>
@@ -239,3 +256,11 @@
     </div>
   </body>
 </html>
+
+    `,
+     };
+
+     return transporter.sendMail(mailOptions);
+};
+
+module.exports = { sendVerificationEmail };
