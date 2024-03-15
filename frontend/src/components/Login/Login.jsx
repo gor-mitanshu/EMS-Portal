@@ -18,6 +18,7 @@ const Login = () => {
     email: "",
     password: "",
   });
+  const [verificationLink, setVerificationLink] = useState(false);
 
   const validateForm = () => {
     let formIsValid = true;
@@ -61,8 +62,12 @@ const Login = () => {
       } catch (error) {
         console.log(error);
         if (error && error.response && error.response.data) {
-          const { errors } = error.response.data;
+          const { errors, status } = error.response.data;
           if (errors) {
+            console.log("email verified error", errors);
+            if (status === 300) {
+              setVerificationLink(true);
+            }
             toast.error(errors);
             setErrors(errors);
           } else {
@@ -74,6 +79,32 @@ const Login = () => {
           console.log(error);
           setErrors({ general: "Something went wrong" });
         }
+      }
+    }
+  };
+
+  const handleResendVerification = async () => {
+    try {
+      const body = {
+        email,
+      };
+      const res = await axios.post(
+        `${process.env.REACT_APP_API}/company/resendVerificationLink`,
+        body
+      );
+      if (res) {
+        console.log(res);
+        toast.warn(res.data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      if (error && error.response && error.response.data) {
+        const { message } = error.response.data;
+        console.log(error);
+        toast.error(message);
+      } else {
+        console.log(error);
+        setErrors({ general: "Something went wrong" });
       }
     }
   };
@@ -170,7 +201,7 @@ const Login = () => {
                   </div>
 
                   <div className="mt-3 text-center">
-                    <Link to="/" className="text-decoration-none">
+                    <Link to="/login????" className="text-decoration-none">
                       Forgot Password?
                     </Link>
                   </div>
@@ -178,6 +209,15 @@ const Login = () => {
                   <div className="mt-3 text-center">
                     Don't have an account? <Link to="/register">Sign Up</Link>
                   </div>
+
+                  {verificationLink && (
+                    <div
+                      className="btn btn-secondary w-100 mt-3"
+                      onClick={handleResendVerification}
+                    >
+                      Click here to resend the Verification Link
+                    </div>
+                  )}
                 </form>
               </div>
             </div>

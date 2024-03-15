@@ -8,6 +8,7 @@ const companyController = require('../controllers/companyController');
 
 // All the list of routes
 router.post('/signup', companyController.signup);
+router.post('/resendVerificationLink', companyController.resendVerificationLink);
 router.post('/verify/:verificationToken', companyController.verify);
 router.post('/signin', companyController.login);
 

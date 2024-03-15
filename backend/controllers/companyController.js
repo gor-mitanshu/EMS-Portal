@@ -428,6 +428,62 @@ const companyController = {
     }
   },
 
+  resendVerificationLink: async (req, res) => {
+    const { email } = req.body;
+    try {
+      // Check if user exists
+      const user = await CommonSchema.findOne({ email });
+      if (!user) {
+        return res.status(404).send({
+          message: "User not found",
+          success: false,
+        });
+      }
+
+      // Generate new verification token
+      const expireIn = "1h";
+      const verificationToken = jwt.sign({ email }, jwtSecret, { expiresIn: expireIn });
+
+      // Update user's verification token
+      user.verification_token = verificationToken;
+      await user.save();
+
+      // Send verification link
+      const verificationLink = `${process.env.REACT_URL}/verify/${verificationToken}`;
+      const mailOptions = {
+        from: process.env.EMAIL_URL,
+        to: email,
+        subject: 'Email Verification Link',
+        html: `
+          <p>Please click the following link to verify your email:</p>
+          <a href="${verificationLink}">Click Me!!🧑🏻</a>
+        `,
+      };
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.error('Error sending email:', error);
+          return res.status(500).send({
+            message: "Error sending verification email",
+            success: false,
+            error: error.message,
+          });
+        }
+        return res.status(200).send({
+          message: "Verification link sent successfully",
+          success: true,
+          data: verificationLink
+        });
+      });
+    } catch (error) {
+      console.error('Error resending verification link:', error);
+      return res.status(500).send({
+        message: "Internal Server Error",
+        success: false,
+        error: error.message,
+      });
+    }
+  },
+
   verify: async (req, res) => {
     const verificationToken = req.params.verificationToken;
 
