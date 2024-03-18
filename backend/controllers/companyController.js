@@ -508,6 +508,11 @@ const companyController = {
 
       try {
         jwt.verify(verificationToken, process.env.JWT_SECRET);
+        user.is_email_verified = true;
+        user.verification_token = undefined;
+        await user.save();
+
+        return res.status(200).send({ message: 'Email verification successful', success: true });
       } catch (err) {
         if (err instanceof jwt.TokenExpiredError) {
           return res.status(401).send({
@@ -521,12 +526,6 @@ const companyController = {
           });
         }
       }
-
-      user.is_email_verified = true;
-      user.verification_token = undefined;
-      await user.save();
-
-      return res.status(200).send({ message: 'Email verification successful', success: true });
     } catch (error) {
       return res.status(500).send({ message: 'Internal server error', success: false });
     }
