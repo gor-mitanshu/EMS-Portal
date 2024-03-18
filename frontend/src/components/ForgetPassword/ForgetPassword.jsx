@@ -6,12 +6,14 @@ import { toast } from "react-toastify";
 
 const ForgotPassword = () => {
   const navigate = useNavigate();
-  // const [error, setError] = useState();
   const [user, setUser] = useState({
     email: "",
     otp: "",
   });
   const [showOTPInput, setShowOTPInput] = useState(false);
+  const [emailStatus, setEmailStatus] = useState("idle"); // "idle", "sending", "sent", "failed"
+  const [verifyingOTP, setVerifyingOTP] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -19,12 +21,17 @@ const ForgotPassword = () => {
       ...prevUserDetails,
       [name]: value,
     }));
+    setErrorMessage("");
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    if (!user.email) {
+      setErrorMessage("Please Enter your Email");
+      return;
+    }
     try {
+      setEmailStatus("sending");
       const body = {
         email: user.email,
       };
@@ -32,35 +39,29 @@ const ForgotPassword = () => {
         `${process.env.REACT_APP_API}/company/forgetpassword`,
         body
       );
-      if (res) {
-        console.log(res);
+      if (res.status === 200) {
+        setEmailStatus("sent");
         setShowOTPInput(true);
         toast.warn(res.data.message);
       }
     } catch (error) {
-      console.log(error);
-      if (error && error.response && error.response.data) {
+      setEmailStatus("failed");
+      if (error.response && error.response.data) {
         const { message } = error.response.data;
-        console.log(error);
-        toast.error(message);
+        setErrorMessage(message);
       } else {
-        console.log(error);
-        toast.error("Something went wrong");
+        setErrorMessage("Something went wrong");
       }
     }
   };
 
   const handleOTPSuccess = async (e) => {
     e.preventDefault();
-    // let formIsValid = true;
-    // const newErrors = {};
-
-    // if (!user.otp) {
-    //   newErrors.email = "Please Enter OTP to verify";
-    //   formIsValid = false;
-    //   return;
-    // }
-
+    if (!user.otp) {
+      setErrorMessage("Please Enter OTP to verify");
+      return;
+    }
+    setVerifyingOTP(true);
     const body = {
       email: user.email,
       otp: user.otp,
@@ -71,15 +72,20 @@ const ForgotPassword = () => {
         `${process.env.REACT_APP_API}/company/verifyOtp`,
         body
       );
-      if (!!res) {
-        console.log(res);
+      if (res.status === 200) {
         const { token, id } = res.data.data;
-
         navigate(`/resetpassword/${id}/${token}`);
         toast.success(res.data.message);
       }
     } catch (error) {
-      console.log(error);
+      if (error.response && error.response.data) {
+        const { message } = error.response.data;
+        setErrorMessage(message);
+      } else {
+        setErrorMessage("Something went wrong");
+      }
+    } finally {
+      setVerifyingOTP(false);
     }
   };
 
@@ -100,29 +106,14 @@ const ForgotPassword = () => {
             </div>
             {showOTPInput ? (
               <div>
-                <h5
-                  style={{
-                    fontWeight: "500",
-                    fontSize: "1.125rem",
-                    color: "rgb(49 53 51 / 1 !important)",
-                    fontFamily: "IBM Plex Sans,sans-serif",
-                    lineHeight: "1.35rem",
-                    margin: "0px",
-                    textAlign: "center",
-                  }}
-                >
-                  OTP Verification
-                  <p
-                    className="mt-2 mb-4"
-                    style={{
-                      color: "rgb(116 120 141 / 1)",
-                      fontSize: "0.8em",
-                    }}
-                  >
-                    Please enter the OTP sent to your email
-                  </p>
-                </h5>
+                <h5>OTP Verification</h5>
+                <p>Please enter the OTP sent to your email</p>
                 <div className="d-flex flex-column">
+                  {errorMessage && (
+                    <div className="alert alert-danger mt-3" role="alert">
+                      {errorMessage}
+                    </div>
+                  )}
                   <form onSubmit={handleOTPSuccess}>
                     <div className="mb-3">
                       <label htmlFor="exampleInputOTP" className="form-label">
@@ -139,8 +130,12 @@ const ForgotPassword = () => {
                       />
                     </div>
                     <div className="text-center">
-                      <button type="submit" className="btn btn-primary w-75">
-                        Verify OTP
+                      <button
+                        type="submit"
+                        className="btn btn-primary w-75"
+                        disabled={verifyingOTP}
+                      >
+                        {verifyingOTP ? "Verifying..." : "Verify OTP"}
                       </button>
                     </div>
                   </form>
@@ -148,30 +143,14 @@ const ForgotPassword = () => {
               </div>
             ) : (
               <div>
-                <h5
-                  style={{
-                    fontWeight: "500",
-                    fontSize: "1.125rem",
-                    color: "rgb(49 53 51 / 1 !important)",
-                    fontFamily: "IBM Plex Sans,sans-serif",
-                    lineHeight: "1.35rem",
-                    margin: "0px",
-                    textAlign: "center",
-                  }}
-                >
-                  Forgot Password?
-                  <p
-                    className="mt-2 mb-4"
-                    style={{
-                      color: "rgb(116 120 141 / 1)",
-                      fontSize: "0.8em",
-                    }}
-                  >
-                    Enter your email address below to receive a password reset
-                    link
-                  </p>
-                </h5>
+                <h5>Forgot Password?</h5>
+                <p>Enter your email address below to reset your password</p>
                 <div className="d-flex flex-column">
+                  {errorMessage && (
+                    <div className="alert alert-danger mt-3" role="alert">
+                      {errorMessage}
+                    </div>
+                  )}
                   <form onSubmit={handleSubmit}>
                     <div className="mb-3">
                       <label
@@ -193,8 +172,16 @@ const ForgotPassword = () => {
                     </div>
 
                     <div className="text-center">
-                      <button type="submit" className="btn btn-primary w-75">
-                        Submit
+                      <button
+                        type="submit"
+                        className="btn btn-primary w-75"
+                        disabled={emailStatus !== "idle"}
+                      >
+                        {emailStatus === "sending"
+                          ? "Sending..."
+                          : emailStatus === "sent"
+                          ? "Email Sent"
+                          : "Submit"}
                       </button>
                     </div>
 
