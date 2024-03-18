@@ -200,7 +200,7 @@ const Login = () => {
                   </div>
 
                   <div className="mt-3 text-center">
-                    <Link to="/login????" className="text-decoration-none">
+                    <Link to="/forgetpassword" className="text-decoration-none">
                       Forgot Password?
                     </Link>
                   </div>

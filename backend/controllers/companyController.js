@@ -13,7 +13,15 @@ const CompanySchema = require('../models/companySchema/companySchema');
 
 // jwt secret
 const jwtSecret = process.env.JWT_SECRET;
-
+// generate OTP
+function generateOTP () {
+  let digits = '0123456789';
+  let OTP = '';
+  for (let i = 0; i < 4; i++) {
+    OTP += digits[Math.floor(Math.random() * 10)];
+  }
+  return OTP;
+}
 // Configure Nodemailer transporter
 const transporter = nodemailer.createTransport({
   host: 'smtp.gmail.com',
@@ -484,7 +492,7 @@ const companyController = {
     }
   },
 
-  verify: async (req, res) => {
+  verifyEmail: async (req, res) => {
     const verificationToken = req.params.verificationToken;
 
     try {
@@ -575,6 +583,134 @@ const companyController = {
       });
     }
   },
+
+  forgetPassword: async (req, res) => {
+    try {
+      const email = req.body.email;
+
+      if (!email) {
+        return res.status(404).send({ message: 'Please enter your Email' });
+
+      }
+      const user = await CommonSchema.findOne({ email: email });
+
+      if (!user) {
+        return res.status(404).send({ message: 'User not found' });
+      }
+
+      const otp = generateOTP();
+      const otpExpiry = new Date();
+      otpExpiry.setMinutes(otpExpiry.getMinutes() + 15);
+
+      user.forget_password_otp = otp;
+      user.forget_password_otp_expiry = otpExpiry;
+      await user.save();
+
+      var mailOptions = {
+        from: process.env.EMAIL_URL,
+        to: email,
+        subject: 'Forgot Password OTP',
+        text: `Your OTP is: ${otp} `,
+      };
+
+      transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+          console.log(error.message);
+          res.status(500).json({ message: 'Failed to send OTP' });
+
+        } else {
+          // console.log('Email sent: ' + info.response);
+          return res.status(200).send({
+            message: 'OTP sent successfully. Please Check your Mail',
+            data: 'Email sent: ' + info.response,
+            status: "Success",
+            success: true
+          });
+        }
+      });
+    } catch (error) {
+      return res.status(400).send({
+        success: false,
+        message: "Something went wrong",
+        error: error.messsage
+      });
+    }
+  },
+
+  verifyForgetPasswordOTP: async (req, res) => {
+    const { email, otp } = req.body;
+
+    if (!otp) {
+      return res.status(404).send({ message: 'Please Enter OTP' });
+    }
+    const user = await CommonSchema.findOne({ email });
+    if (!user) {
+      return res.status(404).send({ message: 'User not found' });
+    }
+    if (user.forget_password_otp !== otp || user.forget_password_otp_expiry < new Date()) {
+      return res.status(400).send({ message: 'Invalid or expired OTP' });
+    }
+
+    user.forget_password_otp = undefined;
+    user.forget_password_otp_expiry = undefined;
+    await user.save();
+
+    const expireIn = "1d";
+    const token = jwt.sign({ user },
+      jwtSecret,
+      { expiresIn: expireIn });
+
+    var mailOptions = {
+      from: process.env.EMAIL_URL,
+      to: email,
+      subject: 'OTP Verified Successfully.',
+    };
+
+    transporter.sendMail(mailOptions, function (error, info) {
+      if (error) {
+        console.log(error.message);
+        res.status(500).json({ message: 'OTP Not Verified' });
+
+      } else {
+        return res.status(200).send({
+          message: 'OTP Verified Successfully',
+          data: { token, id: user._id },
+          status: "Success",
+          success: true,
+        });
+      }
+    });
+  },
+
+  resetPassword: async (req, res) => {
+    const { id, token } = req.params;
+    const { password } = req.body;
+
+    try {
+      const tokens = jwt.verify(token, 'token');
+      if (tokens) {
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const updatePassword = await CommonSchema.findByIdAndUpdate({ _id: id },
+          { $set: { password: hashedPassword } },
+          { new: true })
+        if (updatePassword) {
+          return res.status(200).send({ message: "Password Reset Successfully", success: true, data: updatePassword })
+        } else {
+          return res.status(404).send({
+            message: "Password not updated",
+            success: false
+          })
+        }
+      }
+    } catch (error) {
+      return res.status(400).send({
+        success: false,
+        message: "Something went wrong",
+        error: error.messsage
+      });
+    }
+  },
+
 };
 
 module.exports = companyController;
