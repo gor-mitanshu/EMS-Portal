@@ -13,6 +13,14 @@ const StepOne = ({ formDataStep1, handleChangeStep1, handleNextStep }) => {
     password: "",
   });
 
+  const requiredErrors = {
+    firstName: "First Name is required",
+    lastName: "Last Name is required",
+    email: "Email is required",
+    phone: "Phone Number is required",
+    password: "Password is required",
+  };
+
   const regex = {
     name: /^[a-zA-Z ]{2,30}$/,
     email: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
@@ -32,51 +40,40 @@ const StepOne = ({ formDataStep1, handleChangeStep1, handleNextStep }) => {
       newErrors[key] = "";
     });
 
-    // Validations
-    if (!firstName) {
-      newErrors.firstName = "Please Enter Your First Name";
-      formIsValid = false;
-    } else if (!regex.name.test(firstName)) {
-      newErrors.firstName =
-        "Please enter a valid First Name (2-30 characters, letters only)";
-      formIsValid = false;
-    }
+    const validateField = (fieldName, regex, errorMessage) => {
+      if (!formDataStep1[fieldName]) {
+        newErrors[fieldName] = requiredErrors[fieldName];
+        formIsValid = false;
+      } else if (!regex.test(formDataStep1[fieldName])) {
+        newErrors[fieldName] = errorMessage;
+        formIsValid = false;
+      }
+    };
 
-    if (!lastName) {
-      newErrors.lastName = "Please Enter Your Last Name";
-      formIsValid = false;
-    } else if (!regex.name.test(lastName)) {
-      newErrors.lastName =
-        "Please enter a valid Last Name (2-30 characters, letters only)";
-      formIsValid = false;
-    }
-
-    if (!email) {
-      newErrors.email = "Please Enter Your Email";
-      formIsValid = false;
-    } else if (!regex.email.test(email)) {
-      newErrors.email = "Please Enter a Valid Email";
-      formIsValid = false;
-    }
-
-    if (!phone) {
-      newErrors.phone = "Please Enter Your Phone Number";
-      formIsValid = false;
-    } else if (!regex.phone.test(phone)) {
-      newErrors.phone = "Phone Number should be exactly 10 digits long";
-      formIsValid = false;
-    }
-
-    if (!password) {
-      newErrors.password = "Please Enter a Password";
-      formIsValid = false;
-    } else if (!regex.password.test(password)) {
-      newErrors.password =
-        "Password should be 5 to 10 characters long and can contain letters, digits, and some special characters";
-      formIsValid = false;
-    }
+    validateField(
+      "firstName",
+      regex.name,
+      "Please enter a valid First Name (2-30 characters, letters only)"
+    );
+    validateField(
+      "lastName",
+      regex.name,
+      "Please enter a valid Last Name (2-30 characters, letters only)"
+    );
+    validateField("email", regex.email, "Please enter a valid Email");
+    validateField(
+      "phone",
+      regex.phone,
+      "Phone Number should be exactly 10 digits long"
+    );
+    validateField(
+      "password",
+      regex.password,
+      "Password should be 5 to 10 characters long and can contain letters, digits, and some special characters"
+    );
 
     setErrors(newErrors);
+
     if (formIsValid) {
       try {
         const body = { firstName, lastName, email, phone, password };
@@ -112,6 +109,7 @@ const StepOne = ({ formDataStep1, handleChangeStep1, handleNextStep }) => {
         }
       }
     }
+
     setIsSubmitting(false);
   };
 
@@ -119,6 +117,7 @@ const StepOne = ({ formDataStep1, handleChangeStep1, handleNextStep }) => {
     const newErrors = { ...errors, [fieldName]: "" };
     setErrors(newErrors);
   };
+
   return (
     <>
       <div className="d-flex flex-column">

@@ -14,6 +14,12 @@ const StepTwo = ({ formDataStep2, handleChangeStep2, handleBackStep }) => {
     employeeStrength: "",
   });
 
+  const requiredErrors = {
+    companyName: "Company Name is required",
+    companySize: "Company Size is required",
+    employeeStrength: "Employee Strength is required",
+  };
+
   const validateStep2 = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -26,33 +32,24 @@ const StepTwo = ({ formDataStep2, handleChangeStep2, handleBackStep }) => {
       newErrors[key] = "";
     });
 
-    // Validations
-    if (!companyName) {
-      newErrors.companyName = "Please Enter Your Company Name";
-      formIsValid = false;
-    } else {
-      newErrors.companyName = "";
-    }
+    const validateField = (fieldName, errorMessage) => {
+      if (!formDataStep2[fieldName]) {
+        newErrors[fieldName] = requiredErrors[fieldName];
+        formIsValid = false;
+      } else {
+        newErrors[fieldName] = "";
+      }
+    };
 
-    if (!companySize) {
-      newErrors.companySize = "Please Enter Your Company Size";
-      formIsValid = false;
-    } else {
-      newErrors.companySize = "";
-    }
+    validateField("companyName", requiredErrors.companyName);
+    validateField("companySize", requiredErrors.companySize);
+    validateField("employeeStrength", requiredErrors.employeeStrength);
 
-    if (!employeeStrength) {
-      newErrors.employeeStrength = "Please Enter Your Company Strength";
-      formIsValid = false;
-    } else {
-      newErrors.employeeStrength = "";
-    }
     setErrors(newErrors);
 
     if (formIsValid) {
       try {
         const user_id = localStorage.getItem("user_id");
-        console.log(user_id);
         const body = { companyName, companySize, employeeStrength, user_id };
         const res = await axios.post(
           `${process.env.REACT_APP_API}/company/signup`,
@@ -86,6 +83,7 @@ const StepTwo = ({ formDataStep2, handleChangeStep2, handleBackStep }) => {
     const newErrors = { ...errors, [fieldName]: "" };
     setErrors(newErrors);
   };
+
   return (
     <>
       <div className="d-flex flex-column">
