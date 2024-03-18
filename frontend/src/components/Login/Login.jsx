@@ -1,25 +1,21 @@
 import React, { useState } from "react";
 import "./Login.css";
 import KarmDigitech from "../../assets/karmdigitech.png";
-import {
-  Link,
-  // useLocation,
-  useNavigate,
-} from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 
 const Login = () => {
   const navigate = useNavigate();
-  // const { state } = useLocation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({
     email: "",
     password: "",
   });
-  const [verificationLink, setVerificationLink] = useState(false);
+  const [verificationLinkStatus, setVerificationLinkStatus] = useState("");
 
+  // Function to validate the form fields
   const validateForm = () => {
     let formIsValid = true;
     const newErrors = {};
@@ -38,10 +34,10 @@ const Login = () => {
     return formIsValid;
   };
 
+  // Function to handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (validateForm()) {
-      // Form is valid, you can submit the data
       try {
         const body = {
           email,
@@ -55,7 +51,6 @@ const Login = () => {
           console.log(res);
           const data = res.data.token;
           localStorage.setItem("token", JSON.stringify(data));
-          // navigate(state?.path || "/dashboard", { replace: true });
           navigate("/dashboard");
           toast.success(res.message);
         }
@@ -66,7 +61,7 @@ const Login = () => {
           if (errors) {
             console.log("email verified error", errors);
             if (status === 300) {
-              setVerificationLink(true);
+              setVerificationLinkStatus("pending");
             }
             toast.error(errors);
             setErrors(errors);
@@ -83,11 +78,13 @@ const Login = () => {
     }
   };
 
+  // Function to handle resend verification link
   const handleResendVerification = async () => {
     try {
       const body = {
         email,
       };
+      setVerificationLinkStatus("sending");
       const res = await axios.post(
         `${process.env.REACT_APP_API}/company/resendVerificationLink`,
         body
@@ -95,9 +92,11 @@ const Login = () => {
       if (res) {
         console.log(res);
         toast.warn(res.data.message);
+        setVerificationLinkStatus("sent");
       }
     } catch (error) {
       console.log(error);
+      setVerificationLinkStatus("");
       if (error && error.response && error.response.data) {
         const { message } = error.response.data;
         console.log(error);
@@ -109,6 +108,7 @@ const Login = () => {
     }
   };
 
+  // Function to handle focus on form fields and clear related errors
   const handleFieldFocus = (fieldName) => {
     const newErrors = { ...errors, [fieldName]: "" };
     setErrors(newErrors);
@@ -116,7 +116,6 @@ const Login = () => {
 
   return (
     <div className="container-fluid d-flex flex-wrap w-100 p-0 vh-100">
-      {/* form */}
       <div className="login-form">
         <div className="login-box">
           <div className="form">
@@ -210,14 +209,18 @@ const Login = () => {
                     Don't have an account? <Link to="/register">Sign Up</Link>
                   </div>
 
-                  {verificationLink && (
-                    <div
-                      className="btn btn-secondary w-100 mt-3"
-                      onClick={handleResendVerification}
-                    >
-                      Click here to resend the Verification Link
-                    </div>
-                  )}
+                  {verificationLinkStatus &&
+                    verificationLinkStatus !== "sent" && (
+                      <div
+                        className="btn btn-secondary w-100 mt-3"
+                        onClick={handleResendVerification}
+                        disabled={verificationLinkStatus === "sending"}
+                      >
+                        {verificationLinkStatus === "sending"
+                          ? "Sending..."
+                          : "Click here to resend the Verification Link"}
+                      </div>
+                    )}
                 </form>
               </div>
             </div>
@@ -225,7 +228,6 @@ const Login = () => {
         </div>
       </div>
 
-      {/* bg */}
       <div className="login-bg-wrapper">
         <div className="login-bg"></div>
         <div className="background-color"></div>
