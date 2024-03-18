@@ -1,22 +1,26 @@
 import React, { useState } from "react";
-import {
-  // Link,
-  useParams,
-  useNavigate,
-} from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 
 const ResetPassword = () => {
   const navigate = useNavigate();
   const { id, token } = useParams();
-  const [error, setError] = useState();
+  const [error, setError] = useState(null);
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!password) {
+      setError("Please Enter a Password");
+      return;
+    }
+    if (!confirmPassword) {
+      setError("Please Enter a Confirm Password");
+      return;
+    }
     if (password !== confirmPassword) {
       setError("Passwords do not match");
       return;
@@ -32,24 +36,19 @@ const ResetPassword = () => {
         `${process.env.REACT_APP_API}/company/resetPassword/${id}/${token}`,
         body
       );
-      if (res) {
-        console.log(res);
+      if (res.status === 200) {
         toast.success(res.data.message);
         navigate("/login");
       }
     } catch (error) {
-      console.log(error);
-      if (error && error.response && error.response.data) {
+      if (error.response && error.response.data) {
         const { message } = error.response.data;
-        console.log(error);
-        toast.error(message);
+        setError(message);
       } else {
-        console.log(error);
-        toast.error("Something went wrong");
+        setError("Something went wrong");
       }
     }
   };
-  console.log(error);
 
   return (
     <div className="container-fluid d-flex flex-wrap w-100 p-0 vh-100">
@@ -61,6 +60,11 @@ const ResetPassword = () => {
             </div>
             <div className="d-flex flex-column">
               <form onSubmit={handleSubmit}>
+                {error && (
+                  <div className="alert alert-danger" role="alert">
+                    {error}
+                  </div>
+                )}
                 <div className="mb-3">
                   <label htmlFor="password" className="form-label">
                     New Password
@@ -72,7 +76,6 @@ const ResetPassword = () => {
                     placeholder="Enter New Password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    required
                   />
                 </div>
                 <div className="mb-3">
@@ -86,7 +89,6 @@ const ResetPassword = () => {
                     placeholder="Confirm New Password"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
-                    required
                   />
                 </div>
                 <div className="text-center">
