@@ -1,17 +1,11 @@
-import React, { useState } from "react";
+import React from "react";
 import Menu from "../../../assets/menu.png";
-import NotificationIcon from "../../../assets/notification.png";
-import Person from "../../../assets/person.png";
 import SearchBar from "../../../UI/Search/Search";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUser, faBell } from "@fortawesome/free-solid-svg-icons";
+import Dropdown from "../../../UI/Dropdown/Dropdown";
 
 const NavbarComponent = ({ handleDrawerOpen }) => {
-  const [isOpen, setOpen] = useState(false);
-
-  const toggleSidebar = () => {
-    setOpen(!isOpen);
-    handleDrawerOpen();
-  };
-
   const currentDate = new Date();
   const options = {
     weekday: "short",
@@ -21,6 +15,12 @@ const NavbarComponent = ({ handleDrawerOpen }) => {
   };
   const formattedDate = currentDate.toLocaleDateString("en-US", options);
 
+  const menuItems = [
+    { text: "Action", link: "/" },
+    { text: "Another action", link: "/" },
+    { text: "Something else here", link: "/" },
+  ];
+
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
       <div className="container-fluid d-block">
@@ -28,7 +28,7 @@ const NavbarComponent = ({ handleDrawerOpen }) => {
           {/* Menu Item and Brand Name */}
           <div className="col-lg-2 col-4 d-flex align-items-center">
             <div
-              onClick={toggleSidebar}
+              onClick={handleDrawerOpen}
               style={{ cursor: "pointer", paddingRight: "12px" }}
             >
               <img src={Menu} alt="" />
@@ -48,38 +48,16 @@ const NavbarComponent = ({ handleDrawerOpen }) => {
           <div className="col-lg-4 col-4 d-flex align-items-center justify-content-end">
             <div className="mr-4">{formattedDate}</div>
             <div className="px-2">
-              <img src={NotificationIcon} alt="" />
+              <Dropdown
+                icon={<FontAwesomeIcon icon={faBell} />}
+                menuItems={menuItems}
+              />
             </div>
-            <div className="dropdown">
-              <button
-                className="btn dropdown-toggle"
-                type="button"
-                id="dropdownMenuButton"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                <img src={Person} alt="" />
-              </button>
-              <ul
-                className="dropdown-menu dropdown-menu-end"
-                aria-labelledby="dropdownMenuButton"
-              >
-                <li>
-                  <a className="dropdown-item" href="/">
-                    Action
-                  </a>
-                </li>
-                <li>
-                  <a className="dropdown-item" href="/">
-                    Another action
-                  </a>
-                </li>
-                <li>
-                  <a className="dropdown-item" href="/">
-                    Something else here
-                  </a>
-                </li>
-              </ul>
+            <div className="px-2">
+              <Dropdown
+                icon={<FontAwesomeIcon icon={faUser} />}
+                menuItems={menuItems}
+              />
             </div>
           </div>
         </div>

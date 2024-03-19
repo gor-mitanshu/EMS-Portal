@@ -1,28 +1,22 @@
-import { useState } from "react";
-
 const Dropdown = ({ icon, menuItems }) => {
-  const [isOpen, setOpen] = useState(false);
-
-  const toggleDropdown = () => {
-    setOpen(!isOpen);
-  };
-
   return (
     <div className="dropdown">
       <button
-        className="btn btn-secondary dropdown-toggle"
+        className="btn  dropdown-toggle"
         type="button"
-        onClick={toggleDropdown}
+        id="dropdownMenuButton"
+        data-bs-toggle="dropdown"
+        aria-expanded="false"
       >
         {icon}
       </button>
       <ul
-        className={`dropdown-menu ${isOpen ? "show" : ""} dropdown-menu-end`}
+        className="dropdown-menu dropdown-menu-end"
         aria-labelledby="dropdownMenuButton"
       >
-        {menuItems.map((item, index) => (
-          <li key={index}>
-            <a className="dropdown-item" href={item.link}>
+        {menuItems.map((item) => (
+          <li>
+            <a className="dropdown-item" href="/">
               {item.text}
             </a>
           </li>
