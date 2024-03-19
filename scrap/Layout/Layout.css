@@ -1,0 +1,10 @@
+.layout {
+  display: flex;
+  /* height: 100vh; */
+}
+.outlet {
+  height: 100% !important;
+  width: 100% !important;
+  overflow: auto;
+  /* padding-top: 68px; */
+}

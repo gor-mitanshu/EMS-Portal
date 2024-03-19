@@ -5,6 +5,7 @@ import Dashboard from "./components/Dashboard/Dashboard";
 import UserVerification from "./components/Verification/Verification";
 import ForgotPassword from "./components/ForgetPassword/ForgetPassword";
 import ResetPassword from "./components/ResetPassword/ResetPassword";
+import Layout from "./components/Layout/Layout";
 
 function App() {
   return (
@@ -20,7 +21,7 @@ function App() {
             element={<UserVerification />}
           />
 
-          <Route path="/" element={<Dashboard />}>
+          <Route path="/" element={<Layout />}>
             <Route index element={<Navigate to="dashboard" replace />} />
             <Route path={"/dashboard"} element={<Dashboard />} />
           </Route>
@@ -31,3 +32,9 @@ function App() {
 }
 
 export default App;
+// xs: 0;
+// sm: 576;
+// md: 768;
+// lg: 992;
+// xl: 1280;
+// xxl: 1400;
