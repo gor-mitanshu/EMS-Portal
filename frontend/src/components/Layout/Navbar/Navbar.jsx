@@ -6,6 +6,8 @@ import { faUser, faBell } from "@fortawesome/free-solid-svg-icons";
 import Dropdown from "../../../UI/Dropdown/Dropdown";
 
 const NavbarComponent = ({ handleDrawerOpen }) => {
+  // console.log(handleDrawerOpen);
+
   const currentDate = new Date();
   const options = {
     weekday: "short",

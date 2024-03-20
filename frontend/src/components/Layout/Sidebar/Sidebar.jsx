@@ -2,7 +2,10 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 
-const Sidebar = () => {
+const Sidebar = ({ open, handleDrawerOpen }) => {
+  // console.log(open);
+  // console.log(handleDrawerOpen);
+
   const menuItems = [
     {
       id: 1,
@@ -111,10 +114,10 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="sidebar">
+    <div className={`sidebar ${open ? "" : "close"}`}>
       <div className="d-flex align-items-center justify-content-between p-3">
         <div>Menu</div>
-        <div className="text-end">
+        <div className="text-end" onClick={handleDrawerOpen} role="button">
           <FontAwesomeIcon icon={faTimes} />
         </div>
       </div>

@@ -8,15 +8,15 @@ const Layout = () => {
   const [open, setOpen] = useState(false);
 
   const handleDrawerOpen = () => {
-    setOpen((toggle) => !toggle);
+    setOpen(!open);
   };
-
+  console.log(open);
   return (
     <>
       <div className="layout">
         <NavbarComponent handleDrawerOpen={handleDrawerOpen} />
-        <div className={open ? "content" : ""}>
-          <Sidebar />
+        <div className={`content`}>
+          <Sidebar open={open} handleDrawerOpen={handleDrawerOpen} />
           <div className="outlet">
             <Outlet />
           </div>

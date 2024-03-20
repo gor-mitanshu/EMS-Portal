@@ -15,7 +15,7 @@ const Dropdown = ({ icon, menuItems }) => {
         aria-labelledby="dropdownMenuButton"
       >
         {menuItems.map((item) => (
-          <li>
+          <li key={item.text}>
             <a className="dropdown-item" href="/">
               {item.text}
             </a>
