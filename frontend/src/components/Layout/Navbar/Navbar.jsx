@@ -27,10 +27,7 @@ const NavbarComponent = ({ handleDrawerOpen }) => {
         <div className="row justify-content-between align-items-center">
           {/* Menu Item and Brand Name */}
           <div className="col-lg-2 col-4 d-flex align-items-center">
-            <div
-              onClick={handleDrawerOpen}
-              style={{ cursor: "pointer", paddingRight: "12px" }}
-            >
+            <div className="px-2" onClick={handleDrawerOpen} role="button">
               <img src={Menu} alt="" />
             </div>
             <a className="navbar-brand" href="/">
