@@ -1,6 +1,7 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import SearchBar from "../../../UI/Search/Search";
 
 const Sidebar = ({ open, handleDrawerOpen }) => {
   // console.log(open);
@@ -119,6 +120,11 @@ const Sidebar = ({ open, handleDrawerOpen }) => {
         <div>Menu</div>
         <div className="text-end" onClick={handleDrawerOpen} role="button">
           <FontAwesomeIcon icon={faTimes} />
+        </div>
+      </div>
+      <div className="row">
+        <div className="col-xs-12 d-lg-none">
+          <SearchBar />
         </div>
       </div>
       {menuItems.map((item) => (

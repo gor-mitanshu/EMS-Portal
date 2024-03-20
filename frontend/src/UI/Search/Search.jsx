@@ -4,7 +4,7 @@ import { faSearch } from "@fortawesome/free-solid-svg-icons";
 
 const SearchBar = () => {
   return (
-    <div className="input-group w-75">
+    <div className="input-group">
       <input
         type="text"
         className="form-control"

@@ -67,12 +67,13 @@
   margin-left: auto;
 }
 
-/* Outlet Styles */
+/* Content Styles */
 .content {
   flex: 1;
-  padding: 20px;
+  /* padding: 20px; */
   overflow-y: auto;
   transition: margin-left 0.3s ease;
+  height: calc(100% - 56px);
 }
 
 .close {
@@ -85,14 +86,12 @@
 @media (max-width: 768px) {
   .sidebar {
     width: 100%;
-    height: auto;
-    position: relative;
+    height: 100%;
   }
 
-  .content,
-  .outlet {
+  .content {
     margin-left: 0;
-    padding: 20px;
+    /* padding: 20px; */
   }
 }
 
@@ -100,10 +99,4 @@
 .layout {
   /* display: flex; */
   height: 100vh;
-}
-
-.outlet {
-  flex: 1;
-  padding: 20px;
-  overflow-y: auto;
 }

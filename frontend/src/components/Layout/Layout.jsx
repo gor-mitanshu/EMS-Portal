@@ -15,11 +15,9 @@ const Layout = () => {
     <>
       <div className="layout">
         <NavbarComponent handleDrawerOpen={handleDrawerOpen} />
+        <Sidebar open={open} handleDrawerOpen={handleDrawerOpen} />
         <div className={`content`}>
-          <Sidebar open={open} handleDrawerOpen={handleDrawerOpen} />
-          <div className="outlet">
-            <Outlet />
-          </div>
+          <Outlet />
         </div>
       </div>
     </>
