@@ -23,3 +23,26 @@
   border: none;
   background-color: transparent;
 }
+
+/* employee cards */
+.employee-cards {
+  display: flex;
+  flex-direction: column;
+}
+
+.employee-cards .card {
+  background-color: #f5f0f0;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+.employee-cards .card-title {
+  font-size: 1rem;
+  margin-bottom: 0;
+}
+
+.employee-cards b {
+  font-size: 1.2rem;
+  color: #333;
+}

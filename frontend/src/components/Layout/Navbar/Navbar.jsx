@@ -48,13 +48,13 @@ const NavbarComponent = ({ handleDrawerOpen }) => {
           {/* Settings icon and profile */}
           <div className="col-lg-4 col-8 d-flex align-items-center justify-content-end">
             <div className="mr-4">{formattedDate}</div>
-            <div className="px-2">
+            <div>
               <Dropdown
                 icon={<FontAwesomeIcon icon={faBell} />}
                 menuItems={menuItems}
               />
             </div>
-            <div className="px-2">
+            <div>
               <Dropdown
                 icon={<FontAwesomeIcon icon={faUser} />}
                 menuItems={menuItems}

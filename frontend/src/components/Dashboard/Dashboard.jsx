@@ -33,8 +33,15 @@ const Dashboard = () => {
     { title: "Settings", icon: faGear },
   ];
 
+  const employeeCards = [
+    { title: "Employees Onboard", value: 1 },
+    { title: "Employees No Activated", value: 0 },
+    { title: "Invaid Email", value: 0 },
+    { title: "Mobile Number not verified", value: 0 },
+  ];
+
   return (
-    <div className="row h-100 justify-content-between pt-4">
+    <div className="row m-0 h-100 justify-content-between pt-4">
       {/* File */}
       <div className="col-lg-3 logo d-flex justify-content-center">
         <div className="d-flex flex-column align-items-center">
@@ -85,7 +92,25 @@ const Dashboard = () => {
       </div>
 
       {/* Employee Cards */}
-      <div className="col-lg-3 employee-cards"></div>
+      <div className="col-lg-3 employee-cards">
+        <div
+          className="card mb-3 mx-2 d-flex flex-column align-items-center justify-content-center px-3 py-2"
+          style={{
+            width: "100%",
+            transition: "transform 0.3s",
+          }}
+        >
+          {employeeCards.map((employeeCard, item) => (
+            <div className="d-flex justify-content-between w-100" key={item}>
+              <h5 className="card-title">{employeeCard.title}</h5>
+              <b>{employeeCard.value}</b>
+            </div>
+          ))}
+          <div className="card-footer text-center">
+            <button className="btn btn-secondary">Add Employee</button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
