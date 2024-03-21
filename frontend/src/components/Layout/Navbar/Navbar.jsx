@@ -38,15 +38,15 @@ const NavbarComponent = ({ handleDrawerOpen }) => {
           </div>
 
           {/* Logged User name and search bar */}
-          <div className="col-lg-6 col-4 d-none d-md-flex align-items-center justify-content-center">
-            <div className="col-3 user-name fs-5">Hi, Mitanshu</div>
+          <div className="col-md-6  col-4 d-none d-md-flex col-0 align-items-center justify-content-center">
+            <div className="col-12 col-lg-3 user-name fs-5">Hi, Mitanshu</div>
             <div className="col-9 d-lg-block d-none">
               <SearchBar />
             </div>
           </div>
 
           {/* Settings icon and profile */}
-          <div className="col-lg-4 col-4 d-flex align-items-center justify-content-end">
+          <div className="col-lg-4 col-8 d-flex align-items-center justify-content-end">
             <div className="mr-4">{formattedDate}</div>
             <div className="px-2">
               <Dropdown
