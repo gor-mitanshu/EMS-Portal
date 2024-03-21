@@ -16,11 +16,18 @@
 }
 
 /* cards */
+.card {
+  width: 180px;
+  height: 180px;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+
 .card-hover:hover {
   transform: translateY(-5px);
   transition: transform 0.5s;
   box-shadow: none;
-  border: none;
+  border: none !important;
   background-color: transparent;
 }
 

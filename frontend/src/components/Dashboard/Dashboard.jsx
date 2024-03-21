@@ -21,23 +21,23 @@ const Dashboard = () => {
   };
 
   const cards = [
-    { title: "Konnect", icon: faUser },
-    { title: "ID & Visiting Card", icon: faAddressCard },
-    { title: "Directory", icon: faBook },
-    { title: "Attendance", icon: faClock },
-    { title: "Leave", icon: faHouse },
-    { title: "Payroll", icon: faMoneyCheckDollar },
+    { title: "Konnect", icon: faUser, color: "#6f1616" },
+    { title: "ID & Visiting Card", icon: faAddressCard, color: "#36367e" },
+    { title: "Directory", icon: faBook, color: "#c7c754" },
+    { title: "Attendance", icon: faClock, color: "#9c5d9c" },
+    { title: "Leave", icon: faHouse, color: "#fc8a81" },
+    { title: "Payroll", icon: faMoneyCheckDollar, color: "#3c733c" },
     // { title: "Holiday Calendar", icon: faCalendarAlt },
     // { title: "My Profile", icon: faUser },
     // { title: "Organization Chart", icon: faProjectDiagram },
-    { title: "Settings", icon: faGear },
+    { title: "Settings", icon: faGear, color: "darkgray" },
   ];
 
   const employeeCards = [
-    { title: "Employees Onboard", value: 1 },
-    { title: "Employees No Activated", value: 0 },
-    { title: "Invaid Email", value: 0 },
-    { title: "Mobile Number not verified", value: 0 },
+    { title: "Employees Onboard", value: 1, color: "#3c733c" },
+    { title: "Employees No Activated", value: 0, color: "#fc8a81" },
+    { title: "Invaid Email", value: 0, color: "#6f1616" },
+    { title: "Mobile Number not verified", value: 0, color: "black" },
   ];
 
   return (
@@ -74,17 +74,20 @@ const Dashboard = () => {
         {cards.map((card, index) => (
           <div
             key={index}
-            className="card mb-3 mx-2 d-flex flex-column align-items-center justify-content-center card-hover"
+            className="card mb-3 mx-2 d-flex flex-column align-items-center justify-content-center card-hover p-4"
             style={{
-              width: "200px",
-              cursor: "pointer",
-              transition: "transform 0.3s",
+              border: `1px solid ${card.color}`,
             }}
           >
-            <div className="card-body">
-              <FontAwesomeIcon icon={card.icon} size="3x" className="mb-2" />
+            <div className="card-body m-0" style={{ flex: "0" }}>
+              <FontAwesomeIcon
+                icon={card.icon}
+                size="3x"
+                className="mb-2"
+                color={card.color}
+              />
             </div>
-            <div className="card-footer text-center">
+            <div className="text-center">
               <h5 className="card-title">{card.title}</h5>
             </div>
           </div>
@@ -102,11 +105,16 @@ const Dashboard = () => {
         >
           {employeeCards.map((employeeCard, item) => (
             <div className="d-flex justify-content-between w-100" key={item}>
-              <h5 className="card-title">{employeeCard.title}</h5>
+              <h5
+                className="card-title"
+                style={{ color: `${employeeCard.color}` }}
+              >
+                {employeeCard.title}
+              </h5>
               <b>{employeeCard.value}</b>
             </div>
           ))}
-          <div className="card-footer text-center">
+          <div className="text-center">
             <button className="btn btn-secondary">Add Employee</button>
           </div>
         </div>
