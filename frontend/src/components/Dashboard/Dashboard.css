@@ -1,0 +1,25 @@
+/* File */
+.dropzone {
+  width: 180px;
+  height: 180px;
+  border: 1.5px dashed #b14b4b;
+  border-radius: 50%;
+  cursor: pointer;
+  position: relative;
+}
+.file {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* cards */
+.card-hover:hover {
+  transform: translateY(-5px);
+  transition: transform 0.5s;
+  box-shadow: none;
+  border: none;
+  background-color: transparent;
+}
