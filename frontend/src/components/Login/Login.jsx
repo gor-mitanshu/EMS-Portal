@@ -48,7 +48,6 @@ const Login = () => {
           body
         );
         if (res) {
-          console.log(res);
           const data = res.data.token;
           localStorage.setItem("token", JSON.stringify(data));
           navigate("/dashboard");
@@ -90,7 +89,6 @@ const Login = () => {
         body
       );
       if (res) {
-        console.log(res);
         toast.warn(res.data.message);
         setVerificationLinkStatus("sent");
       }

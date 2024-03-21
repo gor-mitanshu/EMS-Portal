@@ -1,3 +1,16 @@
+/* Navbar */
+.brand-name {
+  font-family: "Luxurious Roman", serif;
+  font-weight: 600;
+  font-style: normal;
+}
+
+.user-name {
+  font-family: "Song Myung", serif;
+  color: brown;
+  /* font-weight: 400; */
+  /* font-style: normal; */
+}
 /* Sidebar Styles */
 .sidebar {
   width: 250px;
@@ -70,10 +83,10 @@
 /* Content Styles */
 .content {
   flex: 1;
-  /* padding: 20px; */
+  padding: 16px;
   overflow-y: auto;
   transition: margin-left 0.3s ease;
-  height: calc(100% - 56px);
+  height: calc(100% - 72px);
 }
 
 .close {

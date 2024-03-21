@@ -81,7 +81,6 @@ const StepOne = ({ formDataStep1, handleChangeStep1, handleNextStep }) => {
           `${process.env.REACT_APP_API}/company/signup`,
           body
         );
-        console.log(res);
         if (res && res.data.success === true) {
           localStorage.setItem("user_id", res.data.userData._id);
           handleNextStep();

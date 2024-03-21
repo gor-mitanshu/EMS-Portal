@@ -10,13 +10,12 @@ const Layout = () => {
   const handleDrawerOpen = () => {
     setOpen(!open);
   };
-  console.log(open);
   return (
     <>
       <div className="layout">
         <NavbarComponent handleDrawerOpen={handleDrawerOpen} />
         <Sidebar open={open} handleDrawerOpen={handleDrawerOpen} />
-        <div className={`content`}>
+        <div className="content">
           <Outlet />
         </div>
       </div>

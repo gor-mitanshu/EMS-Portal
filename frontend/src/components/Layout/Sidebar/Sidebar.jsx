@@ -4,9 +4,6 @@ import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import SearchBar from "../../../UI/Search/Search";
 
 const Sidebar = ({ open, handleDrawerOpen }) => {
-  // console.log(open);
-  // console.log(handleDrawerOpen);
-
   const menuItems = [
     {
       id: 1,
@@ -119,7 +116,7 @@ const Sidebar = ({ open, handleDrawerOpen }) => {
       <div className="d-flex align-items-center justify-content-between p-3">
         <div>Menu</div>
         <div className="text-end" onClick={handleDrawerOpen} role="button">
-          <FontAwesomeIcon icon={faTimes} />
+          <FontAwesomeIcon icon={faTimes} size="xl" />
         </div>
       </div>
       <div className="row">

@@ -7,7 +7,7 @@ const SearchBar = () => {
     <div className="input-group">
       <input
         type="text"
-        className="form-control"
+        className="form-control shadow-none"
         placeholder="Search Employees"
         aria-label="Search Employees"
         aria-describedby="button-addon2"

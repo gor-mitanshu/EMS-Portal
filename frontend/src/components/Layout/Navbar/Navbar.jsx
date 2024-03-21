@@ -1,13 +1,10 @@
 import React from "react";
-import Menu from "../../../assets/menu.png";
 import SearchBar from "../../../UI/Search/Search";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser, faBell } from "@fortawesome/free-solid-svg-icons";
+import { faUser, faBell, faBars } from "@fortawesome/free-solid-svg-icons";
 import Dropdown from "../../../UI/Dropdown/Dropdown";
 
 const NavbarComponent = ({ handleDrawerOpen }) => {
-  // console.log(handleDrawerOpen);
-
   const currentDate = new Date();
   const options = {
     weekday: "short",
@@ -24,22 +21,25 @@ const NavbarComponent = ({ handleDrawerOpen }) => {
   ];
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light">
+    <nav
+      className="navbar navbar-expand-lg navbar-light p-3"
+      style={{ background: "#eeeeee" }}
+    >
       <div className="container-fluid d-block">
         <div className="row justify-content-between align-items-center">
           {/* Menu Item and Brand Name */}
-          <div className="col-lg-2 col-4 d-flex align-items-center">
-            <div className="px-2" onClick={handleDrawerOpen} role="button">
-              <img src={Menu} alt="" />
+          <div className="col-lg-2 col-4 d-flex align-items-center p-0">
+            <div className="pe-3" onClick={handleDrawerOpen} role="button">
+              <FontAwesomeIcon icon={faBars} size="lg" />
             </div>
-            <a className="navbar-brand" href="/">
+            <a className="navbar-brand brand-name" href="/">
               Karm Digitech
             </a>
           </div>
 
           {/* Logged User name and search bar */}
           <div className="col-lg-6 col-4 d-none d-md-flex align-items-center justify-content-center">
-            <div className="pr-4 col-3">Hi, Gor Mitanshu</div>
+            <div className="col-3 user-name fs-5">Hi, Mitanshu</div>
             <div className="col-9 d-lg-block d-none">
               <SearchBar />
             </div>
