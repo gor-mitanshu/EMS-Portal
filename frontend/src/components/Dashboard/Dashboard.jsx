@@ -27,24 +27,28 @@ const Dashboard = () => {
       icon: faLessThan,
       color: "#6f1616",
       backgroundColor: "rgba(247,112,98,0.6)",
+      value: 4,
     },
     {
       title: "Work from Home",
       icon: faHouse,
       color: "#36367e",
       backgroundColor: "rgba(93,165,218,0.6)",
+      value: 2,
     },
     {
       title: "Total Leave",
       icon: faArrowRightFromBracket,
       color: "#c7c754",
       backgroundColor: "rgba(222,207,63,0.5)",
+      value: 20,
     },
     {
       title: "Comp Off",
       icon: faPerson,
       color: "#9c5d9c",
       backgroundColor: "rgba(193,94,243,0.3)",
+      value: 0,
     },
   ];
 
@@ -141,6 +145,20 @@ const Dashboard = () => {
                       color={employeeCard.color}
                     />
                   </h5>
+                  {/* <div className="progress">
+                    <div
+                      className="progress-bar"
+                      role="progressbar"
+                      style={{
+                        width: `${(employeeCard.value / 20) * 100}%`,
+                      }}
+                      aria-valuenow={employeeCard.value}
+                      aria-valuemin="0"
+                      aria-valuemax="20"
+                    >
+                      {employeeCard.value}
+                    </div>
+                  </div> */}
                   <b style={{ color: "#333", fontSize: "1.2rem" }}>
                     {employeeCard.value}
                   </b>
@@ -150,31 +168,40 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
-
+      <hr />
       <div className="row px-2">
         {/* Other Cards */}
-        <div className="col-lg-6 d-flex justify-content-between pe-0 py-2">
-          <div className="row align-items-center justify-content-between w-100">
+        <div className="col-lg-6 employee-cards py-2 flex-column">
+          <h3 className="text-center pb-2">Employee Records</h3>
+          <div className="row align-items-center justify-content-between">
             {cards.map((card, index) => (
               <div key={index} className="col-lg-6 col-12 mb-3 px-3 py-2">
                 <div
                   className="card card-hover"
                   style={{
-                    // border: `1px solid ${card.color}`,
-                    backgroundColor: `${card.backgroundColor}`,
+                    background: `${card.backgroundColor}`,
+                    // border: `1px solid ${employeeCard.color}`,
                   }}
                 >
-                  <div className="card-body m-0" style={{ flex: "0" }}>
+                  <h5
+                    className="card-title d-flex justify-content-center"
+                    style={{
+                      color: "#333",
+                      fontSize: "1rem",
+                      marginBottom: "5px",
+                    }}
+                  >
+                    {card.title}
                     <FontAwesomeIcon
                       icon={card.icon}
                       size="xl"
-                      className="mb-2"
+                      className="px-2"
                       color={card.color}
                     />
-                  </div>
-                  <div className="text-center">
-                    <h5 className="card-title">{card.title}</h5>
-                  </div>
+                  </h5>
+                  <b style={{ color: "#333", fontSize: "1.2rem" }}>
+                    {card.value}
+                  </b>
                 </div>
               </div>
             ))}

@@ -26,11 +26,8 @@
   text-align: center;
   cursor: pointer;
   transition: transform 0.3s;
-  /* background-color: #fff; */
-  /* border: 1px solid #ddd; */
   border-radius: 10px;
   margin-bottom: 10px;
-  padding: "10px";
 }
 
 .card-hover:hover {
@@ -51,7 +48,6 @@
 /* employee cards */
 .employee-cards {
   display: flex;
-  /* flex-direction: column; */
 }
 
 .employee-cards .card {
@@ -71,4 +67,14 @@
 .employee-cards b {
   font-size: 1.2rem;
   color: #333;
+}
+
+/* Progress bar */
+.progress {
+  height: 20px;
+  margin-top: 10px;
+}
+
+.progress-bar {
+  background-color: #6c757d;
 }
