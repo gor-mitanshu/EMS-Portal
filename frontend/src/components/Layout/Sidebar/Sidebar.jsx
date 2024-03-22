@@ -1,6 +1,19 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import {
+  faHome,
+  faBuilding,
+  faUser,
+  faAddressBook,
+  faClipboardCheck,
+  faCalendarAlt,
+  faMoneyCheckAlt,
+  faSitemap,
+  faCalendar,
+  faAward,
+  faTimes,
+  faBars,
+} from "@fortawesome/free-solid-svg-icons";
 import SearchBar from "../../../UI/Search/Search";
 
 const Sidebar = ({ open, handleDrawerOpen }) => {
@@ -8,11 +21,13 @@ const Sidebar = ({ open, handleDrawerOpen }) => {
     {
       id: 1,
       title: "Dashboard",
+      icon: faHome,
       content: null,
     },
     {
       id: 2,
       title: "Company Profile",
+      icon: faBuilding,
       content: [
         "Address",
         "Department",
@@ -28,6 +43,7 @@ const Sidebar = ({ open, handleDrawerOpen }) => {
     {
       id: 3,
       title: "My Profile",
+      icon: faUser,
       content: [
         "Work",
         "Team",
@@ -40,21 +56,25 @@ const Sidebar = ({ open, handleDrawerOpen }) => {
     {
       id: 4,
       title: "Directory",
+      icon: faAddressBook,
       content: null,
     },
     {
       id: 5,
       title: "Attendance",
+      icon: faClipboardCheck,
       content: ["Logs", "Rules", "Approvals", "Settings"],
     },
     {
       id: 6,
       title: "Leave",
+      icon: faCalendarAlt,
       content: ["Logs", "Rules", "Balance"],
     },
     {
       id: 7,
       title: "Payroll",
+      icon: faMoneyCheckAlt,
       content: [
         "Run Payroll",
         "Setup Payroll",
@@ -66,16 +86,19 @@ const Sidebar = ({ open, handleDrawerOpen }) => {
     {
       id: 8,
       title: "Organization Chart",
+      icon: faSitemap,
       content: null,
     },
     {
       id: 9,
       title: "Holiday Calendar",
+      icon: faCalendar,
       content: null,
     },
     {
       id: 10,
       title: "Rewards",
+      icon: faAward,
       content: null,
     },
   ];
@@ -113,11 +136,23 @@ const Sidebar = ({ open, handleDrawerOpen }) => {
 
   return (
     <div className={`sidebar ${open ? "" : "close"}`}>
-      <div className="d-flex align-items-center justify-content-between p-3">
-        <div>Menu</div>
-        <div className="text-end" onClick={handleDrawerOpen} role="button">
-          <FontAwesomeIcon icon={faTimes} size="xl" />
-        </div>
+      <div
+        className="d-flex align-items-center justify-content-end p-3"
+        style={{ height: "72px" }}
+      >
+        {!open ? (
+          <div onClick={handleDrawerOpen}>
+            <FontAwesomeIcon icon={faBars} size="lg" />
+          </div>
+        ) : (
+          <div
+            className="text-end d-flex"
+            onClick={handleDrawerOpen}
+            role="button"
+          >
+            <FontAwesomeIcon icon={faTimes} size="lg" />
+          </div>
+        )}
       </div>
       <div className="row">
         <div className="col-xs-12 d-lg-none">
@@ -137,7 +172,19 @@ const Sidebar = ({ open, handleDrawerOpen }) => {
                     data-bs-target={`#collapse${item.id}`}
                     aria-expanded="false"
                     aria-controls={`collapse${item.id}`}
+                    style={{ padding: "14px" }}
                   >
+                    <FontAwesomeIcon
+                      icon={item.icon}
+                      className="menu-icon"
+                      style={{
+                        paddingRight: "20px",
+                        paddingLeft: "3px",
+                        height: "18px",
+                        // width: "24px",
+                      }}
+                      size="lg"
+                    />
                     {item.title}
                   </button>
                 </h2>
@@ -149,7 +196,15 @@ const Sidebar = ({ open, handleDrawerOpen }) => {
                   <div className="accordion-body list-item-body">
                     <ul className="list-unstyled">
                       {listOrder[item.title].map((subItem, index) => (
-                        <li key={index}>{subItem}</li>
+                        <li key={index}>
+                          <FontAwesomeIcon
+                            icon={
+                              menuItems.find((i) => i.title === item.title).icon
+                            }
+                            className="sub-menu-icon"
+                          />
+                          {subItem}
+                        </li>
                       ))}
                     </ul>
                   </div>
@@ -157,7 +212,19 @@ const Sidebar = ({ open, handleDrawerOpen }) => {
               </div>
             </div>
           ) : (
-            <div className="accordion-item list">{item.title}</div>
+            <div className="accordion-item list">
+              <FontAwesomeIcon
+                icon={item.icon}
+                className="menu-icon"
+                style={{
+                  paddingRight: "20px",
+                  height: "18px",
+                  // width: "24px"
+                }}
+                size="lg"
+              />
+              {item.title}
+            </div>
           )}
         </React.Fragment>
       ))}

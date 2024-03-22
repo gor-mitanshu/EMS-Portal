@@ -20,14 +20,15 @@
   position: fixed;
   top: 0;
   left: 0;
-  transition-duration: 1s;
+  transition-duration: 0.5s;
   z-index: 999;
   box-shadow: 14px 0 34px 0 #dedede;
   text-wrap: nowrap;
+  overflow-x: hidden;
 }
 
 .list {
-  padding: 1rem 1.25rem;
+  padding: 14px;
   font-weight: 500;
 }
 
@@ -87,12 +88,15 @@
   overflow-y: auto;
   transition: margin-left 0.3s ease;
   height: calc(100% - 72px);
+  padding-left: 48px;
 }
 
 .close {
-  left: -300px;
-  transition-duration: 1s;
-  width: 0px !important;
+  /* left: -300px; */
+  transition-duration: 0.5s;
+  width: 48px !important;
+  box-shadow: none;
+  overflow: hidden;
 }
 
 /* Media query for smaller screens */
