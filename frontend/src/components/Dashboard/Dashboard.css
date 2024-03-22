@@ -22,18 +22,15 @@
 
 /* cards */
 .card {
-  width: 180px;
-  height: 180px;
+  width: 100%;
+  text-align: center;
   cursor: pointer;
   transition: transform 0.3s;
-  background-color: #fff; /* White background color */
-  border: 1px solid #ddd;
+  /* background-color: #fff; */
+  /* border: 1px solid #ddd; */
   border-radius: 10px;
   margin-bottom: 10px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  padding: "10px";
 }
 
 .card-hover:hover {
@@ -54,7 +51,7 @@
 /* employee cards */
 .employee-cards {
   display: flex;
-  flex-direction: column;
+  /* flex-direction: column; */
 }
 
 .employee-cards .card {

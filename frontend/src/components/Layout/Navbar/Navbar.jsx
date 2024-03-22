@@ -29,7 +29,7 @@ const NavbarComponent = ({ handleDrawerOpen }) => {
         <div className="row justify-content-between align-items-center">
           {/* Menu Item and Brand Name */}
           <div className="col-lg-2 col-4 d-flex align-items-center p-0">
-            <div className="pe-3" onClick={handleDrawerOpen} role="button">
+            <div className="pe-4" onClick={handleDrawerOpen} role="button">
               <FontAwesomeIcon icon={faBars} size="lg" />
             </div>
             <a className="navbar-brand brand-name" href="/">
