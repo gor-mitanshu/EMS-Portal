@@ -141,7 +141,7 @@ const Sidebar = ({ open, handleDrawerOpen }) => {
         style={{ height: "72px" }}
       >
         {!open ? (
-          <div onClick={handleDrawerOpen}>
+          <div onClick={handleDrawerOpen} role="button">
             <FontAwesomeIcon icon={faBars} size="lg" />
           </div>
         ) : (
@@ -154,10 +154,13 @@ const Sidebar = ({ open, handleDrawerOpen }) => {
           </div>
         )}
       </div>
+
       <div className="row">
-        <div className="col-xs-12 d-lg-none">
-          <SearchBar />
-        </div>
+        {open && (
+          <div className="col-xs-12 d-lg-none">
+            <SearchBar />
+          </div>
+        )}
       </div>
       {menuItems.map((item) => (
         <React.Fragment key={item.id}>
@@ -177,19 +180,14 @@ const Sidebar = ({ open, handleDrawerOpen }) => {
                     <FontAwesomeIcon
                       icon={item.icon}
                       className="menu-icon"
-                      style={{
-                        paddingRight: "20px",
-                        paddingLeft: "3px",
-                        height: "18px",
-                        // width: "24px",
-                      }}
+                      role="button"
                       size="lg"
                     />
                     {item.title}
                   </button>
                 </h2>
                 <div
-                  id={`collapse${item.id}`}
+                  id={open ? `collapse${item.id}` : ""}
                   className="accordion-collapse collapse"
                   aria-labelledby={`heading${item.id}`}
                 >
@@ -215,7 +213,6 @@ const Sidebar = ({ open, handleDrawerOpen }) => {
             <div className="accordion-item list">
               <FontAwesomeIcon
                 icon={item.icon}
-                className="menu-icon"
                 style={{
                   paddingRight: "20px",
                   height: "18px",
