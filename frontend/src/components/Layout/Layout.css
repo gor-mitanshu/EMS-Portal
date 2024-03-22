@@ -23,7 +23,7 @@
   left: 0;
   transition-duration: 0.5s;
   z-index: 999;
-  box-shadow: 14px 0 34px 0 #dedede;
+  /* box-shadow: 14px 0 34px 0 #dedede; */
   text-wrap: nowrap;
   overflow-x: hidden;
 }

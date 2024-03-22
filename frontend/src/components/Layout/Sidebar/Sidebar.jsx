@@ -23,11 +23,14 @@ const Sidebar = ({ open, handleDrawerOpen }) => {
       title: "Dashboard",
       icon: faHome,
       content: null,
+      // color: "rgb(93,165,218)",
+      color: "blue",
     },
     {
       id: 2,
       title: "Company Profile",
       icon: faBuilding,
+      color: "black",
       content: [
         "Address",
         "Department",
@@ -44,6 +47,7 @@ const Sidebar = ({ open, handleDrawerOpen }) => {
       id: 3,
       title: "My Profile",
       icon: faUser,
+      color: "darkgrey",
       content: [
         "Work",
         "Team",
@@ -58,23 +62,27 @@ const Sidebar = ({ open, handleDrawerOpen }) => {
       title: "Directory",
       icon: faAddressBook,
       content: null,
+      color: "orange",
     },
     {
       id: 5,
       title: "Attendance",
       icon: faClipboardCheck,
+      color: "purple",
       content: ["Logs", "Rules", "Approvals", "Settings"],
     },
     {
       id: 6,
       title: "Leave",
       icon: faCalendarAlt,
+      color: "red",
       content: ["Logs", "Rules", "Balance"],
     },
     {
       id: 7,
       title: "Payroll",
       icon: faMoneyCheckAlt,
+      color: "green",
       content: [
         "Run Payroll",
         "Setup Payroll",
@@ -88,18 +96,21 @@ const Sidebar = ({ open, handleDrawerOpen }) => {
       title: "Organization Chart",
       icon: faSitemap,
       content: null,
+      color: "cream",
     },
     {
       id: 9,
       title: "Holiday Calendar",
       icon: faCalendar,
       content: null,
+      color: "brown",
     },
     {
       id: 10,
       title: "Rewards",
       icon: faAward,
       content: null,
+      color: "",
     },
   ];
 
@@ -182,6 +193,7 @@ const Sidebar = ({ open, handleDrawerOpen }) => {
                       className="menu-icon"
                       role="button"
                       size="lg"
+                      color={`${item.color}`}
                     />
                     {item.title}
                   </button>
@@ -213,6 +225,7 @@ const Sidebar = ({ open, handleDrawerOpen }) => {
             <div className="accordion-item list">
               <FontAwesomeIcon
                 icon={item.icon}
+                color={item.color}
                 style={{
                   paddingRight: "20px",
                   height: "18px",
