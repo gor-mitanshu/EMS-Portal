@@ -21,129 +21,116 @@ const Sidebar = ({ open, handleDrawerOpen }) => {
     {
       id: 1,
       title: "Dashboard",
+      link: "/dashboard",
       icon: faHome,
-      content: null,
-      // color: "rgb(93,165,218)",
       color: "blue",
+      content: null,
     },
     {
       id: 2,
       title: "Company Profile",
+      link: "/company-profile",
       icon: faBuilding,
       color: "black",
       content: [
-        "Address",
-        "Department",
-        "Designations",
-        "Announcements",
-        "Policies",
-        "Statutory",
-        "Info",
-        "Admins",
-        "My Plan",
+        { title: "Address", link: "/company-profile/address" },
+        { title: "Department", link: "/company-profile/department" },
+        { title: "Designations", link: "/company-profile/designations" },
+        { title: "Announcements", link: "/company-profile/announcements" },
+        { title: "Policies", link: "/company-profile/policies" },
+        { title: "Statutory", link: "/company-profile/statutory" },
+        { title: "Info", link: "/company-profile/info" },
+        { title: "Admins", link: "/company-profile/admins" },
+        { title: "My Plan", link: "/company-profile/my-plans" },
       ],
     },
     {
       id: 3,
       title: "My Profile",
+      link: "/my-profile",
       icon: faUser,
       color: "darkgrey",
       content: [
-        "Work",
-        "Team",
-        "Education",
-        "Family",
-        "Documents",
-        "File Manager",
+        { title: "Work", link: "/my-profile/work" },
+        { title: "Team", link: "/my-profile/team" },
+        { title: "Education", link: "/my-profile/education" },
+        { title: "Family", link: "/my-profile/family" },
+        { title: "Documents", link: "/my-profile/documents" },
+        { title: "File Manager", link: "/my-profile/file-manager" },
       ],
     },
     {
       id: 4,
       title: "Directory",
+      link: "/directory",
       icon: faAddressBook,
-      content: null,
       color: "orange",
+      content: null,
     },
     {
       id: 5,
       title: "Attendance",
+      link: "/attendance",
       icon: faClipboardCheck,
       color: "purple",
-      content: ["Logs", "Rules", "Approvals", "Settings"],
+      content: [
+        { title: "Logs", link: "/my-profile/logs" },
+        { title: "Rules", link: "/my-profile/rules" },
+        { title: "Approvals", link: "/my-profile/approvals" },
+        { title: "Settings", link: "/my-profile/settings" },
+      ],
     },
     {
       id: 6,
       title: "Leave",
+      link: "/leave",
       icon: faCalendarAlt,
       color: "red",
-      content: ["Logs", "Rules", "Balance"],
+      content: [
+        { title: "Logs", link: "/my-profile/logs" },
+        { title: "Rules", link: "/my-profile/rules" },
+        { title: "Balance", link: "/my-profile/balance" },
+      ],
     },
     {
       id: 7,
       title: "Payroll",
+      link: "/payroll",
       icon: faMoneyCheckAlt,
       color: "green",
       content: [
-        "Run Payroll",
-        "Setup Payroll",
-        "Declaration",
-        "Advanced Settings",
-        "Audit History",
+        { title: "Run Payroll", link: "/my-profile/run-payroll" },
+        { title: "Setup Payroll", link: "/my-profile/setup-payroll" },
+        { title: "Declaration", link: "/my-profile/declaration" },
+        { title: "Advanced Settings", link: "/my-profile/advance-settings" },
+        { title: "Audit History", link: "/my-profile/audit-history" },
       ],
     },
     {
       id: 8,
       title: "Organization Chart",
+      link: "/organization-chart",
       icon: faSitemap,
-      content: null,
       color: "cream",
+      content: null,
     },
     {
       id: 9,
       title: "Holiday Calendar",
+      link: "/holiday-calendar",
       icon: faCalendar,
-      content: null,
       color: "brown",
+      content: null,
     },
     {
       id: 10,
       title: "Rewards",
+      link: "/rewards",
       icon: faAward,
-      content: null,
       color: "",
+      content: null,
     },
   ];
-
-  const listOrder = {
-    "Company Profile": [
-      "Address",
-      "Department",
-      "Designations",
-      "Announcements",
-      "Policies",
-      "Statutory",
-      "Info",
-      "Admins",
-      "My Plan",
-    ],
-    "My Profile": [
-      "Work",
-      "Team",
-      "Education",
-      "Family",
-      "Documents",
-      "File Manager",
-    ],
-    Attendance: ["Logs", "Rules", "Approvals", "Settings"],
-    Leave: ["Logs", "Rules", "Balance"],
-    Payroll: [
-      "Run Payroll",
-      "Setup Payroll",
-      "Declaration",
-      "Advanced Settings",
-      "Audit History",
-    ],
-  };
 
   return (
     <div className={`sidebar ${open ? "" : "close"}`}>
@@ -193,9 +180,14 @@ const Sidebar = ({ open, handleDrawerOpen }) => {
                       className="menu-icon"
                       role="button"
                       size="lg"
-                      color={`${item.color}`}
+                      color={`white`}
                     />
-                    {item.title}
+                    <a
+                      href={item.link}
+                      className="text-decoration-none text-white"
+                    >
+                      {item.title}
+                    </a>
                   </button>
                 </h2>
                 <div
@@ -205,15 +197,21 @@ const Sidebar = ({ open, handleDrawerOpen }) => {
                 >
                   <div className="accordion-body list-item-body">
                     <ul className="list-unstyled">
-                      {listOrder[item.title].map((subItem, index) => (
+                      {item.content.map((subItem, index) => (
                         <li key={index}>
                           <FontAwesomeIcon
-                            icon={
-                              menuItems.find((i) => i.title === item.title).icon
-                            }
+                            icon={item.icon}
                             className="sub-menu-icon"
+                            role="button"
+                            size="lg"
+                            color={`white`}
                           />
-                          {subItem}
+                          <a
+                            href={subItem.link}
+                            className="text-decoration-none text-white"
+                          >
+                            {subItem.title}
+                          </a>
                         </li>
                       ))}
                     </ul>
@@ -225,7 +223,7 @@ const Sidebar = ({ open, handleDrawerOpen }) => {
             <div className="accordion-item list">
               <FontAwesomeIcon
                 icon={item.icon}
-                color={item.color}
+                color={"white"}
                 style={{
                   paddingRight: "20px",
                   height: "18px",
@@ -233,7 +231,9 @@ const Sidebar = ({ open, handleDrawerOpen }) => {
                 }}
                 size="lg"
               />
-              {item.title}
+              <a href={item.link} className="text-decoration-none text-white">
+                {item.title}
+              </a>
             </div>
           )}
         </React.Fragment>

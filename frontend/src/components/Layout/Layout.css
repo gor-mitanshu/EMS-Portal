@@ -1,55 +1,61 @@
 /* Navbar */
 .brand-name {
-  font-family: "Luxurious Roman", serif;
-  font-weight: 600;
+  font-family: "Permanent Marker", cursive;
+  font-weight: 800;
   font-style: normal;
 }
 
 .user-name {
   font-family: "Song Myung", serif;
   color: brown;
-  /* font-weight: 400; */
-  /* font-style: normal; */
 }
 /* Sidebar Styles */
 .sidebar {
   width: 250px;
   height: 100%;
-  /* background-color: #f5f5f5; */
-  background-color: #eeeeee;
+  background-color: rgb(25, 113, 114);
+  color: white;
   overflow-y: auto;
   position: fixed;
   top: 0;
   left: 0;
   transition-duration: 0.5s;
   z-index: 999;
-  /* box-shadow: 14px 0 34px 0 #dedede; */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
   text-wrap: nowrap;
   overflow-x: hidden;
+  /* overflow-y: hidden; */
 }
+/* .sidebar:hover {
+  overflow-y: scroll;
+} */
 
 .list {
   padding: 14px;
   font-weight: 500;
+  cursor: pointer;
 }
 
 .list-btn {
-  /* background-color: #f5f5f5 !important; */
-  background-color: #eeeeee !important;
+  background-color: rgb(25, 113, 114) !important;
+  color: white !important;
   box-shadow: none !important;
   font-weight: 500;
 }
 
 .list-item-body {
-  /* background-color: #f5f5f5; */
-  background-color: #eeeeee;
+  background-color: rgb(25, 113, 114);
+  color: white;
   padding-top: 0 !important;
   padding-bottom: 0 !important;
 }
 
 .accordion {
   /* --bs-accordion-bg: #f5f5f5 !important; */
-  --bs-accordion-bg: #eeeeee !important;
+  --bs-accordion-bg: rgb(25, 113, 114) !important;
+  color: white;
 }
 
 .sidebar ul {
@@ -63,22 +69,7 @@
 }
 
 .sidebar li:hover {
-  background-color: #ebebeb;
-}
-
-.submenu {
-  list-style-type: none;
-  padding-left: 0;
-  transition: 0.3s ease;
-}
-
-.submenu li {
-  padding: 5px 15px;
-  cursor: pointer;
-}
-
-.submenu li:hover {
-  background-color: #ddd;
+  background-color: rgb(167 167 167 / 40%) !important;
 }
 
 .sidebar .icon {
@@ -90,6 +81,16 @@
   padding-left: 3px;
   height: 18px;
 }
+.sub-menu-icon {
+  padding-right: 10px;
+  padding-left: 16px;
+}
+
+.accordion-button::after {
+  background-image: url("../../assets/filter-arrow-down.svg") !important;
+  color: white;
+  /* fill: white !important; */
+}
 /* Content Styles */
 .content {
   flex: 1;
@@ -98,6 +99,7 @@
   transition: margin-left 0.3s ease;
   height: calc(100% - 72px);
   padding-left: 48px;
+  background-color: rgba(0, 102, 102, 0.06);
 }
 
 .close {

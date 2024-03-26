@@ -12,7 +12,6 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
 import "./Dashboard.css";
-import ReactEcharts from "echarts-for-react";
 
 const Dashboard = () => {
   const [file, setFile] = useState(null);
@@ -91,23 +90,11 @@ const Dashboard = () => {
     },
   ];
 
-  const option = {
-    xAxis: {
-      data: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
-    },
-    yAxis: {},
-    series: [
-      {
-        type: "scatter",
-        data: [220, 182, 191, 234, 290, 330, 310],
-      },
-    ],
-  };
   return (
     <>
-      <div className="row m-0 px-2">
+      <div className="row m-0 px-2 align-items-center justify-content-center">
         {/* File */}
-        <div className="col-lg-6 py-2">
+        <div className="col-lg-4 py-2">
           <div className="d-flex flex-column align-items-center">
             <div className="dropzone d-flex justify-content-center align-items-center flex-column text-center p-4">
               <label htmlFor="file-upload">
@@ -132,36 +119,17 @@ const Dashboard = () => {
             <b className="pt-2">Karm Digitech</b>
           </div>
         </div>
-
-        <div className="col-lg-6 py-2">
-          <div className="cards">
-            <ReactEcharts option={option} />
-          </div>
-        </div>
       </div>
-
-      {/* Employee Cards */}
-      <div
-        className="col-lg-12 employee-cards py-2"
-        style={{ padding: "0 10rem" }}
-      >
-        <div className="row align-items-center justify-content-between">
+      <div className="col-lg-12 employee-cards py-2">
+        <div className="row w-100">
           {employeeCards.map((employeeCard, index) => (
             <div key={index} className="col-lg-3 col-12 mb-3 px-3 py-2">
-              <div
-                className="card card-hover"
-                style={
-                  {
-                    // background: `${employeeCard.backgroundColor}`,
-                    // border: `1px solid ${employeeCard.color}`,
-                  }
-                }
-              >
-                <h6
+              <div className="card card-hover">
+                <h5
                   className="card-title d-flex justify-content-center"
                   style={{
                     // color: "#333",
-                    fontSize: "13px",
+                    fontSize: "1rem",
                     marginBottom: "5px",
                   }}
                 >
@@ -172,21 +140,7 @@ const Dashboard = () => {
                     // color={employeeCard.color}
                   />
                   {employeeCard.title}
-                </h6>
-                {/* <div className="progress">
-                    <div
-                      className="progress-bar"
-                      role="progressbar"
-                      style={{
-                        width: `${(employeeCard.value / 20) * 100}%`,
-                      }}
-                      aria-valuenow={employeeCard.value}
-                      aria-valuemin="0"
-                      aria-valuemax="20"
-                    >
-                      {employeeCard.value}
-                    </div>
-                  </div> */}
+                </h5>
                 <b style={{ color: "#333", fontSize: "1.2rem" }}>
                   {employeeCard.value}
                 </b>
@@ -194,35 +148,27 @@ const Dashboard = () => {
             </div>
           ))}
 
-          {cards.map((card, index) => (
+          {employeeCards.map((employeeCard, index) => (
             <div key={index} className="col-lg-3 col-12 mb-3 px-3 py-2">
-              <div
-                className="card card-hover"
-                style={
-                  {
-                    // background: `${card.backgroundColor}`,
-                    // border: `1px solid ${employeeCard.color}`,
-                  }
-                }
-              >
-                <h6
+              <div className="card card-hover">
+                <h5
                   className="card-title d-flex justify-content-center"
                   style={{
                     // color: "#333",
-                    fontSize: "13px",
+                    fontSize: "1rem",
                     marginBottom: "5px",
                   }}
                 >
                   <FontAwesomeIcon
-                    icon={card.icon}
+                    icon={employeeCard.icon}
                     size="xl"
                     className="px-2"
-                    // color={card.color}
+                    // color={employeeCard.color}
                   />
-                  {card.title}
-                </h6>
+                  {employeeCard.title}
+                </h5>
                 <b style={{ color: "#333", fontSize: "1.2rem" }}>
-                  {card.value}
+                  {employeeCard.value}
                 </b>
               </div>
             </div>

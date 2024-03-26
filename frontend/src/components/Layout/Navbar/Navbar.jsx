@@ -23,7 +23,10 @@ const NavbarComponent = ({ handleDrawerOpen }) => {
   return (
     <nav
       className="navbar navbar-expand-lg navbar-light p-3"
-      style={{ background: "#eeeeee" }}
+      style={{
+        background: "rgba(97, 168, 172,0.4)",
+        boxShadow: " 0 4px 8px rgba(0, 0, 0, 0.1)",
+      }}
     >
       <div className="container-fluid d-block">
         <div className="row justify-content-between align-items-center">
@@ -32,9 +35,7 @@ const NavbarComponent = ({ handleDrawerOpen }) => {
             <div className="pe-4" onClick={handleDrawerOpen} role="button">
               <FontAwesomeIcon icon={faBars} size="lg" />
             </div>
-            <a className="navbar-brand brand-name" href="/">
-              Karm Digitech
-            </a>
+            <div className="navbar-brand brand-name">Karm Digitech</div>
           </div>
 
           {/* Logged User name and search bar */}
