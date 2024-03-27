@@ -16,6 +16,7 @@ const ProfileSection = ({
           <button
             className="btn btn-link edit-button"
             onClick={handleCancelClick}
+            type="button"
           >
             <FontAwesomeIcon icon={faTimes} size="lg" color="#ec5d5d" />
           </button>
