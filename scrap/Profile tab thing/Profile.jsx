@@ -7,7 +7,7 @@ import {
   faTwitter,
   faLinkedinIn,
 } from "@fortawesome/free-brands-svg-icons";
-import ProfileField from "../../UI/ProfileFields/ProfileFields";
+import ProfileField from "../../../UI/ProfileFields/ProfileFields";
 
 const Profile = () => {
   const [editMode, setEditMode] = useState({

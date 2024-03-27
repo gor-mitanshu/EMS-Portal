@@ -68,8 +68,12 @@
   cursor: pointer;
 }
 
-.sidebar li:hover {
-  background-color: rgb(167 167 167 / 40%) !important;
+.sidebar li:hover,
+.list-btn:hover,
+.list:hover {
+  /* background-color: rgb(167 167 167 / 40%) !important; */
+  background-color: rgba(255, 255, 255, 0.2) !important;
+  border-radius: 12px !important;
 }
 
 .sidebar .icon {
@@ -98,7 +102,8 @@
   overflow-y: auto;
   transition: margin-left 0.3s ease;
   height: calc(100% - 72px);
-  padding-left: 48px;
+  /* padding-left: 48px; */
+  padding-left: 64px;
   background-color: rgba(0, 102, 102, 0.06);
 }
 

@@ -6,7 +6,8 @@ import UserVerification from "./components/Verification/Verification";
 import ForgotPassword from "./components/ForgetPassword/ForgetPassword";
 import ResetPassword from "./components/ResetPassword/ResetPassword";
 import Layout from "./components/Layout/Layout";
-import ProfilePage from "./components/Profile/Profile";
+// import ProfilePage from "./components/Profile/Profile";
+import TabsComponent from "./components/ProfileTab/TabsComponent";
 
 function App() {
   return (
@@ -23,10 +24,10 @@ function App() {
           />
 
           <Route path="/" element={<Layout />}>
-            <Route index element={<Navigate to="profile" replace />} />
+            <Route index element={<Navigate to="tab" replace />} />
             {/* <Route index element={<Navigate to="dashboard" replace />} /> */}
             {/* <Route path={"/dashboard"} element={<Dashboard />} /> */}
-            <Route path={"/profile"} element={<ProfilePage />} />
+            <Route path={"/tab"} element={<TabsComponent />} />
           </Route>
         </Routes>
       </BrowserRouter>

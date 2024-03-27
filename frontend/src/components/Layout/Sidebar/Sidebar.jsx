@@ -165,7 +165,7 @@ const Sidebar = ({ open, handleDrawerOpen }) => {
           {item.content ? (
             <div className="accordion">
               <div className="accordion-item border-0">
-                <h2 className="accordion-header">
+                <h2 className="accordion-header ">
                   <button
                     className="accordion-button collapsed list-btn"
                     type="button"
