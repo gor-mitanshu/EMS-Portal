@@ -25,6 +25,12 @@ const User = new mongoose.Schema({
      gender: { type: String, enum: ['male', 'female', 'other'] },
      blood_group: { type: String },
      marital_status: { type: String, enum: ['single', 'married', 'divorced', 'widowed'] },
+     current_address: { type: String },
+     social_profile: {
+          linked_in: { type: String },
+          facebook: { type: String },
+          twitter: { type: String }
+     },
      image: { type: String },
      deleted_at: { type: Date }
 }, { timestamps: true });

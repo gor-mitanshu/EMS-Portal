@@ -3,9 +3,6 @@ require('dotenv').config();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
-const ejs = require('ejs');
-const fs = require('fs');
-const path = require('path');
 
 // Importing models
 const CommonSchema = require('../models/commonSchema/userSchema').UserModel;
@@ -616,7 +613,6 @@ const companyController = {
         if (error) {
           console.log(error.message);
           res.status(500).json({ message: 'Failed to send OTP' });
-
         } else {
           // console.log('Email sent: ' + info.response);
           return res.status(200).send({
@@ -669,7 +665,6 @@ const companyController = {
       if (error) {
         console.log(error.message);
         res.status(500).json({ message: 'OTP Not Verified' });
-
       } else {
         return res.status(200).send({
           message: 'OTP Verified Successfully',
@@ -708,6 +703,104 @@ const companyController = {
         error: error.messsage
       });
     }
+  },
+
+  getPersonalDetailsOfUserFromToken: async (req, res) => {
+    try {
+      const token = req.headers.authorization;
+      if (!token) {
+        return res.status(500).send({
+          error: "Token not found",
+          success: false
+        });
+      }
+      const data = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
+      if (!data) {
+        return res.status(404).send({
+          message: "Unalbe to parse the token",
+          success: false,
+          error: res.message
+        });
+      }
+      const user = await CommonSchema.findOne({ _id: data.user._id })
+      if (!user) {
+        return res.status(404).send({
+          message: "User not found",
+          success: false
+        });
+      }
+      return res.status(200).send({
+        message: "Successfully Got the User",
+        success: true,
+        data: user
+      });
+    } catch (error) {
+      res.status(400).send({
+        message: "Internal server error",
+        error: error.message,
+        success: false
+      });
+    }
+  },
+
+  updatePersonalDetailsOfUser: async (req, res) => {
+    const { id } = req.params;
+    if (!id) {
+      return res.status(404).send({ error: "ID not found", success: false });
+    }
+
+    const { firstName, lastName, birth_date, gender, blood_group, marital_status, email, phone, current_address, linked_in, facebook, twitter } = req.body;
+
+    try {
+      const updateUserFields = {
+        firstname: firstName,
+        lastname: lastName,
+        birth_date: birth_date,
+        gender: gender,
+        blood_group: blood_group,
+        marital_status: marital_status,
+        email: email,
+        phone: phone,
+        current_address: current_address,
+        social_profile: {
+          linked_in: linked_in,
+          facebook: facebook,
+          twitter: twitter
+        }
+
+      }
+
+      const updateUser = await CommonSchema.findOneAndUpdate(
+        { _id: id },
+        { $set: updateUserFields },
+        { new: true }
+      );
+
+      if (!updateUser) {
+        return res.status(500).send({
+          error: "Update Unsuccessful",
+          technicalError: res.message,
+          success: true
+        });
+      } else {
+        return res.status(200).send({
+          message: "Update Successful",
+          data: updateUser,
+          success: true
+        });
+      }
+    } catch (error) {
+      console.log(error)
+      return res.status(400).send({
+        success: false,
+        error: "Internal Server Error",
+        technicalError: error.message
+      });
+    }
+  },
+
+  getCompanyProfile: async (req, res) => {
+
   },
 
 };
