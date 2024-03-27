@@ -1,11 +1,18 @@
 import React, { useState } from "react";
-import Profile from "./Profile/Profile";
+import Profile from "./Profile/PersonalProfile";
+import "./TabComponentProfile.css";
+import Work from "./Work/Work";
 
 const TabsComponent = () => {
-  const [activeTab, setActiveTab] = useState("personal");
+  const [activeTab, setActiveTab] = useState(() => {
+    // Retrieve active tab from localStorage or default to "personal"
+    return localStorage.getItem("activeTab") || "personal";
+  });
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
+    // Save active tab to localStorage
+    localStorage.setItem("activeTab", tab);
   };
 
   const tabItems = [
@@ -26,7 +33,7 @@ const TabsComponent = () => {
     <div className="container">
       <div className="d-flex justify-content-center">
         <ul
-          className="nav nav-tabs flex-nowrap overflow-auto"
+          className="nav nav-tabs flex-nowrap overflow-auto tabs-container"
           style={{ maxWidth: "70%" }}
         >
           {tabItems.map((tab, index) => (
@@ -35,12 +42,6 @@ const TabsComponent = () => {
                 className={`nav-link btn nav-button ${
                   activeTab === tab.toLowerCase() ? "active" : ""
                 }`}
-                style={{
-                  fontSize: "13px",
-                  backgroundColor:
-                    activeTab === tab.toLowerCase() ? "rgb(36 146 147)" : "",
-                  color: activeTab === tab.toLowerCase() ? "#fff" : "black",
-                }}
                 onClick={() => handleTabChange(tab.toLowerCase())}
               >
                 {tab}
@@ -52,8 +53,8 @@ const TabsComponent = () => {
 
       <div className="tab-content pt-4">
         {activeTab === "personal" && <Profile />}
-        {/* {activeTab === "work" && <Work />}
-        {activeTab === "team" && <Team />} */}
+        {activeTab === "work" && <Work />}
+        {/* {activeTab === "team" && <Team />} */}
       </div>
     </div>
   );

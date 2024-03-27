@@ -8,6 +8,7 @@ const ProfileSection = ({
   handleCancelClick,
   children,
 }) => {
+  console.log(editMode);
   return (
     <div className="card">
       <div className="card-header d-flex justify-content-between align-items-center">

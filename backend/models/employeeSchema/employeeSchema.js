@@ -21,6 +21,7 @@ const Employee = new mongoose.Schema({
      work_location: { type: String },
      employment_type: { type: String },
      probabtion_period: { type: String },
+     employee_status: { type: String },
      deleted_at: { type: Date }
 }, { timestamps: true });
 

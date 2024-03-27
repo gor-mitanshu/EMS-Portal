@@ -1,3 +1,19 @@
+/* Tab Container Css */
+.tabs-container {
+  background-color: #f8f9fa !important;
+}
+
+.nav-button {
+  font-size: 13px !important;
+  color: black !important;
+}
+
+.nav-button.active {
+  background-color: rgb(36 146 147) !important;
+  color: #fff !important;
+}
+
+/* Personal Profile Css */
 .card {
   margin-bottom: 20px;
 }
@@ -29,4 +45,9 @@
   color: #fff;
   background-color: #5a6268;
   border-color: #545b62;
+}
+
+/* Work section css */
+.no-focus-box-shadow:focus {
+  box-shadow: none !important;
 }

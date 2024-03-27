@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import "./Profile.css";
 import User from "../../../assets/user.jpg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -241,6 +240,7 @@ const Profile = () => {
                       <div className="col-md-6">
                         <div className="form-group row">
                           <div className="col mb-2">
+                            <label className="form-label">Birth Date:</label>
                             <input
                               type="date"
                               className="form-control"
