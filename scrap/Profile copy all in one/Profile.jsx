@@ -183,7 +183,6 @@ const Profile = () => {
                 <h5 className="card-title">Personal Profile</h5>
                 {editMode.personalProfile ? (
                   <button
-                    type="button"
                     className="btn btn-link edit-button"
                     onClick={() => handleCancelClick("personalProfile")}
                   >
