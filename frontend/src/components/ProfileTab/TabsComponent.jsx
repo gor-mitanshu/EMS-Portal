@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Profile from "./Profile/PersonalProfile";
 import "./TabComponentProfile.css";
 import Work from "./Work/Work";
+import Education from "./Education/Education";
 
 const TabsComponent = () => {
   const [activeTab, setActiveTab] = useState(() => {
@@ -54,7 +55,7 @@ const TabsComponent = () => {
       <div className="tab-content pt-4">
         {activeTab === "personal" && <Profile />}
         {activeTab === "work" && <Work />}
-        {/* {activeTab === "team" && <Team />} */}
+        {activeTab === "education" && <Education />}
       </div>
     </div>
   );
