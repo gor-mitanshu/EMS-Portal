@@ -1,12 +1,14 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import ProfileField from "../../../UI/ProfileFields/ProfileFields";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import { useState } from "react";
 import EducationForm from "./EducationForm";
 import EducationItem from "./EducationItem";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useState } from "react";
+import ProfileField from "../../../UI/ProfileFields/ProfileFields";
 
 const Education = () => {
   const [showForm, setShowForm] = useState(false);
+  const [showEditForm, setShowEditForm] = useState(false);
+  const [educationList, setEducationList] = useState([]);
   const [formData, setFormData] = useState({
     qualification_type: "Graduation",
     course_name: "CE",
@@ -17,10 +19,11 @@ const Education = () => {
     college_name: "AIET",
     university_name: "GTU",
   });
-  const [educationList, setEducationList] = useState([]);
+  const [editIndex, setEditIndex] = useState(null);
 
   const handleAddClick = () => {
     setShowForm(true);
+    setEditIndex(null);
     setFormData({
       qualification_type: "",
       course_name: "",
@@ -32,6 +35,18 @@ const Education = () => {
       university_name: "",
     });
   };
+
+  const handleEditClick = (index) => {
+    setEditIndex(index);
+    setShowEditForm(true);
+    setFormData(educationList[index]);
+  };
+
+  const handleDeleteClick = (index) => {
+    const updatedList = educationList.filter((_, i) => i !== index);
+    setEducationList(updatedList);
+  };
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -42,11 +57,15 @@ const Education = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    // Add the current form data to the educationList
-    setEducationList([...educationList, formData]);
-
-    // Reset the form data
+    if (editIndex !== null) {
+      const updatedList = [...educationList];
+      updatedList[editIndex] = formData;
+      setEducationList(updatedList);
+    } else {
+      setEducationList([...educationList, formData]);
+    }
+    setShowForm(false);
+    setShowEditForm(false);
     setFormData({
       qualification_type: "",
       course_name: "",
@@ -57,34 +76,15 @@ const Education = () => {
       college_name: "",
       university_name: "",
     });
-
-    // If all things work fine then setting the form back to false
-    setShowForm(false);
+    setEditIndex(null);
   };
-
-  const handleDeleteClick = (index) => {
-    const updatedList = educationList.filter((_, i) => i !== index);
-    setEducationList(updatedList);
-  };
-
-  const handleSaveEdit = (index, updatedData) => {
-    const updatedEducationList = educationList.map((item, i) => {
-      if (i === index) {
-        return updatedData;
-      }
-      return item;
-    });
-    setEducationList(updatedEducationList);
-  };
-  const handleCancel = () => {
-    setShowForm(false);
-  };
+  console.log(showForm);
   return (
     <>
       <div className="col-md-12">
-        <ProfileField title={"Education"}>
+        <ProfileField title="Education">
           <>
-            {!showForm ? (
+            {(!showForm || !showEditForm) && (
               <button className="btn btn-primary mb-4" onClick={handleAddClick}>
                 <FontAwesomeIcon
                   icon={faPlus}
@@ -94,31 +94,26 @@ const Education = () => {
                 />
                 Add
               </button>
-            ) : (
+            )}
+            {(showForm || showEditForm) && (
               <EducationForm
                 formData={formData}
                 handleInputChange={handleInputChange}
                 handleSubmit={handleSubmit}
-                handleCancel={handleCancel}
               />
             )}
-
-            <div className="p-4 m-0">
-              {educationList.length > 0 && (
-                <>
-                  {educationList.map((education, index) => (
-                    <EducationItem
-                      key={index}
-                      education={education}
-                      valueIndex={index}
-                      handleDeleteClick={() => handleDeleteClick(index)}
-                      onSaveEdit={handleSaveEdit}
-                      handleCancel={handleCancel}
-                    />
-                  ))}
-                </>
-              )}
-            </div>
+            {educationList.map((education, index) => {
+              return (
+                (!showEditForm || index === editIndex) && (
+                  <EducationItem
+                    key={index}
+                    education={education}
+                    onEditClick={() => handleEditClick(index)}
+                    onDeleteClick={() => handleDeleteClick(index)}
+                  />
+                )
+              );
+            })}
           </>
         </ProfileField>
       </div>

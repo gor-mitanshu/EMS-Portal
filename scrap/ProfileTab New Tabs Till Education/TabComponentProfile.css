@@ -1,0 +1,54 @@
+/* Tab Container Css */
+.tabs-container {
+  background-color: #f8f9fa !important;
+}
+
+.nav-button {
+  font-size: 13px !important;
+  color: black !important;
+}
+
+.nav-button.active {
+  background-color: rgb(36 146 147) !important;
+  color: #fff !important;
+}
+
+/* Personal Profile Css */
+.card {
+  margin-bottom: 20px;
+}
+
+.card-header {
+  background-color: #f8f9fa;
+}
+
+.card-title {
+  margin-bottom: 0;
+}
+
+.card-body {
+  padding: 20px;
+}
+
+.btn {
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+}
+
+.btn-secondary {
+  color: #fff;
+  background-color: #6c757d;
+  border-color: #6c757d;
+}
+
+.btn-secondary:hover {
+  color: #fff;
+  background-color: #5a6268;
+  border-color: #545b62;
+}
+
+/* Work section css */
+.no-focus-box-shadow:focus {
+  box-shadow: none !important;
+  border-color: rgb(36 146 147) !important;
+}

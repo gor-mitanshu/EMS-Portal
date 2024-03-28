@@ -1,9 +1,4 @@
-const EducationForm = ({
-  formData,
-  handleInputChange,
-  handleSubmit,
-  handleCancel,
-}) => {
+const EducationForm = ({ formData, handleInputChange, handleSubmit }) => {
   return (
     <form onSubmit={handleSubmit}>
       <div className="row">
@@ -21,13 +16,13 @@ const EducationForm = ({
                 onChange={handleInputChange}
               >
                 <option value="">Select Qualification Type</option>
-                <option value="Graduation">Graduation</option>
-                <option value="Post Graduation">Post Graduation</option>
-                <option value="Doctorate">Doctorate</option>
-                <option value="Diploma">Diploma</option>
-                <option value="Pre University">Pre University</option>
-                <option value="Other Education">Other Education</option>
-                <option value="Certificate">Certificate</option>
+                <option value="Full Time">Graduation</option>
+                <option value="Part Time">Post Graduation</option>
+                <option value="On Contract">Doctorate</option>
+                <option value="Intern">Diploma</option>
+                <option value="Intern">Pre University</option>
+                <option value="Intern">Other Education</option>
+                <option value="Intern">Certificate</option>
               </select>
             </div>
           </div>
@@ -169,18 +164,9 @@ const EducationForm = ({
           </div>
         </div>
       </div>
-      <div>
-        <button
-          type="button"
-          className="btn btn-danger me-2"
-          onClick={handleCancel}
-        >
-          Cancel
-        </button>
-        <button type="submit" className="btn btn-primary ">
-          Save
-        </button>
-      </div>
+      <button type="submit" className="btn btn-primary">
+        Save
+      </button>
     </form>
   );
 };
