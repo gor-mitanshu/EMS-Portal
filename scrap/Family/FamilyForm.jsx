@@ -5,7 +5,7 @@ const FamilyForm = ({
   handleCancel,
 }) => {
   return (
-    <form>
+    <form onSubmit={handleSubmit}>
       <div className="row">
         {/* Family Name */}
         <div className="col-md-4">
@@ -101,11 +101,7 @@ const FamilyForm = ({
         >
           Cancel
         </button>
-        <button
-          type="button"
-          onClick={handleSubmit}
-          className="btn btn-primary"
-        >
+        <button type="submit" className="btn btn-primary">
           Save
         </button>
       </div>
