@@ -50,4 +50,5 @@
 /* Work section css */
 .no-focus-box-shadow:focus {
   box-shadow: none !important;
+  border-color: rgb(36 146 147) !important;
 }

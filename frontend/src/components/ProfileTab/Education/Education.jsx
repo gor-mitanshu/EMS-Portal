@@ -7,11 +7,14 @@ const Education = () => {
   const [showForm, setShowForm] = useState(false);
   const [educationList, setEducationList] = useState([]);
   const [formData, setFormData] = useState({
-    institute: "",
-    degree: "",
-    fieldOfStudy: "",
-    startDate: "",
-    endDate: "",
+    qualification_type: "",
+    course_name: "",
+    course_type: "",
+    stream: "",
+    course_startDate: "",
+    course_endDate: "",
+    college_name: "",
+    university_name: "",
   });
   const [editIndex, setEditIndex] = useState(null);
 
@@ -19,11 +22,14 @@ const Education = () => {
     setShowForm(true);
     setEditIndex(null);
     setFormData({
-      institute: "",
-      degree: "",
-      fieldOfStudy: "",
-      startDate: "",
-      endDate: "",
+      qualification_type: "",
+      course_name: "",
+      course_type: "",
+      stream: "",
+      course_startDate: "",
+      course_endDate: "",
+      college_name: "",
+      university_name: "",
     });
   };
 
@@ -57,11 +63,14 @@ const Education = () => {
     }
     setShowForm(false);
     setFormData({
-      institute: "",
-      degree: "",
-      fieldOfStudy: "",
-      startDate: "",
-      endDate: "",
+      qualification_type: "",
+      course_name: "",
+      course_type: "",
+      stream: "",
+      course_startDate: "",
+      course_endDate: "",
+      college_name: "",
+      university_name: "",
     });
     setEditIndex(null);
   };
@@ -84,65 +93,190 @@ const Education = () => {
             )}
             {showForm && (
               <form onSubmit={handleSubmit}>
-                <div className="form-group">
-                  <label htmlFor="institute">Institute:</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="institute"
-                    name="institute"
-                    value={formData.institute}
-                    onChange={handleInputChange}
-                  />
+                <div className="row">
+                  {/* Qualification Type */}
+                  <div className="col-md-12">
+                    <div className="form-group row">
+                      <div className="col mb-3">
+                        <label
+                          htmlFor="qualification_type"
+                          className="font-weight-bold"
+                        >
+                          Qualification Type:
+                        </label>
+                        <select
+                          className="form-select no-focus-box-shadow"
+                          name="qualification_type"
+                          value={formData.qualification_type}
+                          onChange={handleInputChange}
+                        >
+                          <option value="">Select Qualification Type</option>
+                          <option value="Full Time">Graduation</option>
+                          <option value="Part Time">Post Graduation</option>
+                          <option value="On Contract">Doctorate</option>
+                          <option value="Intern">Diploma</option>
+                          <option value="Intern">Pre University</option>
+                          <option value="Intern">Other Education</option>
+                          <option value="Intern">Certificate</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div className="form-group">
-                  <label htmlFor="degree">Degree:</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="degree"
-                    name="degree"
-                    value={formData.degree}
-                    onChange={handleInputChange}
-                  />
+                <div className="row">
+                  {/* Course Name */}
+                  <div className="col-md-4">
+                    <div className="form-group row">
+                      <div className="col mb-3">
+                        <label
+                          htmlFor="course_name"
+                          className="font-weight-bold"
+                        >
+                          Course Name:
+                        </label>
+                        <input
+                          type="text"
+                          className="form-control no-focus-box-shadow"
+                          placeholder="Course Name"
+                          name="course_name"
+                          value={formData.course_name}
+                          onChange={handleInputChange}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  {/* Course Type */}
+                  <div className="col-md-4">
+                    <div className="form-group row">
+                      <div className="col mb-3">
+                        <label
+                          htmlFor="course_type"
+                          className="font-weight-bold"
+                        >
+                          Course Type:
+                        </label>
+                        <select
+                          className="form-select no-focus-box-shadow"
+                          name="course_type"
+                          value={formData.course_type}
+                          onChange={handleInputChange}
+                        >
+                          <option value="">Select Employment Type</option>
+                          <option value="Full Time">Full Time</option>
+                          <option value="Part Time">Part Time</option>
+                          <option value="On Contract">Correspondance</option>
+                          <option value="Intern">Certificate</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  {/* Stream */}
+                  <div className="col-md-4">
+                    <div className="form-group row">
+                      <div className="col mb-3">
+                        <label htmlFor="stream" className="font-weight-bold">
+                          Stream:
+                        </label>
+                        <input
+                          type="text"
+                          className="form-control no-focus-box-shadow"
+                          placeholder="Stream"
+                          name="stream"
+                          value={formData.stream}
+                          onChange={handleInputChange}
+                        />
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                {!editIndex && (
-                  <>
-                    <div className="form-group">
-                      <label htmlFor="fieldOfStudy">Field of Study:</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        id="fieldOfStudy"
-                        name="fieldOfStudy"
-                        value={formData.fieldOfStudy}
-                        onChange={handleInputChange}
-                      />
+                <div className="row">
+                  {/* Course Start Date */}
+                  <div className="col-md-4">
+                    <div className="form-group row">
+                      <div className="col mb-3">
+                        <label
+                          htmlFor="course_startDate"
+                          className="font-weight-bold"
+                        >
+                          Course Start Date:
+                        </label>
+                        <input
+                          type="date"
+                          className="form-control no-focus-box-shadow"
+                          placeholder="Course Start Date"
+                          name="course_startDate"
+                          value={formData.course_startDate}
+                          onChange={handleInputChange}
+                        />
+                      </div>
                     </div>
-                    <div className="form-group">
-                      <label htmlFor="startDate">Start Date:</label>
-                      <input
-                        type="date"
-                        className="form-control"
-                        id="startDate"
-                        name="startDate"
-                        value={formData.startDate}
-                        onChange={handleInputChange}
-                      />
+                  </div>
+                  {/* Course End Date */}
+                  <div className="col-md-4">
+                    <div className="form-group row">
+                      <div className="col mb-3">
+                        <label
+                          htmlFor="course_startDate"
+                          className="font-weight-bold"
+                        >
+                          Course Start Date:
+                        </label>
+                        <input
+                          type="date"
+                          className="form-control no-focus-box-shadow"
+                          placeholder="Course Start Date"
+                          name="course_startDate"
+                          value={formData.course_startDate}
+                          onChange={handleInputChange}
+                        />
+                      </div>
                     </div>
-                    <div className="form-group">
-                      <label htmlFor="endDate">End Date:</label>
-                      <input
-                        type="date"
-                        className="form-control"
-                        id="endDate"
-                        name="endDate"
-                        value={formData.endDate}
-                        onChange={handleInputChange}
-                      />
+                  </div>
+                  {/* College Name*/}
+                  <div className="col-md-4">
+                    <div className="form-group row">
+                      <div className="col mb-3">
+                        <label
+                          htmlFor="college_name"
+                          className="font-weight-bold"
+                        >
+                          College Name:
+                        </label>
+                        <input
+                          type="text"
+                          className="form-control no-focus-box-shadow"
+                          placeholder="College Name"
+                          name="college_name"
+                          value={formData.college_name}
+                          onChange={handleInputChange}
+                        />
+                      </div>
                     </div>
-                  </>
-                )}
+                  </div>
+                </div>
+                <div className="row">
+                  {/* University Name */}
+                  <div className="col-md-4">
+                    <div className="form-group row">
+                      <div className="col mb-3">
+                        <label
+                          htmlFor="university_name"
+                          className="font-weight-bold"
+                        >
+                          University Name:
+                        </label>
+                        <input
+                          type="text"
+                          className="form-control no-focus-box-shadow"
+                          placeholder="University Name"
+                          name="university_name"
+                          value={formData.university_name}
+                          onChange={handleInputChange}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
                 <button type="submit" className="btn btn-primary">
                   Save
                 </button>
@@ -151,24 +285,31 @@ const Education = () => {
             {educationList.map((education, index) => (
               <div key={index}>
                 <p>
-                  <strong>Institute:</strong> {education.institute}
+                  <strong>Qualification Type:</strong>{" "}
+                  {education.qualification_type}
                 </p>
                 <p>
-                  <strong>Degree:</strong> {education.degree}
+                  <strong>Course Name:</strong> {education.course_name}
                 </p>
-                {!editIndex && (
-                  <>
-                    <p>
-                      <strong>Field of Study:</strong> {education.fieldOfStudy}
-                    </p>
-                    <p>
-                      <strong>Start Date:</strong> {education.startDate}
-                    </p>
-                    <p>
-                      <strong>End Date:</strong> {education.endDate}
-                    </p>
-                  </>
-                )}
+                <p>
+                  <strong>Course Type:</strong> {education.course_type}
+                </p>
+                <p>
+                  <strong>Stream:</strong> {education.stream}
+                </p>
+                <p>
+                  <strong>Course Start Date:</strong>{" "}
+                  {education.course_startDate}
+                </p>
+                <p>
+                  <strong>Course End Date:</strong> {education.course_endDate}
+                </p>
+                <p>
+                  <strong>College Name:</strong> {education.college_name}
+                </p>
+                <p>
+                  <strong>University Name:</strong> {education.university_name}
+                </p>
                 <div>
                   <button
                     className="btn btn-link"

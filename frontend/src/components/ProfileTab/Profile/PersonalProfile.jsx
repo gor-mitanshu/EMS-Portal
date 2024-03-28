@@ -196,10 +196,16 @@ const Profile = () => {
                       {/* Firstname */}
                       <div className="col-md-6">
                         <div className="form-group row">
-                          <div className="col mb-2">
+                          <div className="col mb-3">
+                            <label
+                              htmlFor="firstName"
+                              className="font-weight-bold"
+                            >
+                              Firstname:
+                            </label>
                             <input
                               type="text"
-                              className="form-control"
+                              className="form-control no-focus-box-shadow"
                               placeholder="Firstname"
                               name="firstName"
                               value={formData.firstName}
@@ -216,10 +222,16 @@ const Profile = () => {
                       {/* lastname */}
                       <div className="col-md-6">
                         <div className="form-group row">
-                          <div className="col mb-2">
+                          <div className="col mb-3">
+                            <label
+                              htmlFor="lastName"
+                              className="font-weight-bold"
+                            >
+                              Lastname:
+                            </label>
                             <input
                               type="text"
-                              className="form-control"
+                              className="form-control no-focus-box-shadow"
                               placeholder="Lastname"
                               name="lastName"
                               value={formData.lastName}
@@ -243,7 +255,7 @@ const Profile = () => {
                             <label className="form-label">Birth Date:</label>
                             <input
                               type="date"
-                              className="form-control"
+                              className="form-control no-focus-box-shadow"
                               placeholder="Date of Birth"
                               name="birth_date"
                               value={formData.birth_date}
@@ -329,10 +341,16 @@ const Profile = () => {
                       {/* Blood Group */}
                       <div className="col-md-6">
                         <div className="form-group row">
-                          <div className="col mb-2">
+                          <div className="col mb-3">
+                            <label
+                              htmlFor="blood_group"
+                              className="font-weight-bold"
+                            >
+                              Blood Group:
+                            </label>
                             <input
                               type="text"
-                              className="form-control"
+                              className="form-control no-focus-box-shadow"
                               placeholder="Blood Group"
                               name="blood_group"
                               value={formData.blood_group}
@@ -349,10 +367,16 @@ const Profile = () => {
                       {/* Marital Status */}
                       <div className="col-md-6">
                         <div className="form-group row">
-                          <div className="col mb-2">
+                          <div className="col mb-3">
+                            <label
+                              htmlFor="marital_status"
+                              className="font-weight-bold"
+                            >
+                              Marital Status:
+                            </label>
                             <input
                               type="text"
-                              className="form-control"
+                              className="form-control no-focus-box-shadow"
                               placeholder="Marital Status"
                               name="marital_status"
                               value={formData.marital_status}
@@ -388,19 +412,23 @@ const Profile = () => {
                   </div>
                   <div>
                     <p>
-                      <strong>Name:</strong> Gor Mitanshu
+                      <strong>Name:</strong>{" "}
+                      {formData.firstName + formData.lastName || "Mitanshu Gor"}
                     </p>
                     <p>
-                      <strong>Date of Birth:</strong> January 3, 2002
+                      <strong>Date of Birth:</strong>{" "}
+                      {formData.birth_date || "03/01/2002"}
                     </p>
                     <p>
-                      <strong>Gender:</strong> Male
+                      <strong>Gender:</strong> {formData.gender || "Male"}
                     </p>
                     <p>
-                      <strong>Blood Group:</strong> B+
+                      <strong>Blood Group:</strong>{" "}
+                      {formData.blood_group || "B +ve"}
                     </p>
                     <p>
-                      <strong>Marital Status:</strong> Single
+                      <strong>Marital Status:</strong>{" "}
+                      {formData.marital_status || "Single"}
                     </p>
                   </div>
                 </div>
@@ -417,13 +445,17 @@ const Profile = () => {
               {editMode.contactInformation ? (
                 <>
                   <div className="row">
+                    {/* Email */}
                     <div className="col-md-12">
                       <div className="form-group row">
-                        <div className="col mb-2">
+                        <div className="col mb-3">
+                          <label htmlFor="email" className="font-weight-bold">
+                            Email:
+                          </label>
                           <input
-                            type="text"
-                            className="form-control"
-                            placeholder="Email"
+                            type="email"
+                            className="form-control no-focus-box-shadow"
+                            placeholder="Enter Your Email"
                             name="email"
                             value={formData.email}
                             onChange={handleInputChange}
@@ -436,13 +468,17 @@ const Profile = () => {
                         </div>
                       </div>
                     </div>
+                    {/* Phone Number */}
                     <div className="col-md-12">
                       <div className="form-group row">
-                        <div className="col mb-2">
+                        <div className="col mb-3">
+                          <label htmlFor="phone" className="font-weight-bold">
+                            Phone Number:
+                          </label>
                           <input
-                            type="text"
-                            className="form-control"
-                            placeholder="Phone Number"
+                            type="number"
+                            className="form-control no-focus-box-shadow"
+                            placeholder="Enter Your Phone Number"
                             name="phone"
                             value={formData.phone}
                             onChange={handleInputChange}
@@ -461,10 +497,12 @@ const Profile = () => {
               ) : (
                 <>
                   <p>
-                    <strong>Email:</strong> gor.mitanshu3@gmail.com
+                    <strong>Email:</strong>{" "}
+                    {formData.email || "gor.mitanshu3@gmail.com"}
                   </p>
                   <p>
-                    <strong>Phone Number:</strong> 9558993690
+                    <strong>Phone Number:</strong>{" "}
+                    {formData.phone || "9558993690"}
                   </p>
                 </>
               )}
@@ -483,16 +521,23 @@ const Profile = () => {
               {editMode.address ? (
                 <>
                   <div className="row">
-                    <div className="col-md-6">
+                    <div className="col-md-12">
                       <div className="form-group row">
-                        <div className="col mb-2">
-                          <input
+                        <div className="col mb-3">
+                          <label
+                            htmlFor="current_address"
+                            className="font-weight-bold"
+                          >
+                            Current Address:
+                          </label>
+                          <textarea
                             type="text"
-                            className="form-control"
-                            placeholder="Address"
+                            className="form-control no-focus-box-shadow"
+                            placeholder="Full Address"
                             name="current_address"
                             value={formData.current_address}
                             onChange={handleInputChange}
+                            style={{ height: "120px" }}
                           />
                           {formErrors.current_address && (
                             <small className="text-danger">
@@ -505,7 +550,7 @@ const Profile = () => {
                   </div>
                   {/* <input
                     type="text"
-                    className="form-control"
+                        className="form-control no-focus-box-shadow"
                     placeholder="City"
                     onChange={handleInputChange}
                   /> */}
@@ -513,7 +558,7 @@ const Profile = () => {
                 </>
               ) : (
                 <>
-                  <p>-</p>
+                  <p>{formData.current_address || "-"}</p>
                 </>
               )}
             </ProfileField>
@@ -539,7 +584,7 @@ const Profile = () => {
                       <div className="w-100">
                         <input
                           type="text"
-                          className="form-control"
+                          className="form-control no-focus-box-shadow"
                           placeholder="LinkedIn Profile"
                           name="linked_in"
                           value={formData.linked_in}
@@ -565,7 +610,7 @@ const Profile = () => {
                       <div className="w-100">
                         <input
                           type="text"
-                          className="form-control"
+                          className="form-control no-focus-box-shadow"
                           placeholder="Facebook Profile"
                           name="facebook"
                           value={formData.facebook}
@@ -591,7 +636,7 @@ const Profile = () => {
                       <div className="w-100">
                         <input
                           type="text"
-                          className="form-control"
+                          className="form-control no-focus-box-shadow"
                           placeholder="Twitter Profile"
                           name="twitter"
                           value={formData.twitter}
