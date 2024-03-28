@@ -78,7 +78,7 @@ const FamilySection = ({ title }) => {
               <button className="btn btn-primary mb-4" onClick={handleAddClick}>
                 <FontAwesomeIcon
                   icon={faPlus}
-                  size="lg"
+                  size="sm"
                   color="white"
                   style={{ paddingRight: "10px" }}
                 />

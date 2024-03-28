@@ -31,7 +31,6 @@ const FamilyItem = ({ family, handleDeleteClick, valueIndex, onSaveEdit }) => {
   const handleCancel = () => {
     setEditMode(false);
   };
-  console.log(family.dependant);
   return (
     <div className="card mb-3">
       <div className="card-body">

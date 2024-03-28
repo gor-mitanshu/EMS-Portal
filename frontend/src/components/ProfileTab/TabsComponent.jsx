@@ -4,6 +4,7 @@ import "./TabComponentProfile.css";
 import Work from "./Work/Work";
 import Education from "./Education/Education";
 import Family from "./Family/Family";
+import DocumentTab from "./Documents/DocumentTab";
 
 const TabsComponent = () => {
   const [activeTab, setActiveTab] = useState(() => {
@@ -24,7 +25,7 @@ const TabsComponent = () => {
     "Education",
     "Family",
     "Documents",
-    "WorkWeek",
+    "Work Week",
     "Attendance",
     "Leave",
     "Payroll",
@@ -36,7 +37,7 @@ const TabsComponent = () => {
       <div className="d-flex justify-content-center">
         <ul
           className="nav nav-tabs flex-nowrap overflow-auto tabs-container"
-          style={{ maxWidth: "70%" }}
+          // style={{ maxWidth: "70%" }}
         >
           {tabItems.map((tab, index) => (
             <li className="nav-item" key={index}>
@@ -58,6 +59,7 @@ const TabsComponent = () => {
         {activeTab === "work" && <Work />}
         {activeTab === "education" && <Education />}
         {activeTab === "family" && <Family />}
+        {activeTab === "documents" && <DocumentTab />}
       </div>
     </div>
   );
