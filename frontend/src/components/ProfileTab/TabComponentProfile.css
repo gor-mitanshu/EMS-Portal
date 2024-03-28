@@ -1,3 +1,12 @@
+/* .card:hover .edit-button {
+  display: block !important;
+  opacity: 1;
+}
+.edit-button {
+  display: none !important;
+  opacity: 0;
+} */
+
 /* Tab Container Css */
 .tabs-container {
   background-color: #f8f9fa !important;

@@ -3,6 +3,7 @@ import Profile from "./Profile/PersonalProfile";
 import "./TabComponentProfile.css";
 import Work from "./Work/Work";
 import Education from "./Education/Education";
+import Family from "./Family/Family";
 
 const TabsComponent = () => {
   const [activeTab, setActiveTab] = useState(() => {
@@ -56,6 +57,7 @@ const TabsComponent = () => {
         {activeTab === "personal" && <Profile />}
         {activeTab === "work" && <Work />}
         {activeTab === "education" && <Education />}
+        {activeTab === "family" && <Family />}
       </div>
     </div>
   );
