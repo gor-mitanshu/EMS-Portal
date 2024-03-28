@@ -3,8 +3,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 
 const EducationItem = ({ education, onEditClick, onDeleteClick }) => {
-  console.log(onEditClick);
-  console.log(onDeleteClick);
   return (
     <div>
       <p>

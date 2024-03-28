@@ -111,15 +111,15 @@ const EducationForm = ({ formData, handleInputChange, handleSubmit }) => {
         <div className="col-md-4">
           <div className="form-group row">
             <div className="col mb-3">
-              <label htmlFor="course_startDate" className="font-weight-bold">
-                Course Start Date:
+              <label htmlFor="course_endDate" className="font-weight-bold">
+                Course End Date:
               </label>
               <input
                 type="date"
                 className="form-control no-focus-box-shadow"
-                placeholder="Course Start Date"
-                name="course_startDate"
-                value={formData.course_startDate}
+                placeholder="Course End Date"
+                name="course_endDate"
+                value={formData.course_endDate}
                 onChange={handleInputChange}
               />
             </div>

@@ -7,6 +7,7 @@ import ProfileField from "../../../UI/ProfileFields/ProfileFields";
 
 const Education = () => {
   const [showForm, setShowForm] = useState(false);
+  const [showEditForm, setShowEditForm] = useState(false);
   const [educationList, setEducationList] = useState([]);
   const [formData, setFormData] = useState({
     qualification_type: "Graduation",
@@ -36,9 +37,8 @@ const Education = () => {
   };
 
   const handleEditClick = (index) => {
-    debugger;
-    setShowForm(true);
     setEditIndex(index);
+    setShowEditForm(true);
     setFormData(educationList[index]);
   };
 
@@ -65,6 +65,7 @@ const Education = () => {
       setEducationList([...educationList, formData]);
     }
     setShowForm(false);
+    setShowEditForm(false);
     setFormData({
       qualification_type: "",
       course_name: "",
@@ -77,14 +78,14 @@ const Education = () => {
     });
     setEditIndex(null);
   };
-
+  console.log(showForm);
   return (
     <>
       <div className="col-md-12">
         <ProfileField title="Education">
           <>
-            {!showForm && (
-              <button className="btn btn-primary" onClick={handleAddClick}>
+            {(!showForm || !showEditForm) && (
+              <button className="btn btn-primary mb-4" onClick={handleAddClick}>
                 <FontAwesomeIcon
                   icon={faPlus}
                   size="lg"
@@ -94,21 +95,25 @@ const Education = () => {
                 Add
               </button>
             )}
-            {showForm && (
+            {(showForm || showEditForm) && (
               <EducationForm
                 formData={formData}
                 handleInputChange={handleInputChange}
                 handleSubmit={handleSubmit}
               />
             )}
-            {educationList.map((education, index) => (
-              <EducationItem
-                key={index}
-                education={education}
-                onEditClick={() => handleEditClick(index)}
-                onDeleteClick={() => handleDeleteClick(index)}
-              />
-            ))}
+            {educationList.map((education, index) => {
+              return (
+                (!showEditForm || index === editIndex) && (
+                  <EducationItem
+                    key={index}
+                    education={education}
+                    onEditClick={() => handleEditClick(index)}
+                    onDeleteClick={() => handleDeleteClick(index)}
+                  />
+                )
+              );
+            })}
           </>
         </ProfileField>
       </div>
