@@ -30,7 +30,7 @@ const ProfileSection = ({
               <FontAwesomeIcon
                 icon={faPencilAlt}
                 size="lg"
-                color=" rgb(25, 113, 114)"
+                color="rgb(25, 113, 114)"
               />
             </button>
           )
