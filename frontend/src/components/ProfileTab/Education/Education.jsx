@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import ProfileField from "../../../UI/ProfileFields/ProfileFields";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 
 const Education = () => {
   const [showForm, setShowForm] = useState(false);
@@ -13,9 +13,29 @@ const Education = () => {
     startDate: "",
     endDate: "",
   });
+  const [editIndex, setEditIndex] = useState(null);
 
   const handleAddClick = () => {
     setShowForm(true);
+    setEditIndex(null);
+    setFormData({
+      institute: "",
+      degree: "",
+      fieldOfStudy: "",
+      startDate: "",
+      endDate: "",
+    });
+  };
+
+  const handleEditClick = (index) => {
+    setShowForm(true);
+    setEditIndex(index);
+    setFormData(educationList[index]);
+  };
+
+  const handleDeleteClick = (index) => {
+    const updatedList = educationList.filter((_, i) => i !== index);
+    setEducationList(updatedList);
   };
 
   const handleInputChange = (e) => {
@@ -28,8 +48,13 @@ const Education = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const newEducationList = [...educationList, formData];
-    setEducationList(newEducationList);
+    if (editIndex !== null) {
+      const updatedList = [...educationList];
+      updatedList[editIndex] = formData;
+      setEducationList(updatedList);
+    } else {
+      setEducationList([...educationList, formData]);
+    }
     setShowForm(false);
     setFormData({
       institute: "",
@@ -38,6 +63,7 @@ const Education = () => {
       startDate: "",
       endDate: "",
     });
+    setEditIndex(null);
   };
 
   return (
@@ -80,39 +106,43 @@ const Education = () => {
                     onChange={handleInputChange}
                   />
                 </div>
-                <div className="form-group">
-                  <label htmlFor="fieldOfStudy">Field of Study:</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="fieldOfStudy"
-                    name="fieldOfStudy"
-                    value={formData.fieldOfStudy}
-                    onChange={handleInputChange}
-                  />
-                </div>
-                <div className="form-group">
-                  <label htmlFor="startDate">Start Date:</label>
-                  <input
-                    type="date"
-                    className="form-control"
-                    id="startDate"
-                    name="startDate"
-                    value={formData.startDate}
-                    onChange={handleInputChange}
-                  />
-                </div>
-                <div className="form-group">
-                  <label htmlFor="endDate">End Date:</label>
-                  <input
-                    type="date"
-                    className="form-control"
-                    id="endDate"
-                    name="endDate"
-                    value={formData.endDate}
-                    onChange={handleInputChange}
-                  />
-                </div>
+                {!editIndex && (
+                  <>
+                    <div className="form-group">
+                      <label htmlFor="fieldOfStudy">Field of Study:</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="fieldOfStudy"
+                        name="fieldOfStudy"
+                        value={formData.fieldOfStudy}
+                        onChange={handleInputChange}
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="startDate">Start Date:</label>
+                      <input
+                        type="date"
+                        className="form-control"
+                        id="startDate"
+                        name="startDate"
+                        value={formData.startDate}
+                        onChange={handleInputChange}
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="endDate">End Date:</label>
+                      <input
+                        type="date"
+                        className="form-control"
+                        id="endDate"
+                        name="endDate"
+                        value={formData.endDate}
+                        onChange={handleInputChange}
+                      />
+                    </div>
+                  </>
+                )}
                 <button type="submit" className="btn btn-primary">
                   Save
                 </button>
@@ -126,15 +156,33 @@ const Education = () => {
                 <p>
                   <strong>Degree:</strong> {education.degree}
                 </p>
-                <p>
-                  <strong>Field of Study:</strong> {education.fieldOfStudy}
-                </p>
-                <p>
-                  <strong>Start Date:</strong> {education.startDate}
-                </p>
-                <p>
-                  <strong>End Date:</strong> {education.endDate}
-                </p>
+                {!editIndex && (
+                  <>
+                    <p>
+                      <strong>Field of Study:</strong> {education.fieldOfStudy}
+                    </p>
+                    <p>
+                      <strong>Start Date:</strong> {education.startDate}
+                    </p>
+                    <p>
+                      <strong>End Date:</strong> {education.endDate}
+                    </p>
+                  </>
+                )}
+                <div>
+                  <button
+                    className="btn btn-link"
+                    onClick={() => handleEditClick(index)}
+                  >
+                    <FontAwesomeIcon icon={faEdit} color="blue" />
+                  </button>
+                  <button
+                    className="btn btn-link"
+                    onClick={() => handleDeleteClick(index)}
+                  >
+                    <FontAwesomeIcon icon={faTrash} color="red" />
+                  </button>
+                </div>
                 <hr />
               </div>
             ))}
