@@ -51,24 +51,39 @@ const IdModal = ({ show, handleClose }) => {
   };
 
   const checkboxes = {
-    PAN_CARD: ["photoId", "dateOfBirth", "currentAddress", "permanentAddress"],
-    PASSPORT: ["photoId", "dateOfBirth", "currentAddress", "permanentAddress"],
-    VOTER_ID: ["photoId", "dateOfBirth", "currentAddress", "permanentAddress"],
-    ELECTRICITY_BILL: ["currentAddress", "permanentAddress"],
-    PHONE_BILL: ["currentAddress", "permanentAddress"],
-    BANK_PASSBOOK: ["currentAddress", "permanentAddress"],
-    RENTAL_AGREEMENT: ["currentAddress"],
-    DRIVING_LICENSE: [
-      "photoId",
-      "dateOfBirth",
-      "currentAddress",
-      "permanentAddress",
+    PAN_CARD: [
+      "Photo Id",
+      "Date of Birth",
+      "Current Address",
+      "Permanent Address",
     ],
     ADHAR_CARD: [
-      "photoId",
-      "dateOfBirth",
-      "currentAddress",
-      "permanentAddress",
+      "Photo Id",
+      "Date of Birth",
+      "Current Address",
+      "Permanent Address",
+    ],
+    PASSPORT: [
+      "Photo Id",
+      "Date of Birth",
+      "Current Address",
+      "Permanent Address",
+    ],
+    VOTER_ID: [
+      "Photo Id",
+      "Date of Birth",
+      "Current Address",
+      "Permanent Address",
+    ],
+    ELECTRICITY_BILL: ["Current Address", "Permanent Address"],
+    PHONE_BILL: ["Current Address", "Permanent Address"],
+    BANK_PASSBOOK: ["Current Address", "Permanent Address"],
+    RENTAL_AGREEMENT: ["Current Address"],
+    DRIVING_LICENSE: [
+      "Photo Id",
+      "Date of Birth",
+      "Current Address",
+      "Permanent Address",
     ],
   };
 
@@ -114,26 +129,27 @@ const IdModal = ({ show, handleClose }) => {
             />
           </Form.Group>
           {/* Render checkboxes based on selected id_type */}
-          <Form.Label
-            style={{ color: "grey" }}
-          >{`Use if proof for`}</Form.Label>
-          {formData.id_type !== "ADHAR_CARD" &&
-            checkboxes[formData.id_type]?.map((checkboxName) => (
-              <Form.Group
-                key={checkboxName}
-                controlId={checkboxName}
-                className="mb-3"
-              >
-                <Form.Check
-                  type="checkbox"
-                  id={checkboxName}
-                  label={checkboxName}
-                  name={checkboxName}
-                  checked={formData[checkboxName]}
-                  onChange={handleCheckboxChange}
-                />
-              </Form.Group>
-            ))}
+          {formData.id_type && (
+            <Form.Label
+              style={{ color: "grey" }}
+            >{`Use if proof for`}</Form.Label>
+          )}
+          {checkboxes[formData.id_type]?.map((checkboxName) => (
+            <Form.Group
+              key={checkboxName}
+              controlId={checkboxName}
+              className="mb-3"
+            >
+              <Form.Check
+                type="checkbox"
+                id={checkboxName}
+                label={checkboxName}
+                name={checkboxName}
+                checked={formData[checkboxName]}
+                onChange={handleCheckboxChange}
+              />
+            </Form.Group>
+          ))}
           {/* File */}
           {formData.id_type !== "ADHAR_CARD" && (
             <Form.Group as={Col} controlId="certificateFile" className="mb-3">
