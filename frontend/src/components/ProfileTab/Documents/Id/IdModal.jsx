@@ -1,5 +1,4 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import { Modal, Button, Form, Col } from "react-bootstrap";
 
 const IdModal = ({ show, handleClose }) => {
@@ -8,6 +7,10 @@ const IdModal = ({ show, handleClose }) => {
     id: "",
     proof_id: "",
     file: null,
+    photoId: false,
+    dateOfBirth: false,
+    currentAddress: false,
+    permanentAddress: false,
   };
 
   const [formData, setFormData] = useState(initialFormData);
@@ -17,6 +20,19 @@ const IdModal = ({ show, handleClose }) => {
     setFormData({
       ...formData,
       [name]: value,
+      // Reset checkboxes when id_type changes
+      photoId: false,
+      dateOfBirth: false,
+      currentAddress: false,
+      permanentAddress: false,
+    });
+  };
+
+  const handleCheckboxChange = (e) => {
+    const { name, checked } = e.target;
+    setFormData({
+      ...formData,
+      [name]: checked,
     });
   };
 
@@ -32,6 +48,28 @@ const IdModal = ({ show, handleClose }) => {
     console.log("Submitted:", formData);
     handleClose();
     setFormData(initialFormData);
+  };
+
+  const checkboxes = {
+    PAN_CARD: ["photoId", "dateOfBirth", "currentAddress", "permanentAddress"],
+    PASSPORT: ["photoId", "dateOfBirth", "currentAddress", "permanentAddress"],
+    VOTER_ID: ["photoId", "dateOfBirth", "currentAddress", "permanentAddress"],
+    ELECTRICITY_BILL: ["currentAddress", "permanentAddress"],
+    PHONE_BILL: ["currentAddress", "permanentAddress"],
+    BANK_PASSBOOK: ["currentAddress", "permanentAddress"],
+    RENTAL_AGREEMENT: ["currentAddress"],
+    DRIVING_LICENSE: [
+      "photoId",
+      "dateOfBirth",
+      "currentAddress",
+      "permanentAddress",
+    ],
+    ADHAR_CARD: [
+      "photoId",
+      "dateOfBirth",
+      "currentAddress",
+      "permanentAddress",
+    ],
   };
 
   return (
@@ -52,15 +90,15 @@ const IdModal = ({ show, handleClose }) => {
               onChange={handleChange}
             >
               <option value="">---</option>
-              <option value="pan_card">PAN Card</option>
-              <option value="adharCard">AdharCard</option>
-              <option value="passport">Passport</option>
-              <option value="driving_licience">Driving Licence</option>
-              <option value="voter_id">Voter Id</option>
-              <option value="Electricity Bill">Electricity Bill</option>
-              <option value="phone_bill">Phone Bill</option>
-              <option value="bank_passbook">Bank Passbook</option>
-              <option value="rental_agreement">Rental Agreement</option>
+              <option value="PAN_CARD">PAN Card</option>
+              <option value="PASSPORT">Passport</option>
+              <option value="VOTER_ID">Voter Id</option>
+              <option value="ELECTRICITY_BILL">Electricity Bill</option>
+              <option value="PHONE_BILL">Phone Bill</option>
+              <option value="BANK_PASSBOOK">Bank Passbook</option>
+              <option value="RENTAL_AGREEMENT">Rental Agreement</option>
+              <option value="DRIVING_LICENSE">Driving Licence</option>
+              <option value="ADHAR_CARD">Adhar Card</option>
             </Form.Control>
           </Form.Group>
           {/* ID */}
@@ -75,61 +113,40 @@ const IdModal = ({ show, handleClose }) => {
               onChange={handleChange}
             />
           </Form.Group>
-          {/* CheckBox */}
-          <Form.Group as={Col} controlId="checkboxes" className="mb-3">
-            <Form.Label>Select Options</Form.Label>
-            <Form.Check
-              type="checkbox"
-              id="photoId"
-              label="Photo ID"
-              name="photoId"
-              checked={formData.photoId}
-              onChange={(e) =>
-                setFormData({ ...formData, photoId: e.target.checked })
-              }
-            />
-            <Form.Check
-              type="checkbox"
-              id="dateOfBirth"
-              label="Date of Birth"
-              name="dateOfBirth"
-              checked={formData.dateOfBirth}
-              onChange={(e) =>
-                setFormData({ ...formData, dateOfBirth: e.target.checked })
-              }
-            />
-            <Form.Check
-              type="checkbox"
-              id="currentAddress"
-              label="Current Address"
-              name="currentAddress"
-              checked={formData.currentAddress}
-              onChange={(e) =>
-                setFormData({ ...formData, currentAddress: e.target.checked })
-              }
-            />
-            <Form.Check
-              type="checkbox"
-              id="permanentAddress"
-              label="Permanent Address"
-              name="permanentAddress"
-              checked={formData.permanentAddress}
-              onChange={(e) =>
-                setFormData({ ...formData, permanentAddress: e.target.checked })
-              }
-            />
-          </Form.Group>
+          {/* Render checkboxes based on selected id_type */}
+          <Form.Label
+            style={{ color: "grey" }}
+          >{`Use if proof for`}</Form.Label>
+          {formData.id_type !== "ADHAR_CARD" &&
+            checkboxes[formData.id_type]?.map((checkboxName) => (
+              <Form.Group
+                key={checkboxName}
+                controlId={checkboxName}
+                className="mb-3"
+              >
+                <Form.Check
+                  type="checkbox"
+                  id={checkboxName}
+                  label={checkboxName}
+                  name={checkboxName}
+                  checked={formData[checkboxName]}
+                  onChange={handleCheckboxChange}
+                />
+              </Form.Group>
+            ))}
           {/* File */}
-          <Form.Group as={Col} controlId="certificateFile" className="mb-3">
-            <Form.Label>Select File</Form.Label>
-            <Form.Control
-              type="file"
-              name="selectedFile"
-              accept=".pdf,.doc,.docx,.jpg,.png"
-              onChange={handleFileChange}
-              required
-            />
-          </Form.Group>
+          {formData.id_type !== "ADHAR_CARD" && (
+            <Form.Group as={Col} controlId="certificateFile" className="mb-3">
+              <Form.Label>Select File</Form.Label>
+              <Form.Control
+                type="file"
+                name="selectedFile"
+                accept=".pdf,.doc,.docx,.jpg,.png"
+                onChange={handleFileChange}
+                required
+              />
+            </Form.Group>
+          )}
           <Button
             variant="secondary"
             className="me-2 btn-danger"
