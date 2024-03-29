@@ -9,12 +9,32 @@ const Work = () => {
   });
 
   const [formData, setFormData] = useState({
-    employee_id: "01",
-    date_of_joining: "01/01/2023",
-    probation_period: "0",
-    employment_type: "Full Time",
+    employee_id: "",
+    date_of_joining: "",
+    probation_period: "",
+    employment_type: "",
     work_location: "",
-    employee_status: "Active",
+    employee_status: "",
+    work_experience: "",
+
+    designation: "",
+    job_title: "",
+    department: "",
+    sub_department: "",
+
+    resignation_date: "",
+    resignation_status: "",
+    notice_period: "",
+    last_working_day: "",
+  });
+
+  const [formErrors, setFormErrors] = useState({
+    employee_id: "",
+    date_of_joining: "",
+    probation_period: "",
+    employment_type: "",
+    work_location: "",
+    employee_status: "",
     work_experience: "",
 
     designation: "",
@@ -34,6 +54,10 @@ const Work = () => {
       ...formData,
       [name]: value,
     });
+    setFormErrors({
+      ...formErrors,
+      [name]: "",
+    });
   };
 
   const handleEditClick = (section) => {
@@ -48,11 +72,104 @@ const Work = () => {
       ...editMode,
       [section]: false,
     });
+
+    // Reset validation errors for all fields in the specific card
+    if (section === "basicInfo") {
+      setFormErrors((prevFormErrors) => ({
+        ...prevFormErrors,
+        employee_id: "",
+        date_of_joining: "",
+        probation_period: "",
+        employment_type: "",
+        work_location: "",
+        employee_status: "",
+        work_experience: "",
+      }));
+    }
+    if (section === "workInfo") {
+      setFormErrors((prevFormErrors) => ({
+        ...prevFormErrors,
+        designation: "",
+        job_title: "",
+        department: "",
+        sub_department: "",
+      }));
+    }
+    if (section === "resignationInfo") {
+      setFormErrors((prevFormErrors) => ({
+        ...prevFormErrors,
+        resignation_date: "",
+        resignation_status: "",
+        notice_period: "",
+        last_working_day: "",
+      }));
+    }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setEditMode(false);
+    // Error Handling
+    let errors = {};
+    // Validate each field based on the section
+    // Basic Info Section
+    if (editMode.basicInfo) {
+      if (!formData.employee_id.trim()) {
+        errors.employee_id = "Employee Id is required";
+      }
+      if (!formData.employment_type.trim()) {
+        errors.employment_type = "Employment Type is required";
+      }
+      if (!formData.date_of_joining) {
+        errors.date_of_joining = "Date of Joining is required";
+      }
+      if (!formData.work_location) {
+        errors.work_location = "Work Location is required";
+      }
+      if (!formData.work_experience.trim()) {
+        errors.work_experience = "Work Experience is required";
+      }
+      if (!formData.probation_period.trim()) {
+        errors.probation_period = "Probation Period is required";
+      }
+    }
+    // Work Info Section
+    if (editMode.workInfo) {
+      if (!formData.designation.trim()) {
+        errors.designation = "Designation is required";
+      }
+      if (!formData.job_title.trim()) {
+        errors.job_title = "Job Title is required";
+      }
+      if (!formData.department.trim()) {
+        errors.department = "Department is required";
+      }
+      if (!formData.sub_department.trim()) {
+        errors.sub_department = "Sub-Department is required";
+      }
+    }
+    // Address Section
+    if (editMode.resignationInfo) {
+      if (!formData.resignation_date) {
+        errors.resignation_date = "Resignation Info is required";
+      }
+      if (!formData.resignation_status) {
+        errors.resignation_status = "Resignation Status is required";
+      }
+      if (!formData.notice_period) {
+        errors.notice_period = "Notice Period is required";
+      }
+      if (!formData.last_working_day) {
+        errors.last_working_day = "Last Working Day is required";
+      }
+    }
+
+    setFormErrors(errors);
+    // If there are no errors, you can submit the form
+    if (Object.keys(errors).length === 0) {
+      // Add your submit logic here
+      setEditMode(false);
+      alert("Form submitted successfully!");
+    }
   };
 
   return (
@@ -90,6 +207,11 @@ const Work = () => {
                                 value={formData.employee_id}
                                 onChange={handleInputChange}
                               />
+                              {formErrors.employee_id && (
+                                <small className="text-danger">
+                                  {formErrors.employee_id}
+                                </small>
+                              )}
                             </div>
                           </div>
                         </div>
@@ -116,6 +238,11 @@ const Work = () => {
                                 <option value="On Contract">On Contract</option>
                                 <option value="Intern">Intern</option>
                               </select>
+                              {formErrors.employment_type && (
+                                <small className="text-danger">
+                                  {formErrors.employment_type}
+                                </small>
+                              )}
                             </div>
                           </div>
                         </div>
@@ -137,6 +264,11 @@ const Work = () => {
                                 value={formData.date_of_joining}
                                 onChange={handleInputChange}
                               />
+                              {formErrors.date_of_joining && (
+                                <small className="text-danger">
+                                  {formErrors.date_of_joining}
+                                </small>
+                              )}
                             </div>
                           </div>
                         </div>
@@ -162,6 +294,11 @@ const Work = () => {
                               >
                                 <option value="">Select Work Location</option>
                               </select>
+                              {formErrors.work_location && (
+                                <small className="text-danger">
+                                  {formErrors.work_location}
+                                </small>
+                              )}
                             </div>
                           </div>
                         </div>
@@ -183,6 +320,11 @@ const Work = () => {
                                 value={formData.work_experience}
                                 onChange={handleInputChange}
                               />
+                              {formErrors.work_experience && (
+                                <small className="text-danger">
+                                  {formErrors.work_experience}
+                                </small>
+                              )}
                             </div>
                           </div>
                         </div>
@@ -204,6 +346,11 @@ const Work = () => {
                                 value={formData.probation_period}
                                 onChange={handleInputChange}
                               />
+                              {formErrors.probation_period && (
+                                <small className="text-danger">
+                                  {formErrors.probation_period}
+                                </small>
+                              )}
                             </div>
                           </div>
                         </div>
@@ -300,6 +447,11 @@ const Work = () => {
                               >
                                 <option value="">Select Designation</option>
                               </select>
+                              {formErrors.designation && (
+                                <small className="text-danger">
+                                  {formErrors.designation}
+                                </small>
+                              )}
                             </div>
                           </div>
                         </div>
@@ -321,6 +473,11 @@ const Work = () => {
                                 value={formData.job_title}
                                 onChange={handleInputChange}
                               />
+                              {formErrors.job_title && (
+                                <small className="text-danger">
+                                  {formErrors.job_title}
+                                </small>
+                              )}
                             </div>
                           </div>
                         </div>
@@ -346,6 +503,11 @@ const Work = () => {
                               >
                                 <option value="">Select Department</option>
                               </select>
+                              {formErrors.department && (
+                                <small className="text-danger">
+                                  {formErrors.department}
+                                </small>
+                              )}
                             </div>
                           </div>
                         </div>
@@ -368,6 +530,11 @@ const Work = () => {
                               >
                                 <option value="">Select Sub-Department</option>
                               </select>
+                              {formErrors.sub_department && (
+                                <small className="text-danger">
+                                  {formErrors.sub_department}
+                                </small>
+                              )}
                             </div>
                           </div>
                         </div>
@@ -443,7 +610,6 @@ const Work = () => {
             </div>
             {/* Card 4 */}
             <div className="row">
-              {/* Card 4 */}
               <div className="col-md-12">
                 <ProfileField
                   title="Resignation Info"
@@ -473,6 +639,11 @@ const Work = () => {
                                   value={formData.resignation_date}
                                   onChange={handleInputChange}
                                 />
+                                {formErrors.resignation_date && (
+                                  <small className="text-danger">
+                                    {formErrors.resignation_date}
+                                  </small>
+                                )}
                               </div>
                             </div>
                           </div>
@@ -494,6 +665,11 @@ const Work = () => {
                                   value={formData.resignation_status}
                                   onChange={handleInputChange}
                                 />
+                                {formErrors.resignation_status && (
+                                  <small className="text-danger">
+                                    {formErrors.resignation_status}
+                                  </small>
+                                )}
                               </div>
                             </div>
                           </div>
@@ -518,6 +694,11 @@ const Work = () => {
                                   value={formData.notice_period}
                                   onChange={handleInputChange}
                                 />
+                                {formErrors.notice_period && (
+                                  <small className="text-danger">
+                                    {formErrors.notice_period}
+                                  </small>
+                                )}
                               </div>
                             </div>
                           </div>
@@ -539,6 +720,11 @@ const Work = () => {
                                   value={formData.last_working_day}
                                   onChange={handleInputChange}
                                 />
+                                {formErrors.last_working_day && (
+                                  <small className="text-danger">
+                                    {formErrors.last_working_day}
+                                  </small>
+                                )}
                               </div>
                             </div>
                           </div>

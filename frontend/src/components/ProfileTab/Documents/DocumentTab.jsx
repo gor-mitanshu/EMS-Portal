@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Id from "./Id/Id";
 import Certificate from "./Certificate/Certificate";
 import Work from "./Work/Work";
@@ -6,7 +6,7 @@ import Work from "./Work/Work";
 const DocumentTab = () => {
   const [subActiveTab, setSubActiveTab] = useState(() => {
     // Retrieve active tab from localStorage or default to "personal"
-    return localStorage.getItem("subActiveTab") || "personal";
+    return localStorage.getItem("subActiveTab") || "id";
   });
 
   const handleTabChange = (tab) => {
@@ -14,6 +14,13 @@ const DocumentTab = () => {
     // Save active tab to localStorage
     localStorage.setItem("subActiveTab", tab);
   };
+
+  useEffect(() => {
+    // Clear subActiveTab from localStorage when moving from my-profile to dashboard
+    return () => {
+      localStorage.removeItem("subActiveTab");
+    };
+  }, []);
 
   const tabItems = ["ID", "Certificate", "Work"];
   return (

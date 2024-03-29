@@ -4,9 +4,9 @@ import CertificateModal from "./CertificateModal";
 const Certificate = () => {
   const [showModal, setShowModal] = useState(false);
 
-  const handleCloseModal = () => {
-    setShowModal(false);
-  };
+  // const handleCloseModal = () => {
+  //   setShowModal(false);
+  // };
 
   const handleShowModal = () => {
     setShowModal(true);
@@ -17,7 +17,11 @@ const Certificate = () => {
       <button className="btn btn-primary" onClick={handleShowModal}>
         Add Certificate
       </button>
-      <CertificateModal show={showModal} handleClose={handleCloseModal} />
+      <CertificateModal
+        show={showModal}
+        // handleClose={handleCloseModal}
+        setShowModal={setShowModal}
+      />
     </div>
   );
 };

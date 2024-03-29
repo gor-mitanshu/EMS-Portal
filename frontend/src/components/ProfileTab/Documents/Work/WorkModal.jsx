@@ -7,14 +7,18 @@ const WorkModal = ({ show, handleClose }) => {
     document_description: "",
     selected_work_file: null,
   };
-
   const [formData, setFormData] = useState(initialFormData);
+  const [formErrors, setFormErrors] = useState(initialFormData);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
       [name]: value,
+    });
+    setFormErrors({
+      ...formErrors,
+      [name]: "",
     });
   };
 
@@ -23,10 +27,32 @@ const WorkModal = ({ show, handleClose }) => {
       ...formData,
       selected_work_file: e.target.files[0],
     });
+    setFormErrors({
+      ...formErrors,
+      selected_work_file: "",
+    });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    // Error Handling
+    let errors = {};
+    // Validate each field based on the section
+    // Basic Info Section
+    if (!formData.document_title) {
+      errors.document_title = "Please Enter Document Title";
+    }
+    if (!formData.document_description) {
+      errors.document_description = "Please Enter Description Title";
+    }
+    if (!formData.selected_work_file) {
+      errors.selected_work_file = "Please select any file";
+    }
+    if (Object.keys(errors).length > 0) {
+      setFormErrors(errors);
+      return;
+    }
+
     console.log("Submitted:", formData);
     handleClose();
     setFormData(initialFormData);
@@ -48,8 +74,10 @@ const WorkModal = ({ show, handleClose }) => {
               placeholder="Enter Document Title"
               value={formData.documentTitle}
               onChange={handleChange}
-              required
             />
+            {formErrors.document_title && (
+              <small className="text-danger">{formErrors.document_title}</small>
+            )}
           </Form.Group>
           {/* Description */}
           <Form.Group
@@ -65,8 +93,12 @@ const WorkModal = ({ show, handleClose }) => {
               placeholder="Enter Description Title"
               value={formData.document_description}
               onChange={handleChange}
-              required
             />
+            {formErrors.document_description && (
+              <small className="text-danger">
+                {formErrors.document_description}
+              </small>
+            )}
           </Form.Group>
           {/* File Selection */}
           <Form.Group as={Col} controlId="workFile" className="mb-3">
@@ -76,8 +108,12 @@ const WorkModal = ({ show, handleClose }) => {
               name="workFile"
               accept=".pdf,.doc,.docx,.jpg,.png"
               onChange={handleFileChange}
-              required
             />
+            {formErrors.selected_work_file && (
+              <small className="text-danger">
+                {formErrors.selected_work_file}
+              </small>
+            )}
           </Form.Group>
           <Button
             variant="secondary"

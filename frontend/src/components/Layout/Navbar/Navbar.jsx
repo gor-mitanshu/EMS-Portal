@@ -3,6 +3,7 @@ import SearchBar from "../../../UI/Search/Search";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faBell, faBars } from "@fortawesome/free-solid-svg-icons";
 import Dropdown from "../../../UI/Dropdown/Dropdown";
+import { Link } from "react-router-dom";
 
 const NavbarComponent = ({ handleDrawerOpen }) => {
   const currentDate = new Date();
@@ -35,7 +36,9 @@ const NavbarComponent = ({ handleDrawerOpen }) => {
             <div className="pe-4" onClick={handleDrawerOpen} role="button">
               <FontAwesomeIcon icon={faBars} size="lg" />
             </div>
-            <div className="navbar-brand brand-name">Karm Digitech</div>
+            <Link to={"/"} className="navbar-brand brand-name">
+              Karm Digitech
+            </Link>
           </div>
 
           {/* Logged User name and search bar */}

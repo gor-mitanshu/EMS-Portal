@@ -1,11 +1,13 @@
 const FamilyForm = ({
   formData,
+  formErrors,
   handleInputChange,
   handleSubmit,
   handleCancel,
+  handleCheckboxChange,
 }) => {
   return (
-    <form>
+    <form onSubmit={handleSubmit}>
       <div className="row">
         {/* Family Name */}
         <div className="col-md-4">
@@ -22,6 +24,9 @@ const FamilyForm = ({
                 value={formData.family_name}
                 onChange={handleInputChange}
               />
+              {formErrors.family_name && (
+                <div className="text-danger">{formErrors.family_name}</div>
+              )}
             </div>
           </div>
         </div>
@@ -48,6 +53,11 @@ const FamilyForm = ({
                 <option value="Brother">Brother</option>
                 <option value="Sister">Sister</option>
               </select>
+              {formErrors.family_relationship && (
+                <div className="text-danger">
+                  {formErrors.family_relationship}
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -66,6 +76,11 @@ const FamilyForm = ({
                 value={formData.family_birth_date}
                 onChange={handleInputChange}
               />
+              {formErrors.family_birth_date && (
+                <div className="text-danger">
+                  {formErrors.family_birth_date}
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -81,11 +96,9 @@ const FamilyForm = ({
               </label>
               <input
                 type="checkbox"
-                id="dependant"
                 name="dependant"
                 checked={formData.dependant}
-                // value={formData.dependant}
-                onChange={handleInputChange}
+                onChange={handleCheckboxChange}
                 style={{ transform: "scale(2)" }}
               />
             </div>
@@ -101,11 +114,7 @@ const FamilyForm = ({
         >
           Cancel
         </button>
-        <button
-          type="button"
-          onClick={handleSubmit}
-          className="btn btn-primary"
-        >
+        <button type="submit" className="btn btn-primary">
           Save
         </button>
       </div>

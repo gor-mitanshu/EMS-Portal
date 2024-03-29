@@ -5,10 +5,6 @@ import IdModal from "./IdModal";
 const Id = () => {
   const [showModal, setShowModal] = useState(false);
 
-  const handleCloseModal = () => {
-    setShowModal(false);
-  };
-
   const handleShowModal = () => {
     setShowModal(true);
   };
@@ -17,7 +13,11 @@ const Id = () => {
       <button className="btn btn-primary" onClick={handleShowModal}>
         Add
       </button>
-      <IdModal show={showModal} handleClose={handleCloseModal} />
+      <IdModal
+        show={showModal}
+        // handleClose={handleCloseModal}
+        setShowModal={setShowModal}
+      />
     </div>
   );
 };

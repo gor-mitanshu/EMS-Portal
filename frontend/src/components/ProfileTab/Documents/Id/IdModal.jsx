@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Modal, Button, Form, Col } from "react-bootstrap";
 
-const IdModal = ({ show, handleClose }) => {
+const IdModal = ({ show, setShowModal }) => {
   const initialFormData = {
     id_type: "",
     id: "",
@@ -12,8 +12,29 @@ const IdModal = ({ show, handleClose }) => {
     currentAddress: false,
     permanentAddress: false,
   };
-
   const [formData, setFormData] = useState(initialFormData);
+  const [formErrors, setFormErrors] = useState({
+    id_type: "",
+    id: "",
+    proof_id: "",
+    file: null,
+  });
+
+  const handleClose = () => {
+    setShowModal(false);
+    setFormErrors({
+      id_type: "",
+      id: "",
+      proof_id: "",
+      file: null,
+    });
+    setFormData({
+      id_type: "",
+      id: "",
+      proof_id: "",
+      file: null,
+    });
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -25,6 +46,11 @@ const IdModal = ({ show, handleClose }) => {
       dateOfBirth: false,
       currentAddress: false,
       permanentAddress: false,
+    });
+
+    setFormErrors({
+      ...formErrors,
+      [name]: "",
     });
   };
 
@@ -41,10 +67,31 @@ const IdModal = ({ show, handleClose }) => {
       ...formData,
       file: e.target.files[0],
     });
+    setFormErrors({
+      ...formErrors,
+      file: "",
+    });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    // Error Handling
+    let errors = {};
+    // Validate each field based on the section
+    // Basic Info Section
+    if (!formData.id_type) {
+      errors.id_type = "Please Select any Id Type";
+    }
+    if (!formData.id) {
+      errors.id = "Please enter any Certificate Title";
+    }
+    if (!formData.file) {
+      errors.file = "Please select any file";
+    }
+    if (Object.keys(errors).length > 0) {
+      setFormErrors(errors);
+      return;
+    }
     console.log("Submitted:", formData);
     handleClose();
     setFormData(initialFormData);
@@ -115,6 +162,9 @@ const IdModal = ({ show, handleClose }) => {
               <option value="DRIVING_LICENSE">Driving Licence</option>
               <option value="ADHAR_CARD">Adhar Card</option>
             </Form.Control>
+            {formErrors.id_type && (
+              <small className="text-danger">{formErrors.id_type}</small>
+            )}
           </Form.Group>
           {/* ID */}
           <Form.Group as={Col} controlId="id" className="mb-3">
@@ -127,6 +177,9 @@ const IdModal = ({ show, handleClose }) => {
               value={formData.id}
               onChange={handleChange}
             />
+            {formErrors.id && (
+              <small className="text-danger">{formErrors.id}</small>
+            )}
           </Form.Group>
           {/* Render checkboxes based on selected id_type */}
           {formData.id_type && (
@@ -159,8 +212,10 @@ const IdModal = ({ show, handleClose }) => {
                 name="selectedFile"
                 accept=".pdf,.doc,.docx,.jpg,.png"
                 onChange={handleFileChange}
-                required
               />
+              {formErrors.file && (
+                <small className="text-danger">{formErrors.file}</small>
+              )}
             </Form.Group>
           )}
           <Button

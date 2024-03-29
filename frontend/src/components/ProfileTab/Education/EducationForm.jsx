@@ -1,5 +1,6 @@
 const EducationForm = ({
   formData,
+  formErrors,
   handleInputChange,
   handleSubmit,
   handleCancel,
@@ -29,6 +30,11 @@ const EducationForm = ({
                 <option value="Other Education">Other Education</option>
                 <option value="Certificate">Certificate</option>
               </select>
+              {formErrors.qualification_type && (
+                <div className="text-danger">
+                  {formErrors.qualification_type}
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -44,11 +50,14 @@ const EducationForm = ({
               <input
                 type="text"
                 className="form-control no-focus-box-shadow"
-                placeholder="Course Name"
+                placeholder="Enter your Course Name"
                 name="course_name"
                 value={formData.course_name}
                 onChange={handleInputChange}
               />
+              {formErrors.course_name && (
+                <div className="text-danger">{formErrors.course_name}</div>
+              )}
             </div>
           </div>
         </div>
@@ -71,6 +80,9 @@ const EducationForm = ({
                 <option value="On Contract">Correspondance</option>
                 <option value="Intern">Certificate</option>
               </select>
+              {formErrors.course_type && (
+                <div className="text-danger">{formErrors.course_type}</div>
+              )}
             </div>
           </div>
         </div>
@@ -84,11 +96,14 @@ const EducationForm = ({
               <input
                 type="text"
                 className="form-control no-focus-box-shadow"
-                placeholder="Stream"
+                placeholder="Enter Your Stream"
                 name="stream"
                 value={formData.stream}
                 onChange={handleInputChange}
               />
+              {formErrors.stream && (
+                <div className="text-danger">{formErrors.stream}</div>
+              )}
             </div>
           </div>
         </div>
@@ -104,11 +119,14 @@ const EducationForm = ({
               <input
                 type="date"
                 className="form-control no-focus-box-shadow"
-                placeholder="Course Start Date"
+                placeholder="Enter Your Course Start Date"
                 name="course_startDate"
                 value={formData.course_startDate}
                 onChange={handleInputChange}
               />
+              {formErrors.course_startDate && (
+                <div className="text-danger">{formErrors.course_startDate}</div>
+              )}
             </div>
           </div>
         </div>
@@ -122,11 +140,14 @@ const EducationForm = ({
               <input
                 type="date"
                 className="form-control no-focus-box-shadow"
-                placeholder="Course End Date"
+                placeholder="Enter Your Course End Date"
                 name="course_endDate"
                 value={formData.course_endDate}
                 onChange={handleInputChange}
               />
+              {formErrors.course_endDate && (
+                <div className="text-danger">{formErrors.course_endDate}</div>
+              )}
             </div>
           </div>
         </div>
@@ -140,11 +161,14 @@ const EducationForm = ({
               <input
                 type="text"
                 className="form-control no-focus-box-shadow"
-                placeholder="College Name"
+                placeholder="Enter Your College Name"
                 name="college_name"
                 value={formData.college_name}
                 onChange={handleInputChange}
               />
+              {formErrors.college_name && (
+                <div className="text-danger">{formErrors.college_name}</div>
+              )}
             </div>
           </div>
         </div>
@@ -160,11 +184,14 @@ const EducationForm = ({
               <input
                 type="text"
                 className="form-control no-focus-box-shadow"
-                placeholder="University Name"
+                placeholder="Enter Your University Name"
                 name="university_name"
                 value={formData.university_name}
                 onChange={handleInputChange}
               />
+              {formErrors.university_name && (
+                <div className="text-danger">{formErrors.university_name}</div>
+              )}
             </div>
           </div>
         </div>

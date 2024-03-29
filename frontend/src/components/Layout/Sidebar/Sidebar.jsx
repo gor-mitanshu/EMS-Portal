@@ -171,7 +171,7 @@ const Sidebar = ({ open, handleDrawerOpen }) => {
                     type="button"
                     data-bs-toggle="collapse"
                     data-bs-target={`#collapse${item.id}`}
-                    aria-expanded="false"
+                    aria-expanded={open ? "true" : "false"}
                     aria-controls={`collapse${item.id}`}
                     style={{ padding: "14px" }}
                   >

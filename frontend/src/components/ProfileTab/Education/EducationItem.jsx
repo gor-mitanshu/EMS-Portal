@@ -8,6 +8,8 @@ const EducationItem = ({
   handleDeleteClick,
   valueIndex,
   onSaveEdit,
+  formErrors,
+  setFormErrors,
 }) => {
   const [editMode, setEditMode] = useState(false);
   const [formData, setFormData] = useState({
@@ -22,6 +24,29 @@ const EducationItem = ({
   });
 
   const handleEditClick = () => {
+    setFormData({
+      qualification_type: education.qualification_type,
+      course_name: education.course_name,
+      course_type: education.course_type,
+      stream: education.stream,
+      course_startDate: education.course_startDate,
+      course_endDate: education.course_endDate,
+      college_name: education.college_name,
+      university_name: education.university_name,
+    });
+
+    // Reset form errors
+    setFormErrors({
+      qualification_type: "",
+      course_name: "",
+      course_type: "",
+      stream: "",
+      course_startDate: "",
+      course_endDate: "",
+      college_name: "",
+      university_name: "",
+    });
+
     setEditMode(true);
   };
 
@@ -31,15 +56,74 @@ const EducationItem = ({
       ...formData,
       [name]: value,
     });
+    setFormErrors({
+      ...formErrors,
+      [name]: "",
+    });
   };
 
-  const handleSaveClick = () => {
+  const handleSaveClick = (e) => {
+    e.preventDefault();
+    // Handling the errors
+    let errors = {};
+
+    // Validate each form field
+    if (!formData.qualification_type) {
+      errors.qualification_type = "Qualification Type is required";
+    }
+    if (!formData.course_name) {
+      errors.course_name = "Course Name is required";
+    }
+    if (!formData.course_type) {
+      errors.course_type = "Course Type is required";
+    }
+    if (!formData.stream) {
+      errors.stream = "Stream is required";
+    }
+    if (!formData.course_startDate) {
+      errors.course_startDate = "Course Start Date is required";
+    }
+    if (!formData.course_endDate) {
+      errors.course_endDate = "Course End Date is required";
+    }
+    if (!formData.college_name) {
+      errors.college_name = "College Name is required";
+    }
+    if (!formData.university_name) {
+      errors.university_name = "University Name is required";
+    }
+    if (Object.keys(errors).length > 0) {
+      setFormErrors(errors);
+      return;
+    }
     onSaveEdit(valueIndex, formData);
     setEditMode(false);
   };
+
   const handleCancel = () => {
     setEditMode(false);
+    setFormData({
+      qualification_type: education.qualification_type,
+      course_name: education.course_name,
+      course_type: education.course_type,
+      stream: education.stream,
+      course_startDate: education.course_startDate,
+      course_endDate: education.course_endDate,
+      college_name: education.college_name,
+      university_name: education.university_name,
+    });
+    setFormErrors({
+      qualification_type: "",
+      course_name: "",
+      course_type: "",
+      stream: "",
+      course_startDate: "",
+      course_endDate: "",
+      college_name: "",
+      university_name: "",
+    });
   };
+
   return (
     <div className="card mb-3">
       <div className="card-body">
@@ -59,6 +143,7 @@ const EducationItem = ({
         {editMode ? (
           <EducationForm
             formData={formData}
+            formErrors={formErrors}
             handleInputChange={handleInputChange}
             handleSubmit={handleSaveClick}
             handleCancel={handleCancel}

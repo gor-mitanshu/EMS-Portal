@@ -1,20 +1,30 @@
 import React, { useState } from "react";
 import { Modal, Button, Form, Col } from "react-bootstrap";
 
-const CertificateModal = ({ show, handleClose }) => {
+const CertificateModal = ({ show, setShowModal }) => {
   const initialFormData = {
     courseType: "",
     certificationTitle: "",
     selectedFile: null,
   };
-
   const [formData, setFormData] = useState(initialFormData);
+  const [formErrors, setFormErrors] = useState(initialFormData);
+
+  const handleClose = () => {
+    setShowModal(false);
+    setFormErrors(initialFormData);
+    setFormData(initialFormData);
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
       [name]: value,
+    });
+    setFormErrors({
+      ...formErrors,
+      [name]: "",
     });
   };
 
@@ -23,10 +33,32 @@ const CertificateModal = ({ show, handleClose }) => {
       ...formData,
       selectedFile: e.target.files[0],
     });
+    setFormErrors({
+      ...formErrors,
+      selectedFile: "",
+    });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    // Error Handling
+    let errors = {};
+    // Validate each field based on the section
+    // Basic Info Section
+    if (!formData.courseType) {
+      errors.courseType = "Please Select any Course Type";
+    }
+    if (!formData.certificationTitle) {
+      errors.certificationTitle = "Please enter any Certificate Title";
+    }
+    if (!formData.selectedFile) {
+      errors.selectedFile = "Please select any file";
+    }
+    if (Object.keys(errors).length > 0) {
+      setFormErrors(errors);
+      return;
+    }
+
     console.log("Submitted:", formData);
     handleClose();
     setFormData(initialFormData);
@@ -57,6 +89,9 @@ const CertificateModal = ({ show, handleClose }) => {
               <option value="Other Education">Other Education</option>
               <option value="Certificate">Certificate</option>
             </Form.Control>
+            {formErrors.courseType && (
+              <small className="text-danger">{formErrors.courseType}</small>
+            )}
           </Form.Group>
           <Form.Group as={Col} controlId="certificationTitle" className="mb-3">
             <Form.Label>Certification Title</Form.Label>
@@ -67,8 +102,12 @@ const CertificateModal = ({ show, handleClose }) => {
               placeholder="Enter Certificate Title"
               value={formData.certificationTitle}
               onChange={handleChange}
-              required
             />
+            {formErrors.certificationTitle && (
+              <small className="text-danger">
+                {formErrors.certificationTitle}
+              </small>
+            )}
           </Form.Group>
           <Form.Group as={Col} controlId="certificateFile" className="mb-3">
             <Form.Label>Select File</Form.Label>
@@ -77,8 +116,10 @@ const CertificateModal = ({ show, handleClose }) => {
               name="selectedFile"
               accept=".pdf,.doc,.docx,.jpg,.png"
               onChange={handleFileChange}
-              required
             />
+            {formErrors.selectedFile && (
+              <small className="text-danger">{formErrors.selectedFile}</small>
+            )}
           </Form.Group>
           <Button
             variant="secondary"
