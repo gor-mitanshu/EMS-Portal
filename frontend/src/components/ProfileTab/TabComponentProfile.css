@@ -68,3 +68,39 @@
   color: black !important;
   border-bottom: 2px solid #007bff !important;
 }
+
+/* File Manager */
+.custom-header {
+  background-color: rgb(25, 113, 114) !important;
+  color: white !important;
+}
+
+.file-manager-container {
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+.custom-row {
+  background-color: rgba(25, 113, 114, 0.1) !important;
+  white-space: nowrap !important;
+}
+
+/* Work Week */
+.status-indicator {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.present {
+  background-color: green !important;
+}
+
+.absent {
+  background-color: red !important;
+}
+.half {
+  background-color: yellow !important;
+}

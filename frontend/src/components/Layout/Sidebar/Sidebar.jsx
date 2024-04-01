@@ -79,10 +79,10 @@ const Sidebar = ({ open, handleDrawerOpen }) => {
       icon: faClipboardCheck,
       color: "purple",
       content: [
-        { title: "Logs", link: "/my-profile/logs" },
-        { title: "Rules", link: "/my-profile/rules" },
-        { title: "Approvals", link: "/my-profile/approvals" },
-        { title: "Settings", link: "/my-profile/settings" },
+        { title: "Logs", link: "/attendance/logs" },
+        { title: "Rules", link: "/attendance/rules" },
+        { title: "Approvals", link: "/attendance/approvals" },
+        { title: "Settings", link: "/attendance/settings" },
       ],
     },
     {
@@ -92,9 +92,9 @@ const Sidebar = ({ open, handleDrawerOpen }) => {
       icon: faCalendarAlt,
       color: "red",
       content: [
-        { title: "Logs", link: "/my-profile/logs" },
-        { title: "Rules", link: "/my-profile/rules" },
-        { title: "Balance", link: "/my-profile/balance" },
+        { title: "Logs", link: "/leave/logs" },
+        { title: "Rules", link: "/leave/rules" },
+        { title: "Balance", link: "/leave/balance" },
       ],
     },
     {
@@ -104,11 +104,11 @@ const Sidebar = ({ open, handleDrawerOpen }) => {
       icon: faMoneyCheckAlt,
       color: "green",
       content: [
-        { title: "Run Payroll", link: "/my-profile/run-payroll" },
-        { title: "Setup Payroll", link: "/my-profile/setup-payroll" },
-        { title: "Declaration", link: "/my-profile/declaration" },
-        { title: "Advanced Settings", link: "/my-profile/advance-settings" },
-        { title: "Audit History", link: "/my-profile/audit-history" },
+        { title: "Run Payroll", link: "/payroll/run-payroll" },
+        { title: "Setup Payroll", link: "/payroll/setup-payroll" },
+        { title: "Declaration", link: "/payroll/declaration" },
+        { title: "Advanced Settings", link: "/payroll/advance-settings" },
+        { title: "Audit History", link: "/payroll/audit-history" },
       ],
     },
     {

@@ -12,7 +12,7 @@ const TabsComponent = () => {
     { title: "Education", path: "/my-profile/education" },
     { title: "Family", path: "/my-profile/family" },
     { title: "Documents", path: "/my-profile/documents" },
-    { title: "Work Week", path: "/work-week" },
+    { title: "Work Week", path: "/my-profile/work-week" },
     { title: "Attendance", path: "/attendance" },
     { title: "Leave", path: "/leave" },
     { title: "Payroll", path: "/payroll" },

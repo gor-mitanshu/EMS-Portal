@@ -14,10 +14,10 @@ import DocumentTab from "./components/ProfileTab/Documents/DocumentTab";
 import FileManager from "./components/ProfileTab/FileManager/FileManager";
 import Profile from "./components/ProfileTab/Profile/PersonalProfile";
 import Team from "./components/ProfileTab/Team/Team";
-import WorkWeek from "./components/WorkWeek/WorkWeek";
 import Attendance from "./components/Attendance/Attendance";
 import Leave from "./components/Leave/Leave";
 import Payroll from "./components/Payroll/Payroll";
+import WorkWeek from "./components/ProfileTab/WorkWeek/WorkWeek";
 
 function App() {
   return (
@@ -35,11 +35,10 @@ function App() {
 
           <Route path="/" element={<Layout />}>
             <Route index element={<Navigate to="dashboard" replace />} />
-            <Route path={"/dashboard"} element={<Dashboard />} />
-            <Route path="/work-week" element={<WorkWeek />} />
-            <Route path="/attendance" element={<Attendance />} />
-            <Route path="/leave" element={<Leave />} />
-            <Route path="/payroll" element={<Payroll />} />
+            <Route path="dashboard" element={<Dashboard />} />
+            <Route path="attendance" element={<Attendance />} />
+            <Route path="leave" element={<Leave />} />
+            <Route path="payroll" element={<Payroll />} />
 
             <Route path="/my-profile" element={<TabsComponent />}>
               <Route index element={<Navigate to="personal" replace />} />
@@ -49,6 +48,7 @@ function App() {
               <Route path="education" element={<Education />} />
               <Route path="family" element={<Family />} />
               <Route path="documents" element={<DocumentTab />} />
+              <Route path="work-week" element={<WorkWeek />} />
               <Route path="file-manager" element={<FileManager />} />
             </Route>
           </Route>
