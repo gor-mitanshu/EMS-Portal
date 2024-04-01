@@ -1,5 +1,5 @@
 import React from "react";
-import { DataGrid } from "@mui/x-data-grid";
+import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { IconButton } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
@@ -100,9 +100,11 @@ const FileManager = () => {
             rows={rows}
             columns={columns}
             density="comfortable"
+            autoHeight
             // rowHeight={25}
             // headerHeight={56}
             getRowClassName={(params) => "custom-row"}
+            slots={{ toolbar: GridToolbar }}
           />
         </div>
       </div>

@@ -18,6 +18,10 @@ import Attendance from "./components/Attendance/Attendance";
 import Leave from "./components/Leave/Leave";
 import Payroll from "./components/Payroll/Payroll";
 import WorkWeek from "./components/ProfileTab/WorkWeek/WorkWeek";
+import Logs from "./components/Leave/logs/Logs";
+import Balance from "./components/Leave/Balance/Balance";
+import Settings from "./components/Leave/Settings/Settings";
+import Rules from "./components/Leave/Rules/Rules";
 
 function App() {
   return (
@@ -32,7 +36,7 @@ function App() {
             path="/verify/:verificationToken"
             element={<UserVerification />}
           />
-
+          {/* Layout Routes */}
           <Route path="/" element={<Layout />}>
             <Route index element={<Navigate to="dashboard" replace />} />
             <Route path="dashboard" element={<Dashboard />} />
@@ -40,6 +44,7 @@ function App() {
             <Route path="leave" element={<Leave />} />
             <Route path="payroll" element={<Payroll />} />
 
+            {/* My Profile Routes */}
             <Route path="/my-profile" element={<TabsComponent />}>
               <Route index element={<Navigate to="personal" replace />} />
               <Route path="personal" element={<Profile />} />
@@ -50,6 +55,15 @@ function App() {
               <Route path="documents" element={<DocumentTab />} />
               <Route path="work-week" element={<WorkWeek />} />
               <Route path="file-manager" element={<FileManager />} />
+            </Route>
+
+            {/* Leave Routes */}
+            <Route path="/leave" element={<Leave />}>
+              <Route index element={<Navigate to="logs" replace />} />
+              <Route path="logs" element={<Logs />} />
+              <Route path="rules" element={<Rules />} />
+              <Route path="balance" element={<Balance />} />
+              <Route path="settings" element={<Settings />} />
             </Route>
           </Route>
         </Routes>
