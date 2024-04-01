@@ -21,8 +21,8 @@ const TabsComponent = () => {
 
   return (
     <div className="container">
-      <div className="d-flex justify-content-center">
-        <ul className="nav nav-tabs flex-nowrap overflow-auto tabs-container">
+      <div className="d-flex justify-content-between">
+        <ul className="nav nav-tabs flex-nowrap overflow-auto tabs-container justify-content-between w-100 text-nowrap">
           {tabItems.map((tab, index) => (
             <li className="nav-item" key={index}>
               <Link
@@ -38,7 +38,7 @@ const TabsComponent = () => {
         </ul>
       </div>
 
-      <div className="tab-content pt-4">
+      <div className="tab-content pt-4 px-4">
         <Outlet />
       </div>
     </div>

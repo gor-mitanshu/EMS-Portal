@@ -100,7 +100,8 @@ const FileManager = () => {
             rows={rows}
             columns={columns}
             density="comfortable"
-            rowHeight={25}
+            // rowHeight={25}
+            // headerHeight={56}
             getRowClassName={(params) => "custom-row"}
           />
         </div>
