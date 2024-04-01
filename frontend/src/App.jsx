@@ -7,6 +7,17 @@ import ForgotPassword from "./components/ForgetPassword/ForgetPassword";
 import ResetPassword from "./components/ResetPassword/ResetPassword";
 import Layout from "./components/Layout/Layout";
 import TabsComponent from "./components/ProfileTab/TabsComponent";
+import Work from "./components/ProfileTab/Work/Work";
+import Education from "./components/ProfileTab/Education/Education";
+import Family from "./components/ProfileTab/Family/Family";
+import DocumentTab from "./components/ProfileTab/Documents/DocumentTab";
+import FileManager from "./components/ProfileTab/FileManager/FileManager";
+import Profile from "./components/ProfileTab/Profile/PersonalProfile";
+import Team from "./components/ProfileTab/Team/Team";
+import WorkWeek from "./components/WorkWeek/WorkWeek";
+import Attendance from "./components/Attendance/Attendance";
+import Leave from "./components/Leave/Leave";
+import Payroll from "./components/Payroll/Payroll";
 
 function App() {
   return (
@@ -25,7 +36,21 @@ function App() {
           <Route path="/" element={<Layout />}>
             <Route index element={<Navigate to="dashboard" replace />} />
             <Route path={"/dashboard"} element={<Dashboard />} />
-            <Route path={"/my-profile"} element={<TabsComponent />} />
+            <Route path="/work-week" element={<WorkWeek />} />
+            <Route path="/attendance" element={<Attendance />} />
+            <Route path="/leave" element={<Leave />} />
+            <Route path="/payroll" element={<Payroll />} />
+
+            <Route path="/my-profile" element={<TabsComponent />}>
+              <Route index element={<Navigate to="personal" replace />} />
+              <Route path="personal" element={<Profile />} />
+              <Route path="work" element={<Work />} />
+              <Route path="team" element={<Team />} />
+              <Route path="education" element={<Education />} />
+              <Route path="family" element={<Family />} />
+              <Route path="documents" element={<DocumentTab />} />
+              <Route path="file-manager" element={<FileManager />} />
+            </Route>
           </Route>
         </Routes>
       </BrowserRouter>

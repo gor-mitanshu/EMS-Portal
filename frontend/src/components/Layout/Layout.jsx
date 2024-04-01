@@ -15,7 +15,6 @@ const Layout = () => {
   useEffect(() => {
     // Clear activeTab from localStorage when moving from my-profile to dashboard
     if (location.pathname !== "/my-profile") {
-      console.log("hhhhhh");
       localStorage.removeItem("activeTab");
     }
   }, [location.pathname]);

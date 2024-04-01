@@ -1,65 +1,45 @@
-import React, { useState } from "react";
-import Profile from "./Profile/PersonalProfile";
+import React from "react";
+import { Link, Outlet, useLocation } from "react-router-dom";
 import "./TabComponentProfile.css";
-import Work from "./Work/Work";
-import Education from "./Education/Education";
-import Family from "./Family/Family";
-import DocumentTab from "./Documents/DocumentTab";
 
 const TabsComponent = () => {
-  const [activeTab, setActiveTab] = useState(() => {
-    // Retrieve active tab from localStorage or default to "personal"
-    return localStorage.getItem("activeTab") || "personal";
-  });
-
-  const handleTabChange = (tab) => {
-    setActiveTab(tab);
-    // Save active tab to localStorage
-    localStorage.setItem("activeTab", tab);
-  };
+  const location = useLocation();
 
   const tabItems = [
-    "Personal",
-    "Work",
-    "Team",
-    "Education",
-    "Family",
-    "Documents",
-    "Work Week",
-    "Attendance",
-    "Leave",
-    "Payroll",
-    "FileManager",
+    { title: "Personal", path: "/my-profile/personal" },
+    { title: "Work", path: "/my-profile/work" },
+    { title: "Team", path: "/my-profile/team" },
+    { title: "Education", path: "/my-profile/education" },
+    { title: "Family", path: "/my-profile/family" },
+    { title: "Documents", path: "/my-profile/documents" },
+    { title: "Work Week", path: "/work-week" },
+    { title: "Attendance", path: "/attendance" },
+    { title: "Leave", path: "/leave" },
+    { title: "Payroll", path: "/payroll" },
+    { title: "FileManager", path: "/my-profile/file-manager" },
   ];
 
   return (
     <div className="container">
       <div className="d-flex justify-content-center">
-        <ul
-          className="nav nav-tabs flex-nowrap overflow-auto tabs-container"
-          // style={{ maxWidth: "70%" }}
-        >
+        <ul className="nav nav-tabs flex-nowrap overflow-auto tabs-container">
           {tabItems.map((tab, index) => (
             <li className="nav-item" key={index}>
-              <button
+              <Link
+                to={tab.path}
                 className={`nav-link btn nav-button ${
-                  activeTab === tab.toLowerCase() ? "active" : ""
+                  location.pathname === tab.path ? "active" : ""
                 }`}
-                onClick={() => handleTabChange(tab.toLowerCase())}
               >
-                {tab}
-              </button>
+                {tab.title}
+              </Link>
             </li>
           ))}
         </ul>
       </div>
 
       <div className="tab-content pt-4">
-        {activeTab === "personal" && <Profile />}
-        {activeTab === "work" && <Work />}
-        {activeTab === "education" && <Education />}
-        {activeTab === "family" && <Family />}
-        {activeTab === "documents" && <DocumentTab />}
+        <Outlet />
       </div>
     </div>
   );

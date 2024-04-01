@@ -15,7 +15,7 @@ import {
   faTimes,
   faBars,
 } from "@fortawesome/free-solid-svg-icons";
-import SearchBar from "../../../UI/Search/Search";
+import SearchBar from "../../UI/Search/Search";
 
 const Sidebar = ({ open, handleDrawerOpen }) => {
   const location = useLocation();
@@ -51,11 +51,10 @@ const Sidebar = ({ open, handleDrawerOpen }) => {
     {
       id: 3,
       title: "My Profile",
-      link: "/my-profile/personal",
+      link: "/my-profile",
       icon: faUser,
       color: "darkgrey",
       content: [
-        { title: "Personal", link: "/my-profile/personal" },
         { title: "Work", link: "/my-profile/work" },
         { title: "Team", link: "/my-profile/team" },
         { title: "Education", link: "/my-profile/education" },
@@ -177,7 +176,7 @@ const Sidebar = ({ open, handleDrawerOpen }) => {
                 <h2 className="accordion-header ">
                   <button
                     className={`accordion-button collapsed list-btn ${
-                      location.pathname === item.link ? "nav-active" : ""
+                      location.pathname === item.link ? "active" : ""
                     }`}
                     onClick={() => handleAccordionClick(item)}
                     type="button"
@@ -234,7 +233,7 @@ const Sidebar = ({ open, handleDrawerOpen }) => {
           ) : (
             <div
               className={`accordion-item list ${
-                location.pathname === item.link ? "nav-active" : ""
+                location.pathname === item.link ? "active" : ""
               }`}
             >
               <Link to={item.link} className="text-decoration-none text-white">
