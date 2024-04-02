@@ -15,8 +15,10 @@ require('./config/database');
 
 // routes
 const companyRoutes = require('./routes/companyRoute');
+const commonRoutes = require('./routes/commonRoutes');
 
 // use of routes
+app.use('', commonRoutes);
 app.use('/company', companyRoutes);
 
 // PORT

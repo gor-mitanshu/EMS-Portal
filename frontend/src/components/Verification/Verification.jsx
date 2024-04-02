@@ -15,7 +15,7 @@ const UserVerification = () => {
       const verifyUser = async () => {
         try {
           const res = await axios.post(
-            `${process.env.REACT_APP_API}/company/verify/${verificationToken}`
+            `${process.env.REACT_APP_API}/verify/${verificationToken}`
           );
 
           if (res.status === 200) {

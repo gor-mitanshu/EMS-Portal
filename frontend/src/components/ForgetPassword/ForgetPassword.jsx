@@ -37,7 +37,7 @@ const ForgotPassword = () => {
         email: user.email,
       };
       const res = await axios.post(
-        `${process.env.REACT_APP_API}/company/forgetpassword`,
+        `${process.env.REACT_APP_API}/forgetpassword`,
         body
       );
       if (res.status === 200) {
@@ -70,7 +70,7 @@ const ForgotPassword = () => {
 
     try {
       const res = await axios.post(
-        `${process.env.REACT_APP_API}/company/verifyOtp`,
+        `${process.env.REACT_APP_API}/verifyOtp`,
         body
       );
       if (res.status === 200) {

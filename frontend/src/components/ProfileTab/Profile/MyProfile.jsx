@@ -103,28 +103,6 @@ const Profile = () => {
       }));
     }
   };
-  const handleCancel = () => {
-    setFormData({
-      qualification_type: "",
-      course_name: "",
-      course_type: "",
-      stream: "",
-      course_startDate: "",
-      course_endDate: "",
-      college_name: "",
-      university_name: "",
-    });
-    setFormErrors({
-      qualification_type: "",
-      course_name: "",
-      course_type: "",
-      stream: "",
-      course_startDate: "",
-      course_endDate: "",
-      college_name: "",
-      university_name: "",
-    });
-  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -207,7 +185,6 @@ const Profile = () => {
                     formData={formData}
                     formErrors={formErrors}
                     handleInputChange={handleInputChange}
-                    handleCancel={handleCancel}
                   />
                 </>
               ) : (

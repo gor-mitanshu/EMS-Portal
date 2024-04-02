@@ -65,7 +65,7 @@ const Login = () => {
           password,
         };
         const res = await axios.post(
-          `${process.env.REACT_APP_API}/company/signin`,
+          `${process.env.REACT_APP_API}/signin`,
           body
         );
         if (res) {
@@ -106,7 +106,7 @@ const Login = () => {
       };
       setVerificationLinkStatus("sending");
       const res = await axios.post(
-        `${process.env.REACT_APP_API}/company/resendVerificationLink`,
+        `${process.env.REACT_APP_API}/resendVerificationLink`,
         body
       );
       if (res) {
