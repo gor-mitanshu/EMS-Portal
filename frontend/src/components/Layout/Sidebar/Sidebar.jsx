@@ -51,7 +51,7 @@ const Sidebar = ({ open, handleDrawerOpen }) => {
     {
       id: 3,
       title: "My Profile",
-      link: "/my-profile/personal",
+      link: "/my-profile",
       icon: faUser,
       color: "darkgrey",
       content: [
@@ -179,7 +179,7 @@ const Sidebar = ({ open, handleDrawerOpen }) => {
                     className={`accordion-button collapsed list-btn ${
                       location.pathname === item.link ? "nav-active" : ""
                     }`}
-                    onClick={() => handleAccordionClick(item)}
+                    // onClick={() => handleAccordionClick(item)}
                     type="button"
                     data-bs-toggle="collapse"
                     data-bs-target={`#collapse${item.id}`}
@@ -187,17 +187,18 @@ const Sidebar = ({ open, handleDrawerOpen }) => {
                     aria-controls={`collapse${item.id}`}
                     style={{ padding: "14px" }}
                   >
-                    <FontAwesomeIcon
-                      icon={item.icon}
-                      className="menu-icon"
-                      role="button"
-                      size="lg"
-                      color={`white`}
-                    />
                     <Link
                       to={item.link}
+                      onClick={() => handleAccordionClick(item)}
                       className="text-decoration-none text-white"
                     >
+                      <FontAwesomeIcon
+                        icon={item.icon}
+                        className="menu-icon"
+                        role="button"
+                        size="lg"
+                        color={`white`}
+                      />
                       {item.title}
                     </Link>
                   </button>
@@ -210,7 +211,14 @@ const Sidebar = ({ open, handleDrawerOpen }) => {
                   <div className="accordion-body list-item-body">
                     <ul className="list-unstyled">
                       {item.content.map((subItem, index) => (
-                        <li key={index}>
+                        <li
+                          key={index}
+                          className={`${
+                            location.pathname === subItem.link
+                              ? "nav-active"
+                              : ""
+                          }`}
+                        >
                           <FontAwesomeIcon
                             icon={item.icon}
                             className="sub-menu-icon"
@@ -220,7 +228,7 @@ const Sidebar = ({ open, handleDrawerOpen }) => {
                           />
                           <Link
                             to={subItem.link}
-                            className="text-decoration-none text-white"
+                            className={`text-decoration-none text-white`}
                           >
                             {subItem.title}
                           </Link>

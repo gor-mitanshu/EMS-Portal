@@ -16,9 +16,11 @@ const NavbarComponent = ({ handleDrawerOpen }) => {
   const formattedDate = currentDate.toLocaleDateString("en-US", options);
 
   const menuItems = [
-    { text: "Action", link: "/" },
-    { text: "Another action", link: "/" },
-    { text: "Something else here", link: "/" },
+    { text: "Settings", link: "/" },
+    { text: "File Manager", link: "/" },
+    { text: "My Plan", link: "/" },
+    { text: "Change Password", link: "/" },
+    { text: "Logout", link: "/" },
   ];
 
   return (

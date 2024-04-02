@@ -8,7 +8,10 @@ const Leave = () => {
   // for admin
   const adminTabItems = [
     { title: "Logs", path: "/leave/logs" },
-    { title: "Rules", path: "/leave/rules" },
+    {
+      title: "Rules",
+      path: "/leave/rules",
+    },
     { title: "Balance", path: "/leave/balance" },
     { title: "Settings", path: "/leave/settings" },
   ];

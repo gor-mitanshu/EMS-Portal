@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import "./Register.css";
-import KarmDigitech from "../../assets/karmdigitech.png";
 import Step2Register from "./StepTwo/StepTwo";
 import Step1Register from "./StepOne/StepOne";
+import FormWrapper from "../../UI/FormWrapper/FormWrapper";
+import "../../UI/FormWrapper/FormWrapper.css";
 
 const Register = () => {
   const [step, setStep] = useState(1);
@@ -54,54 +55,32 @@ const Register = () => {
     formDataStep1.password !== "";
 
   return (
-    <div className="container-fluid d-flex flex-wrap w-100 p-0 vh-100">
-      {/* form */}
-      <div className="register-form">
-        <div className="register-box">
-          <div className="form">
-            <div style={{ textAlign: "center" }}>
-              <img
-                src={KarmDigitech}
-                alt="Logo"
-                width={200}
-                height={30}
-                className="mb-5"
-                style={{ textAlign: "center" }}
-              />
-            </div>
-            <div>
-              <h5 className="text-center">Create an Account</h5>
-              <p className="text-center">Sign up to get started</p>
-              {step === 1 && (
-                <Step1Register
-                  formDataStep1={formDataStep1}
-                  handleChangeStep1={handleChangeStep1}
-                  isStep1Valid={isStep1Valid}
-                  handleNextStep={handleNextStep}
-                  errors={errors}
-                  setErrors={setErrors}
-                />
-              )}
-              {step === 2 && (
-                <Step2Register
-                  formDataStep2={formDataStep2}
-                  handleChangeStep2={handleChangeStep2}
-                  handleBackStep={handleBackStep}
-                  errors={errors}
-                  setErrors={setErrors}
-                />
-              )}
-            </div>
-          </div>
-        </div>
+    <FormWrapper
+      title={"Create an Account"}
+      subtitle={"Sign up to get started"}
+    >
+      <div>
+        {step === 1 && (
+          <Step1Register
+            formDataStep1={formDataStep1}
+            handleChangeStep1={handleChangeStep1}
+            isStep1Valid={isStep1Valid}
+            handleNextStep={handleNextStep}
+            errors={errors}
+            setErrors={setErrors}
+          />
+        )}
+        {step === 2 && (
+          <Step2Register
+            formDataStep2={formDataStep2}
+            handleChangeStep2={handleChangeStep2}
+            handleBackStep={handleBackStep}
+            errors={errors}
+            setErrors={setErrors}
+          />
+        )}
       </div>
-
-      {/* bg */}
-      <div className="register-bg-wrapper">
-        <div className="register-bg"></div>
-        <div className="background-color"></div>
-      </div>
-    </div>
+    </FormWrapper>
   );
 };
 

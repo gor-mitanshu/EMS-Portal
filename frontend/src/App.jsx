@@ -61,6 +61,7 @@ function App() {
             <Route path="/leave" element={<Leave />}>
               <Route index element={<Navigate to="logs" replace />} />
               <Route path="logs" element={<Logs />} />
+              {/* Leave's Rules route */}
               <Route path="rules" element={<Rules />} />
               <Route path="balance" element={<Balance />} />
               <Route path="settings" element={<Settings />} />

@@ -1,11 +1,39 @@
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IconButton } from "@mui/material";
-import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import React from "react";
+import CustomDataGrid from "../../../UI/CustomDataGrid/CustomDataGrid";
 
 const Logs = () => {
-  const rows = [];
+  const rows = [
+    {
+      id: 1,
+      employee_name: "John Doe",
+      department: "Marketing",
+      type: "Annual Leave",
+      start_date: "2024-04-01",
+      end_date: "2024-04-05",
+      days: 5,
+    },
+    {
+      id: 2,
+      employee_name: "Jane Smith",
+      department: "Human Resources",
+      type: "Sick Leave",
+      start_date: "2024-04-03",
+      end_date: "2024-04-03",
+      days: 1,
+    },
+    {
+      id: 3,
+      employee_name: "Alice Johnson",
+      department: "Finance",
+      type: "Maternity Leave",
+      start_date: "2024-04-02",
+      end_date: "2024-04-30",
+      days: 29,
+    },
+  ];
 
   const columns = [
     {
@@ -76,16 +104,7 @@ const Logs = () => {
         <div className="file-manager-container">
           <div className="row">
             <div className="col-md-12">
-              <DataGrid
-                rows={rows}
-                columns={columns}
-                autoHeight
-                density="comfortable"
-                // rowHeight={25}
-                // headerHeight={56}
-                getRowClassName={(params) => "custom-row"}
-                slots={{ toolbar: GridToolbar }}
-              />
+              <CustomDataGrid rows={rows} columns={columns} />
             </div>
           </div>
         </div>

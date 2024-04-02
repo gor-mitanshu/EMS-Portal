@@ -1,8 +1,8 @@
 import React from "react";
-import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { IconButton } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
+import CustomDataGrid from "../../../UI/CustomDataGrid/CustomDataGrid";
 
 const FileManager = () => {
   const rows = [
@@ -96,16 +96,7 @@ const FileManager = () => {
     <div className="file-manager-container">
       <div className="row">
         <div className="col-md-12">
-          <DataGrid
-            rows={rows}
-            columns={columns}
-            density="comfortable"
-            autoHeight
-            // rowHeight={25}
-            // headerHeight={56}
-            getRowClassName={(params) => "custom-row"}
-            slots={{ toolbar: GridToolbar }}
-          />
+          <CustomDataGrid rows={rows} columns={columns} />
         </div>
       </div>
     </div>

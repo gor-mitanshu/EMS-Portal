@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
+import FormWrapper from "../../UI/FormWrapper/FormWrapper";
+import "../../UI/FormWrapper/FormWrapper.css";
 
 const ResetPassword = () => {
   const navigate = useNavigate();
@@ -51,62 +53,50 @@ const ResetPassword = () => {
   };
 
   return (
-    <div className="container-fluid d-flex flex-wrap w-100 p-0 vh-100">
-      <div className="login-form">
-        <div className="login-box">
-          <div className="form">
-            <div className="text-center mb-5">
-              <h3>Reset Password</h3>
+    <>
+      <FormWrapper title={"Reset Password"}>
+        <div className="d-flex flex-column">
+          <form onSubmit={handleSubmit}>
+            {error && (
+              <div className="alert alert-danger" role="alert">
+                {error}
+              </div>
+            )}
+            <div className="mb-3">
+              <label htmlFor="password" className="form-label">
+                New Password
+              </label>
+              <input
+                type="password"
+                className="form-control"
+                id="password"
+                placeholder="Enter New Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
             </div>
-            <div className="d-flex flex-column">
-              <form onSubmit={handleSubmit}>
-                {error && (
-                  <div className="alert alert-danger" role="alert">
-                    {error}
-                  </div>
-                )}
-                <div className="mb-3">
-                  <label htmlFor="password" className="form-label">
-                    New Password
-                  </label>
-                  <input
-                    type="password"
-                    className="form-control"
-                    id="password"
-                    placeholder="Enter New Password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                  />
-                </div>
-                <div className="mb-3">
-                  <label htmlFor="confirmPassword" className="form-label">
-                    Confirm Password
-                  </label>
-                  <input
-                    type="password"
-                    className="form-control"
-                    id="confirmPassword"
-                    placeholder="Confirm New Password"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                  />
-                </div>
-                <div className="text-center">
-                  <button type="submit" className="btn btn-primary w-75">
-                    Reset Password
-                  </button>
-                </div>
-              </form>
+            <div className="mb-3">
+              <label htmlFor="confirmPassword" className="form-label">
+                Confirm Password
+              </label>
+              <input
+                type="password"
+                className="form-control"
+                id="confirmPassword"
+                placeholder="Confirm New Password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+              />
             </div>
-          </div>
+            <div className="text-center">
+              <button type="submit" className="btn btn-primary w-75">
+                Reset Password
+              </button>
+            </div>
+          </form>
         </div>
-      </div>
-
-      <div className="login-bg-wrapper">
-        <div className="login-bg"></div>
-        <div className="background-color"></div>
-      </div>
-    </div>
+      </FormWrapper>
+    </>
   );
 };
 

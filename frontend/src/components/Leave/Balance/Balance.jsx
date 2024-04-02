@@ -1,8 +1,22 @@
-import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import React from "react";
+import CustomDataGrid from "../../../UI/CustomDataGrid/CustomDataGrid";
 
 const Balance = () => {
-  const rows = [];
+  const rows = [
+    { id: 1, employee: "John Doe", department: "HR", location: "New York" },
+    {
+      id: 2,
+      employee: "Jane Smith",
+      department: "Finance",
+      location: "Chicago",
+    },
+    {
+      id: 3,
+      employee: "Alice Johnson",
+      department: "IT",
+      location: "San Francisco",
+    },
+  ];
 
   const columns = [
     {
@@ -31,16 +45,7 @@ const Balance = () => {
         <div className="file-manager-container">
           <div className="row">
             <div className="col-md-12">
-              <DataGrid
-                rows={rows}
-                columns={columns}
-                autoHeight
-                density="comfortable"
-                // rowHeight={25}
-                // headerHeight={56}
-                getRowClassName={(params) => "custom-row"}
-                slots={{ toolbar: GridToolbar }}
-              />
+              <CustomDataGrid rows={rows} columns={columns} />
             </div>
           </div>
         </div>

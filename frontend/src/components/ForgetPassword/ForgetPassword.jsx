@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import KarmDigitech from "../../assets/karmdigitech.png";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
+import FormWrapper from "../../UI/FormWrapper/FormWrapper";
+import "../../UI/FormWrapper/FormWrapper.css";
 
 const ForgotPassword = () => {
   const navigate = useNavigate();
@@ -90,119 +91,96 @@ const ForgotPassword = () => {
   };
 
   return (
-    <div className="container-fluid d-flex flex-wrap w-100 p-0 vh-100">
-      <div className="login-form">
-        <div className="login-box">
-          <div className="form">
-            <div style={{ textAlign: "center" }}>
-              <img
-                src={KarmDigitech}
-                alt="Logo"
-                width={200}
-                height={30}
-                className="mb-5"
-                style={{ textAlign: "center" }}
-              />
-            </div>
-            {showOTPInput ? (
-              <div>
-                <h5>OTP Verification</h5>
-                <p>Please enter the OTP sent to your email</p>
-                <div className="d-flex flex-column">
-                  {errorMessage && (
-                    <div className="alert alert-danger mt-3" role="alert">
-                      {errorMessage}
-                    </div>
-                  )}
-                  <form onSubmit={handleOTPSuccess}>
-                    <div className="mb-3">
-                      <label htmlFor="exampleInputOTP" className="form-label">
-                        OTP
-                      </label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        id="exampleInputOTP"
-                        placeholder="Enter OTP"
-                        value={user.otp}
-                        onChange={handleChange}
-                        name="otp"
-                      />
-                    </div>
-                    <div className="text-center">
-                      <button
-                        type="submit"
-                        className="btn btn-primary w-75"
-                        disabled={verifyingOTP}
-                      >
-                        {verifyingOTP ? "Verifying..." : "Verify OTP"}
-                      </button>
-                    </div>
-                  </form>
-                </div>
-              </div>
-            ) : (
-              <div>
-                <h5>Forgot Password?</h5>
-                <p>Enter your email address below to reset your password</p>
-                <div className="d-flex flex-column">
-                  {errorMessage && (
-                    <div className="alert alert-danger mt-3" role="alert">
-                      {errorMessage}
-                    </div>
-                  )}
-                  <form onSubmit={handleSubmit}>
-                    <div className="mb-3">
-                      <label
-                        htmlFor="exampleInputEmail1"
-                        className="form-label"
-                      >
-                        Email
-                      </label>
-                      <input
-                        type="email"
-                        className="form-control"
-                        id="exampleInputEmail1"
-                        aria-describedby="emailHelp"
-                        placeholder="Enter Your Email"
-                        value={user.email}
-                        onChange={handleChange}
-                        name="email"
-                      />
-                    </div>
-
-                    <div className="text-center">
-                      <button
-                        type="submit"
-                        className="btn btn-primary w-75"
-                        disabled={emailStatus !== "idle"}
-                      >
-                        {emailStatus === "sending"
-                          ? "Sending..."
-                          : emailStatus === "sent"
-                          ? "Email Sent"
-                          : "Submit"}
-                      </button>
-                    </div>
-
-                    <div className="mt-3 text-center">
-                      <Link to="/login" className="text-decoration-none">
-                        Back to Login
-                      </Link>
-                    </div>
-                  </form>
-                </div>
+    <>
+      <FormWrapper
+        title={showOTPInput ? "OTP Verification" : "Forgot Password"}
+        subtitle={
+          showOTPInput
+            ? "Please enter the OTP sent to your email"
+            : "Enter your email address below to reset your password"
+        }
+      >
+        {showOTPInput ? (
+          <div className="d-flex flex-column">
+            {errorMessage && (
+              <div className="alert alert-danger mt-3" role="alert">
+                {errorMessage}
               </div>
             )}
+            <form onSubmit={handleOTPSuccess}>
+              <div className="mb-3">
+                <label htmlFor="exampleInputOTP" className="form-label">
+                  OTP
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="exampleInputOTP"
+                  placeholder="Enter OTP"
+                  value={user.otp}
+                  onChange={handleChange}
+                  name="otp"
+                />
+              </div>
+              <div className="text-center">
+                <button
+                  type="submit"
+                  className="btn btn-primary w-75"
+                  disabled={verifyingOTP}
+                >
+                  {verifyingOTP ? "Verifying..." : "Verify OTP"}
+                </button>
+              </div>
+            </form>
           </div>
-        </div>
-      </div>
+        ) : (
+          <div className="d-flex flex-column">
+            {errorMessage && (
+              <div className="alert alert-danger mt-3" role="alert">
+                {errorMessage}
+              </div>
+            )}
+            <form onSubmit={handleSubmit}>
+              <div className="mb-3">
+                <label htmlFor="exampleInputEmail1" className="form-label">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  className="form-control"
+                  id="exampleInputEmail1"
+                  aria-describedby="emailHelp"
+                  placeholder="Enter Your Email"
+                  value={user.email}
+                  onChange={handleChange}
+                  name="email"
+                />
+              </div>
 
-      <div className="login-bg-wrapper">
-        <div className="login-bg"></div>
-        <div className="background-color"></div>
-      </div>
-    </div>
+              <div className="text-center">
+                <button
+                  type="submit"
+                  className="btn btn-primary w-75"
+                  disabled={emailStatus !== "idle"}
+                >
+                  {emailStatus === "sending"
+                    ? "Sending..."
+                    : emailStatus === "sent"
+                    ? "Email Sent"
+                    : "Submit"}
+                </button>
+              </div>
+
+              <div className="mt-3 text-center">
+                <Link to="/login" className="text-decoration-none">
+                  Back to Login
+                </Link>
+              </div>
+            </form>
+          </div>
+        )}
+      </FormWrapper>
+    </>
   );
 };
 

@@ -1,32 +1,26 @@
-/* full conatiner */
-.login-container {
-  width: 100%;
-  height: 100vh;
-}
-
 /* Form */
-.login-form {
+.form {
   width: 25%;
   min-width: 330px;
   height: 100%;
   position: relative;
 }
 
-.login-box {
-  padding: 3rem;
+.wrapper-box {
+  padding: 3rem 3rem 0 3rem;
   background: white;
   display: flex;
   flex-direction: column;
 }
 
 /* Background */
-.login-bg-wrapper {
+.bg-wrapper {
   position: relative;
   height: 100%;
   width: 75%;
   max-width: calc(100% - 330px);
 }
-.login-bg {
+.bg-image {
   position: absolute;
   width: 100%;
   height: 100%;
@@ -40,4 +34,16 @@
   height: 100%;
   position: absolute;
   background-color: rgba(0, 0, 0, 0.4);
+}
+
+.title {
+  font-weight: 500;
+  font-size: 1.125rem;
+  color: rgb(49 53 51 / 1);
+  font-family: IBM Plex Sans, sans-serif;
+  line-height: 1.35rem;
+}
+.subtitle {
+  font-size: 0.9rem !important;
+  color: rgb(116 120 141 / 1);
 }

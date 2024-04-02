@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import "./Login.css";
-import KarmDigitech from "../../assets/karmdigitech.png";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
+import FormWrapper from "../../UI/FormWrapper/FormWrapper";
+import "../../UI/FormWrapper/FormWrapper.css";
+// import "./Login.css";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -16,19 +17,39 @@ const Login = () => {
   const [verificationLinkStatus, setVerificationLinkStatus] = useState("");
 
   // Function to validate the form fields
+  const validations = {
+    email: {
+      required: "Please enter your email",
+      pattern: {
+        value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+        message: "Please enter a valid email address",
+      },
+    },
+    password: {
+      required: "Please enter your password",
+      minLength: {
+        value: 6,
+        message: "Password must be at least 6 characters long",
+      },
+    },
+  };
   const validateForm = () => {
     let formIsValid = true;
     const newErrors = {};
 
-    if (!email) {
-      newErrors.email = "Please enter your email";
-      formIsValid = false;
-    }
-
-    if (!password) {
-      newErrors.password = "Please enter your password";
-      formIsValid = false;
-    }
+    Object.keys(validations).forEach((field) => {
+      const rules = validations[field];
+      if (rules.required && !email) {
+        newErrors[field] = rules.required;
+        formIsValid = false;
+      } else if (rules.pattern && !rules.pattern.value.test(email)) {
+        newErrors[field] = rules.pattern.message;
+        formIsValid = false;
+      } else if (rules.minLength && password.length < rules.minLength.value) {
+        newErrors[field] = rules.minLength.message;
+        formIsValid = false;
+      }
+    });
 
     setErrors(newErrors);
     return formIsValid;
@@ -113,124 +134,80 @@ const Login = () => {
   };
 
   return (
-    <div className="container-fluid d-flex flex-wrap w-100 p-0 vh-100">
-      <div className="login-form">
-        <div className="login-box">
-          <div className="form">
-            <div style={{ textAlign: "center" }}>
-              <img
-                src={KarmDigitech}
-                alt="Logo"
-                width={200}
-                height={30}
-                className="mb-5"
-                style={{ textAlign: "center" }}
+    <FormWrapper
+      title={"Welcome Back!"}
+      subtitle={"Sign in to continue to system"}
+    >
+      <div>
+        <div className="d-flex flex-column">
+          <form onSubmit={handleSubmit}>
+            <div className="mb-3">
+              <label htmlFor="email" className="form-label">
+                Email
+              </label>
+              <input
+                type="email"
+                className={`form-control no-focus-box-shadow ${
+                  errors.email ? "is-invalid" : ""
+                }`}
+                id="email"
+                aria-describedby="emailHelp"
+                placeholder="Enter Your Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                onFocus={() => handleFieldFocus("email")}
               />
+              <div className="invalid-feedback">{errors.email}</div>
             </div>
-            <div>
-              <h5
-                style={{
-                  fontWeight: "500",
-                  fontSize: "1.125rem",
-                  color: "rgb(49 53 51 / 1 !important)",
-                  fontFamily: "IBM Plex Sans,sans-serif",
-                  lineHeight: "1.35rem",
-                  margin: "0px",
-                  textAlign: "center",
-                }}
+            <div className="mb-3">
+              <label htmlFor="password" className="form-label">
+                Password
+              </label>
+              <input
+                type="password"
+                className={`form-control no-focus-box-shadow ${
+                  errors.password ? "is-invalid" : ""
+                }`}
+                id="password"
+                placeholder="Enter Your Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                onFocus={() => handleFieldFocus("password")}
+              />
+              <div className="invalid-feedback">{errors.password}</div>
+            </div>
+
+            <div className="text-center">
+              <button type="submit" className="btn btn-primary w-75">
+                Submit
+              </button>
+            </div>
+
+            <div className="mt-3 text-center">
+              <Link to="/forgetpassword" className="text-decoration-none">
+                Forgot Password?
+              </Link>
+            </div>
+
+            <div className="mt-3 text-center">
+              Don't have an account? <Link to="/register">Sign Up</Link>
+            </div>
+
+            {verificationLinkStatus && verificationLinkStatus !== "sent" && (
+              <div
+                className="btn btn-secondary w-100 mt-3"
+                onClick={handleResendVerification}
+                disabled={verificationLinkStatus === "sending"}
               >
-                Welcome Back!
-                <p
-                  className="mt-2 mb-4"
-                  style={{
-                    color: "rgb(116 120 141 / 1)",
-                    fontSize: "0.8em",
-                  }}
-                >
-                  Sign in to continue to system
-                </p>
-              </h5>
-              <div className="d-flex flex-column">
-                <form onSubmit={handleSubmit}>
-                  <div className="mb-3">
-                    <label htmlFor="exampleInputEmail1" className="form-label">
-                      Email
-                    </label>
-                    <input
-                      type="email"
-                      className={`form-control ${
-                        errors.email ? "is-invalid" : ""
-                      }`}
-                      id="exampleInputEmail1"
-                      aria-describedby="emailHelp"
-                      placeholder="Enter Your Email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      onFocus={() => handleFieldFocus("email")}
-                    />
-                    <div className="invalid-feedback">{errors.email}</div>
-                  </div>
-                  <div className="mb-3">
-                    <label
-                      htmlFor="exampleInputPassword1"
-                      className="form-label"
-                    >
-                      Password
-                    </label>
-                    <input
-                      type="password"
-                      className={`form-control ${
-                        errors.password ? "is-invalid" : ""
-                      }`}
-                      id="exampleInputPassword1"
-                      placeholder="Enter Your Password"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      onFocus={() => handleFieldFocus("password")}
-                    />
-                    <div className="invalid-feedback">{errors.password}</div>
-                  </div>
-
-                  <div className="text-center">
-                    <button type="submit" className="btn btn-primary w-75">
-                      Submit
-                    </button>
-                  </div>
-
-                  <div className="mt-3 text-center">
-                    <Link to="/forgetpassword" className="text-decoration-none">
-                      Forgot Password?
-                    </Link>
-                  </div>
-
-                  <div className="mt-3 text-center">
-                    Don't have an account? <Link to="/register">Sign Up</Link>
-                  </div>
-
-                  {verificationLinkStatus &&
-                    verificationLinkStatus !== "sent" && (
-                      <div
-                        className="btn btn-secondary w-100 mt-3"
-                        onClick={handleResendVerification}
-                        disabled={verificationLinkStatus === "sending"}
-                      >
-                        {verificationLinkStatus === "sending"
-                          ? "Sending..."
-                          : "Click here to resend the Verification Link"}
-                      </div>
-                    )}
-                </form>
+                {verificationLinkStatus === "sending"
+                  ? "Sending..."
+                  : "Click here to resend the Verification Link"}
               </div>
-            </div>
-          </div>
+            )}
+          </form>
         </div>
       </div>
-
-      <div className="login-bg-wrapper">
-        <div className="login-bg"></div>
-        <div className="background-color"></div>
-      </div>
-    </div>
+    </FormWrapper>
   );
 };
 
