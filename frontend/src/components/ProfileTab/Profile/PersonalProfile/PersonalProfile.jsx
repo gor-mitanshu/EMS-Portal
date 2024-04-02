@@ -2,6 +2,8 @@ import React from "react";
 import User from "../../../../assets/user.jpg";
 
 const PersonalProfile = ({ formData }) => {
+  const formatedDate = formData.birth_date;
+  const newDate = new Date(formatedDate);
   return (
     <>
       <div className="user-details d-flex justify-content-evenly align-items-center flex-wrap">
@@ -25,7 +27,13 @@ const PersonalProfile = ({ formData }) => {
           </p>
           <p>
             <strong>Date of Birth: </strong>{" "}
-            {formData.birth_date ? formData.birth_date : "-"}
+            {formData.birth_date
+              ? newDate.toLocaleDateString("en-US", {
+                  day: "numeric",
+                  month: "short",
+                  year: "numeric",
+                })
+              : "-"}
           </p>
           <p>
             <strong>Gender: </strong>

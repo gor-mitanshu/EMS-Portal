@@ -10,6 +10,5 @@ const verifyToken = require('../helpers/authMiddleware');
 
 // All the list of routes
 router.post('/signup', companyController.signup);
-router.put('/updateprofile/:id', verifyToken, companyController.updatePersonalDetailsOfUser);
 
 module.exports = router;

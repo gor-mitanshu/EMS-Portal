@@ -16,5 +16,6 @@ router.post('/forgetpassword', commonController.forgetPassword);
 router.post('/verifyOtp', commonController.verifyForgetPasswordOTP);
 router.post('/resetPassword/:id/:token', commonController.resetPassword);
 router.get('/getprofile', verifyToken, commonController.getPersonalDetailsOfUserFromToken);
+router.put('/updateprofile/:id', verifyToken, commonController.updatePersonalDetailsOfUser);
 
 module.exports = router;

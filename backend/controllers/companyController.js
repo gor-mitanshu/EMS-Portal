@@ -433,62 +433,6 @@ const companyController = {
     }
   },
 
-  updatePersonalDetailsOfUser: async (req, res) => {
-    const { id } = req.params;
-    if (!id) {
-      return res.status(404).send({ error: "ID not found", success: false });
-    }
-
-    const { firstName, lastName, birth_date, gender, blood_group, marital_status, email, phone, current_address, linked_in, facebook, twitter } = req.body;
-
-    try {
-      const updateUserFields = {
-        firstname: firstName,
-        lastname: lastName,
-        birth_date: birth_date,
-        gender: gender,
-        blood_group: blood_group,
-        marital_status: marital_status,
-        email: email,
-        phone: phone,
-        current_address: current_address,
-        social_profile: {
-          linked_in: linked_in,
-          facebook: facebook,
-          twitter: twitter
-        }
-
-      }
-
-      const updateUser = await CommonSchema.findOneAndUpdate(
-        { _id: id },
-        { $set: updateUserFields },
-        { new: true }
-      );
-
-      if (!updateUser) {
-        return res.status(500).send({
-          error: "Update Unsuccessful",
-          technicalError: res.message,
-          success: true
-        });
-      } else {
-        return res.status(200).send({
-          message: "Update Successful",
-          data: updateUser,
-          success: true
-        });
-      }
-    } catch (error) {
-      console.log(error)
-      return res.status(400).send({
-        success: false,
-        error: "Internal Server Error",
-        technicalError: error.message
-      });
-    }
-  },
-
 };
 
 module.exports = companyController;

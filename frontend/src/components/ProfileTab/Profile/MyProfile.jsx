@@ -138,7 +138,7 @@ const Profile = () => {
   };
 
   // Update the data
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     // Error Handling
     let errors = {};
@@ -194,9 +194,33 @@ const Profile = () => {
     setFormErrors(errors);
     // If there are no errors, you can submit the form
     if (Object.keys(errors).length === 0) {
-      console.log(formData);
-      // Add your submit logic here
-      alert("Form submitted successfully!");
+      try {
+        const accessToken = localStorage.getItem("token");
+        const accessTokenwithoutQuotes = JSON.parse(accessToken);
+        const { user } = JSON.parse(
+          atob(accessTokenwithoutQuotes.split(".")[1])
+        );
+
+        if (accessToken) {
+          await axios.put(
+            `${process.env.REACT_APP_API}/updateprofile/${user._id}`,
+            formData,
+            {
+              headers: { Authorization: `Bearer ${accessTokenwithoutQuotes}` },
+            }
+          );
+          console.log(formData);
+          // alert("Form submitted successfully!");
+          setEditMode({
+            personalProfile: false,
+            contactInformation: false,
+            address: false,
+            socialProfiles: false,
+          });
+        }
+      } catch (error) {
+        console.error("Error updating profile:", error);
+      }
     }
   };
 
@@ -229,9 +253,9 @@ const Profile = () => {
             {/* Contact Information */}
             <ProfileField
               title="Contact Information"
-              editMode={editMode.contactInformation}
-              handleEditClick={() => handleEditClick("contactInformation")}
-              handleCancelClick={() => handleCancelClick("contactInformation")}
+              // editMode={editMode.contactInformation}
+              // handleEditClick={() => handleEditClick("contactInformation")}
+              // handleCancelClick={() => handleCancelClick("contactInformation")}
             >
               {editMode.contactInformation ? (
                 <>
@@ -260,7 +284,11 @@ const Profile = () => {
             >
               {editMode.address ? (
                 <>
-                  <AddressForm formData={formData} formErrors={formErrors} />
+                  <AddressForm
+                    formData={formData}
+                    formErrors={formErrors}
+                    handleInputChange={handleInputChange}
+                  />
                 </>
               ) : (
                 <>
@@ -288,7 +316,7 @@ const Profile = () => {
                 </>
               ) : (
                 <>
-                  <SocialProfile />
+                  <SocialProfile formData={formData} />
                 </>
               )}
             </ProfileField>
