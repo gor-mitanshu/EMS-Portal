@@ -5,22 +5,36 @@ import {
 } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
+import { Link } from "react-router-dom";
 
-const SocialProfile = () => {
+const SocialProfile = ({ formData }) => {
+  // console.log(formData);
   return (
     <>
       <div className="d-flex">
-        <a href="/" className="pe-4">
+        <Link
+          // to={formData.linked_in}
+          target="_blank"
+          className="pe-4"
+        >
           <FontAwesomeIcon icon={faLinkedinIn} size="2xl" />
-        </a>
+        </Link>
 
-        <a href="/" className="pe-4">
+        <Link
+          //  to={formData.facebook}
+          target="_blank"
+          className="pe-4"
+        >
           <FontAwesomeIcon icon={faFacebook} size="2xl" />
-        </a>
+        </Link>
 
-        <a href="/" className="pe-4">
+        <Link
+          // to={formData.twitter}
+          target="_blank"
+          className="pe-4"
+        >
           <FontAwesomeIcon icon={faTwitter} size="2xl" />
-        </a>
+        </Link>
       </div>
     </>
   );

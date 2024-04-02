@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ProfileField from "../../../UI/ProfileFields/ProfileFields";
 import PersonalProfileForm from "./PersonalProfile/PersonalProfileForm";
 import PersonalProfile from "./PersonalProfile/PersonalProfile";
@@ -7,6 +7,7 @@ import ContactInformation from "./ContactInformation/ContactInformation";
 import AddressForm from "./Address/AddressForm";
 import SocialProfileForm from "./SocialProfile/SocialProfileForm";
 import SocialProfile from "./SocialProfile/SocialProfile";
+import axios from "axios";
 
 const Profile = () => {
   const [editMode, setEditMode] = useState({
@@ -46,6 +47,36 @@ const Profile = () => {
     twitter: "",
   });
 
+  // Get the User
+  useEffect(() => {
+    const getUser = async () => {
+      const accessToken = localStorage.getItem("token");
+      const accessTokenwithoutQuotes = JSON.parse(accessToken);
+      if (accessToken) {
+        const res = await axios.get(`${process.env.REACT_APP_API}/getprofile`, {
+          headers: { Authorization: `Bearer ${accessTokenwithoutQuotes}` },
+        });
+        const { user } = res.data;
+        setFormData({
+          firstName: user.firstName,
+          lastName: user.lastName,
+          birth_date: user.birth_date,
+          gender: user.gender,
+          blood_group: user.blood_group,
+          marital_status: user.marital_status,
+          email: user.email,
+          phone: user.phone,
+          current_address: user.current_address,
+          linked_in: user.linked_in,
+          facebook: user.facebook,
+          twitter: user.twitter,
+        });
+      }
+    };
+    getUser();
+  }, []);
+
+  // Handle Change
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -59,6 +90,7 @@ const Profile = () => {
     });
   };
 
+  // Handle Edit Click
   const handleEditClick = (section) => {
     setEditMode((prevEditMode) => ({
       ...prevEditMode,
@@ -66,6 +98,7 @@ const Profile = () => {
     }));
   };
 
+  //Handle Cancel Click
   const handleCancelClick = (section) => {
     setEditMode((prevEditMode) => ({
       ...prevEditMode,
@@ -104,6 +137,7 @@ const Profile = () => {
     }
   };
 
+  // Update the data
   const handleSubmit = (e) => {
     e.preventDefault();
     // Error Handling
@@ -230,7 +264,9 @@ const Profile = () => {
                 </>
               ) : (
                 <>
-                  <p>{formData.current_address || "-"}</p>
+                  <p>
+                    {formData.current_address ? formData.current_address : "-"}
+                  </p>
                 </>
               )}
             </ProfileField>

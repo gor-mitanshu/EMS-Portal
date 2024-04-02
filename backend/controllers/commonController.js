@@ -330,7 +330,7 @@ const commonController = {
                return res.status(200).send({
                     message: "Successfully Got the User",
                     success: true,
-                    data: user
+                    user
                });
           } catch (error) {
                res.status(400).send({

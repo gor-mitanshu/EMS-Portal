@@ -18,22 +18,26 @@ const PersonalProfile = ({ formData }) => {
         </div>
         <div>
           <p>
-            <strong>Name:</strong>{" "}
-            {formData.firstName + formData.lastName || "Mitanshu Gor"}
+            <strong>Name: </strong>{" "}
+            {formData.firstName && formData.lastName
+              ? formData.firstName + " " + formData.lastName
+              : "-"}
           </p>
           <p>
-            <strong>Date of Birth:</strong>{" "}
-            {formData.birth_date || "03/01/2002"}
+            <strong>Date of Birth: </strong>{" "}
+            {formData.birth_date ? formData.birth_date : "-"}
           </p>
           <p>
-            <strong>Gender:</strong> {formData.gender || "Male"}
+            <strong>Gender: </strong>
+            {formData.gender ? formData.gender : "-"}
           </p>
           <p>
-            <strong>Blood Group:</strong> {formData.blood_group || "B +ve"}
+            <strong>Blood Group: </strong>
+            {formData.blood_group ? formData.blood_group : "-"}
           </p>
           <p>
-            <strong>Marital Status:</strong>{" "}
-            {formData.marital_status || "Single"}
+            <strong>Marital Status: </strong>
+            {formData.marital_status ? formData.marital_status : "-"}
           </p>
         </div>
       </div>
