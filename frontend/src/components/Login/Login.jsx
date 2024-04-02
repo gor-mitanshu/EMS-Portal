@@ -71,8 +71,8 @@ const Login = () => {
         if (res) {
           const data = res.data.token;
           localStorage.setItem("token", JSON.stringify(data));
-          navigate("/dashboard");
-          toast.success(res.message);
+          toast.success(res.data.message);
+          navigate("/");
         }
       } catch (error) {
         console.log(error);
@@ -146,7 +146,7 @@ const Login = () => {
                 Email
               </label>
               <input
-                type="email"
+                type="text"
                 className={`form-control no-focus-box-shadow ${
                   errors.email ? "is-invalid" : ""
                 }`}

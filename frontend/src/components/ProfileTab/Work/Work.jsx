@@ -1,5 +1,11 @@
 import React, { useState } from "react";
 import ProfileField from "../../../UI/ProfileFields/ProfileFields";
+import BasicInfoForm from "./BasicInfo/BasicInfoForm";
+import BasicInfo from "./BasicInfo/BasicInfo";
+import WorkInfoForm from "./WorkInfo/WorkInfoForm";
+import WorkInfo from "./WorkInfo/WorkInfo";
+import ResignationInfoForm from "./ResignationInfo/ResignationInfoForm";
+import ResignationInfo from "./ResignationInfo/ResignationInfo";
 
 const Work = () => {
   const [editMode, setEditMode] = useState({
@@ -178,7 +184,7 @@ const Work = () => {
         <form onSubmit={handleSubmit}>
           <div className="row">
             {/* Card 1 */}
-            <div className="col-md-8">
+            <div className="col-md-7">
               <ProfileField
                 title="Basic Info"
                 editMode={editMode.basicInfo}
@@ -187,237 +193,22 @@ const Work = () => {
               >
                 {editMode.basicInfo ? (
                   <>
-                    <div className="form-group">
-                      <div className="row">
-                        {/* Employee ID */}
-                        <div className="col-md-4">
-                          <div className="form-group row">
-                            <div className="col mb-3">
-                              <label
-                                htmlFor="employee-id"
-                                className="font-weight-bold"
-                              >
-                                Employee ID:
-                              </label>
-                              <input
-                                type="text"
-                                className="form-control no-focus-box-shadow"
-                                placeholder="Employee ID"
-                                name="employee_id"
-                                value={formData.employee_id}
-                                onChange={handleInputChange}
-                              />
-                              {formErrors.employee_id && (
-                                <small className="text-danger">
-                                  {formErrors.employee_id}
-                                </small>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                        {/* Employee Select */}
-                        <div className="col-md-4">
-                          <div className="form-group row">
-                            <div className="col mb-3">
-                              <label
-                                htmlFor="employee_type"
-                                className="font-weight-bold"
-                              >
-                                Employee Type:
-                              </label>
-                              <select
-                                className="form-select no-focus-box-shadow"
-                                name="employment_type"
-                                value={formData.employment_type}
-                                onChange={handleInputChange}
-                                disabled={!editMode}
-                              >
-                                <option value="">Select Employment Type</option>
-                                <option value="Full Time">Full Time</option>
-                                <option value="Part Time">Part Time</option>
-                                <option value="On Contract">On Contract</option>
-                                <option value="Intern">Intern</option>
-                              </select>
-                              {formErrors.employment_type && (
-                                <small className="text-danger">
-                                  {formErrors.employment_type}
-                                </small>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                        {/* Date of Joining */}
-                        <div className="col-md-4">
-                          <div className="form-group row">
-                            <div className="col mb-3">
-                              <label
-                                htmlFor="date_of_joining"
-                                className="font-weight-bold"
-                              >
-                                Date of Joining:
-                              </label>
-                              <input
-                                type="date"
-                                className="form-control no-focus-box-shadow"
-                                placeholder="Date of Joining"
-                                name="date_of_joining"
-                                value={formData.date_of_joining}
-                                onChange={handleInputChange}
-                              />
-                              {formErrors.date_of_joining && (
-                                <small className="text-danger">
-                                  {formErrors.date_of_joining}
-                                </small>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="row">
-                        {/* Work Location */}
-                        <div className="col-md-4">
-                          <div className="form-group row">
-                            <div className="col mb-3">
-                              <label
-                                htmlFor="employee_type"
-                                className="font-weight-bold"
-                              >
-                                Work Location:
-                              </label>
-                              <select
-                                className="form-select no-focus-box-shadow"
-                                name="work_location"
-                                value={formData.work_location}
-                                onChange={handleInputChange}
-                                disabled={!editMode}
-                              >
-                                <option value="">Select Work Location</option>
-                              </select>
-                              {formErrors.work_location && (
-                                <small className="text-danger">
-                                  {formErrors.work_location}
-                                </small>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                        {/* Work Experience */}
-                        <div className="col-md-4">
-                          <div className="form-group row">
-                            <div className="col mb-3">
-                              <label
-                                htmlFor="work_experience"
-                                className="font-weight-bold"
-                              >
-                                Work Experience:
-                              </label>
-                              <input
-                                type="text"
-                                className="form-control no-focus-box-shadow"
-                                placeholder="Experience in months"
-                                name="work_experience"
-                                value={formData.work_experience}
-                                onChange={handleInputChange}
-                              />
-                              {formErrors.work_experience && (
-                                <small className="text-danger">
-                                  {formErrors.work_experience}
-                                </small>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                        {/* Date of Joining */}
-                        <div className="col-md-4">
-                          <div className="form-group row">
-                            <div className="col mb-3">
-                              <label
-                                htmlFor="probation_period"
-                                className="font-weight-bold"
-                              >
-                                Probation Period:
-                              </label>
-                              <input
-                                type="number"
-                                className="form-control no-focus-box-shadow"
-                                placeholder="Date of Joining"
-                                name="probation_period"
-                                value={formData.probation_period}
-                                onChange={handleInputChange}
-                              />
-                              {formErrors.probation_period && (
-                                <small className="text-danger">
-                                  {formErrors.probation_period}
-                                </small>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      <button type="submit" className="btn btn-primary mr-2">
-                        Save
-                      </button>
-                    </div>
+                    <BasicInfoForm
+                      formData={formData}
+                      formErrors={formErrors}
+                      handleInputChange={handleInputChange}
+                      editMode={editMode}
+                    />
                   </>
                 ) : (
                   <>
-                    <div className="user-details">
-                      <div className="row">
-                        <div className="col-md-4">
-                          <p>
-                            <strong>Employee ID:</strong> {formData.employee_id}
-                          </p>
-                        </div>
-                        <div className="col-md-4">
-                          <p>
-                            <strong>Date of Joining:</strong>{" "}
-                            {formData.date_of_joining}
-                          </p>
-                        </div>
-                        <div className="col-md-4">
-                          <p>
-                            <strong>Probation Period:</strong>{" "}
-                            {formData.probation_period}
-                          </p>
-                        </div>
-                      </div>
-                      <div className="row">
-                        <div className="col-md-4">
-                          <p>
-                            <strong>Employee Type:</strong>{" "}
-                            {formData.employment_type}
-                          </p>
-                        </div>
-                        <div className="col-md-4">
-                          <p>
-                            <strong>Work Location:</strong>{" "}
-                            {formData.work_location}
-                          </p>
-                        </div>
-                        <div className="col-md-4">
-                          <p>
-                            <strong>Employee Status:</strong>{" "}
-                            {formData.employee_status}
-                          </p>
-                        </div>
-                      </div>
-                      <div className="row">
-                        <div className="col-md-6">
-                          <p>
-                            <strong>Work Experience:</strong>{" "}
-                            {formData.work_experience}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
+                    <BasicInfo formData={formData} />
                   </>
                 )}
               </ProfileField>
             </div>
             {/* Card 2 */}
-            <div className="col-md-4">
+            <div className="col-md-5">
               <ProfileField
                 title="Work Info"
                 editMode={editMode.workInfo}
@@ -426,345 +217,73 @@ const Work = () => {
               >
                 {editMode.workInfo ? (
                   <>
-                    <div className="form-group">
-                      <div className="row">
-                        {/* Designation */}
-                        <div className="col-md-6">
-                          <div className="form-group row">
-                            <div className="col mb-3">
-                              <label
-                                htmlFor="designation"
-                                className="font-weight-bold"
-                              >
-                                Designation:
-                              </label>
-                              <select
-                                className="form-select no-focus-box-shadow"
-                                name="designation"
-                                value={formData.designation}
-                                onChange={handleInputChange}
-                                disabled={!editMode}
-                              >
-                                <option value="">Select Designation</option>
-                              </select>
-                              {formErrors.designation && (
-                                <small className="text-danger">
-                                  {formErrors.designation}
-                                </small>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                        {/* Job Title*/}
-                        <div className="col-md-6">
-                          <div className="form-group row">
-                            <div className="col mb-3">
-                              <label
-                                htmlFor="job_title"
-                                className="font-weight-bold"
-                              >
-                                Job Title:
-                              </label>
-                              <input
-                                type="text"
-                                className="form-control no-focus-box-shadow"
-                                placeholder="Designation"
-                                name="job_title"
-                                value={formData.job_title}
-                                onChange={handleInputChange}
-                              />
-                              {formErrors.job_title && (
-                                <small className="text-danger">
-                                  {formErrors.job_title}
-                                </small>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="row">
-                        {/* Department */}
-                        <div className="col-md-6">
-                          <div className="form-group row">
-                            <div className="col mb-3">
-                              <label
-                                htmlFor="department"
-                                className="font-weight-bold"
-                              >
-                                Department:
-                              </label>
-                              <select
-                                className="form-select no-focus-box-shadow"
-                                name="department"
-                                value={formData.department}
-                                onChange={handleInputChange}
-                                disabled={!editMode}
-                              >
-                                <option value="">Select Department</option>
-                              </select>
-                              {formErrors.department && (
-                                <small className="text-danger">
-                                  {formErrors.department}
-                                </small>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                        {/* Sub Department */}
-                        <div className="col-md-6">
-                          <div className="form-group row">
-                            <div className="col mb-3">
-                              <label
-                                htmlFor="sub_department"
-                                className="font-weight-bold"
-                              >
-                                Sub Department:
-                              </label>
-                              <select
-                                className="form-select no-focus-box-shadow"
-                                name="sub_department"
-                                value={formData.sub_department}
-                                onChange={handleInputChange}
-                                disabled={!editMode}
-                              >
-                                <option value="">Select Sub-Department</option>
-                              </select>
-                              {formErrors.sub_department && (
-                                <small className="text-danger">
-                                  {formErrors.sub_department}
-                                </small>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      <button type="submit" className="btn btn-primary mr-2">
-                        Save
-                      </button>
-                    </div>
+                    <WorkInfoForm
+                      formData={formData}
+                      formErrors={formErrors}
+                      handleInputChange={handleInputChange}
+                      editMode={editMode}
+                    />
                   </>
                 ) : (
+                  <WorkInfo />
+                )}
+              </ProfileField>
+            </div>
+          </div>
+          {/* Card 3 */}
+          <div className="row">
+            <div className="col-md-12">
+              <ProfileField title="Work History">
+                <>
                   <div className="user-details">
                     <div className="row">
-                      <div className="col-md-6">
+                      <div className="col-md-3">
                         <p>
-                          <strong>Designation:</strong> -
+                          <strong>Department</strong>
                         </p>
                       </div>
-                      <div className="col-md-6">
+                      <div className="col-md-3">
                         <p>
-                          <strong>Job Title:</strong> -
+                          <strong>Designation</strong>{" "}
                         </p>
                       </div>
-                    </div>
-                    <div className="row">
-                      <div className="col-md-6">
+                      <div className="col-md-3">
                         <p>
-                          <strong>Department:</strong> -
+                          <strong>From</strong>
                         </p>
                       </div>
-                      <div className="col-md-6">
+                      <div className="col-md-3">
                         <p>
-                          <strong>Sub Department:</strong> -
+                          <strong>To</strong>
                         </p>
                       </div>
                     </div>
                   </div>
-                )}
+                </>
               </ProfileField>
             </div>
-            <div className="row">
-              {/* Card 3 */}
-              <div className="col-md-12">
-                <ProfileField title="Work History">
+          </div>
+          {/* Card 4 */}
+          <div className="row">
+            <div className="col-md-12">
+              <ProfileField
+                title="Resignation Info"
+                editMode={editMode.resignationInfo}
+                handleEditClick={() => handleEditClick("resignationInfo")}
+                handleCancelClick={() => handleCancelClick("resignationInfo")}
+              >
+                {editMode.resignationInfo ? (
                   <>
-                    <div className="user-details">
-                      <div className="row">
-                        <div className="col-md-3">
-                          <p>
-                            <strong>Department</strong>
-                          </p>
-                        </div>
-                        <div className="col-md-3">
-                          <p>
-                            <strong>Designation</strong>{" "}
-                          </p>
-                        </div>
-                        <div className="col-md-3">
-                          <p>
-                            <strong>From</strong>
-                          </p>
-                        </div>
-                        <div className="col-md-3">
-                          <p>
-                            <strong>To</strong>
-                          </p>
-                        </div>
-                      </div>
-                    </div>
+                    <ResignationInfoForm
+                      formData={formData}
+                      formErrors={formErrors}
+                      handleInputChange={handleInputChange}
+                    />
                   </>
-                </ProfileField>
-              </div>
-            </div>
-            {/* Card 4 */}
-            <div className="row">
-              <div className="col-md-12">
-                <ProfileField
-                  title="Resignation Info"
-                  editMode={editMode.resignationInfo}
-                  handleEditClick={() => handleEditClick("resignationInfo")}
-                  handleCancelClick={() => handleCancelClick("resignationInfo")}
-                >
-                  {editMode.resignationInfo ? (
-                    <>
-                      <div className="form-group">
-                        <div className="row">
-                          {/* Resignation Date */}
-                          <div className="col-md-6">
-                            <div className="form-group row">
-                              <div className="col mb-3">
-                                <label
-                                  htmlFor="resignation_date"
-                                  className="font-weight-bold"
-                                >
-                                  Resignation Date:
-                                </label>
-                                <input
-                                  type="date"
-                                  className="form-control no-focus-box-shadow"
-                                  placeholder="Resignation Date"
-                                  name="resignation_date"
-                                  value={formData.resignation_date}
-                                  onChange={handleInputChange}
-                                />
-                                {formErrors.resignation_date && (
-                                  <small className="text-danger">
-                                    {formErrors.resignation_date}
-                                  </small>
-                                )}
-                              </div>
-                            </div>
-                          </div>
-                          {/* Resignation Status*/}
-                          <div className="col-md-6">
-                            <div className="form-group row">
-                              <div className="col mb-3">
-                                <label
-                                  htmlFor="resignation_status"
-                                  className="font-weight-bold"
-                                >
-                                  Resignation Status:
-                                </label>
-                                <input
-                                  type="text"
-                                  className="form-control no-focus-box-shadow"
-                                  placeholder="Resignation Status"
-                                  name="resignation_status"
-                                  value={formData.resignation_status}
-                                  onChange={handleInputChange}
-                                />
-                                {formErrors.resignation_status && (
-                                  <small className="text-danger">
-                                    {formErrors.resignation_status}
-                                  </small>
-                                )}
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="row">
-                          {/* Notice Period */}
-                          <div className="col-md-6">
-                            <div className="form-group row">
-                              <div className="col mb-3">
-                                <label
-                                  htmlFor="notice_period"
-                                  className="font-weight-bold"
-                                >
-                                  Notice Period:
-                                </label>
-                                <input
-                                  type="text"
-                                  className="form-control no-focus-box-shadow"
-                                  placeholder="Notice Period"
-                                  name="notice_period"
-                                  value={formData.notice_period}
-                                  onChange={handleInputChange}
-                                />
-                                {formErrors.notice_period && (
-                                  <small className="text-danger">
-                                    {formErrors.notice_period}
-                                  </small>
-                                )}
-                              </div>
-                            </div>
-                          </div>
-                          {/* Last Working Day*/}
-                          <div className="col-md-6">
-                            <div className="form-group row">
-                              <div className="col mb-3">
-                                <label
-                                  htmlFor="last_working_day"
-                                  className="font-weight-bold"
-                                >
-                                  Last Working Day:
-                                </label>
-                                <input
-                                  type="date"
-                                  className="form-control no-focus-box-shadow"
-                                  placeholder="Last Working Day"
-                                  name="last_working_day"
-                                  value={formData.last_working_day}
-                                  onChange={handleInputChange}
-                                />
-                                {formErrors.last_working_day && (
-                                  <small className="text-danger">
-                                    {formErrors.last_working_day}
-                                  </small>
-                                )}
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-
-                        <button type="submit" className="btn btn-primary mr-2">
-                          Save
-                        </button>
-                      </div>
-                    </>
-                  ) : (
-                    <div className="user-details">
-                      <div className="row">
-                        <div className="col-md-6">
-                          <p>
-                            <strong>Resignation Date:</strong> -
-                          </p>
-                        </div>
-                        <div className="col-md-6">
-                          <p>
-                            <strong>Resignation Status:</strong> -
-                          </p>
-                        </div>
-                      </div>
-                      <div className="row">
-                        <div className="col-md-6">
-                          <p>
-                            <strong>Notice Period:</strong> -
-                          </p>
-                        </div>
-                        <div className="col-md-6">
-                          <p>
-                            <strong>Last Working Day:</strong> -
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </ProfileField>
-              </div>
+                ) : (
+                  <ResignationInfo formData={formData} />
+                )}
+              </ProfileField>
             </div>
           </div>
         </form>

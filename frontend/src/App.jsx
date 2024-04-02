@@ -12,7 +12,7 @@ import Education from "./components/ProfileTab/Education/Education";
 import Family from "./components/ProfileTab/Family/Family";
 import DocumentTab from "./components/ProfileTab/Documents/DocumentTab";
 import FileManager from "./components/ProfileTab/FileManager/FileManager";
-import Profile from "./components/ProfileTab/Profile/PersonalProfile";
+import Profile from "./components/ProfileTab/Profile/MyProfile";
 import Team from "./components/ProfileTab/Team/Team";
 import Attendance from "./components/Attendance/Attendance";
 import Leave from "./components/Leave/Leave";
