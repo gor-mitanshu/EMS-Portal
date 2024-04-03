@@ -42,9 +42,9 @@ const Profile = () => {
     email: "",
     phone: "",
     current_address: "",
-    linked_in: "",
-    facebook: "",
-    twitter: "",
+    // linked_in: "",
+    // facebook: "",
+    // twitter: "",
   });
 
   // Get the User
@@ -127,14 +127,15 @@ const Profile = () => {
         ...prevFormErrors,
         current_address: "",
       }));
-    } else if (section === "socialProfiles") {
-      setFormErrors((prevFormErrors) => ({
-        ...prevFormErrors,
-        linked_in: "",
-        facebook: "",
-        twitter: "",
-      }));
     }
+    //  else if (section === "socialProfiles") {
+    //   setFormErrors((prevFormErrors) => ({
+    //     ...prevFormErrors,
+    //     linked_in: "",
+    //     facebook: "",
+    //     twitter: "",
+    //   }));
+    // }
   };
 
   // Update the data
@@ -180,17 +181,17 @@ const Profile = () => {
       }
     }
     // Social Profiles Section
-    if (editMode.socialProfiles) {
-      if (!formData.linked_in) {
-        errors.linked_in = "LinkedIn profile is required";
-      }
-      if (!formData.facebook) {
-        errors.facebook = "Facebook profile is required";
-      }
-      if (!formData.twitter) {
-        errors.twitter = "Twitter profile is required";
-      }
-    }
+    // if (editMode.socialProfiles) {
+    //   if (!formData.linked_in) {
+    //     errors.linked_in = "LinkedIn profile is required";
+    //   }
+    //   if (!formData.facebook) {
+    //     errors.facebook = "Facebook profile is required";
+    //   }
+    //   if (!formData.twitter) {
+    //     errors.twitter = "Twitter profile is required";
+    //   }
+    // }
     setFormErrors(errors);
     // If there are no errors, you can submit the form
     if (Object.keys(errors).length === 0) {

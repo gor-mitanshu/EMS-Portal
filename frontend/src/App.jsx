@@ -22,6 +22,8 @@ import Logs from "./components/Leave/logs/Logs";
 import Balance from "./components/Leave/Balance/Balance";
 import Settings from "./components/Leave/Settings/Settings";
 import Rules from "./components/Leave/Rules/Rules";
+import CompanyProfile from "./components/CompanyProfile/CompanyProfile";
+import Overview from "./components/CompanyProfile/Overview/Overview";
 
 function App() {
   return (
@@ -43,6 +45,20 @@ function App() {
             <Route path="attendance" element={<Attendance />} />
             <Route path="leave" element={<Leave />} />
             <Route path="payroll" element={<Payroll />} />
+
+            {/* Company Routes */}
+            <Route path="/company-profile" element={<CompanyProfile />}>
+              <Route index element={<Navigate to="overview" replace />} />
+              <Route path="overview" element={<Overview />} />
+              <Route path="address" element={<Profile />} />
+              <Route path="department" element={<Profile />} />
+              <Route path="designation" element={<Profile />} />
+              <Route path="announcements" element={<Profile />} />
+              <Route path="policies" element={<Profile />} />
+              <Route path="admin" element={<Profile />} />
+              <Route path="statutory" element={<Profile />} />
+              <Route path="my-plan" element={<Profile />} />
+            </Route>
 
             {/* My Profile Routes */}
             <Route path="/my-profile" element={<TabsComponent />}>

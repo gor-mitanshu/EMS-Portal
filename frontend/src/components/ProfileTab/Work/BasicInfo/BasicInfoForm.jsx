@@ -14,20 +14,20 @@ const BasicInfoForm = ({
           <div className="col-md-4">
             <div className="form-group row">
               <div className="col mb-3">
-                <label htmlFor="employee-id" className="font-weight-bold">
+                <label htmlFor="employee_code" className="font-weight-bold">
                   Employee ID:
                 </label>
                 <input
                   type="text"
                   className="form-control no-focus-box-shadow"
                   placeholder="Employee ID"
-                  name="employee_id"
-                  value={formData.employee_id}
+                  name="employee_code"
+                  value={formData.employee_code}
                   onChange={handleInputChange}
                 />
-                {formErrors.employee_id && (
+                {formErrors.employee_code && (
                   <small className="text-danger">
-                    {formErrors.employee_id}
+                    {formErrors.employee_code}
                   </small>
                 )}
               </div>

@@ -15,7 +15,7 @@ const Work = () => {
   });
 
   const [formData, setFormData] = useState({
-    employee_id: "",
+    employee_code: "",
     date_of_joining: "",
     probation_period: "",
     employment_type: "",
@@ -35,7 +35,7 @@ const Work = () => {
   });
 
   const [formErrors, setFormErrors] = useState({
-    employee_id: "",
+    employee_code: "",
     date_of_joining: "",
     probation_period: "",
     employment_type: "",
@@ -83,7 +83,7 @@ const Work = () => {
     if (section === "basicInfo") {
       setFormErrors((prevFormErrors) => ({
         ...prevFormErrors,
-        employee_id: "",
+        employee_code: "",
         date_of_joining: "",
         probation_period: "",
         employment_type: "",
@@ -119,8 +119,8 @@ const Work = () => {
     // Validate each field based on the section
     // Basic Info Section
     if (editMode.basicInfo) {
-      if (!formData.employee_id.trim()) {
-        errors.employee_id = "Employee Id is required";
+      if (!formData.employee_code.trim()) {
+        errors.employee_code = "Employee Id is required";
       }
       if (!formData.employment_type.trim()) {
         errors.employment_type = "Employment Type is required";
