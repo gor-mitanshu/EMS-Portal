@@ -9,7 +9,7 @@ const CommonSchema = require('../models/commonSchema/userSchema').UserModel;
 const EmployeeSchema = require('../models/employeeSchema/employeeSchema');
 
 // List of the controllers
-const companyController = {
+const employeeController = {
      signup: async (req, res) => {
           try {
                // getting the body part from request
@@ -40,7 +40,7 @@ const companyController = {
                // Create a new user in the EmployeeSchema
                const newUserCompanyUser = new EmployeeSchema({
                     user_id: newUserCommonSchema._id, // Assign the user ID from CommonSchema
-            
+
                     company_name, register_office, company_size, employee_no, set_time_shift: { inTime, out_time, garce_time, working_hours }
                });
                await newUserCompanyUser.save();
@@ -61,35 +61,148 @@ const companyController = {
           }
      },
 
-     login: async (req, res) => {
+     addWorkDetails: async (req, res) => {
+          let { employee_code, date_of_joining, probation_period, employment_type, work_location, employee_status, work_experience, user_id } = req.body;
           try {
-               const { email, password } = req.body;
-               const user = await CommonSchema.findOne({ email: email });
-               if (!user) {
-                    return res.status(404).send({ message: "User not found. Please Register Yourself!", success: false });
-               }
-               const compareHashedPassword = await bcrypt.compare(password, user.password);
+               const workDetails = new EmployeeSchema({
+                    employee_code, date_of_joining, probation_period, employment_type, work_location, employee_status, work_experience, role: "employee", user_id
+               });
+               await workDetails.save();
 
-               if (!compareHashedPassword) {
-                    return res.status(401).send({ message: "Password does not match", success: false });
-               }
-
-               const expireIn = "10h";
-               const token = jwt.sign({ user }, jwtSecret, { expiresIn: expireIn });
-
-               return res.status(200).send({
-                    message: "Logged In Successfully!!!",
+               res.status(200).send({
+                    message: "Added Successfully",
                     success: true,
-                    data: token
+                    workDetails
                });
           } catch (error) {
+               console.log(error);
                return res.status(500).send({
-                    message: "Internal Server Error",
+                    error: "Internal Server Error",
+                    success: false,
+                    technicalError: error.message
+               });
+          }
+     },
+
+     getworkDetails: async (req, res) => {
+          try {
+               const token = req.headers.authorization;
+               if (!token) {
+                    return res.status(500).send({
+                         error: "Token not found",
+                         success: false
+                    });
+               }
+               const { user } = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
+               if (!user) {
+                    return res.status(404).send({
+                         message: "Unable to parse the token",
+                         success: false,
+                         error: res.message
+                    });
+               }
+               const workDetails = await EmployeeSchema.findOne({ user_id: user._id })
+               if (workDetails) {
+                    return res.status(200).send({
+                         message: "Got the User",
+                         success: true,
+                         workDetails,
+                    });
+               } else {
+                    return res.status(200).send({
+                         message: "Didn't find the User",
+                         res,
+                         success: false,
+                    });
+               }
+          } catch (error) {
+               console.error('Error getting user:', error.message);
+               return res.status(500).send({
+                    message: "Internal server error",
                     error: error.message,
                     success: false
                });
           }
      },
+
+     updateWorkDetails: async (req, res) => {
+          try {
+               const token = req.headers.authorization;
+               if (!token) {
+                    return res.status(500).send({
+                         error: "Token not found",
+                         success: false
+                    });
+               }
+               const { user } = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
+               if (!user) {
+                    return res.status(404).send({
+                         message: "Unable to parse the token",
+                         success: false,
+                         error: res.message
+                    });
+               }
+               const {
+                    employee_code,
+                    date_of_joining,
+                    probation_period,
+                    employment_type,
+                    work_location,
+                    employee_status,
+                    work_experience,
+                    designation,
+                    job_title,
+                    department,
+                    sub_department,
+                    resignation_date,
+                    resignation_status,
+                    notice_period,
+                    last_working_day
+               } = req.body;
+
+               const updateFields = {
+                    employee_code,
+                    date_of_joining,
+                    probation_period,
+                    employment_type,
+                    work_location,
+                    employee_status,
+                    work_experience,
+                    designation,
+                    job_title,
+                    department,
+                    sub_department,
+                    resignation_date,
+                    resignation_status,
+                    notice_period,
+                    last_working_day,
+               }
+               const updatedEmployee = await EmployeeSchema.findOneAndUpdate(
+                    { user_id: user._id },
+                    { $set: updateFields },
+                    { new: true }
+               );
+               if (!updatedEmployee) {
+                    return res.status(500).send({
+                         error: "Update Unsuccessful",
+                         success: false,
+                    });
+               } else {
+                    return res.status(200).send({
+                         message: "Update Successful",
+                         updatedEmployee,
+                         success: true,
+                    });
+               }
+          } catch (error) {
+               console.log(error);
+               return res.status(500).send({
+                    error: "Internal Server Error",
+                    success: false,
+                    technicalError: error.message
+               });
+          }
+     },
 };
 
-module.exports = companyController;
+module.exports = employeeController;

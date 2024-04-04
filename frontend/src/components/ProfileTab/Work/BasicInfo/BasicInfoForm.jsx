@@ -1,7 +1,15 @@
 import React from "react";
 
+const initialFormData = {
+  employee_code: "",
+  employment_type: "",
+  date_of_joining: "",
+  work_location: "",
+  work_experience: "",
+  probation_period: "",
+};
 const BasicInfoForm = ({
-  formData,
+  formData = initialFormData,
   formErrors,
   handleInputChange,
   editMode,
@@ -73,7 +81,7 @@ const BasicInfoForm = ({
                   className="form-control no-focus-box-shadow"
                   placeholder="Date of Joining"
                   name="date_of_joining"
-                  value={formData.date_of_joining}
+                  value={formData.date_of_joining || ""}
                   onChange={handleInputChange}
                 />
                 {formErrors.date_of_joining && (
@@ -102,6 +110,7 @@ const BasicInfoForm = ({
                   disabled={!editMode}
                 >
                   <option value="">Select Work Location</option>
+                  <option value="Ahmedabad">Ahmedabad</option>
                 </select>
                 {formErrors.work_location && (
                   <small className="text-danger">
@@ -123,7 +132,7 @@ const BasicInfoForm = ({
                   className="form-control no-focus-box-shadow"
                   placeholder="Experience in months"
                   name="work_experience"
-                  value={formData.work_experience}
+                  value={formData.work_experience || ""}
                   onChange={handleInputChange}
                 />
                 {formErrors.work_experience && (

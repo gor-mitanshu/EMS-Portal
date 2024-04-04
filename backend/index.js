@@ -16,10 +16,12 @@ require('./config/database');
 // routes
 const companyRoutes = require('./routes/companyRoute');
 const commonRoutes = require('./routes/commonRoutes');
+const employeeRoutes = require('./routes/employeeRoute');
 
 // use of routes
 app.use('', commonRoutes);
 app.use('/company', companyRoutes);
+app.use('/employee', employeeRoutes);
 
 // PORT
 const PORT = process.env.PORT || 7000;

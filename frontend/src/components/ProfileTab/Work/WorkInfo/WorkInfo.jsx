@@ -1,7 +1,7 @@
 import React from "react";
 
 const WorkInfo = ({ formData }) => {
-  console.log(formData);
+  // console.log(formData);
   return (
     <>
       <div className="user-details">

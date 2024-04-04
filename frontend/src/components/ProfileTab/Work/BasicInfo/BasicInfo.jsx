@@ -7,7 +7,7 @@ const BasicInfo = ({ formData }) => {
         <div className="row">
           <div className="col-md-4">
             <p>
-              <strong>Employee ID:</strong> {formData.employee_id}
+              <strong>Employee ID:</strong> {formData.employee_code}
             </p>
           </div>
           <div className="col-md-4">

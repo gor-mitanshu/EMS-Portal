@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ProfileField from "../../../UI/ProfileFields/ProfileFields";
 import BasicInfoForm from "./BasicInfo/BasicInfoForm";
 import BasicInfo from "./BasicInfo/BasicInfo";
@@ -6,6 +6,7 @@ import WorkInfoForm from "./WorkInfo/WorkInfoForm";
 import WorkInfo from "./WorkInfo/WorkInfo";
 import ResignationInfoForm from "./ResignationInfo/ResignationInfoForm";
 import ResignationInfo from "./ResignationInfo/ResignationInfo";
+import axios from "axios";
 
 const Work = () => {
   const [editMode, setEditMode] = useState({
@@ -112,7 +113,43 @@ const Work = () => {
     }
   };
 
-  const handleSubmit = (e) => {
+  useEffect(() => {
+    const getWorkData = async () => {
+      const accessToken = localStorage.getItem("token");
+      const accessTokenwithoutQuotes = JSON.parse(accessToken);
+      const res = await axios.get(
+        `${process.env.REACT_APP_API}/employee/getworkdetails`,
+        {
+          headers: { Authorization: `Bearer ${accessTokenwithoutQuotes}` },
+        }
+      );
+      if (res && res.status === 200) {
+        const { workDetails } = res.data;
+        setFormData({
+          employee_code: workDetails.employee_code,
+          date_of_joining: workDetails.date_of_joining,
+          probation_period: workDetails.probation_period,
+          employment_type: workDetails.employment_type,
+          work_location: workDetails.work_location,
+          employee_status: workDetails.employee_status,
+          work_experience: workDetails.work_experience,
+
+          designation: workDetails.designation,
+          job_title: workDetails.job_title,
+          department: workDetails.department,
+          sub_department: workDetails.sub_department,
+
+          resignation_date: workDetails.resignation_date,
+          resignation_status: workDetails.resignation_status,
+          notice_period: workDetails.notice_period,
+          last_working_day: workDetails.last_working_day,
+        });
+      }
+    };
+    getWorkData();
+  }, []);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     // Error Handling
     let errors = {};
@@ -172,9 +209,35 @@ const Work = () => {
     setFormErrors(errors);
     // If there are no errors, you can submit the form
     if (Object.keys(errors).length === 0) {
-      // Add your submit logic here
+      try {
+        const accessToken = localStorage.getItem("token");
+        const accessTokenwithoutQuotes = JSON.parse(accessToken);
+        const { user } = JSON.parse(
+          atob(accessTokenwithoutQuotes.split(".")[1])
+        );
+
+        if (accessToken) {
+          await axios.put(
+            `${process.env.REACT_APP_API}/employee/updateworkdetails/${user._id}`,
+            formData,
+            {
+              headers: { Authorization: `Bearer ${accessTokenwithoutQuotes}` },
+            }
+          );
+          console.log(formData);
+          // alert("Form submitted successfully!");
+          setEditMode({
+            personalProfile: false,
+            contactInformation: false,
+            address: false,
+            socialProfiles: false,
+          });
+        }
+      } catch (error) {
+        console.error("Error updating profile:", error);
+      }
       setEditMode(false);
-      alert("Form submitted successfully!");
+      // alert("Form submitted successfully!");
     }
   };
 
