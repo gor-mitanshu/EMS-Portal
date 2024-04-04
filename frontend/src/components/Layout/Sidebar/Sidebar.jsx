@@ -183,7 +183,7 @@ const Sidebar = ({ open, handleDrawerOpen }) => {
                     type="button"
                     data-bs-toggle="collapse"
                     data-bs-target={`#collapse${item.id}`}
-                    aria-expanded={open ? "true" : "false"}
+                    aria-expanded={open ? true : false}
                     aria-controls={`collapse${item.id}`}
                     style={{ padding: "14px" }}
                   >
@@ -205,7 +205,9 @@ const Sidebar = ({ open, handleDrawerOpen }) => {
                 </h2>
                 <div
                   id={open ? `collapse${item.id}` : ""}
-                  className="accordion-collapse collapse"
+                  className={`accordion-collapse collapse ${
+                    open ? "" : " hide"
+                  } `}
                   aria-labelledby={`heading${item.id}`}
                 >
                   <div className="accordion-body list-item-body">
