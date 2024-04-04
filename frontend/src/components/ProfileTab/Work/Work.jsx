@@ -81,9 +81,9 @@ const Work = () => {
     });
 
     // Reset validation errors for all fields in the specific card
-    if (section === "basicInfo") {
-      setFormErrors((prevFormErrors) => ({
-        ...prevFormErrors,
+    setFormErrors((prevFormErrors) => ({
+      ...prevFormErrors,
+      ...(section === "basicInfo" && {
         employee_code: "",
         date_of_joining: "",
         probation_period: "",
@@ -91,26 +91,20 @@ const Work = () => {
         work_location: "",
         employee_status: "",
         work_experience: "",
-      }));
-    }
-    if (section === "workInfo") {
-      setFormErrors((prevFormErrors) => ({
-        ...prevFormErrors,
+      }),
+      ...(section === "workInfo" && {
         designation: "",
         job_title: "",
         department: "",
         sub_department: "",
-      }));
-    }
-    if (section === "resignationInfo") {
-      setFormErrors((prevFormErrors) => ({
-        ...prevFormErrors,
+      }),
+      ...(section === "resignationInfo" && {
         resignation_date: "",
         resignation_status: "",
         notice_period: "",
         last_working_day: "",
-      }));
-    }
+      }),
+    }));
   };
 
   useEffect(() => {
@@ -227,17 +221,14 @@ const Work = () => {
           console.log(formData);
           // alert("Form submitted successfully!");
           setEditMode({
-            personalProfile: false,
-            contactInformation: false,
-            address: false,
-            socialProfiles: false,
+            basicInfo: false,
+            workInfo: false,
+            resignationInfo: false,
           });
         }
       } catch (error) {
         console.error("Error updating profile:", error);
       }
-      setEditMode(false);
-      // alert("Form submitted successfully!");
     }
   };
 
@@ -288,7 +279,7 @@ const Work = () => {
                     />
                   </>
                 ) : (
-                  <WorkInfo />
+                  <WorkInfo formData={formData} />
                 )}
               </ProfileField>
             </div>

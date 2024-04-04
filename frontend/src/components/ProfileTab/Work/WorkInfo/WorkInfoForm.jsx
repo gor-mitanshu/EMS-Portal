@@ -20,6 +20,7 @@ const WorkInfo = ({ formData, handleInputChange, formErrors, editMode }) => {
                   disabled={!editMode}
                 >
                   <option value="">Select Designation</option>
+                  <option value="Frontend Developer">Frontend Developer</option>
                 </select>
                 {formErrors.designation && (
                   <small className="text-danger">
@@ -68,6 +69,7 @@ const WorkInfo = ({ formData, handleInputChange, formErrors, editMode }) => {
                   disabled={!editMode}
                 >
                   <option value="">Select Department</option>
+                  <option value="Computer">Computer</option>
                 </select>
                 {formErrors.department && (
                   <small className="text-danger">{formErrors.department}</small>
@@ -90,6 +92,7 @@ const WorkInfo = ({ formData, handleInputChange, formErrors, editMode }) => {
                   disabled={!editMode}
                 >
                   <option value="">Select Sub-Department</option>
+                  <option value="IT">IT</option>
                 </select>
                 {formErrors.sub_department && (
                   <small className="text-danger">
