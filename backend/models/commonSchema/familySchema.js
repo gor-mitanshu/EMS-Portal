@@ -5,7 +5,8 @@ const mongoose = require('mongoose');
 const familySchema = new mongoose.Schema({
      name: { type: String },
      relationship: { type: String },
-     number: { type: String },
+     date_of_birth: { type: Date },
+     dependant: { type: String },
      deleted_at: { type: Date }
 }, { timestamps: true });
 

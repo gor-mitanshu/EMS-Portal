@@ -15,11 +15,6 @@ const User = new mongoose.Schema({
      lastName: { type: String, required: true },
      email: { type: String, required: true, unique: true },
      phone: { type: String },
-     is_email_verified: { type: Boolean, default: false },
-     verification_token: { type: String },
-     forget_password_otp: { type: String },
-     forget_password_otp_expiry: { type: Date },
-     role: { type: String, enum: ['company', 'employee', 'hr', 'admin'], required: true },
      password: { type: String, required: true },
      birth_date: { type: Date },
      gender: { type: String, enum: ['male', 'female', 'other'] },
@@ -32,6 +27,11 @@ const User = new mongoose.Schema({
           twitter: { type: String }
      },
      image: { type: String },
+     role: { type: String, enum: ['company', 'employee', 'hr', 'admin'], required: true },
+     is_email_verified: { type: Boolean, default: false },
+     verification_token: { type: String },
+     forget_password_otp: { type: String },
+     forget_password_otp_expiry: { type: Date },
      deleted_at: { type: Date }
 }, { timestamps: true });
 

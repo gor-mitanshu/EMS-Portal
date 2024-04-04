@@ -7,6 +7,7 @@ const nodemailer = require('nodemailer');
 // Importing models
 const CommonSchema = require('../models/commonSchema/userSchema').UserModel;
 const CompanySchema = require('../models/companySchema/companySchema');
+const EmployeeSchema = require('../models/employeeSchema/employeeSchema');
 
 // jwt secret
 const jwtSecret = process.env.JWT_SECRET;
@@ -433,6 +434,143 @@ const companyController = {
     }
   },
 
+  workDetails: async (req, res) => {
+    try {
+      const viewUserWorkDetails = await EmployeeSchema.aggregate([
+        {
+          $lookup: {
+            from: "users",
+            localField: "user_id",
+            foreignField: "_id",
+            as: "user"
+          }
+        }
+      ]);
+      if (!viewUserWorkDetails) {
+        return res.status(404).send({
+          success: false,
+          message: "User not found",
+        });
+      }
+      return res.status(200).send({
+        message: "Success",
+        success: true,
+        viewUserWorkDetails
+      });
+    } catch (error) {
+      console.error('Error getting user:', error.message);
+      return res.status(500).send({
+        message: "Internal server error",
+        error: error.message,
+        success: false
+      });
+    }
+  },
+
+  addWorkDetails: async (req, res) => {
+    let { employee_code, date_of_joining, probation_period, employment_type, work_location, employee_status, work_experience } = req.body;
+    try {
+      const workDetails = new EmployeeSchema({
+        employee_code, date_of_joining, probation_period, employment_type, work_location, employee_status, work_experience, role: "employee",
+      });
+      await workDetails.save();
+
+      res.status(200).send({
+        message: "Added Successfully",
+        success: true,
+        workDetails
+      });
+    } catch (error) {
+      console.log(error);
+      return res.status(500).send({
+        error: "Internal Server Error",
+        success: false,
+        technicalError: error.message
+      });
+    }
+  },
+
+  updateWorkDetails: async (req, res) => {
+    try {
+      const token = req.headers.authorization;
+      if (!token) {
+        return res.status(500).send({
+          error: "Token not found",
+          success: false
+        });
+      }
+      const { user } = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
+      if (!user) {
+        return res.status(404).send({
+          message: "Unalbe to parse the token",
+          success: false,
+          error: res.message
+        });
+      }
+      const { id } = req.params;
+      const {
+        employee_code,
+        date_of_joining,
+        probation_period,
+        employment_type,
+        work_location,
+        employee_status,
+        work_experience,
+        designation,
+        job_title,
+        department,
+        sub_department,
+        resignation_date,
+        resignation_status,
+        notice_period,
+        last_working_day
+      } = req.body;
+
+      const updateFields = {
+        employee_code,
+        date_of_joining,
+        probation_period,
+        employment_type,
+        work_location,
+        employee_status,
+        work_experience,
+        designation,
+        job_title,
+        department,
+        sub_department,
+        resignation_date,
+        resignation_status,
+        notice_period,
+        last_working_day,
+      }
+      const updatedEmployee = await EmployeeSchema.findOneAndUpdate(
+        { user_id: id },
+        { $set: updateFields },
+        { new: true }
+      );
+      console.log(updatedEmployee)
+      if (!updatedEmployee) {
+        return res.status(500).send({
+          error: "Update Unsuccessful",
+          success: false,
+        });
+      } else {
+        return res.status(200).send({
+          message: "Update Successful",
+          updatedEmployee,
+          success: true,
+
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      return res.status(500).send({
+        error: "Internal Server Error",
+        success: false,
+        technicalError: error.message
+      });
+    }
+  },
 };
 
 module.exports = companyController;

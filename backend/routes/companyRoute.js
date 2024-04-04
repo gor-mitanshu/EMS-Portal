@@ -10,5 +10,8 @@ const verifyToken = require('../helpers/authMiddleware');
 
 // All the list of routes
 router.post('/signup', companyController.signup);
+router.get('/getworkdetails', companyController.workDetails);
+router.get('/addworkdetails', companyController.addWorkDetails);
+router.post('/updateworkdetails/:id', companyController.updateWorkDetails);
 
 module.exports = router;
