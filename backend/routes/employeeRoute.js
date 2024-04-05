@@ -13,5 +13,8 @@ router.post('/signup', employeeController.signup);
 router.post('/addworkdetails', employeeController.addWorkDetails);
 router.get('/getworkdetails', employeeController.getworkDetails);
 router.put('/updateworkdetails/:id', employeeController.updateWorkDetails);
+router.post('/addeducationdetails', employeeController.addEducationDetails);
+router.get('/geteducationdetails', employeeController.getEducationDetails);
+router.put('/updateeducationdetails/:id', employeeController.updateEducationDetails);
 
 module.exports = router;

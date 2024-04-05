@@ -90,19 +90,19 @@ const EducationForm = ({
         <div className="col-md-4">
           <div className="form-group row">
             <div className="col mb-3">
-              <label htmlFor="stream" className="font-weight-bold">
+              <label htmlFor="course_stream" className="font-weight-bold">
                 Stream:
               </label>
               <input
                 type="text"
                 className="form-control no-focus-box-shadow"
                 placeholder="Enter Your Stream"
-                name="stream"
-                value={formData.stream}
+                name="course_stream"
+                value={formData.course_stream}
                 onChange={handleInputChange}
               />
-              {formErrors.stream && (
-                <div className="text-danger">{formErrors.stream}</div>
+              {formErrors.course_stream && (
+                <div className="text-danger">{formErrors.course_stream}</div>
               )}
             </div>
           </div>
@@ -113,19 +113,21 @@ const EducationForm = ({
         <div className="col-md-4">
           <div className="form-group row">
             <div className="col mb-3">
-              <label htmlFor="course_startDate" className="font-weight-bold">
+              <label htmlFor="course_start_date" className="font-weight-bold">
                 Course Start Date:
               </label>
               <input
                 type="date"
                 className="form-control no-focus-box-shadow"
                 placeholder="Enter Your Course Start Date"
-                name="course_startDate"
-                value={formData.course_startDate}
+                name="course_start_date"
+                value={formData.course_start_date}
                 onChange={handleInputChange}
               />
-              {formErrors.course_startDate && (
-                <div className="text-danger">{formErrors.course_startDate}</div>
+              {formErrors.course_start_date && (
+                <div className="text-danger">
+                  {formErrors.course_start_date}
+                </div>
               )}
             </div>
           </div>
@@ -134,19 +136,19 @@ const EducationForm = ({
         <div className="col-md-4">
           <div className="form-group row">
             <div className="col mb-3">
-              <label htmlFor="course_endDate" className="font-weight-bold">
+              <label htmlFor="course_end_date" className="font-weight-bold">
                 Course End Date:
               </label>
               <input
                 type="date"
                 className="form-control no-focus-box-shadow"
                 placeholder="Enter Your Course End Date"
-                name="course_endDate"
-                value={formData.course_endDate}
+                name="course_end_date"
+                value={formData.course_end_date}
                 onChange={handleInputChange}
               />
-              {formErrors.course_endDate && (
-                <div className="text-danger">{formErrors.course_endDate}</div>
+              {formErrors.course_end_date && (
+                <div className="text-danger">{formErrors.course_end_date}</div>
               )}
             </div>
           </div>

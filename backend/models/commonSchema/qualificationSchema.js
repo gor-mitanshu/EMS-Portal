@@ -3,7 +3,15 @@ const mongoose = require('mongoose');
 
 // Schema setup
 const qualificationSchema = new mongoose.Schema({
-     qualification_name: { type: String, required: true },
+     qualification_type: { type: String },
+     course_name: { type: String },
+     course_type: { type: String },
+     course_stream: { type: String },
+     course_start_date: { type: String },
+     course_end_date: { type: String },
+     college_name: { type: String },
+     university_name: { type: String },
+
      deleted_at: { type: Date }
 }, { timestamps: true });
 

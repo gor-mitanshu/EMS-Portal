@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 
 const SocialProfile = ({ formData }) => {
-  console.log(formData);
+  // console.log(formData);
   return (
     <>
       <div className="d-flex">

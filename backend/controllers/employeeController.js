@@ -7,6 +7,7 @@ const jwtSecret = process.env.JWT_SECRET;
 // Importing models
 const CommonSchema = require('../models/commonSchema/userSchema').UserModel;
 const EmployeeSchema = require('../models/employeeSchema/employeeSchema');
+const EducationSchema = require('../models/commonSchema/educationSchema');
 
 // List of the controllers
 const employeeController = {
@@ -178,6 +179,155 @@ const employeeController = {
                     last_working_day,
                }
                const updatedEmployee = await EmployeeSchema.findOneAndUpdate(
+                    { user_id: user._id },
+                    { $set: updateFields },
+                    { new: true }
+               );
+               if (!updatedEmployee) {
+                    return res.status(500).send({
+                         error: "Update Unsuccessful",
+                         success: false,
+                    });
+               } else {
+                    return res.status(200).send({
+                         message: "Update Successful",
+                         updatedEmployee,
+                         success: true,
+                    });
+               }
+          } catch (error) {
+               console.log(error);
+               return res.status(500).send({
+                    error: "Internal Server Error",
+                    success: false,
+                    technicalError: error.message
+               });
+          }
+     },
+
+     addEducationDetails: async (req, res) => {
+          let {
+               qualification_type,
+               course_name,
+               course_type,
+               course_stream,
+               course_start_date,
+               course_end_date,
+               college_name,
+               university_name,
+               user_id
+          } = req.body;
+          try {
+               const educationDetails = new EducationSchema({
+                    qualification_type,
+                    course_name,
+                    course_type,
+                    course_stream,
+                    course_start_date,
+                    course_end_date,
+                    college_name,
+                    university_name,
+                    role: "employee",
+                    user_id
+               });
+               await educationDetails.save();
+
+               res.status(200).send({
+                    message: "Added Successfully",
+                    success: true,
+                    educationDetails
+               });
+          } catch (error) {
+               console.log(error);
+               return res.status(500).send({
+                    error: "Internal Server Error",
+                    success: false,
+                    technicalError: error.message
+               });
+          }
+     },
+
+     getEducationDetails: async (req, res) => {
+          try {
+               const token = req.headers.authorization;
+               if (!token) {
+                    return res.status(500).send({
+                         error: "Token not found",
+                         success: false
+                    });
+               }
+               const { user } = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
+               if (!user) {
+                    return res.status(404).send({
+                         message: "Unable to parse the token",
+                         success: false,
+                         error: res.message
+                    });
+               }
+               const educationDetails = await EducationSchema.findOne({ user_id: user._id })
+               if (educationDetails) {
+                    return res.status(200).send({
+                         message: "Got the User",
+                         success: true,
+                         educationDetails,
+                    });
+               } else {
+                    // console.log(res);
+                    return res.status(200).send({
+                         message: "Didn't find the User",
+                         // res,
+                         success: false,
+                    });
+               }
+          } catch (error) {
+               console.error('Error getting user:', error.message);
+               return res.status(500).send({
+                    message: "Internal server error",
+                    error: error.message,
+                    success: false
+               });
+          }
+     },
+
+     updateEducationDetails: async (req, res) => {
+          try {
+               const token = req.headers.authorization;
+               if (!token) {
+                    return res.status(500).send({
+                         error: "Token not found",
+                         success: false
+                    });
+               }
+               const { user } = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
+               if (!user) {
+                    return res.status(404).send({
+                         message: "Unable to parse the token",
+                         success: false,
+                         error: res.message
+                    });
+               }
+               const {
+                    qualification_type,
+                    course_name,
+                    course_type,
+                    course_stream,
+                    course_start_date,
+                    course_end_date,
+                    college_name,
+                    university_name,
+               } = req.body;
+
+               const updateFields = {
+                    qualification_type,
+                    course_name,
+                    course_type,
+                    course_stream,
+                    course_start_date,
+                    course_end_date,
+                    college_name,
+                    university_name,
+               }
+               const updatedEmployee = await EducationSchema.findOneAndUpdate(
                     { user_id: user._id },
                     { $set: updateFields },
                     { new: true }

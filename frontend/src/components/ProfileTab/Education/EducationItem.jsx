@@ -11,14 +11,15 @@ const EducationItem = ({
   formErrors,
   setFormErrors,
 }) => {
+  console.log(education);
   const [editMode, setEditMode] = useState(false);
   const [formData, setFormData] = useState({
     qualification_type: education.qualification_type,
     course_name: education.course_name,
     course_type: education.course_type,
-    stream: education.stream,
-    course_startDate: education.course_startDate,
-    course_endDate: education.course_endDate,
+    course_stream: education.course_stream,
+    course_start_date: education.course_start_date,
+    course_end_date: education.course_end_date,
     college_name: education.college_name,
     university_name: education.university_name,
   });
@@ -28,9 +29,9 @@ const EducationItem = ({
       qualification_type: education.qualification_type,
       course_name: education.course_name,
       course_type: education.course_type,
-      stream: education.stream,
-      course_startDate: education.course_startDate,
-      course_endDate: education.course_endDate,
+      course_stream: education.course_stream,
+      course_start_date: education.course_start_date,
+      course_end_date: education.course_end_date,
       college_name: education.college_name,
       university_name: education.university_name,
     });
@@ -40,9 +41,9 @@ const EducationItem = ({
       qualification_type: "",
       course_name: "",
       course_type: "",
-      stream: "",
-      course_startDate: "",
-      course_endDate: "",
+      course_stream: "",
+      course_start_date: "",
+      course_end_date: "",
       college_name: "",
       university_name: "",
     });
@@ -77,14 +78,14 @@ const EducationItem = ({
     if (!formData.course_type) {
       errors.course_type = "Course Type is required";
     }
-    if (!formData.stream) {
-      errors.stream = "Stream is required";
+    if (!formData.course_stream) {
+      errors.course_stream = "Stream is required";
     }
-    if (!formData.course_startDate) {
-      errors.course_startDate = "Course Start Date is required";
+    if (!formData.course_start_date) {
+      errors.course_start_date = "Course Start Date is required";
     }
-    if (!formData.course_endDate) {
-      errors.course_endDate = "Course End Date is required";
+    if (!formData.course_end_date) {
+      errors.course_end_date = "Course End Date is required";
     }
     if (!formData.college_name) {
       errors.college_name = "College Name is required";
@@ -106,9 +107,9 @@ const EducationItem = ({
       qualification_type: education.qualification_type,
       course_name: education.course_name,
       course_type: education.course_type,
-      stream: education.stream,
-      course_startDate: education.course_startDate,
-      course_endDate: education.course_endDate,
+      course_stream: education.course_stream,
+      course_start_date: education.course_start_date,
+      course_end_date: education.course_end_date,
       college_name: education.college_name,
       university_name: education.university_name,
     });
@@ -116,9 +117,9 @@ const EducationItem = ({
       qualification_type: "",
       course_name: "",
       course_type: "",
-      stream: "",
-      course_startDate: "",
-      course_endDate: "",
+      course_stream: "",
+      course_start_date: "",
+      course_end_date: "",
       college_name: "",
       university_name: "",
     });
@@ -171,18 +172,18 @@ const EducationItem = ({
             <div className="row">
               <div className="col-md-4">
                 <p className="mb-1">
-                  <strong>Stream:</strong> {education.stream}
+                  <strong>Stream:</strong> {education.course_stream}
                 </p>
               </div>
               <div className="col-md-4">
                 <p className="mb-1">
                   <strong>Course Start Date:</strong>{" "}
-                  {education.course_startDate}
+                  {education.course_start_date}
                 </p>
               </div>
               <div className="col-md-4">
                 <p className="mb-1">
-                  <strong>Course End Date:</strong> {education.course_endDate}
+                  <strong>Course End Date:</strong> {education.course_end_date}
                 </p>
               </div>
             </div>

@@ -210,7 +210,7 @@ const Profile = () => {
               headers: { Authorization: `Bearer ${accessTokenwithoutQuotes}` },
             }
           );
-          console.log(formData);
+          // console.log(formData);
           // alert("Form submitted successfully!");
           setEditMode({
             personalProfile: false,
