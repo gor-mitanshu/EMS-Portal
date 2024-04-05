@@ -3,6 +3,8 @@ const mongoose = require('mongoose');
 
 // Schema setup
 const qualificationSchema = new mongoose.Schema({
+     education_id: { type: mongoose.Schema.Types.ObjectId, ref: 'education' },
+
      qualification_type: { type: String },
      course_name: { type: String },
      course_type: { type: String },

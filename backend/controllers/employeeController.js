@@ -8,6 +8,7 @@ const jwtSecret = process.env.JWT_SECRET;
 const CommonSchema = require('../models/commonSchema/userSchema').UserModel;
 const EmployeeSchema = require('../models/employeeSchema/employeeSchema');
 const EducationSchema = require('../models/commonSchema/educationSchema');
+const QualificationSchema = require('../models/commonSchema/qualificationSchema');
 
 // List of the controllers
 const employeeController = {
@@ -218,7 +219,20 @@ const employeeController = {
                user_id
           } = req.body;
           try {
-               const educationDetails = new EducationSchema({
+               let educationDetails = await EducationSchema.findOne({ user_id });
+
+               if (!educationDetails) {
+                    // Create a new education record if it doesn't exist
+                    educationDetails = new EducationSchema({
+                         user_id,
+                         deleted_at: null
+                    });
+                    await educationDetails.save();
+               }
+
+               // Create a new qualification record associated with the education record
+               const newQualification = new QualificationSchema({
+                    education_id: educationDetails._id,
                     qualification_type,
                     course_name,
                     course_type,
@@ -227,15 +241,15 @@ const employeeController = {
                     course_end_date,
                     college_name,
                     university_name,
-                    role: "employee",
-                    user_id
+                    deleted_at: null
                });
-               await educationDetails.save();
+               await newQualification.save();
 
                res.status(200).send({
                     message: "Added Successfully",
                     success: true,
-                    educationDetails
+                    educationDetails,
+                    newQualification
                });
           } catch (error) {
                console.log(error);
