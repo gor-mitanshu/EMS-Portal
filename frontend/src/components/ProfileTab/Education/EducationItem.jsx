@@ -98,10 +98,9 @@ const EducationItem = ({
       setFormErrors(errors);
       return;
     }
-    debugger;
+    // debugger;
     //alert(formData.course_type);
-    await onSaveEdit(valueIndex, formData);
-    console.log(formData);
+    await onSaveEdit(id, formData);
     setEditMode(false);
   };
 

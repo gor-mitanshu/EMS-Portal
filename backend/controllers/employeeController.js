@@ -333,6 +333,7 @@ const employeeController = {
 
      updateEducationDetails: async (req, res) => {
           try {
+               const { id } = req.params
                const token = req.headers.authorization;
                if (!token) {
                     return res.status(500).send({
@@ -358,7 +359,7 @@ const employeeController = {
                }
 
                const {
-                    qualificationId,
+                    // qualificationId,
                     qualification_type,
                     course_name,
                     course_type,
@@ -382,21 +383,20 @@ const employeeController = {
 
                const updatedQualification = await QualificationSchema.findOneAndUpdate(
                     {
-                         _id: qualificationId,
-                         education_id: new ObjectId(educationId._id)
+                         _id: id,
                     },
                     { $set: updateFields },
                     { new: true }
                );
-               console.log(req.body)
+               console.log(updatedQualification)
                if (!updatedQualification) {
                     return res.status(500).send({
-                         error: "Update Unsuccessful",
+                         error: "Qualification Update Unsuccessful",
                          success: false,
                     });
                } else {
                     return res.status(200).send({
-                         message: "Update Successful",
+                         message: "Qualification Updated Successfully",
                          updatedQualification,
                          success: true,
                     });
@@ -410,6 +410,41 @@ const employeeController = {
                });
           }
      },
+
+     deleteEducationDetails: async (req, res) => {
+          try {
+               const { id } = req.params;
+               const token = req.headers.authorization;
+
+               if (!token) {
+                    return res.status(401).json({ success: false, message: "Unauthorized: Token not found" });
+               }
+
+               const { user } = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
+               if (!user) {
+                    return res.status(401).json({ success: false, message: "Unauthorized: Invalid token" });
+               }
+
+               const educationId = await EducationSchema.findOne({ user_id: user._id });
+               if (!educationId) {
+                    return res.status(404).json({ success: false, message: "Education details not found" });
+               }
+
+               const deletedQualification = await QualificationSchema.findByIdAndDelete(id);
+               if (!deletedQualification) {
+                    return res.status(404).json({ success: false, message: "Qualification not found" });
+               }
+
+               return res.status(200).json({ success: true, message: "Qualification deleted successfully" });
+          } catch (error) {
+               console.log(error);
+               return res.status(500).send({
+                    error: "Internal Server Error",
+                    success: false,
+                    technicalError: error.message
+               });
+          }
+     }
 };
 
 module.exports = employeeController;

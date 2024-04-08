@@ -16,5 +16,6 @@ router.put('/updateworkdetails/:id', employeeController.updateWorkDetails);
 router.post('/addeducationdetails', employeeController.addEducationDetails);
 router.get('/geteducationdetails', employeeController.getEducationDetails);
 router.put('/updateeducationdetails/:id', employeeController.updateEducationDetails);
+router.delete('/deletequalification/:id', employeeController.deleteEducationDetails);
 
 module.exports = router;

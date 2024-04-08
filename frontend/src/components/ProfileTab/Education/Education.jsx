@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import EducationForm from "./EducationForm";
 import EducationItem from "./EducationItem";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const Education = () => {
   const [showForm, setShowForm] = useState(false);
@@ -47,7 +48,6 @@ const Education = () => {
 
   // For onchange property
   const handleInputChange = (e) => {
-    debugger;
     const { name, value } = e.target;
     setFormData({
       ...formData,
@@ -117,7 +117,6 @@ const Education = () => {
 
     // Add the current form data to the educationList
     try {
-      debugger;
       const accessToken = localStorage.getItem("token");
       const accessTokenwithoutQuotes = JSON.parse(accessToken);
       const res = await axios.post(
@@ -163,56 +162,50 @@ const Education = () => {
     // If all things work fine then setting the form back to false
     setShowForm(false);
   };
-  const handleDeleteClick = async (index, educationId) => {
+  const handleDeleteClick = async (index, id) => {
     try {
       const accessToken = localStorage.getItem("token");
       const accessTokenWithoutQuotes = JSON.parse(accessToken);
-      await axios.delete(
-        `${process.env.REACT_APP_API}/employee/deleteeducation/${educationId}`,
+      const res = await axios.delete(
+        `${process.env.REACT_APP_API}/employee/deletequalification/${id}`,
         {
           headers: { Authorization: `Bearer ${accessTokenWithoutQuotes}` },
         }
       );
-      const updatedList = educationList.filter((_, i) => i !== index);
-      setEducationList(updatedList);
+      if (res) {
+        console.log(res);
+        const updatedList = educationList.filter((_, i) => i !== index);
+        setEducationList(updatedList);
+        toast.success(res.data.message);
+        getEducationDetails();
+      }
     } catch (error) {
       console.error("Error deleting education details:", error);
     }
   };
 
-  const handleSaveEdit = async (index, updatedData) => {
-    // console.log(updatedData);
-    // alert(updatedData.course_type);
-    const accessToken = localStorage.getItem("token");
-    const accessTokenwithoutQuotes = JSON.parse(accessToken);
-    const body = {
-      qualificationId: updatedData._id,
-      qualification_type: updatedData.qualification_type,
-      course_name: updatedData.course_name,
-      course_type: updatedData.course_type,
-      course_stream: updatedData.course_stream,
-      course_start_date: updatedData.course_start_date,
-      course_end_date: updatedData.course_end_date,
-      college_name: updatedData.college_name,
-      university_name: updatedData.university_name,
-    };
+  const handleSaveEdit = async (id, formData) => {
     try {
-      debugger;
+      const accessToken = localStorage.getItem("token");
+      const accessTokenwithoutQuotes = JSON.parse(accessToken);
       const res = await axios.put(
-        `${process.env.REACT_APP_API}/employee/updateeducationdetails/${updatedData._id}`,
-        body,
+        `${process.env.REACT_APP_API}/employee/updateeducationdetails/${id}`,
+        formData,
         {
           headers: { Authorization: `Bearer ${accessTokenwithoutQuotes}` },
         }
       );
-      // console.log(body);
-      console.log(res.data);
-      const updatedEducationList = [...educationList];
-      updatedEducationList[0].qualifications[index] =
-        res.data.updatedQualification;
-      setEducationList(updatedEducationList);
+      if (res && res.status === 200) {
+        console.log(res);
+        const updatedList = educationList.map((item) =>
+          item.id === id ? { ...item, ...formData } : item
+        );
+        setEducationList(updatedList);
+        toast.success(res.data.message);
+        getEducationDetails();
+      }
     } catch (error) {
-      console.log("Error updating education details:", error.response.data);
+      console.error("Error updating education details:", error);
     }
   };
 
@@ -258,21 +251,23 @@ const Education = () => {
             <div className="p-4 m-0">
               {educationList.length > 0 && (
                 <>
-                  {educationList[0].qualifications.map((education, index) => (
-                    <EducationItem
-                      key={index}
-                      education={education}
-                      formErrors={formErrors}
-                      setFormErrors={setFormErrors}
-                      index={index}
-                      id={education.education_id}
-                      handleDeleteClick={() =>
-                        handleDeleteClick(index, education.education_id)
-                      }
-                      onSaveEdit={() => handleSaveEdit(index, education)}
-                      handleCancel={handleCancel}
-                    />
-                  ))}
+                  {educationList[0].qualifications.map(
+                    (qualificationData, index) => (
+                      <EducationItem
+                        key={index}
+                        education={qualificationData}
+                        formErrors={formErrors}
+                        setFormErrors={setFormErrors}
+                        index={index}
+                        id={qualificationData._id}
+                        handleDeleteClick={() =>
+                          handleDeleteClick(index, qualificationData._id)
+                        }
+                        onSaveEdit={handleSaveEdit}
+                        handleCancel={handleCancel}
+                      />
+                    )
+                  )}
                 </>
               )}
             </div>
