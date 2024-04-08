@@ -1,9 +1,8 @@
 // configuring dotenv
 require('dotenv').config();
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
+const { ObjectId } = require('mongoose').Types;
 
-const jwtSecret = process.env.JWT_SECRET;
 // Importing models
 const CommonSchema = require('../models/commonSchema/userSchema').UserModel;
 const EmployeeSchema = require('../models/employeeSchema/employeeSchema');
@@ -207,6 +206,21 @@ const employeeController = {
      },
 
      addEducationDetails: async (req, res) => {
+          const token = req.headers.authorization;
+          if (!token) {
+               return res.status(500).send({
+                    error: "Token not found",
+                    success: false
+               });
+          }
+          const { user } = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
+          if (!user) {
+               return res.status(404).send({
+                    message: "Unable to parse the token",
+                    success: false,
+                    error: res.message
+               });
+          }
           let {
                qualification_type,
                course_name,
@@ -216,15 +230,14 @@ const employeeController = {
                course_end_date,
                college_name,
                university_name,
-               user_id
           } = req.body;
           try {
-               let educationDetails = await EducationSchema.findOne({ user_id });
+               let educationDetails = await EducationSchema.findOne({ user_id: user._id });
 
                if (!educationDetails) {
                     // Create a new education record if it doesn't exist
                     educationDetails = new EducationSchema({
-                         user_id,
+                         user_id: user._id,
                          deleted_at: null
                     });
                     await educationDetails.save();
@@ -278,18 +291,33 @@ const employeeController = {
                          error: res.message
                     });
                }
-               const educationDetails = await EducationSchema.findOne({ user_id: user._id })
-               if (educationDetails) {
+               const educationId = await EducationSchema.findOne({ user_id: user._id });
+               if (educationId) {
+                    const educationDetails = await EducationSchema.aggregate([
+                         {
+                              $match: { _id: new ObjectId(educationId._id) }
+                         },
+                         {
+                              $lookup: {
+                                   from: "qualifications",
+                                   localField: "_id",
+                                   foreignField: "education_id",
+                                   as: "qualifications"
+                              }
+                         }
+                    ]);
+                    // let data = []
+                    // data = educationDetails.filter((e) => {
+                    //      return e._id == id
+                    // })
                     return res.status(200).send({
                          message: "Got the User",
                          success: true,
                          educationDetails,
                     });
                } else {
-                    // console.log(res);
                     return res.status(200).send({
                          message: "Didn't find the User",
-                         // res,
                          success: false,
                     });
                }
@@ -320,7 +348,17 @@ const employeeController = {
                          error: res.message
                     });
                }
+
+               const educationId = await EducationSchema.findOne({ user_id: user._id });
+               if (!educationId) {
+                    return res.status(404).send({
+                         message: "Education details not found",
+                         success: false
+                    });
+               }
+
                const {
+                    qualificationId,
                     qualification_type,
                     course_name,
                     course_type,
@@ -341,12 +379,17 @@ const employeeController = {
                     college_name,
                     university_name,
                }
-               const updatedEmployee = await EducationSchema.findOneAndUpdate(
-                    { user_id: user._id },
+
+               const updatedQualification = await QualificationSchema.findOneAndUpdate(
+                    {
+                         _id: qualificationId,
+                         education_id: new ObjectId(educationId._id)
+                    },
                     { $set: updateFields },
                     { new: true }
                );
-               if (!updatedEmployee) {
+               console.log(req.body)
+               if (!updatedQualification) {
                     return res.status(500).send({
                          error: "Update Unsuccessful",
                          success: false,
@@ -354,7 +397,7 @@ const employeeController = {
                } else {
                     return res.status(200).send({
                          message: "Update Successful",
-                         updatedEmployee,
+                         updatedQualification,
                          success: true,
                     });
                }

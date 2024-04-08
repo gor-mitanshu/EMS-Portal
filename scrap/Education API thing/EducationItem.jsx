@@ -10,7 +10,6 @@ const EducationItem = ({
   onSaveEdit,
   formErrors,
   setFormErrors,
-  id,
 }) => {
   const [editMode, setEditMode] = useState(false);
   const [formData, setFormData] = useState({
@@ -22,7 +21,6 @@ const EducationItem = ({
     course_end_date: education.course_end_date,
     college_name: education.college_name,
     university_name: education.university_name,
-    qulificationId: id,
   });
 
   const handleEditClick = () => {
@@ -64,7 +62,7 @@ const EducationItem = ({
     });
   };
 
-  const handleSaveClick = async (e) => {
+  const handleSaveClick = (e) => {
     e.preventDefault();
     // Handling the errors
     let errors = {};
@@ -98,10 +96,7 @@ const EducationItem = ({
       setFormErrors(errors);
       return;
     }
-    debugger;
-    //alert(formData.course_type);
-    await onSaveEdit(valueIndex, formData);
-    console.log(formData);
+    onSaveEdit(valueIndex, formData);
     setEditMode(false);
   };
 

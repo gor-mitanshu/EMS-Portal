@@ -18,36 +18,14 @@ const Education = () => {
     college_name: "",
     university_name: "",
   });
-  const [formErrors, setFormErrors] = useState({
-    qualification_type: "",
-    course_name: "",
-    course_type: "",
-    course_stream: "",
-    course_start_date: "",
-    course_end_date: "",
-    college_name: "",
-    university_name: "",
-  });
+  const [formErrors, setFormErrors] = useState({});
   const [educationList, setEducationList] = useState([]);
 
-  // For showing and hiding the form
   const handleAddClick = () => {
     setShowForm(true);
-    // setFormData({
-    //   qualification_type: "Graduation",
-    //   course_name: "CE",
-    //   course_type: "Full Time",
-    //   course_stream: "XYZ",
-    //   course_start_date: "2024-03-15",
-    //   course_end_date: "2024-03-30",
-    //   college_name: "AIET",
-    //   university_name: "GTU",
-    // });
   };
 
-  // For onchange property
   const handleInputChange = (e) => {
-    debugger;
     const { name, value } = e.target;
     setFormData({
       ...formData,
@@ -60,64 +38,28 @@ const Education = () => {
     });
   };
 
-  const getEducationDetails = async () => {
-    try {
-      const accessToken = localStorage.getItem("token");
-      const accessTokenwithoutQuotes = JSON.parse(accessToken);
-      const res = await axios.get(
-        `${process.env.REACT_APP_API}/employee/geteducationdetails`,
-        {
-          headers: { Authorization: `Bearer ${accessTokenwithoutQuotes}` },
-        }
-      );
-      setEducationList(res.data.educationDetails);
-    } catch (error) {
-      console.error("Error getting education details:", error);
-    }
-  };
   useEffect(() => {
+    const getEducationDetails = async () => {
+      try {
+        const accessToken = localStorage.getItem("token");
+        const accessTokenwithoutQuotes = JSON.parse(accessToken);
+        const res = await axios.get(
+          `${process.env.REACT_APP_API}/employee/geteducationdetails`,
+          {
+            headers: { Authorization: `Bearer ${accessTokenwithoutQuotes}` },
+          }
+        );
+        setEducationList(res.data.educationDetails);
+      } catch (error) {
+        console.error("Error getting education details:", error);
+      }
+    };
     getEducationDetails();
   }, []);
 
-  // for Education form for adding the main form
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handling the errors
-    let errors = {};
-
-    // Validate each form field
-    if (!formData.qualification_type) {
-      errors.qualification_type = "Qualification Type is required";
-    }
-    if (!formData.course_name) {
-      errors.course_name = "Course Name is required";
-    }
-    if (!formData.course_type) {
-      errors.course_type = "Course Type is required";
-    }
-    if (!formData.course_stream) {
-      errors.stream = "Stream is required";
-    }
-    if (!formData.course_start_date) {
-      errors.course_startDate = "Course Start Date is required";
-    }
-    if (!formData.course_end_date) {
-      errors.course_endDate = "Course End Date is required";
-    }
-    if (!formData.college_name) {
-      errors.college_name = "College Name is required";
-    }
-    if (!formData.university_name) {
-      errors.university_name = "University Name is required";
-    }
-    if (Object.keys(errors).length > 0) {
-      setFormErrors(errors);
-      return;
-    }
-
-    // Add the current form data to the educationList
     try {
-      debugger;
       const accessToken = localStorage.getItem("token");
       const accessTokenwithoutQuotes = JSON.parse(accessToken);
       const res = await axios.post(
@@ -127,42 +69,24 @@ const Education = () => {
           headers: { Authorization: `Bearer ${accessTokenwithoutQuotes}` },
         }
       );
-      if (res && res.status === 200) {
-        // console.log(res);
-        setEducationList([...educationList, res.data.newQualification]);
-        setShowForm(false);
-        setFormData({
-          qualification_type: "",
-          course_name: "",
-          course_type: "",
-          course_stream: "",
-          course_start_date: "",
-          course_end_date: "",
-          college_name: "",
-          university_name: "",
-        });
-        setFormErrors({});
-        getEducationDetails();
-      }
+      setEducationList([...educationList, res.data.newQualification]);
+      setShowForm(false);
+      setFormData({
+        qualification_type: "",
+        course_name: "",
+        course_type: "",
+        course_stream: "",
+        course_start_date: "",
+        course_end_date: "",
+        college_name: "",
+        university_name: "",
+      });
+      setFormErrors({});
     } catch (error) {
       console.error("Error adding education details:", error);
     }
-
-    // Reset the form data
-    setFormData({
-      qualification_type: "",
-      course_name: "",
-      course_type: "",
-      course_stream: "",
-      course_start_date: "",
-      course_end_date: "",
-      college_name: "",
-      university_name: "",
-    });
-    setFormErrors({});
-    // If all things work fine then setting the form back to false
-    setShowForm(false);
   };
+
   const handleDeleteClick = async (index, educationId) => {
     try {
       const accessToken = localStorage.getItem("token");
@@ -181,38 +105,27 @@ const Education = () => {
   };
 
   const handleSaveEdit = async (index, updatedData) => {
-    // console.log(updatedData);
-    // alert(updatedData.course_type);
-    const accessToken = localStorage.getItem("token");
-    const accessTokenwithoutQuotes = JSON.parse(accessToken);
-    const body = {
-      qualificationId: updatedData._id,
-      qualification_type: updatedData.qualification_type,
-      course_name: updatedData.course_name,
-      course_type: updatedData.course_type,
-      course_stream: updatedData.course_stream,
-      course_start_date: updatedData.course_start_date,
-      course_end_date: updatedData.course_end_date,
-      college_name: updatedData.college_name,
-      university_name: updatedData.university_name,
-    };
+    console.log(updatedData);
     try {
-      debugger;
+      const accessToken = localStorage.getItem("token");
+      const accessTokenwithoutQuotes = JSON.parse(accessToken);
       const res = await axios.put(
         `${process.env.REACT_APP_API}/employee/updateeducationdetails/${updatedData._id}`,
-        body,
+        updatedData,
         {
           headers: { Authorization: `Bearer ${accessTokenwithoutQuotes}` },
         }
       );
-      // console.log(body);
-      console.log(res.data);
-      const updatedEducationList = [...educationList];
-      updatedEducationList[0].qualifications[index] =
-        res.data.updatedQualification;
+      const updatedEducationList = educationList.map((item, i) => {
+        if (i === index) {
+          console.log(res);
+          return res.data.updatedQualification;
+        }
+        return item;
+      });
       setEducationList(updatedEducationList);
     } catch (error) {
-      console.log("Error updating education details:", error.response.data);
+      console.error("Error updating education details:", error);
     }
   };
 
@@ -265,11 +178,12 @@ const Education = () => {
                       formErrors={formErrors}
                       setFormErrors={setFormErrors}
                       index={index}
-                      id={education.education_id}
                       handleDeleteClick={() =>
                         handleDeleteClick(index, education.education_id)
                       }
-                      onSaveEdit={() => handleSaveEdit(index, education)}
+                      onSaveEdit={(updatedData) =>
+                        handleSaveEdit(index, updatedData)
+                      }
                       handleCancel={handleCancel}
                     />
                   ))}
