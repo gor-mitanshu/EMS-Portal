@@ -10,12 +10,19 @@ const verifyToken = require('../helpers/authMiddleware');
 
 // All the list of routes
 router.post('/signup', employeeController.signup);
+
 router.post('/addworkdetails', employeeController.addWorkDetails);
 router.get('/getworkdetails', employeeController.getworkDetails);
 router.put('/updateworkdetails/:id', employeeController.updateWorkDetails);
+
 router.post('/addeducationdetails', employeeController.addEducationDetails);
 router.get('/geteducationdetails', employeeController.getEducationDetails);
 router.put('/updateeducationdetails/:id', employeeController.updateEducationDetails);
 router.delete('/deletequalification/:id', employeeController.deleteEducationDetails);
+
+router.post('/addFamilyDetails', employeeController.addFamilyDetails);
+router.get('/getFamilyDetails', employeeController.getFamilyDetails);
+router.put('/updateFamilyDetails/:id', employeeController.updateFamilyDetails);
+router.delete('/deleteFamilyMemberDetails/:id', employeeController.deleteFamilyDetails);
 
 module.exports = router;

@@ -3,11 +3,10 @@ const mongoose = require('mongoose');
 
 // Schema setup
 const familySchema = new mongoose.Schema({
-     name: { type: String },
-     relationship: { type: String },
-     date_of_birth: { type: Date },
-     dependant: { type: String },
+     user_id: { type: mongoose.Schema.ObjectId, ref: 'user' },
+
      deleted_at: { type: Date }
+
 }, { timestamps: true });
 
 // exports and databse collection setup
