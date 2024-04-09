@@ -748,7 +748,7 @@ const employeeController = {
                                    from: "emergency-family-members",
                                    localField: "_id",
                                    foreignField: "family_id",
-                                   as: "emergencyfamilyMemberDetails"
+                                   as: "familyMemberDetails"
                               }
                          }
                     ]);

@@ -11,6 +11,7 @@ const FamilyItem = ({
   formErrors,
   setFormErrors,
   id,
+  emergency,
 }) => {
   const formatedDate = family.family_birth_date;
   const newDate = new Date(formatedDate);
