@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 const documentSchema = new mongoose.Schema({
      user_id: { type: mongoose.Schema.ObjectId, ref: 'user' },
 
-     document_name: [{ type: String }],
+     document_name: { type: String },
      document_id: { type: String },
      proof: [{ type: String }],
      document_file: { type: String },
