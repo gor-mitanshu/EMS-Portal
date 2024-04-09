@@ -10,6 +10,7 @@ const EducationSchema = require('../models/commonSchema/educationSchema');
 const QualificationSchema = require('../models/commonSchema/qualificationSchema');
 const FamilySchema = require('../models/commonSchema/familySchema');
 const FamilyMemberSchema = require('../models/commonSchema/familyMember');
+const EmergencyFamilyMemberSchema = require('../models/commonSchema/emergencyFamilyMember');
 
 // List of the controllers
 const employeeController = {
@@ -464,9 +465,9 @@ const employeeController = {
                });
           }
           let {
-               name,
-               relationship,
-               date_of_birth,
+               family_name,
+               family_relationship,
+               family_birth_date,
                dependant
           } = req.body;
           try {
@@ -482,9 +483,9 @@ const employeeController = {
                // Create a new qualification record associated with the education record
                const newFamilyMember = new FamilyMemberSchema({
                     family_id: familyDetails._id,
-                    name,
-                    relationship,
-                    date_of_birth,
+                    family_name,
+                    family_relationship,
+                    family_birth_date,
                     dependant,
                     deleted_at: null
                });
@@ -585,16 +586,16 @@ const employeeController = {
                     });
                }
                const {
-                    name,
-                    relationship,
-                    date_of_birth,
+                    family_name,
+                    family_relationship,
+                    family_birth_date,
                     dependant
                } = req.body;
 
                const updatedFields = {
-                    name,
-                    relationship,
-                    date_of_birth,
+                    family_name,
+                    family_relationship,
+                    family_birth_date,
                     dependant
                }
 
@@ -646,6 +647,220 @@ const employeeController = {
                     });
                }
                const deleteFamilyMemberDetails = await FamilyMemberSchema.findOneAndDelete(id)
+               if (!deleteFamilyMemberDetails) {
+                    return res.status(404).json({ success: false, message: "Family Member Details not found" });
+               }
+               return res.status(200).json({ success: true, message: "Family Member Details deleted successfully" });
+
+          } catch (error) {
+               console.log(error);
+               return res.status(500).send({
+                    error: "Internal Server Error",
+                    success: false,
+                    technicalError: error.message
+               });
+          }
+     },
+
+     emergencyaddFamilyDetails: async (req, res) => {
+          const token = req.headers.authorization;
+          if (!token) {
+               return res.status(500).send({
+                    error: "Token not found",
+                    success: false
+               });
+          }
+          const { user } = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
+          if (!user) {
+               return res.status(404).send({
+                    message: "Unable to parse the token",
+                    success: false,
+                    error: res.message
+               });
+          }
+          let {
+               family_name,
+               family_relationship,
+               family_birth_date,
+               dependant
+          } = req.body;
+          try {
+               let familyDetails = await FamilySchema.findOne({ user_id: user._id });
+               if (!familyDetails) {
+                    // Create a new family record if it doesn't exist
+                    familyDetails = new FamilySchema({
+                         user_id: user._id,
+                         deleted_at: null
+                    });
+                    await familyDetails.save();
+               }
+               // Create a new qualification record associated with the education record
+               const newFamilyMember = new EmergencyFamilyMemberSchema({
+                    family_id: familyDetails._id,
+                    family_name,
+                    family_relationship,
+                    family_birth_date,
+                    dependant,
+                    deleted_at: null
+               });
+               await newFamilyMember.save();
+               res.status(200).send({
+                    message: "Member Added Successfully",
+                    success: true,
+                    familyDetails,
+                    newFamilyMember
+               });
+          } catch (error) {
+               console.log(error);
+               return res.status(500).send({
+                    error: "Internal Server Error",
+                    success: false,
+                    technicalError: error.message
+               });
+          }
+     },
+
+     emergencygetFamilyDetails: async (req, res) => {
+          try {
+               const token = req.headers.authorization;
+               if (!token) {
+                    return res.status(500).send({
+                         error: "Token not found",
+                         success: false
+                    });
+               }
+               const { user } = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
+               if (!user) {
+                    return res.status(404).send({
+                         message: "Unable to parse the token",
+                         success: false,
+                         error: res.message
+                    });
+               }
+               const familyId = await FamilySchema.findOne({ user_id: user._id })
+               if (familyId) {
+                    const familyDetails = await FamilySchema.aggregate([
+                         {
+                              $match: { _id: new ObjectId(familyId._id) }
+                         },
+                         {
+                              $lookup: {
+                                   from: "emergency-family-members",
+                                   localField: "_id",
+                                   foreignField: "family_id",
+                                   as: "emergencyfamilyMemberDetails"
+                              }
+                         }
+                    ]);
+                    return res.status(200).send({
+                         message: "Got the Family Details",
+                         success: true,
+                         familyDetails,
+                    });
+               } else {
+                    return res.status(200).send({
+                         message: "Didn't find the User",
+                         success: false,
+                    });
+               }
+          } catch (error) {
+               console.error('Error getting user:', error.message);
+               return res.status(500).send({
+                    message: "Internal server error",
+                    error: error.message,
+                    success: false
+               });
+          }
+     },
+
+     emergencyupdateFamilyDetails: async (req, res) => {
+          try {
+               const { id } = req.params;
+               const token = req.headers.authorization;
+
+               if (!token) {
+                    return res.status(500).send({
+                         error: "Token not found",
+                         success: false
+                    });
+               }
+               const { user } = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
+               if (!user) {
+                    return res.status(404).send({
+                         message: "Unable to parse the token",
+                         success: false,
+                         error: res.message
+                    });
+               }
+               const familyId = await FamilySchema.findOne({ user_id: user._id });
+               if (!familyId) {
+                    return res.status(404).send({
+                         message: "Family Details not found",
+                         success: false,
+                    });
+               }
+               const {
+                    family_name,
+                    family_relationship,
+                    family_birth_date,
+                    dependant
+               } = req.body;
+
+               const updatedFields = {
+                    family_name,
+                    family_relationship,
+                    family_birth_date,
+                    dependant
+               }
+
+               const updatedFamilyMember = await EmergencyFamilyMemberSchema.findOneAndUpdate(
+                    { _id: id },
+                    { $set: updatedFields },
+                    { new: true }
+               )
+               if (!updatedFamilyMember) {
+                    return res.status(500).send({
+                         error: "Family Member Update Unsuccessful",
+                         success: false,
+                    });
+               } else {
+                    return res.status(200).send({
+                         message: "Family Member Updated Successfully",
+                         updatedFamilyMember,
+                         success: true,
+                    });
+               }
+          } catch (error) {
+               console.log(error);
+               return res.status(500).send({
+                    error: "Internal Server Error",
+                    success: false,
+                    technicalError: error.message
+               });
+          }
+     },
+
+     emergencydeleteFamilyDetails: async (req, res) => {
+          try {
+               const { id } = req.params;
+               const token = req.headers.authorization;
+
+               if (!token) {
+                    return res.status(401).json({ success: false, message: "Unauthorized: Token not found" });
+               }
+
+               const { user } = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
+               if (!user) {
+                    return res.status(401).json({ success: false, message: "Unauthorized: Invalid token" });
+               }
+               const familyId = await FamilySchema.findOne({ user_id: user._id });
+               if (!familyId) {
+                    return res.status(404).json({
+                         success: false,
+                         message: "Family Details not found"
+                    });
+               }
+               const deleteFamilyMemberDetails = await EmergencyFamilyMemberSchema.findOneAndDelete(id)
                if (!deleteFamilyMemberDetails) {
                     return res.status(404).json({ success: false, message: "Family Member Details not found" });
                }

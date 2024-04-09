@@ -2,7 +2,7 @@
 const mongoose = require('mongoose');
 
 // Schema setup
-const familyMemberSchema = new mongoose.Schema({
+const emergencyfamilyMemberSchema = new mongoose.Schema({
      family_id: { type: mongoose.Schema.Types.ObjectId, ref: 'family' },
 
      family_name: { type: String },
@@ -13,7 +13,7 @@ const familyMemberSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 // exports and databse collection setup
-const familyMember = mongoose.model('family-member', familyMemberSchema);
+const emergencyfamilyMember = mongoose.model('emergency-family-member', emergencyfamilyMemberSchema);
 
 // Export the model 
-module.exports = familyMember;
+module.exports = emergencyfamilyMember;

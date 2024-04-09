@@ -25,4 +25,9 @@ router.get('/getFamilyDetails', employeeController.getFamilyDetails);
 router.put('/updateFamilyDetails/:id', employeeController.updateFamilyDetails);
 router.delete('/deleteFamilyMemberDetails/:id', employeeController.deleteFamilyDetails);
 
+router.post('/addemergencyFamilyDetails', employeeController.emergencyaddFamilyDetails);
+router.get('/getemergencyFamilyDetails', employeeController.emergencygetFamilyDetails);
+router.put('/updateemergencyFamilyDetails/:id', employeeController.emergencyupdateFamilyDetails);
+router.delete('/deleteemergencyFamilyMemberDetails/:id', employeeController.emergencydeleteFamilyDetails);
+
 module.exports = router;

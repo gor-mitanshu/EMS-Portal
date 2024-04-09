@@ -1,11 +1,13 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ProfileField from "../../../UI/ProfileFields/ProfileFields";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import FamilyForm from "./FamilyForm";
 import FamilyItem from "./FamilyItem";
+import axios from "axios";
+import { toast } from "react-toastify";
 
-const FamilySection = ({ title }) => {
+const FamilySection = ({ title, emergency }) => {
   const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState({
     family_name: "",
@@ -40,7 +42,6 @@ const FamilySection = ({ title }) => {
 
   // For onchange property
   const handleInputChange = (e) => {
-    console.log(e.target.value);
     const { name, value } = e.target;
     setFormData({
       ...formData,
@@ -60,8 +61,42 @@ const FamilySection = ({ title }) => {
     });
   };
 
+  // for canceling the form
+  const handleCancel = () => {
+    setShowForm(false);
+    setFormData({
+      family_name: "",
+      family_relationship: "",
+      family_birth_date: "",
+      dependant: "",
+    });
+    setFormErrors({
+      family_name: "",
+      family_relationship: "",
+      family_birth_date: "",
+      dependant: "",
+    });
+  };
+
+  const getFamilyDetails = async () => {
+    const accessToken = localStorage.getItem("token");
+    const accessTokenwithoutQuotes = JSON.parse(accessToken);
+    const res = await axios.get(
+      `${process.env.REACT_APP_API}/employee/getFamilyDetails`,
+      {
+        headers: { Authorization: `Bearer ${accessTokenwithoutQuotes}` },
+      }
+    );
+    if (res) {
+      setFamilyList(res.data.familyDetails);
+    }
+  };
+
+  useEffect(() => {
+    getFamilyDetails();
+  }, []);
   // for Family form for adding the main form
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     // Handling the errors
     let errors = {};
@@ -80,9 +115,23 @@ const FamilySection = ({ title }) => {
       setFormErrors(errors);
       return;
     }
-
+    try {
+      const accessToken = localStorage.getItem("token");
+      const accessTokenwithoutQuotes = JSON.parse(accessToken);
+      const res = await axios.post(
+        `${process.env.REACT_APP_API}/employee/addFamilyDetails`,
+        formData,
+        {
+          headers: { Authorization: `Bearer ${accessTokenwithoutQuotes}` },
+        }
+      );
+      if (res) {
+        setFamilyList([...familyList, formData]);
+        toast.success(res.data.message);
+        getFamilyDetails();
+      }
+    } catch (error) {}
     // Add the current form data to the FamilyList
-    setFamilyList([...familyList, formData]);
 
     // Reset the form data
     setFormData({
@@ -97,7 +146,24 @@ const FamilySection = ({ title }) => {
   };
 
   // For deleting the form entry entered
-  const handleDeleteClick = (index) => {
+  const handleDeleteClick = async (index, id) => {
+    try {
+      const accessToken = localStorage.getItem("token");
+      const accessTokenWithoutQuotes = JSON.parse(accessToken);
+      const res = await axios.delete(
+        `${process.env.REACT_APP_API}/employee/deleteFamilyMemberDetails/${id}`,
+        {
+          headers: { Authorization: `Bearer ${accessTokenWithoutQuotes}` },
+        }
+      );
+      if (res) {
+        console.log(res);
+        const updatedList = familyList.filter((_, i) => i !== index);
+        setFamilyList(updatedList);
+        toast.success(res.data.message);
+        getFamilyDetails();
+      }
+    } catch (error) {}
     const updatedList = familyList.filter((_, i) => i !== index);
     setFamilyList(updatedList);
   };
@@ -112,24 +178,6 @@ const FamilySection = ({ title }) => {
     });
     setFamilyList(updatedFamilyList);
   };
-
-  // for canceling the form
-  const handleCancel = () => {
-    setShowForm(false);
-    setFormData({
-      family_name: "",
-      family_relationship: "",
-      family_birth_date: "",
-      dependant: "",
-    });
-    setFormErrors({
-      family_name: "",
-      family_relationship: "",
-      family_birth_date: "",
-      dependant: "",
-    });
-  };
-
   return (
     <div className="row">
       <div className="col-md-12">
@@ -159,14 +207,16 @@ const FamilySection = ({ title }) => {
             <div className="p-4 m-0">
               {familyList.length > 0 && (
                 <>
-                  {familyList.map((family, index) => (
+                  {familyList[0].familyMemberDetails.map((family, index) => (
                     <FamilyItem
                       key={index}
                       family={family}
                       formErrors={formErrors}
                       setFormErrors={setFormErrors}
                       valueIndex={index}
-                      handleDeleteClick={() => handleDeleteClick(index)}
+                      handleDeleteClick={() =>
+                        handleDeleteClick(index, family._id)
+                      }
                       onSaveEdit={handleSaveEdit}
                       handleCancel={handleCancel}
                       handleCheckboxChange={handleCheckboxChange}

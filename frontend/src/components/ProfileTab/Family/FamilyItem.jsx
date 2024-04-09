@@ -11,6 +11,9 @@ const FamilyItem = ({
   formErrors,
   setFormErrors,
 }) => {
+  const formatedDate = family.family_birth_date;
+  const newDate = new Date(formatedDate);
+
   const [editMode, setEditMode] = useState(false);
   const [formData, setFormData] = useState({
     family_name: family.family_name,
@@ -129,7 +132,12 @@ const FamilyItem = ({
               </div>
               <div className="col-md-3">
                 <p className="mb-1">
-                  <strong>Date of Birth:</strong> {family.family_birth_date}
+                  <strong>Date of Birth:</strong>{" "}
+                  {newDate.toLocaleDateString("en-US", {
+                    day: "numeric",
+                    month: "short",
+                    year: "numeric",
+                  })}
                 </p>
               </div>
               <div className="col-md-3">
