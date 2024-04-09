@@ -10,6 +10,7 @@ const FamilyItem = ({
   onSaveEdit,
   formErrors,
   setFormErrors,
+  id,
 }) => {
   const formatedDate = family.family_birth_date;
   const newDate = new Date(formatedDate);
@@ -74,7 +75,7 @@ const FamilyItem = ({
       setFormErrors(errors);
       return;
     }
-    onSaveEdit(valueIndex, formData);
+    onSaveEdit(id, formData);
     setEditMode(false);
   };
 

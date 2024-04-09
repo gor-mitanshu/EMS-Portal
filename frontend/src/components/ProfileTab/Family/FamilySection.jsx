@@ -169,14 +169,27 @@ const FamilySection = ({ title, emergency }) => {
   };
 
   // for editing the form and submit the data through this
-  const handleSaveEdit = (index, updatedData) => {
-    const updatedFamilyList = familyList.map((item, i) => {
-      if (i === index) {
-        return updatedData;
+  const handleSaveEdit = async (id, updatedData) => {
+    console.log(id);
+    try {
+      const accessToken = localStorage.getItem("token");
+      const accessTokenwithoutQuotes = JSON.parse(accessToken);
+      const res = await axios.put(
+        `${process.env.REACT_APP_API}/employee/updateFamilyDetails/${id}`,
+        updatedData,
+        {
+          headers: { Authorization: `Bearer ${accessTokenwithoutQuotes}` },
+        }
+      );
+      if (res && res.status === 200) {
+        const updatedFamilyList = familyList.map((item) =>
+          item.id === id ? { ...item, ...updatedData } : item
+        );
+        setFamilyList(updatedFamilyList);
+        toast.success(res.data.message);
+        getFamilyDetails();
       }
-      return item;
-    });
-    setFamilyList(updatedFamilyList);
+    } catch (error) {}
   };
   return (
     <div className="row">
@@ -214,6 +227,7 @@ const FamilySection = ({ title, emergency }) => {
                       formErrors={formErrors}
                       setFormErrors={setFormErrors}
                       valueIndex={index}
+                      id={family._id}
                       handleDeleteClick={() =>
                         handleDeleteClick(index, family._id)
                       }
