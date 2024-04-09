@@ -6,11 +6,11 @@ const { ObjectId } = require('mongoose').Types;
 // Importing models
 const CommonSchema = require('../models/commonSchema/userSchema').UserModel;
 const EmployeeSchema = require('../models/employeeSchema/employeeSchema');
-const EducationSchema = require('../models/commonSchema/educationSchema');
-const QualificationSchema = require('../models/commonSchema/qualificationSchema');
-const FamilySchema = require('../models/commonSchema/familySchema');
-const FamilyMemberSchema = require('../models/commonSchema/familyMember');
-const EmergencyFamilyMemberSchema = require('../models/commonSchema/emergencyFamilyMember');
+const EducationSchema = require('../models/commonSchema/education/educationSchema');
+const QualificationSchema = require('../models/commonSchema/education/qualificationSchema');
+const FamilySchema = require('../models/commonSchema/family/familySchema');
+const FamilyMemberSchema = require('../models/commonSchema/family/familyMember');
+const EmergencyFamilyMemberSchema = require('../models/commonSchema/family/emergencyFamilyMember');
 
 // List of the controllers
 const employeeController = {

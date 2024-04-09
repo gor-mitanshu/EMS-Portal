@@ -2,7 +2,9 @@
 const mongoose = require('mongoose');
 
 // Schema setup
-const documentSchema = new mongoose.Schema({
+const documentListSchema = new mongoose.Schema({
+     user_id: { type: mongoose.Schema.ObjectId, ref: 'user' },
+
      document: {
           document_name: [{ type: String }],
           document_id: { type: String },
@@ -26,7 +28,7 @@ const documentSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 // exports and databse collection setup
-const Document = mongoose.model('documents', documentSchema);
+const DocumentList = mongoose.model('document-list', documentListSchema);
 
 // Export the model 
-module.exports = Document;
+module.exports = DocumentList;
