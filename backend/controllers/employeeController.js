@@ -433,6 +433,7 @@ const employeeController = {
                }
 
                const deletedQualification = await QualificationSchema.findByIdAndDelete(id);
+
                if (!deletedQualification) {
                     return res.status(404).json({ success: false, message: "Qualification not found" });
                }
@@ -646,7 +647,9 @@ const employeeController = {
                          message: "Family Details not found"
                     });
                }
-               const deleteFamilyMemberDetails = await FamilyMemberSchema.findOneAndDelete(id)
+               const deleteFamilyMemberDetails = await FamilyMemberSchema.findOneAndDelete({ _id: id })
+               console.log(deleteFamilyMemberDetails)
+               console.log(id)
                if (!deleteFamilyMemberDetails) {
                     return res.status(404).json({ success: false, message: "Family Member Details not found" });
                }
@@ -860,7 +863,7 @@ const employeeController = {
                          message: "Family Details not found"
                     });
                }
-               const deleteFamilyMemberDetails = await EmergencyFamilyMemberSchema.findOneAndDelete(id)
+               const deleteFamilyMemberDetails = await EmergencyFamilyMemberSchema.findOneAndDelete({ _id: id })
                if (!deleteFamilyMemberDetails) {
                     return res.status(404).json({ success: false, message: "Family Member Details not found" });
                }

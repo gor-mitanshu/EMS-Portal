@@ -91,7 +91,6 @@ const Family = () => {
       }
     );
     if (res) {
-      console.log(res);
       setFamilyList(res.data.familyDetails);
     }
   };
@@ -113,7 +112,6 @@ const Family = () => {
       }
     );
     if (res) {
-      console.log(res);
       setEmergencyFamilyList(res.data.familyDetails);
     }
   };
@@ -240,7 +238,7 @@ const Family = () => {
         }
       );
       if (res) {
-        console.log(res);
+        // console.log(res);
         const updatedList = familyList.filter((_, i) => i !== index);
         setFamilyList(updatedList);
         toast.success(res.data.message);
@@ -261,7 +259,7 @@ const Family = () => {
         }
       );
       if (res) {
-        console.log(res);
+        // console.log(res);
         const updatedList = emergencyfamilyList.filter((_, i) => i !== index);
         setEmergencyFamilyList(updatedList);
         toast.success(res.data.message);
@@ -272,7 +270,6 @@ const Family = () => {
 
   // for editing the form and submit the data through this
   const handleSaveEdit = async (id, updatedData) => {
-    console.log(id);
     try {
       const accessToken = localStorage.getItem("token");
       const accessTokenwithoutQuotes = JSON.parse(accessToken);
@@ -296,7 +293,6 @@ const Family = () => {
 
   // for editing the form and submit the data through this
   const handleEmergencySaveEdit = async (id, updatedData) => {
-    console.log(id);
     try {
       const accessToken = localStorage.getItem("token");
       const accessTokenwithoutQuotes = JSON.parse(accessToken);
@@ -317,7 +313,6 @@ const Family = () => {
       }
     } catch (error) {}
   };
-  console.log(emergencyfamilyList);
   return (
     <>
       <FamilySection
