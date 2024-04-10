@@ -1106,6 +1106,7 @@ const employeeController = {
                if (!user) {
                     return res.status(401).json({ success: false, message: "Unauthorized: Invalid token" });
                }
+
                const documentId = await DocumentListSchema.findOne({ user_id: user._id });
                if (!documentId) {
                     return res.status(404).json({
@@ -1113,10 +1114,18 @@ const employeeController = {
                          message: "Family Details not found"
                     });
                }
-               const deleteDocumentDetails = await DocumentSchema.findOneAndDelete({ _id: id })
-               if (!deleteDocumentDetails) {
+
+               const deletedDocument = await DocumentSchema.findByIdAndDelete(id);
+               if (!deletedDocument) {
                     return res.status(404).json({ success: false, message: "Document not found" });
                }
+
+               // Delete the associated file
+               const filePath = path.join(__dirname, 'images', deletedDocument.document_file);
+               if (fs.existsSync(filePath)) {
+                    fs.unlinkSync(filePath);
+               }
+
                return res.status(200).json({ success: true, message: "Document deleted successfully" });
 
           } catch (error) {
