@@ -2,6 +2,8 @@
 require('dotenv').config();
 const bcrypt = require('bcrypt');
 const { ObjectId } = require('mongoose').Types;
+const fs = require('fs');
+const path = require('path');
 
 // Importing models
 const CommonSchema = require('../models/commonSchema/userSchema').UserModel;
@@ -911,7 +913,7 @@ const employeeController = {
           try {
                let file = '';
                if (req.files && req.files.length > 0) {
-                    file = req.files[0].originalname;
+                    file = req.files[0].filename;
                }
 
                let documentDetails = await DocumentListSchema.findOne({ user_id: user._id });
@@ -1036,10 +1038,21 @@ const employeeController = {
                } = req.body;
 
                let document_file = '';
+
+               // Check if a new file was uploaded
                if (req.files && req.files.length > 0) {
                     document_file = req.files[0].filename;
+
+                    // Delete the old file
+                    const existingDocument = await DocumentSchema.findById(id);
+                    if (existingDocument && existingDocument.document_file) {
+                         const filePath = path.join('images', existingDocument.document_file);
+                         if (fs.existsSync(filePath)) {
+                              fs.unlinkSync(filePath);
+                         }
+                    }
                } else {
-                    // Get the existing document file if no new file uploaded
+                    // No new file uploaded, keep the existing file
                     const existingDocument = await DocumentSchema.findById(id);
                     if (existingDocument) {
                          document_file = existingDocument.document_file;
@@ -1079,7 +1092,6 @@ const employeeController = {
                });
           }
      },
-
 
      deleteDocument: async (req, res) => {
           try {
