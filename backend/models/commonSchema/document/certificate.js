@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 
 // Schema setup
 const certificateSchema = new mongoose.Schema({
-     user_id: { type: mongoose.Schema.ObjectId, ref: 'user' },
+     document_list_id: { type: mongoose.Schema.ObjectId, ref: 'document-list' },
 
      certificate_name: { type: String },
      certificate_title: { type: String },

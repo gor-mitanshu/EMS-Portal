@@ -55,4 +55,9 @@ router.get('/getDocument', verifyToken, employeeController.getDocuments);
 router.put('/updateDocument/:id', verifyToken, upload.any(), employeeController.updateDocuments);
 router.delete('/deleteDocument/:id', verifyToken, employeeController.deleteDocument);
 
+router.post('/addCertificate', verifyToken, upload.any(), employeeController.addCertificate);
+router.get('/getCertificate', verifyToken, employeeController.getCertificate);
+router.post('/updateCertificate/:id', verifyToken, upload.any(), employeeController.updateCertificate);
+router.delete('/deleteCertificate/:id', verifyToken, employeeController.deleteCertificate);
+
 module.exports = router;

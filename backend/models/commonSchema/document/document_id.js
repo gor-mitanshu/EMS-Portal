@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 const documentSchema = new mongoose.Schema({
      document_list_id: { type: mongoose.Schema.ObjectId, ref: 'document-list' },
 
-     document_name: { type: String },
+     document_type: { type: String },
      document_id: { type: String },
      proof: [{ type: String }],
      document_file: { type: String },

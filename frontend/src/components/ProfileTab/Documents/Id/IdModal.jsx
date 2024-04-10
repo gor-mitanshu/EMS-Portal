@@ -1,39 +1,30 @@
 import React, { useState } from "react";
 import { Modal, Button, Form, Col } from "react-bootstrap";
+import axios from "axios";
 
 const IdModal = ({ show, setShowModal }) => {
   const initialFormData = {
-    id_type: "",
-    id: "",
+    document_type: "",
+    document_id: "",
     proof_id: "",
     file: null,
-    photoId: false,
-    dateOfBirth: false,
-    currentAddress: false,
-    permanentAddress: false,
+    photoId: "",
+    dateOfBirth: "",
+    currentAddress: "",
+    permanentAddress: "",
   };
   const [formData, setFormData] = useState(initialFormData);
   const [formErrors, setFormErrors] = useState({
-    id_type: "",
-    id: "",
+    document_type: "",
+    document_id: "",
     proof_id: "",
     file: null,
   });
 
   const handleClose = () => {
     setShowModal(false);
-    setFormErrors({
-      id_type: "",
-      id: "",
-      proof_id: "",
-      file: null,
-    });
-    setFormData({
-      id_type: "",
-      id: "",
-      proof_id: "",
-      file: null,
-    });
+    setFormErrors(initialFormData);
+    setFormData(initialFormData);
   };
 
   const handleChange = (e) => {
@@ -42,10 +33,10 @@ const IdModal = ({ show, setShowModal }) => {
       ...formData,
       [name]: value,
       // Reset checkboxes when id_type changes
-      photoId: false,
-      dateOfBirth: false,
-      currentAddress: false,
-      permanentAddress: false,
+      photoId: "",
+      dateOfBirth: "",
+      currentAddress: "",
+      permanentAddress: "",
     });
 
     setFormErrors({
@@ -56,10 +47,10 @@ const IdModal = ({ show, setShowModal }) => {
 
   const handleCheckboxChange = (e) => {
     const { name, checked } = e.target;
-    setFormData({
-      ...formData,
-      [name]: checked,
-    });
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: checked ? "Yes" : "",
+    }));
   };
 
   const handleFileChange = (e) => {
@@ -73,17 +64,17 @@ const IdModal = ({ show, setShowModal }) => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     // Error Handling
     let errors = {};
     // Validate each field based on the section
     // Basic Info Section
-    if (!formData.id_type) {
-      errors.id_type = "Please Select any Id Type";
+    if (!formData.document_type) {
+      errors.document_type = "Please Select any Id Type";
     }
-    if (!formData.id) {
-      errors.id = "Please enter any Certificate Title";
+    if (!formData.document_id) {
+      errors.document_id = "Please enter any Certificate Title";
     }
     if (!formData.file) {
       errors.file = "Please select any file";
@@ -92,9 +83,34 @@ const IdModal = ({ show, setShowModal }) => {
       setFormErrors(errors);
       return;
     }
-    console.log("Submitted:", formData);
-    handleClose();
-    setFormData(initialFormData);
+
+    try {
+      const formDataToSend = new FormData();
+      formDataToSend.append("document_type", formData.document_type);
+      formDataToSend.append("document_id", formData.document_id);
+      formDataToSend.append("file", formData.file);
+      formDataToSend.append("photoId", formData.photoId);
+      formDataToSend.append("dateOfBirth", formData.dateOfBirth);
+      formDataToSend.append("currentAddress", formData.currentAddress);
+      formDataToSend.append("permanentAddress", formData.permanentAddress);
+
+      const accessToken = localStorage.getItem("token");
+      const accessTokenwithoutQuotes = JSON.parse(accessToken);
+      const res = await axios.post(
+        `${process.env.REACT_APP_API}/employee/addDocument`,
+        formDataToSend,
+        {
+          headers: { Authorization: `Bearer ${accessTokenwithoutQuotes}` },
+        }
+      );
+      if (res) {
+        console.log("Submitted:", formData);
+        handleClose();
+        setFormData(initialFormData);
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error);
+    }
   };
 
   const checkboxes = {
@@ -142,13 +158,13 @@ const IdModal = ({ show, setShowModal }) => {
       <Modal.Body>
         <Form onSubmit={handleSubmit}>
           {/* ID Type */}
-          <Form.Group as={Col} controlId="id_type" className="mb-3">
+          <Form.Group as={Col} controlId="document_type" className="mb-3">
             <Form.Label>Select ID Type</Form.Label>
             <Form.Control
               as="select"
-              name="id_type"
+              name="document_type"
               className="form-select no-focus-box-shadow"
-              value={formData.id_type}
+              value={formData.document_type}
               onChange={handleChange}
             >
               <option value="">---</option>
@@ -162,32 +178,32 @@ const IdModal = ({ show, setShowModal }) => {
               <option value="DRIVING_LICENSE">Driving Licence</option>
               <option value="ADHAR_CARD">Adhar Card</option>
             </Form.Control>
-            {formErrors.id_type && (
-              <small className="text-danger">{formErrors.id_type}</small>
+            {formErrors.document_type && (
+              <small className="text-danger">{formErrors.document_type}</small>
             )}
           </Form.Group>
           {/* ID */}
-          <Form.Group as={Col} controlId="id" className="mb-3">
+          <Form.Group as={Col} controlId="document_id" className="mb-3">
             <Form.Label>ID</Form.Label>
             <Form.Control
               type="text"
-              name="id"
+              name="document_id"
               className="form-group no-focus-box-shadow"
               placeholder="Enter Certificate Title"
-              value={formData.id}
+              value={formData.document_id}
               onChange={handleChange}
             />
-            {formErrors.id && (
-              <small className="text-danger">{formErrors.id}</small>
+            {formErrors.document_id && (
+              <small className="text-danger">{formErrors.document_id}</small>
             )}
           </Form.Group>
           {/* Render checkboxes based on selected id_type */}
-          {formData.id_type && (
+          {formData.document_type && (
             <Form.Label
               style={{ color: "grey" }}
             >{`Use if proof for`}</Form.Label>
           )}
-          {checkboxes[formData.id_type]?.map((checkboxName) => (
+          {checkboxes[formData.document_type]?.map((checkboxName) => (
             <Form.Group
               key={checkboxName}
               controlId={checkboxName}
@@ -198,19 +214,19 @@ const IdModal = ({ show, setShowModal }) => {
                 id={checkboxName}
                 label={checkboxName}
                 name={checkboxName}
-                checked={formData[checkboxName]}
+                checked={formData[checkboxName] === "Yes"}
                 onChange={handleCheckboxChange}
               />
             </Form.Group>
           ))}
           {/* File */}
-          {formData.id_type !== "ADHAR_CARD" && (
+          {formData.document_type !== "ADHAR_CARD" && (
             <Form.Group as={Col} controlId="certificateFile" className="mb-3">
               <Form.Label>Select File</Form.Label>
               <Form.Control
                 type="file"
-                name="selectedFile"
-                accept=".pdf,.doc,.docx,.jpg,.png"
+                name="file"
+                className="form-group no-focus-box-shadow"
                 onChange={handleFileChange}
               />
               {formErrors.file && (
@@ -218,15 +234,8 @@ const IdModal = ({ show, setShowModal }) => {
               )}
             </Form.Group>
           )}
-          <Button
-            variant="secondary"
-            className="me-2 btn-danger"
-            onClick={handleClose}
-          >
-            Cancel
-          </Button>
           <Button variant="primary" type="submit">
-            Save
+            Submit
           </Button>
         </Form>
       </Modal.Body>

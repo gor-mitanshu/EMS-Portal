@@ -1,83 +1,31 @@
-import React, { useState } from "react";
+import React from "react";
 import { Modal, Button, Form, Col } from "react-bootstrap";
 
-const CertificateModal = ({ show, setShowModal }) => {
-  const initialFormData = {
-    courseType: "",
-    certificationTitle: "",
-    selectedFile: null,
-  };
-  const [formData, setFormData] = useState(initialFormData);
-  const [formErrors, setFormErrors] = useState(initialFormData);
-
-  const handleClose = () => {
-    setShowModal(false);
-    setFormErrors(initialFormData);
-    setFormData(initialFormData);
-  };
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-    setFormErrors({
-      ...formErrors,
-      [name]: "",
-    });
-  };
-
-  const handleFileChange = (e) => {
-    setFormData({
-      ...formData,
-      selectedFile: e.target.files[0],
-    });
-    setFormErrors({
-      ...formErrors,
-      selectedFile: "",
-    });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Error Handling
-    let errors = {};
-    // Validate each field based on the section
-    // Basic Info Section
-    if (!formData.courseType) {
-      errors.courseType = "Please Select any Course Type";
-    }
-    if (!formData.certificationTitle) {
-      errors.certificationTitle = "Please enter any Certificate Title";
-    }
-    if (!formData.selectedFile) {
-      errors.selectedFile = "Please select any file";
-    }
-    if (Object.keys(errors).length > 0) {
-      setFormErrors(errors);
-      return;
-    }
-
-    console.log("Submitted:", formData);
-    handleClose();
-    setFormData(initialFormData);
-  };
-
+const CertificateModal = ({
+  show,
+  handleClose,
+  formData,
+  formErrors,
+  handleChange,
+  handleFileChange,
+  handleSubmit,
+}) => {
   return (
     <Modal show={show} onHide={handleClose}>
       <Modal.Header closeButton>
-        <Modal.Title>Add Certificate</Modal.Title>
+        <Modal.Title>
+          {formData._id ? "Edit Certificate" : "Add Certificate"}
+        </Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={handleSubmit}>
-          <Form.Group as={Col} controlId="courseType" className="mb-3">
+          <Form.Group as={Col} controlId="certificate_name" className="mb-3">
             <Form.Label>Select Course Type</Form.Label>
             <Form.Control
               as="select"
-              name="courseType"
+              name="certificate_name"
               className="form-select no-focus-box-shadow"
-              value={formData.courseType}
+              value={formData.certificate_name}
               onChange={handleChange}
             >
               <option value="">Select Qualification Type</option>
@@ -89,23 +37,25 @@ const CertificateModal = ({ show, setShowModal }) => {
               <option value="Other Education">Other Education</option>
               <option value="Certificate">Certificate</option>
             </Form.Control>
-            {formErrors.courseType && (
-              <small className="text-danger">{formErrors.courseType}</small>
+            {formErrors.certificate_name && (
+              <small className="text-danger">
+                {formErrors.certificate_name}
+              </small>
             )}
           </Form.Group>
-          <Form.Group as={Col} controlId="certificationTitle" className="mb-3">
+          <Form.Group as={Col} controlId="certificate_title" className="mb-3">
             <Form.Label>Certification Title</Form.Label>
             <Form.Control
               type="text"
-              name="certificationTitle"
+              name="certificate_title"
               className="form-group no-focus-box-shadow"
               placeholder="Enter Certificate Title"
-              value={formData.certificationTitle}
+              value={formData.certificate_title}
               onChange={handleChange}
             />
-            {formErrors.certificationTitle && (
+            {formErrors.certificate_title && (
               <small className="text-danger">
-                {formErrors.certificationTitle}
+                {formErrors.certificate_title}
               </small>
             )}
           </Form.Group>
@@ -113,12 +63,19 @@ const CertificateModal = ({ show, setShowModal }) => {
             <Form.Label>Select File</Form.Label>
             <Form.Control
               type="file"
-              name="selectedFile"
+              name="certificate_file"
               accept=".pdf,.doc,.docx,.jpg,.png"
               onChange={handleFileChange}
             />
-            {formErrors.selectedFile && (
-              <small className="text-danger">{formErrors.selectedFile}</small>
+            {formData.certificate_file ? (
+              <small>Current File: {formData.certificate_file}</small>
+            ) : (
+              <small>No file selected</small>
+            )}
+            {formErrors.certificate_file && (
+              <small className="text-danger">
+                {formErrors.certificate_file}
+              </small>
             )}
           </Form.Group>
           <Button

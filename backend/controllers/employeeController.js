@@ -906,7 +906,7 @@ const employeeController = {
                });
           }
           let {
-               document_name,
+               document_type,
                document_id,
                proof,
           } = req.body;
@@ -929,7 +929,7 @@ const employeeController = {
                // Create a new qualification record associated with the education record
                const newDocument = new DocumentSchema({
                     document_list_id: documentDetails._id,
-                    document_name,
+                    document_type,
                     document_id,
                     proof,
                     document_file: file,
@@ -1032,7 +1032,7 @@ const employeeController = {
                     });
                }
                const {
-                    document_name,
+                    document_type,
                     document_id,
                     proof
                } = req.body;
@@ -1060,7 +1060,7 @@ const employeeController = {
                }
 
                const updatedFields = {
-                    document_name,
+                    document_type,
                     document_id,
                     proof,
                     document_file
@@ -1136,10 +1136,253 @@ const employeeController = {
                     technicalError: error.message
                });
           }
-     }
+     },
 
      // Certificate
+     addCertificate: async (req, res) => {
+          const token = req.headers.authorization;
+          if (!token) {
+               return res.status(500).send({
+                    error: "Token not found",
+                    success: false
+               });
+          }
+          const { user } = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
+          if (!user) {
+               return res.status(404).send({
+                    message: "Unable to parse the token",
+                    success: false,
+                    error: res.message
+               });
+          }
+          let {
+               certificate_name,
+               certificate_title,
+          } = req.body;
+          try {
+               let file = '';
+               if (req.files && req.files.length > 0) {
+                    file = req.files[0].filename;
+               }
 
+               let certificateDetails = await DocumentListSchema.findOne({ user_id: user._id });
+               if (!certificateDetails) {
+                    // Create a new family record if it doesn't exist
+                    certificateDetails = new DocumentListSchema({
+                         user_id: user._id,
+                         deleted_at: null
+                    });
+                    await certificateDetails.save();
+               }
+
+               // Create a new qualification record associated with the education record
+               const newCertificate = new CertificateSchema({
+                    document_list_id: certificateDetails._id,
+                    certificate_name,
+                    certificate_title,
+                    certificate_file: file,
+                    deleted_at: null
+               });
+               await newCertificate.save();
+               res.status(200).send({
+                    message: "Certificate Added Successfully",
+                    success: true,
+                    certificateDetails,
+                    newCertificate
+               });
+          } catch (error) {
+               console.log(error);
+               return res.status(500).send({
+                    error: "Internal Server Error",
+                    success: false,
+                    technicalError: error.message
+               });
+          }
+     },
+
+     getCertificate: async (req, res) => {
+          try {
+               const token = req.headers.authorization;
+               if (!token) {
+                    return res.status(500).send({
+                         error: "Token not found",
+                         success: false
+                    });
+               }
+               const { user } = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
+               if (!user) {
+                    return res.status(404).send({
+                         message: "Unable to parse the token",
+                         success: false,
+                         error: res.message
+                    });
+               }
+               const certificateId = await DocumentListSchema.findOne({ user_id: user._id })
+               if (certificateId) {
+                    const certificateDetails = await DocumentListSchema.aggregate([
+                         {
+                              $match: { _id: new ObjectId(certificateId._id) }
+                         },
+                         {
+                              $lookup: {
+                                   from: "certificates",
+                                   localField: "_id",
+                                   foreignField: "document_list_id",
+                                   as: "certificateDetails"
+                              }
+                         }
+                    ]);
+                    return res.status(200).send({
+                         message: "Got the Certificate Details",
+                         success: true,
+                         certificateDetails,
+                    });
+               } else {
+                    return res.status(200).send({
+                         message: "Didn't find the User",
+                         success: false,
+                    });
+               }
+          } catch (error) {
+               console.error('Error getting user:', error.message);
+               return res.status(500).send({
+                    message: "Internal server error",
+                    error: error.message,
+                    success: false
+               });
+          }
+     },
+
+     updateCertificate: async (req, res) => {
+          try {
+               const { id } = req.params;
+               const token = req.headers.authorization;
+
+               if (!token) {
+                    return res.status(500).send({
+                         error: "Token not found",
+                         success: false
+                    });
+               }
+               const { user } = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
+               if (!user) {
+                    return res.status(404).send({
+                         message: "Unable to parse the token",
+                         success: false,
+                         error: res.message
+                    });
+               }
+               const certificateId = await DocumentListSchema.findOne({ user_id: user._id });
+               if (!certificateId) {
+                    return res.status(404).send({
+                         message: "Certificate not found",
+                         success: false,
+                    });
+               }
+               const {
+                    certificate_name,
+                    certificate_title,
+               } = req.body;
+
+               let certificate_file = '';
+
+               // Check if a new file was uploaded
+               if (req.files && req.files.length > 0) {
+                    certificate_file = req.files[0].filename;
+
+                    // Delete the old file
+                    const existingCertificate = await CertificateSchema.findById(id);
+                    if (existingCertificate && existingCertificate.certificate_file) {
+                         const filePath = path.join('images', existingCertificate.certificate_file);
+                         if (fs.existsSync(filePath)) {
+                              fs.unlinkSync(filePath);
+                         }
+                    }
+               } else {
+                    // No new file uploaded, keep the existing file
+                    const existingCertificate = await CertificateSchema.findById(id);
+                    if (existingCertificate) {
+                         certificate_file = existingCertificate.certificate_file;
+                    }
+               }
+
+               const updatedFields = {
+                    certificate_name,
+                    certificate_title,
+                    certificate_file
+               }
+
+               const updatedDocument = await CertificateSchema.findOneAndUpdate(
+                    { _id: id },
+                    { $set: updatedFields },
+                    { new: true }
+               )
+               if (!updatedDocument) {
+                    return res.status(500).send({
+                         error: "Certificate Update Unsuccessful",
+                         success: false,
+                    });
+               } else {
+                    return res.status(200).send({
+                         message: "Certificate Updated Successfully",
+                         updatedDocument,
+                         success: true,
+                    });
+               }
+          } catch (error) {
+               console.log(error);
+               return res.status(500).send({
+                    error: "Internal Server Error",
+                    success: false,
+                    technicalError: error.message
+               });
+          }
+     },
+
+     deleteCertificate: async (req, res) => {
+          try {
+               const { id } = req.params;
+               const token = req.headers.authorization;
+
+               if (!token) {
+                    return res.status(401).json({ success: false, message: "Unauthorized: Token not found" });
+               }
+
+               const { user } = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
+               if (!user) {
+                    return res.status(401).json({ success: false, message: "Unauthorized: Invalid token" });
+               }
+
+               const certificateId = await DocumentListSchema.findOne({ user_id: user._id });
+               if (!certificateId) {
+                    return res.status(404).json({
+                         success: false,
+                         message: "Family Details not found"
+                    });
+               }
+
+               const deletedCertificate = await CertificateSchema.findByIdAndDelete(id);
+               if (!deletedCertificate) {
+                    return res.status(404).json({ success: false, message: "Document not found" });
+               }
+
+               // Delete the associated file
+               const filePath = path.join(__dirname, 'images', deletedCertificate.certificate_file);
+               if (fs.existsSync(filePath)) {
+                    fs.unlinkSync(filePath);
+               }
+
+               return res.status(200).json({ success: true, message: "Certificate deleted successfully" });
+
+          } catch (error) {
+               console.log(error);
+               return res.status(500).send({
+                    error: "Internal Server Error",
+                    success: false,
+                    technicalError: error.message
+               });
+          }
+     }
 };
 
 module.exports = employeeController;
