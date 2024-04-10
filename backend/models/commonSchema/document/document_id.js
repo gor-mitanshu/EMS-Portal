@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 
 // Schema setup
 const documentSchema = new mongoose.Schema({
-     user_id: { type: mongoose.Schema.ObjectId, ref: 'user' },
+     document_list_id: { type: mongoose.Schema.ObjectId, ref: 'document-list' },
 
      document_name: { type: String },
      document_id: { type: String },

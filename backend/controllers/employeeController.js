@@ -11,6 +11,10 @@ const QualificationSchema = require('../models/commonSchema/education/qualificat
 const FamilySchema = require('../models/commonSchema/family/familySchema');
 const FamilyMemberSchema = require('../models/commonSchema/family/familyMember');
 const EmergencyFamilyMemberSchema = require('../models/commonSchema/family/emergencyFamilyMember');
+const DocumentListSchema = require('../models/commonSchema/document/documentSchema');
+const DocumentSchema = require('../models/commonSchema/document/document_id');
+const CertificateSchema = require('../models/commonSchema/document/certificate');
+const WorkSchema = require('../models/commonSchema/document/work');
 
 // List of the controllers
 const employeeController = {
@@ -65,6 +69,7 @@ const employeeController = {
           }
      },
 
+     // Work
      addWorkDetails: async (req, res) => {
           let { employee_code, date_of_joining, probation_period, employment_type, work_location, employee_status, work_experience, user_id } = req.body;
           try {
@@ -208,6 +213,7 @@ const employeeController = {
           }
      },
 
+     // Education
      addEducationDetails: async (req, res) => {
           const token = req.headers.authorization;
           if (!token) {
@@ -449,6 +455,7 @@ const employeeController = {
           }
      },
 
+     // Family
      addFamilyDetails: async (req, res) => {
           const token = req.headers.authorization;
           if (!token) {
@@ -877,7 +884,241 @@ const employeeController = {
                     technicalError: error.message
                });
           }
+     },
+
+     // Documents
+     addDocuments: async (req, res) => {
+          const token = req.headers.authorization;
+          if (!token) {
+               return res.status(500).send({
+                    error: "Token not found",
+                    success: false
+               });
+          }
+          const { user } = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
+          if (!user) {
+               return res.status(404).send({
+                    message: "Unable to parse the token",
+                    success: false,
+                    error: res.message
+               });
+          }
+          let {
+               document_name,
+               document_id,
+               proof,
+          } = req.body;
+          try {
+               let file = '';
+               if (req.files && req.files.length > 0) {
+                    file = req.files[0].originalname;
+               }
+
+               let documentDetails = await DocumentListSchema.findOne({ user_id: user._id });
+               if (!documentDetails) {
+                    // Create a new family record if it doesn't exist
+                    documentDetails = new DocumentListSchema({
+                         user_id: user._id,
+                         deleted_at: null
+                    });
+                    await documentDetails.save();
+               }
+
+               // Create a new qualification record associated with the education record
+               const newDocument = new DocumentSchema({
+                    document_list_id: documentDetails._id,
+                    document_name,
+                    document_id,
+                    proof,
+                    document_file: file,
+                    deleted_at: null
+               });
+               await newDocument.save();
+               res.status(200).send({
+                    message: "Document Added Successfully",
+                    success: true,
+                    documentDetails,
+                    newDocument
+               });
+          } catch (error) {
+               console.log(error);
+               return res.status(500).send({
+                    error: "Internal Server Error",
+                    success: false,
+                    technicalError: error.message
+               });
+          }
+     },
+
+     getDocuments: async (req, res) => {
+          try {
+               const token = req.headers.authorization;
+               if (!token) {
+                    return res.status(500).send({
+                         error: "Token not found",
+                         success: false
+                    });
+               }
+               const { user } = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
+               if (!user) {
+                    return res.status(404).send({
+                         message: "Unable to parse the token",
+                         success: false,
+                         error: res.message
+                    });
+               }
+               const documentId = await DocumentListSchema.findOne({ user_id: user._id })
+               if (documentId) {
+                    const documentDetails = await DocumentListSchema.aggregate([
+                         {
+                              $match: { _id: new ObjectId(documentId._id) }
+                         },
+                         {
+                              $lookup: {
+                                   from: "documents",
+                                   localField: "_id",
+                                   foreignField: "document_list_id",
+                                   as: "documentDetails"
+                              }
+                         }
+                    ]);
+                    return res.status(200).send({
+                         message: "Got the Family Details",
+                         success: true,
+                         documentDetails,
+                    });
+               } else {
+                    return res.status(200).send({
+                         message: "Didn't find the User",
+                         success: false,
+                    });
+               }
+          } catch (error) {
+               console.error('Error getting user:', error.message);
+               return res.status(500).send({
+                    message: "Internal server error",
+                    error: error.message,
+                    success: false
+               });
+          }
+     },
+
+     updateDocuments: async (req, res) => {
+          try {
+               const { id } = req.params;
+               const token = req.headers.authorization;
+
+               if (!token) {
+                    return res.status(500).send({
+                         error: "Token not found",
+                         success: false
+                    });
+               }
+               const { user } = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
+               if (!user) {
+                    return res.status(404).send({
+                         message: "Unable to parse the token",
+                         success: false,
+                         error: res.message
+                    });
+               }
+               const documentId = await DocumentListSchema.findOne({ user_id: user._id });
+               if (!documentId) {
+                    return res.status(404).send({
+                         message: "Family Details not found",
+                         success: false,
+                    });
+               }
+               const {
+                    document_name,
+                    document_id,
+                    proof
+               } = req.body;
+
+               let document_file = '';
+               if (req.files && req.files.length > 0) {
+                    document_file = req.files[0].filename;
+               } else {
+                    // Get the existing document file if no new file uploaded
+                    const existingDocument = await DocumentSchema.findById(id);
+                    if (existingDocument) {
+                         document_file = existingDocument.document_file;
+                    }
+               }
+
+               const updatedFields = {
+                    document_name,
+                    document_id,
+                    proof,
+                    document_file
+               }
+
+               const updatedDocument = await DocumentSchema.findOneAndUpdate(
+                    { _id: id },
+                    { $set: updatedFields },
+                    { new: true }
+               )
+               if (!updatedDocument) {
+                    return res.status(500).send({
+                         error: "Family Member Update Unsuccessful",
+                         success: false,
+                    });
+               } else {
+                    return res.status(200).send({
+                         message: "Family Member Updated Successfully",
+                         updatedDocument,
+                         success: true,
+                    });
+               }
+          } catch (error) {
+               console.log(error);
+               return res.status(500).send({
+                    error: "Internal Server Error",
+                    success: false,
+                    technicalError: error.message
+               });
+          }
+     },
+
+
+     deleteDocument: async (req, res) => {
+          try {
+               const { id } = req.params;
+               const token = req.headers.authorization;
+
+               if (!token) {
+                    return res.status(401).json({ success: false, message: "Unauthorized: Token not found" });
+               }
+
+               const { user } = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
+               if (!user) {
+                    return res.status(401).json({ success: false, message: "Unauthorized: Invalid token" });
+               }
+               const documentId = await DocumentListSchema.findOne({ user_id: user._id });
+               if (!documentId) {
+                    return res.status(404).json({
+                         success: false,
+                         message: "Family Details not found"
+                    });
+               }
+               const deleteDocumentDetails = await DocumentSchema.findOneAndDelete({ _id: id })
+               if (!deleteDocumentDetails) {
+                    return res.status(404).json({ success: false, message: "Document not found" });
+               }
+               return res.status(200).json({ success: true, message: "Document deleted successfully" });
+
+          } catch (error) {
+               console.log(error);
+               return res.status(500).send({
+                    error: "Internal Server Error",
+                    success: false,
+                    technicalError: error.message
+               });
+          }
      }
+
+     // Certificate
+
 };
 
 module.exports = employeeController;
