@@ -60,4 +60,9 @@ router.get('/getCertificate', verifyToken, employeeController.getCertificate);
 router.post('/updateCertificate/:id', verifyToken, upload.any(), employeeController.updateCertificate);
 router.delete('/deleteCertificate/:id', verifyToken, employeeController.deleteCertificate);
 
+router.post('/addWork', verifyToken, upload.any(), employeeController.addWork);
+router.get('/getWork', verifyToken, employeeController.getWork);
+router.post('/updateWork/:id', verifyToken, upload.any(), employeeController.updateWork);
+router.delete('/deleteWork/:id', verifyToken, employeeController.deleteWork);
+
 module.exports = router;

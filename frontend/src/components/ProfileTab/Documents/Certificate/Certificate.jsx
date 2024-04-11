@@ -86,7 +86,6 @@ const Certificate = () => {
 
       const accessToken = localStorage.getItem("token");
       const accessTokenwithoutQuotes = JSON.parse(accessToken);
-      console.log(editId);
       const endpoint = editId
         ? `${process.env.REACT_APP_API}/employee/updateCertificate/${editId}`
         : `${process.env.REACT_APP_API}/employee/addCertificate`;
@@ -122,7 +121,7 @@ const Certificate = () => {
   };
 
   const handleEdit = (certificate) => {
-    console.log(certificate);
+    // console.log(certificate);
     setEditId(certificate._id);
     setFormData({
       certificate_name: certificate.certificate_name,
@@ -172,23 +171,23 @@ const Certificate = () => {
         handleFileChange={handleFileChange}
         handleSubmit={handleSubmit}
       />
-      <table className="table">
-        <thead>
-          <tr>
-            <th>Certificate Name</th>
-            <th>Certificate Title</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {certificates.length > 0 &&
-            certificates[0].certificateDetails.map((certificate) => (
+      {certificates.length && certificates[0].certificateDetails.length > 0 ? (
+        <table className="table">
+          <thead>
+            <tr>
+              <th>Certificate Name</th>
+              <th>Certificate Title</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {certificates[0].certificateDetails.map((certificate) => (
               <tr key={certificate._id}>
                 <td>{certificate.certificate_name}</td>
                 <td>{certificate.certificate_title}</td>
                 <td>
                   <button
-                    className="btn btn-primary"
+                    className="btn btn-primary me-2"
                     onClick={() => handleEdit(certificate)}
                   >
                     Edit
@@ -202,8 +201,11 @@ const Certificate = () => {
                 </td>
               </tr>
             ))}
-        </tbody>
-      </table>
+          </tbody>
+        </table>
+      ) : (
+        <h4>No data found</h4>
+      )}
     </div>
   );
 };

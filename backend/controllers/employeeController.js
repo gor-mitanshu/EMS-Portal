@@ -1382,6 +1382,252 @@ const employeeController = {
                     technicalError: error.message
                });
           }
+     },
+
+     // Work
+     addWork: async (req, res) => {
+          const token = req.headers.authorization;
+          if (!token) {
+               return res.status(500).send({
+                    error: "Token not found",
+                    success: false
+               });
+          }
+          const { user } = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
+          if (!user) {
+               return res.status(404).send({
+                    message: "Unable to parse the token",
+                    success: false,
+                    error: res.message
+               });
+          }
+          let {
+               work_name,
+               work_description,
+          } = req.body;
+          try {
+               let file = '';
+               if (req.files && req.files.length > 0) {
+                    file = req.files[0].filename;
+               }
+
+               let workDetails = await DocumentListSchema.findOne({ user_id: user._id });
+               if (!workDetails) {
+                    // Create a new family record if it doesn't exist
+                    workDetails = new DocumentListSchema({
+                         user_id: user._id,
+                         deleted_at: null
+                    });
+                    await workDetails.save();
+               }
+
+               // Create a new qualification record associated with the education record
+               const newWork = new WorkSchema({
+                    document_list_id: workDetails._id,
+                    work_name,
+                    work_description,
+                    work_file: file,
+                    deleted_at: null
+               });
+               await newWork.save();
+               res.status(200).send({
+                    message: "Work Added Successfully",
+                    success: true,
+                    workDetails,
+                    newWork
+               });
+          } catch (error) {
+               console.log(error);
+               return res.status(500).send({
+                    error: "Internal Server Error",
+                    success: false,
+                    technicalError: error.message
+               });
+          }
+     },
+
+     getWork: async (req, res) => {
+          try {
+               const token = req.headers.authorization;
+               if (!token) {
+                    return res.status(500).send({
+                         error: "Token not found",
+                         success: false
+                    });
+               }
+               const { user } = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
+               if (!user) {
+                    return res.status(404).send({
+                         message: "Unable to parse the token",
+                         success: false,
+                         error: res.message
+                    });
+               }
+               const workId = await DocumentListSchema.findOne({ user_id: user._id })
+               if (workId) {
+                    const workDetails = await DocumentListSchema.aggregate([
+                         {
+                              $match: { _id: new ObjectId(workId._id) }
+                         },
+                         {
+                              $lookup: {
+                                   from: "works",
+                                   localField: "_id",
+                                   foreignField: "document_list_id",
+                                   as: "workDetails"
+                              }
+                         }
+                    ]);
+                    return res.status(200).send({
+                         message: "Got the Work Details",
+                         success: true,
+                         workDetails,
+                    });
+               } else {
+                    return res.status(200).send({
+                         message: "Didn't find the User",
+                         success: false,
+                    });
+               }
+          } catch (error) {
+               console.error('Error getting user:', error.message);
+               return res.status(500).send({
+                    message: "Internal server error",
+                    error: error.message,
+                    success: false
+               });
+          }
+     },
+
+     updateWork: async (req, res) => {
+          try {
+               const { id } = req.params;
+               const token = req.headers.authorization;
+
+               if (!token) {
+                    return res.status(500).send({
+                         error: "Token not found",
+                         success: false
+                    });
+               }
+               const { user } = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
+               if (!user) {
+                    return res.status(404).send({
+                         message: "Unable to parse the token",
+                         success: false,
+                         error: res.message
+                    });
+               }
+               const workId = await DocumentListSchema.findOne({ user_id: user._id });
+               if (!workId) {
+                    return res.status(404).send({
+                         message: "Certificate not found",
+                         success: false,
+                    });
+               }
+               const {
+                    work_name,
+                    work_description,
+               } = req.body;
+
+               let work_file = '';
+
+               // Check if a new file was uploaded
+               if (req.files && req.files.length > 0) {
+                    work_file = req.files[0].filename;
+
+                    // Delete the old file
+                    const existingWork = await WorkSchema.findById(id);
+                    if (existingWork && existingWork.work_file) {
+                         const filePath = path.join('images', existingWork.work_file);
+                         if (fs.existsSync(filePath)) {
+                              fs.unlinkSync(filePath);
+                         }
+                    }
+               } else {
+                    // No new file uploaded, keep the existing file
+                    const existingWork = await WorkSchema.findById(id);
+                    if (existingWork) {
+                         work_file = existingWork.work_file;
+                    }
+               }
+
+               const updatedFields = {
+                    work_name,
+                    work_description,
+                    work_file
+               }
+
+               const updatedDocument = await WorkSchema.findOneAndUpdate(
+                    { _id: id },
+                    { $set: updatedFields },
+                    { new: true }
+               )
+               if (!updatedDocument) {
+                    return res.status(500).send({
+                         error: "Work Update Unsuccessful",
+                         success: false,
+                    });
+               } else {
+                    return res.status(200).send({
+                         message: "Work Updated Successfully",
+                         updatedDocument,
+                         success: true,
+                    });
+               }
+          } catch (error) {
+               console.log(error);
+               return res.status(500).send({
+                    error: "Internal Server Error",
+                    success: false,
+                    technicalError: error.message
+               });
+          }
+     },
+
+     deleteWork: async (req, res) => {
+          try {
+               const { id } = req.params;
+               const token = req.headers.authorization;
+
+               if (!token) {
+                    return res.status(401).json({ success: false, message: "Unauthorized: Token not found" });
+               }
+
+               const { user } = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
+               if (!user) {
+                    return res.status(401).json({ success: false, message: "Unauthorized: Invalid token" });
+               }
+
+               const certificateId = await DocumentListSchema.findOne({ user_id: user._id });
+               if (!certificateId) {
+                    return res.status(404).json({
+                         success: false,
+                         message: "Family Details not found"
+                    });
+               }
+
+               const deletedCertificate = await WorkSchema.findByIdAndDelete(id);
+               if (!deletedCertificate) {
+                    return res.status(404).json({ success: false, message: "Document not found" });
+               }
+
+               // Delete the associated file
+               const filePath = path.join(__dirname, 'images', deletedCertificate.work_file);
+               if (fs.existsSync(filePath)) {
+                    fs.unlinkSync(filePath);
+               }
+
+               return res.status(200).json({ success: true, message: "Certificate deleted successfully" });
+
+          } catch (error) {
+               console.log(error);
+               return res.status(500).send({
+                    error: "Internal Server Error",
+                    success: false,
+                    technicalError: error.message
+               });
+          }
      }
 };
 

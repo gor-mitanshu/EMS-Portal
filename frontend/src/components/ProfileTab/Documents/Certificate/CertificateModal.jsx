@@ -67,11 +67,11 @@ const CertificateModal = ({
               accept=".pdf,.doc,.docx,.jpg,.png"
               onChange={handleFileChange}
             />
-            {formData.certificate_file ? (
+            {/* {formData.certificate_file ? (
               <small>Current File: {formData.certificate_file}</small>
             ) : (
               <small>No file selected</small>
-            )}
+            )} */}
             {formErrors.certificate_file && (
               <small className="text-danger">
                 {formErrors.certificate_file}
