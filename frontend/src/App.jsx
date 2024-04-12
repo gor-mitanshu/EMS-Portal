@@ -25,6 +25,7 @@ import Rules from "./components/Leave/Rules/Rules";
 import CompanyProfile from "./components/CompanyProfile/CompanyProfile";
 import Overview from "./components/CompanyProfile/Overview/Overview";
 import Address from "./components/CompanyProfile/Address/Address";
+import Department from "./components/CompanyProfile/Department/Department";
 
 function App() {
   return (
@@ -52,7 +53,7 @@ function App() {
               <Route index element={<Navigate to="overview" replace />} />
               <Route path="overview" element={<Overview />} />
               <Route path="address" element={<Address />} />
-              <Route path="department" element={<Profile />} />
+              <Route path="department" element={<Department />} />
               <Route path="designation" element={<Profile />} />
               <Route path="announcements" element={<Profile />} />
               <Route path="policies" element={<Profile />} />
