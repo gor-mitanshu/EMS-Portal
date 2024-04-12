@@ -1,159 +1,24 @@
-import React, { useState } from "react";
+// IdModal.jsx
+import React from "react";
 import { Modal, Button, Form, Col } from "react-bootstrap";
-import axios from "axios";
 
-const IdModal = ({ show, setShowModal }) => {
-  const initialFormData = {
-    document_type: "",
-    document_id: "",
-    proof_id: "",
-    file: null,
-    photoId: "",
-    dateOfBirth: "",
-    currentAddress: "",
-    permanentAddress: "",
-  };
-  const [formData, setFormData] = useState(initialFormData);
-  const [formErrors, setFormErrors] = useState({
-    document_type: "",
-    document_id: "",
-    proof_id: "",
-    file: null,
-  });
-
-  const handleClose = () => {
-    setShowModal(false);
-    setFormErrors(initialFormData);
-    setFormData(initialFormData);
-  };
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-      // Reset checkboxes when id_type changes
-      photoId: "",
-      dateOfBirth: "",
-      currentAddress: "",
-      permanentAddress: "",
-    });
-
-    setFormErrors({
-      ...formErrors,
-      [name]: "",
-    });
-  };
-
-  const handleCheckboxChange = (e) => {
-    const { name, checked } = e.target;
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [name]: checked ? "Yes" : "",
-    }));
-  };
-
-  const handleFileChange = (e) => {
-    setFormData({
-      ...formData,
-      file: e.target.files[0],
-    });
-    setFormErrors({
-      ...formErrors,
-      file: "",
-    });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    // Error Handling
-    let errors = {};
-    // Validate each field based on the section
-    // Basic Info Section
-    if (!formData.document_type) {
-      errors.document_type = "Please Select any Id Type";
-    }
-    if (!formData.document_id) {
-      errors.document_id = "Please enter any Certificate Title";
-    }
-    if (!formData.file) {
-      errors.file = "Please select any file";
-    }
-    if (Object.keys(errors).length > 0) {
-      setFormErrors(errors);
-      return;
-    }
-
-    try {
-      const formDataToSend = new FormData();
-      formDataToSend.append("document_type", formData.document_type);
-      formDataToSend.append("document_id", formData.document_id);
-      formDataToSend.append("file", formData.file);
-      formDataToSend.append("photoId", formData.photoId);
-      formDataToSend.append("dateOfBirth", formData.dateOfBirth);
-      formDataToSend.append("currentAddress", formData.currentAddress);
-      formDataToSend.append("permanentAddress", formData.permanentAddress);
-
-      const accessToken = localStorage.getItem("token");
-      const accessTokenwithoutQuotes = JSON.parse(accessToken);
-      const res = await axios.post(
-        `${process.env.REACT_APP_API}/employee/addDocument`,
-        formDataToSend,
-        {
-          headers: { Authorization: `Bearer ${accessTokenwithoutQuotes}` },
-        }
-      );
-      if (res) {
-        console.log("Submitted:", formData);
-        handleClose();
-        setFormData(initialFormData);
-      }
-    } catch (error) {
-      console.error("Error submitting form:", error);
-    }
-  };
-
-  const checkboxes = {
-    PAN_CARD: [
-      "Photo Id",
-      "Date of Birth",
-      "Current Address",
-      "Permanent Address",
-    ],
-    ADHAR_CARD: [
-      "Photo Id",
-      "Date of Birth",
-      "Current Address",
-      "Permanent Address",
-    ],
-    PASSPORT: [
-      "Photo Id",
-      "Date of Birth",
-      "Current Address",
-      "Permanent Address",
-    ],
-    VOTER_ID: [
-      "Photo Id",
-      "Date of Birth",
-      "Current Address",
-      "Permanent Address",
-    ],
-    ELECTRICITY_BILL: ["Current Address", "Permanent Address"],
-    PHONE_BILL: ["Current Address", "Permanent Address"],
-    BANK_PASSBOOK: ["Current Address", "Permanent Address"],
-    RENTAL_AGREEMENT: ["Current Address"],
-    DRIVING_LICENSE: [
-      "Photo Id",
-      "Date of Birth",
-      "Current Address",
-      "Permanent Address",
-    ],
-  };
-
+const IdModal = ({
+  show,
+  handleClose,
+  formData,
+  formErrors,
+  handleChange,
+  handleSubmit,
+  checkboxes,
+  handleCheckboxChange,
+  handleFileChange,
+}) => {
   return (
     <Modal show={show} onHide={handleClose}>
       <Modal.Header closeButton>
-        <Modal.Title>Add Certificate</Modal.Title>
+        <Modal.Title>
+          {formData._id ? "Edit Certificate" : "Add Certificate"}
+        </Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={handleSubmit}>
@@ -203,18 +68,18 @@ const IdModal = ({ show, setShowModal }) => {
               style={{ color: "grey" }}
             >{`Use if proof for`}</Form.Label>
           )}
-          {checkboxes[formData.document_type]?.map((checkboxName) => (
+          {checkboxes[formData.document_type]?.map((checkbox) => (
             <Form.Group
-              key={checkboxName}
-              controlId={checkboxName}
+              key={checkbox.label}
+              controlId={checkbox.label}
               className="mb-3"
             >
               <Form.Check
                 type="checkbox"
-                id={checkboxName}
-                label={checkboxName}
-                name={checkboxName}
-                checked={formData[checkboxName] === "Yes"}
+                id={checkbox.label}
+                label={checkbox.label}
+                name={checkbox.name}
+                checked={formData.proof ? formData.proof[checkbox.name] : false}
                 onChange={handleCheckboxChange}
               />
             </Form.Group>

@@ -910,6 +910,7 @@ const employeeController = {
                document_id,
                proof,
           } = req.body;
+          const proofObject = JSON.parse(proof);
           try {
                let file = '';
                if (req.files && req.files.length > 0) {
@@ -931,7 +932,12 @@ const employeeController = {
                     document_list_id: documentDetails._id,
                     document_type,
                     document_id,
-                    proof,
+                    proof: {
+                         photo_id: proofObject.photo_id,
+                         date_of_birth: proofObject.date_of_birth,
+                         current_address: proofObject.current_address,
+                         permanent_address: proofObject.permanent_address
+                    },
                     document_file: file,
                     deleted_at: null
                });
@@ -985,13 +991,13 @@ const employeeController = {
                          }
                     ]);
                     return res.status(200).send({
-                         message: "Got the Family Details",
+                         message: "Got the Document Details",
                          success: true,
                          documentDetails,
                     });
                } else {
                     return res.status(200).send({
-                         message: "Didn't find the User",
+                         message: "Didn't find the Document",
                          success: false,
                     });
                }
@@ -1058,13 +1064,18 @@ const employeeController = {
                          document_file = existingDocument.document_file;
                     }
                }
-
+               const proofObject = JSON.parse(proof);
                const updatedFields = {
                     document_type,
                     document_id,
-                    proof,
+                    proof: {
+                         photo_id: proofObject.photo_id,
+                         date_of_birth: proofObject.date_of_birth,
+                         current_address: proofObject.current_address,
+                         permanent_address: proofObject.permanent_address
+                    },
                     document_file
-               }
+               };
 
                const updatedDocument = await DocumentSchema.findOneAndUpdate(
                     { _id: id },
@@ -1097,7 +1108,7 @@ const employeeController = {
           try {
                const { id } = req.params;
                const token = req.headers.authorization;
-
+               console.log(id)
                if (!token) {
                     return res.status(401).json({ success: false, message: "Unauthorized: Token not found" });
                }
@@ -1111,11 +1122,12 @@ const employeeController = {
                if (!documentId) {
                     return res.status(404).json({
                          success: false,
-                         message: "Family Details not found"
+                         message: "Documents Details not found"
                     });
                }
 
                const deletedDocument = await DocumentSchema.findByIdAndDelete(id);
+
                if (!deletedDocument) {
                     return res.status(404).json({ success: false, message: "Document not found" });
                }

@@ -7,7 +7,12 @@ const documentSchema = new mongoose.Schema({
 
      document_type: { type: String },
      document_id: { type: String },
-     proof: [{ type: String }],
+     proof: {
+          photo_id: Boolean,
+          date_of_birth: Boolean,
+          current_address: Boolean,
+          permanent_address: Boolean,
+     },
      document_file: { type: String },
      deleted_at: { type: Date }
 
@@ -16,5 +21,5 @@ const documentSchema = new mongoose.Schema({
 // exports and databse collection setup
 const Document = mongoose.model('document', documentSchema);
 
-// Export the model 
+// Export the model
 module.exports = Document;

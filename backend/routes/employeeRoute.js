@@ -52,7 +52,7 @@ router.delete('/deleteemergencyFamilyMemberDetails/:id', verifyToken, employeeCo
 
 router.post('/addDocument', verifyToken, upload.any(), employeeController.addDocuments);
 router.get('/getDocument', verifyToken, employeeController.getDocuments);
-router.put('/updateDocument/:id', verifyToken, upload.any(), employeeController.updateDocuments);
+router.post('/updateDocument/:id', verifyToken, upload.any(), employeeController.updateDocuments);
 router.delete('/deleteDocument/:id', verifyToken, employeeController.deleteDocument);
 
 router.post('/addCertificate', verifyToken, upload.any(), employeeController.addCertificate);
