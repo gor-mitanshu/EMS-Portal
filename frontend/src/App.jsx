@@ -27,6 +27,7 @@ import Overview from "./components/CompanyProfile/Overview/Overview";
 import Address from "./components/CompanyProfile/Address/Address";
 import Department from "./components/CompanyProfile/Department/Department";
 import CompanyPolices from "./components/CompanyProfile/CompanyPolicies/CompanyPolicies";
+import Announcement from "./components/CompanyProfile/Announcements/Announcement";
 
 function App() {
   return (
@@ -56,7 +57,7 @@ function App() {
               <Route path="address" element={<Address />} />
               <Route path="department" element={<Department />} />
               <Route path="designation" element={<Profile />} />
-              <Route path="announcements" element={<Profile />} />
+              <Route path="announcements" element={<Announcement />} />
               <Route path="policies" element={<CompanyPolices />} />
               <Route path="admin" element={<Profile />} />
               <Route path="statutory" element={<Profile />} />
