@@ -150,12 +150,11 @@ const Dashboard = () => {
             <div key={index} className="col-lg-3 col-12 mb-3 px-3 py-2">
               <div
                 className="card card-hover"
-                style={
-                  {
-                    // background: `${employeeCard.backgroundColor}`,
-                    // border: `1px solid ${employeeCard.color}`,
-                  }
-                }
+                style={{
+                  cursor: "pointer",
+                  // background: `${employeeCard.backgroundColor}`,
+                  // border: `1px solid ${employeeCard.color}`,
+                }}
               >
                 <h6
                   className="card-title d-flex justify-content-center"

@@ -1,109 +1,57 @@
-import React, { useState } from "react";
+import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faComment,
-  faMessage,
-  faTimes,
-} from "@fortawesome/free-solid-svg-icons";
+import { faComment, faTimes } from "@fortawesome/free-solid-svg-icons";
 
-const AddAnnouncementForm = ({ onAdd, initialAnnouncement }) => {
-  const [announcement, setAnnouncement] = useState(initialAnnouncement || "");
-  const [isMaxLengthError, setIsMaxLengthError] = useState(false);
-  const [isEmptyError, setIsEmptyError] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showForm, setShowForm] = useState(false);
-
-  const handleInputChange = (e) => {
-    const { value } = e.target;
-    setAnnouncement(value);
-    setIsMaxLengthError(value.length > 100);
-    setIsEmptyError(value.trim() === "");
-  };
-
-  const handleAddAnnouncement = async () => {
-    if (announcement === "") {
-      setIsEmptyError(true);
-      return;
-    }
-
-    if (announcement.length > 100) {
-      setIsMaxLengthError(true);
-      return;
-    }
-
-    setIsSubmitting(true);
-    onAdd(announcement);
-    setAnnouncement("");
-    setIsSubmitting(false);
-    setShowForm(false);
-  };
-
-  const resetForm = () => {
-    setAnnouncement("");
-    setIsMaxLengthError(false);
-    setIsEmptyError(false);
-    setIsSubmitting(false);
-    setShowForm(false);
-  };
-
+const AddAnnouncementForm = ({
+  announcement,
+  error,
+  handleInputChange,
+  handleSubmit,
+  handleCancel,
+  isEdit,
+}) => {
   return (
-    <div className="card w-100 mb-3">
-      <div className="card-body">
-        {showForm ? (
-          <>
-            <h5 className="card-title ps-3">
-              <FontAwesomeIcon icon={faComment} /> Post an Announcement
-            </h5>
-            <textarea
-              className={`form-control mb-2 ${
-                isMaxLengthError || isEmptyError ? "is-invalid" : ""
-              }`}
-              rows="3"
-              value={announcement}
-              onChange={handleInputChange}
-            />
-            {isEmptyError && (
-              <div className="invalid-feedback">Field cannot be empty</div>
-            )}
-            {isMaxLengthError && (
-              <div className="invalid-feedback">
-                Text length should not exceed 100 characters
-              </div>
-            )}
-            <small className="text-muted">{announcement.length}/100</small>
-            <hr />
-            <div>
-              <button
-                className="btn btn-primary mt-2"
-                onClick={handleAddAnnouncement}
-                disabled={isSubmitting || isEmptyError || isMaxLengthError}
-              >
-                {isSubmitting ? "Posting..." : "Post Announcement"}
-              </button>
-
-              <button
-                className="btn btn-link"
-                style={{ position: "absolute", top: "10px", right: "10px" }}
-                onClick={() => {
-                  resetForm();
-                }}
-              >
-                <FontAwesomeIcon icon={faTimes} size="lg" color="#ec5d5d" />
-              </button>
-            </div>
-          </>
-        ) : (
-          <h5
-            className="card-title"
-            style={{ cursor: "pointer" }}
-            onClick={() => setShowForm(true)}
+    <>
+      <form action="" onSubmit={handleSubmit}>
+        <h5 className="card-title ps-3">
+          <FontAwesomeIcon icon={faComment} className="pe-2" />
+          {isEdit ? "Edit an Announcement" : "Post an Announcement"}
+        </h5>
+        <textarea
+          className={`form-control mb-2 ${error ? "is-invalid" : ""}`}
+          name="announcement"
+          rows="3"
+          value={announcement}
+          onChange={handleInputChange}
+        />
+        <div className="invalid-feedback">{error}</div>
+        <small className="text-muted">{announcement.length}/100</small>
+        <hr />
+        <div>
+          {isEdit ? (
+            <button className="btn btn-danger my-2 me-2" onClick={handleCancel}>
+              Cancel
+            </button>
+          ) : (
+            <button
+              className="btn btn-link"
+              style={{ position: "absolute", top: "10px", right: "10px" }}
+              onClick={handleCancel}
+            >
+              <FontAwesomeIcon icon={faTimes} size="lg" color="#ec5d5d" />
+            </button>
+          )}
+          <button
+            className="btn btn-primary my-2"
+            onClick={handleSubmit}
+            disabled={error}
           >
-            <FontAwesomeIcon icon={faMessage} className="pe-2" size="lg" />
-            Click here to add an announcement
-          </h5>
-        )}
-      </div>
-    </div>
+            {isEdit ? "Save" : "Post"}
+            {/* {isSubmitting ? "Posting..." : "Post Announcement"} */}
+          </button>
+        </div>
+      </form>
+    </>
   );
 };
 

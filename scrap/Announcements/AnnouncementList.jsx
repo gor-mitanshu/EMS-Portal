@@ -15,11 +15,11 @@ const AnnouncementList = ({
   handleCancel,
 }) => {
   const [isEdit, setIsEdit] = useState(false);
-  const [announcement, setAnnouncement] = useState(announcements.content);
+  const [announcement, setAnnouncement] = useState(announcements);
 
   const handleEditClick = () => {
-    setAnnouncement(announcements.content);
-    setError("");
+    setAnnouncement({ announcement: announcements });
+    setError({ announcement: "" });
     setIsEdit(true);
   };
 
@@ -29,10 +29,9 @@ const AnnouncementList = ({
 
   const handleCancelEdit = () => {
     setIsEdit(false);
-    setAnnouncement(announcements.content);
+    setAnnouncement(announcements);
     setError("");
   };
-
   return (
     <>
       {isEdit ? (
@@ -46,7 +45,7 @@ const AnnouncementList = ({
         />
       ) : (
         <div>
-          <strong>{announcements.content}</strong> {/* Render content here */}
+          <strong>{announcements}</strong>
         </div>
       )}
       <div className="d-flex justify-content-end">

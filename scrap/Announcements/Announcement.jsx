@@ -7,21 +7,17 @@ import axios from "axios";
 
 const Announcement = () => {
   const [showForm, setShowForm] = useState(false);
-  const [formData, setFormData] = useState({ announcement: "" });
+  const [announcement, setAnnouncement] = useState("");
   const [error, setError] = useState("");
   const [announcements, setAnnouncements] = useState([]);
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleAddForm = () => {
     setShowForm(true);
   };
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+    const { value } = e.target;
+    setAnnouncement(value);
     if (value.trim() === "") {
       setError("Field cannot be empty");
     } else if (value.length > 100) {
@@ -33,7 +29,7 @@ const Announcement = () => {
 
   const getAnnouncementDetails = async () => {
     try {
-      const response = await axios.get("http://localhost:3001/announcements");
+      const response = await axios.get("http://localhost:3000/announcements");
       setAnnouncements(response.data);
     } catch (error) {
       console.error("Error fetching announcements:", error);
@@ -47,12 +43,10 @@ const Announcement = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:3001/announcements", {
-        content: formData.announcement,
+      await axios.post("http://localhost:3000/announcements", {
+        content: announcement,
       });
-      setFormData({
-        announcement: "",
-      });
+      setAnnouncement("");
       setShowForm(false);
       getAnnouncementDetails();
     } catch (error) {
@@ -60,33 +54,23 @@ const Announcement = () => {
     }
   };
 
-  const handleEdit = async (id, updatedAnnouncement) => {
-    try {
-      await axios.put(`http://localhost:3001/announcements/${id}`, {
-        content: updatedAnnouncement,
-      });
-      getAnnouncementDetails();
-    } catch (error) {
-      console.error("Error editing announcement:", error);
-    }
-  };
-
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:3001/announcements/${id}`);
+      await axios.delete(`http://localhost:3000/announcements/${id}`);
       getAnnouncementDetails();
     } catch (error) {
       console.error("Error deleting announcement:", error);
     }
   };
 
+  const handleEdit = (id) => {
+    // Handle edit logic here
+    console.log("Edit announcement with id:", id);
+  };
+
   const handleCancel = () => {
     setShowForm(false);
-    setFormData({
-      announcement: "",
-    });
-    setError("");
-    setIsSubmitting(false);
+    setAnnouncement("");
   };
 
   return (
@@ -101,14 +85,12 @@ const Announcement = () => {
         <div className="card-body">
           {showForm ? (
             <AddAnnouncementForm
-              announcement={formData.announcement}
+              announcement={announcement}
               error={error}
               handleInputChange={handleInputChange}
               handleSubmit={handleSubmit}
               handleCancel={handleCancel}
               isEdit={false}
-              isSubmitting={isSubmitting}
-              setIsSubmitting={setIsSubmitting}
             />
           ) : (
             <h5
@@ -128,17 +110,15 @@ const Announcement = () => {
           <h5 className="card-title">Live Announcements</h5>
           {announcements.map((announcement, index) => (
             <AnnouncementList
-              key={announcement.id}
+              key={index}
               announcements={announcement}
               error={error}
               setError={setError}
               handleInputChange={handleInputChange}
               index={index}
               id={announcement.id}
-              handleDelete={() => handleDelete(announcement.id)}
-              handleEdit={(updatedAnnouncement) =>
-                handleEdit(announcement.id, updatedAnnouncement)
-              }
+              handleDelete={() => handleDelete(index, announcement.id)}
+              handleEdit={handleEdit}
               handleCancel={handleCancel}
             />
           ))}
