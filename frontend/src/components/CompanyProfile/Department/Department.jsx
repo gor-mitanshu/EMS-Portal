@@ -36,11 +36,16 @@ const Department = () => {
     console.log("Data submitted:", data);
   };
 
+  const handleCancel = () => {
+    setFields([]);
+    setFieldValues({});
+  };
+
   return (
     <>
       <ProfileField title={"Department"}>
         {fields.map((field) => (
-          <div key={field.id} className="row">
+          <div key={field.id} className="row mb-2">
             <div className="form-group col-md-5">
               <input
                 type="text"
@@ -56,7 +61,7 @@ const Department = () => {
             <div className="form-group col-md-5">
               {fieldValues[field.id]?.subdepartments?.map(
                 (subdepartment, index) => (
-                  <div key={index} className="row">
+                  <div key={index} className="row mb-2">
                     <div className="form-group col-md-8">
                       <input
                         type="text"
@@ -130,7 +135,9 @@ const Department = () => {
         {fields.length > 0 && (
           <>
             <div className="d-flex justify-content-end">
-              <button className="btn btn-danger me-2">Cancel</button>
+              <button className="btn btn-danger me-2" onClick={handleCancel}>
+                Cancel
+              </button>
               <button className="btn btn-primary" onClick={handleSubmit}>
                 Submit
               </button>
