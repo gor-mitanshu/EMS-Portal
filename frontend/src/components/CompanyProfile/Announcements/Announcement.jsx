@@ -136,9 +136,7 @@ const Announcement = () => {
               index={index}
               id={announcement.id}
               handleDelete={() => handleDelete(announcement.id)}
-              handleEdit={(updatedAnnouncement) =>
-                handleEdit(announcement.id, updatedAnnouncement)
-              }
+              handleEdit={handleEdit}
               handleCancel={handleCancel}
             />
           ))}

@@ -7,7 +7,8 @@ const nodemailer = require('nodemailer');
 // Importing models
 const CommonSchema = require('../models/commonSchema/userSchema').UserModel;
 const CompanySchema = require('../models/companySchema/companySchema');
-const EmployeeSchema = require('../models/employeeSchema/employeeSchema');
+const Department = require('../models/companySchema/department/departmentSchema');
+const SubDepartment = require('../models/companySchema/subDepartment/subDepartment');
 
 // jwt secret
 const jwtSecret = process.env.JWT_SECRET;
@@ -434,6 +435,34 @@ const companyController = {
     }
   },
 
+  addDepartment: async (req, res) => {
+    try {
+      // Create a new department object
+      const newDepartment = new Department({
+        company_id: req.body.company_id,
+        department: req.body.department,
+      });
+
+      // Save the department to the database
+      const savedDepartment = await newDepartment.save();
+
+      // If sub_departments are provided in the request body, add them to the department
+      if (req.body.sub_departments && req.body.sub_departments.length > 0) {
+        const subDepartments = req.body.sub_departments.map(sub_department => ({
+          department_id: savedDepartment._id,
+          sub_department
+        }));
+        await SubDepartment.insertMany(subDepartments);
+      }
+
+      // Send a success response
+      res.status(201).json(savedDepartment);
+    } catch (err) {
+      // Handle errors
+      console.error(err);
+      res.status(500).json({ message: 'Server error' });
+    }
+  }
 };
 
 module.exports = companyController;

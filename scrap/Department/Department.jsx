@@ -36,15 +36,20 @@ const Department = () => {
     console.log("Data submitted:", data);
   };
 
+  const handleCancel = () => {
+    setFields([]);
+    setFieldValues({});
+  };
+
   return (
     <>
       <ProfileField title={"Department"}>
         {fields.map((field) => (
-          <div key={field.id} className="row align-items-center">
-            <div className="form-group col-md-4">
+          <div key={field.id} className="row mb-2">
+            <div className="form-group col-md-5">
               <input
                 type="text"
-                className="form-control"
+                className="form-control mr-2"
                 placeholder="Department"
                 value={fieldValues[field.id]?.department || ""}
                 onChange={(e) =>
@@ -52,14 +57,15 @@ const Department = () => {
                 }
               />
             </div>
-            <div className="form-group col-md-8">
+
+            <div className="form-group col-md-5">
               {fieldValues[field.id]?.subdepartments?.map(
                 (subdepartment, index) => (
-                  <div key={index} className="row">
-                    <div className="form-group col-md-10">
+                  <div key={index} className="row mb-2">
+                    <div className="form-group col-md-8">
                       <input
                         type="text"
-                        className="form-control"
+                        className="form-control mr-2"
                         placeholder={`Subdepartment ${index + 1}`}
                         value={subdepartment}
                         onChange={(e) => {
@@ -75,7 +81,7 @@ const Department = () => {
                         }}
                       />
                     </div>
-                    <div className="form-group col-md-2">
+                    <div className="form-group col-md-4">
                       <button
                         className="btn btn-outline-danger"
                         onClick={() => {
@@ -96,47 +102,48 @@ const Department = () => {
                   </div>
                 )
               )}
-              <div className="row">
-                <div className="form-group col-md-10">
-                  <button
-                    className="btn btn-outline-primary"
-                    onClick={() => {
-                      const newSubdepartments = [
-                        ...(fieldValues[field.id]?.subdepartments || []),
-                        "",
-                      ];
-                      handleChange(
-                        field.id,
-                        "subdepartments",
-                        newSubdepartments
-                      );
-                    }}
-                  >
-                    <FontAwesomeIcon icon={faPlus} /> Add Subdepartment
-                  </button>
-                </div>
-                <div className="form-group col-md-2">
-                  <button
-                    className="btn btn-outline-danger"
-                    onClick={() => removeField(field.id)}
-                  >
-                    <FontAwesomeIcon icon={faTrash} />
-                  </button>
-                </div>
+              <div className="form-group col-md-12">
+                <button
+                  className="btn btn-outline-primary mb-2"
+                  onClick={() => {
+                    const newSubdepartments = [
+                      ...(fieldValues[field.id]?.subdepartments || []),
+                      "",
+                    ];
+                    handleChange(field.id, "subdepartments", newSubdepartments);
+                  }}
+                >
+                  <FontAwesomeIcon icon={faPlus} /> Add Subdepartment
+                </button>
               </div>
+            </div>
+
+            <div className="form-group col-md-2">
+              <button
+                className="btn btn-outline-danger"
+                onClick={() => removeField(field.id)}
+              >
+                <FontAwesomeIcon icon={faTrash} />
+              </button>
             </div>
           </div>
         ))}
-        <div className="form-group">
-          <button className="btn btn-outline-primary" onClick={addField}>
-            <FontAwesomeIcon icon={faPlus} /> Add Department
-          </button>
-          {fields.length > 0 && (
-            <button className="btn btn-primary ml-2" onClick={handleSubmit}>
-              Submit
-            </button>
-          )}
-        </div>
+
+        <button className="btn btn-outline-primary" onClick={addField}>
+          <FontAwesomeIcon icon={faPlus} /> Add Department
+        </button>
+        {fields.length > 0 && (
+          <>
+            <div className="d-flex justify-content-end">
+              <button className="btn btn-danger me-2" onClick={handleCancel}>
+                Cancel
+              </button>
+              <button className="btn btn-primary" onClick={handleSubmit}>
+                Submit
+              </button>
+            </div>
+          </>
+        )}
       </ProfileField>
     </>
   );
