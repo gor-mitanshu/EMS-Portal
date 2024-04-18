@@ -7,12 +7,8 @@ const AnnouncementList = ({
   announcements,
   error,
   setError,
-  handleInputChange,
-  index,
-  id,
   handleDelete,
   handleEdit,
-  handleCancel,
 }) => {
   const [isEdit, setIsEdit] = useState(false);
   const [announcement, setAnnouncement] = useState(announcements.content);
@@ -25,6 +21,10 @@ const AnnouncementList = ({
 
   const handleSave = (e) => {
     e.preventDefault();
+    console.log(announcements.id);
+    console.log(announcement);
+    handleEdit(announcements.id, announcement);
+    setIsEdit(false);
   };
 
   const handleCancelEdit = () => {
@@ -39,7 +39,7 @@ const AnnouncementList = ({
         <AddAnnouncementForm
           announcement={announcement}
           error={error}
-          handleInputChange={handleInputChange}
+          handleInputChange={(e) => setAnnouncement(e.target.value)}
           handleSubmit={handleSave}
           handleCancel={handleCancelEdit}
           isEdit={true}
