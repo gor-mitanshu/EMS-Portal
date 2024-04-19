@@ -438,23 +438,35 @@ const companyController = {
   addDepartment: async (req, res) => {
     try {
       // Create a new department object
-      const newDepartment = new Department({
-        company_id: req.body.company_id,
-        department: req.body.department,
-      });
+      const departments = req.body.map(department => ({
+        company_id: department.company_id,
+        department: department.department
+      }));
+      const savedDepartment = await Department.insertMany(departments);
 
-      // Save the department to the database
-      const savedDepartment = await newDepartment.save();
-
-      // If sub_departments are provided in the request body, add them to the department
-      if (req.body.sub_departments && req.body.sub_departments.length > 0) {
-        const subDepartments = req.body.sub_departments.map(sub_department => ({
-          department_id: savedDepartment._id,
-          sub_department
-        }));
-        await SubDepartment.insertMany(subDepartments);
+      // Create a new subdepartment object
+      if (savedDepartment.length > 0) {
+        let subDep = []
+        savedDepartment.forEach(savedDep => {
+          req.body.forEach(departments => {
+            departments.sub_departments.forEach(subDepartments => {
+              subDep.push({
+                department_id: savedDep._id,
+                sub_departments: subDepartments
+              })
+            })
+          });
+        })
+        if (subDep.length > 0) {
+          var result = subDep.reduce((unique, o) => {
+            if (!unique.some(obj => obj.sub_departments === o.sub_departments)) {
+              unique.push(o);
+            }
+            return unique;
+          }, []);
+          await SubDepartment.insertMany(result)
+        }
       }
-
       // Send a success response
       res.status(201).json(savedDepartment);
     } catch (err) {
