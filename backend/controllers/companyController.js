@@ -9,18 +9,11 @@ const CommonSchema = require('../models/commonSchema/userSchema').UserModel;
 const CompanySchema = require('../models/companySchema/companySchema');
 const Department = require('../models/companySchema/department/departmentSchema');
 const SubDepartment = require('../models/companySchema/department/subDepartment');
+const Overview = require('../models/companySchema/overview/overviewSchema');
 
 // jwt secret
 const jwtSecret = process.env.JWT_SECRET;
-// generate OTP
-function generateOTP () {
-  let digits = '0123456789';
-  let OTP = '';
-  for (let i = 0; i < 4; i++) {
-    OTP += digits[Math.floor(Math.random() * 10)];
-  }
-  return OTP;
-}
+
 // Configure Nodemailer transporter
 const transporter = nodemailer.createTransport({
   host: 'smtp.gmail.com',
@@ -435,6 +428,127 @@ const companyController = {
     }
   },
 
+  // OverView
+  addOverview: async (req, res) => {
+    // console.log(req.user)
+    let { register_company, brand_name, company_official_email, company_official_contact, website, domain_name, industry_type, linked_in, facebook, twitter, user_id } = req.body
+    try {
+      const overViewDetails = new Overview({
+        register_company, brand_name, company_official_email, company_official_contact, website, domain_name, industry_type, company_social_profile: {
+          linked_in: linked_in,
+          facebook: facebook,
+          twitter: twitter
+        },
+        user_id
+      });
+      await overViewDetails.save();
+
+      res.status(200).send({
+        message: "Added Successfully",
+        success: true,
+        overViewDetails
+      });
+    } catch (error) {
+      console.log(error);
+      return res.status(500).send({
+        error: "Internal Server Error",
+        success: false,
+        technicalError: error.message
+      });
+    }
+  },
+
+  getOverview: async (req, res) => {
+    try {
+      const token = req.headers.authorization;
+      if (!token) {
+        return res.status(500).send({
+          error: "Token not found",
+          success: false
+        });
+      }
+      const data = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
+      if (!data) {
+        return res.status(404).send({
+          message: "Unalbe to parse the token",
+          success: false,
+          error: res.message
+        });
+      }
+      const company = await Overview.findOne({ user_id: data.user._id })
+      if (!company) {
+        return res.status(404).send({
+          message: "Details not found",
+          success: false
+        });
+      }
+      return res.status(200).send({
+        message: "Successfully Got the Details",
+        success: true,
+        company
+      });
+    } catch (error) {
+      res.status(400).send({
+        message: "Internal server error",
+        error: error.message,
+        success: false
+      });
+    }
+  },
+
+  updateOverview: async (req, res) => {
+    try {
+      const token = req.headers.authorization;
+      if (!token) {
+        return res.status(500).send({
+          error: "Token not found",
+          success: false
+        });
+      }
+      const { user } = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
+      if (!user) {
+        return res.status(404).send({
+          message: "Unable to parse the token",
+          success: false,
+          error: res.message
+        });
+      }
+      let { register_company, brand_name, company_official_email, company_official_contact, website, domain_name, industry_type, linked_in, facebook, twitter } = req.body
+      const updatedFields = {
+        register_company, brand_name, company_official_email, company_official_contact, website, domain_name, industry_type, company_social_profile: {
+          linked_in: linked_in,
+          facebook: facebook,
+          twitter: twitter
+        },
+      }
+      const updateOverview = await Overview.findOneAndUpdate(
+        { user_id: user._id },
+        { $set: updatedFields },
+        { new: true }
+      );
+      if (!updateOverview) {
+        return res.status(500).send({
+          error: "Update Unsuccessful",
+          success: false,
+        });
+      } else {
+        return res.status(200).send({
+          message: "Update Successful",
+          updateOverview,
+          success: true,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      return res.status(500).send({
+        error: "Internal Server Error",
+        success: false,
+        technicalError: error.message
+      });
+    }
+  },
+
+  // Department
   addDepartment: async (req, res) => {
     try {
       // Create a new department object
