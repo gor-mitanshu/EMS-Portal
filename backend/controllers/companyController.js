@@ -8,7 +8,7 @@ const nodemailer = require('nodemailer');
 const CommonSchema = require('../models/commonSchema/userSchema').UserModel;
 const CompanySchema = require('../models/companySchema/companySchema');
 const Department = require('../models/companySchema/department/departmentSchema');
-const SubDepartment = require('../models/companySchema/subDepartment/subDepartment');
+const SubDepartment = require('../models/companySchema/department/subDepartment');
 
 // jwt secret
 const jwtSecret = process.env.JWT_SECRET;
