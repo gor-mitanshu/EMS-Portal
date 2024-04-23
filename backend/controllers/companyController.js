@@ -10,6 +10,7 @@ const CompanySchema = require('../models/companySchema/companySchema');
 const Department = require('../models/companySchema/department/departmentSchema');
 const SubDepartment = require('../models/companySchema/department/subDepartment');
 const Overview = require('../models/companySchema/overview/overviewSchema');
+const Address = require('../models/companySchema/address/address');
 
 // jwt secret
 const jwtSecret = process.env.JWT_SECRET;
@@ -548,6 +549,92 @@ const companyController = {
     }
   },
 
+  // Address
+  addCompanyAddress: async (req, res) => {
+    // console.log(req.user)
+    const { user } = req.user;
+    let { register_office_address, corporate_office_address, custom_office_address } = req.body
+    const getCompanydetails = await CompanySchema.findOne({ user_id: user._id })
+    try {
+      const addressDetails = new Address({
+        register_office_address, corporate_office_address, custom_office_address, user_id: user._id, company_id: getCompanydetails._id
+      });
+      await addressDetails.save();
+
+      res.status(200).send({
+        message: "Added Successfully",
+        success: true,
+        addressDetails
+      });
+    } catch (error) {
+      console.log(error);
+      return res.status(500).send({
+        error: "Internal Server Error",
+        success: false,
+        technicalError: error.message
+      });
+    }
+  },
+
+  getCompanyAddress: async (req, res) => {
+    try {
+      const { user } = req.user;
+      const getCompanydetails = await CompanySchema.findOne({ user_id: user._id })
+      const company = await Address.findOne({ company_id: getCompanydetails._id })
+      if (!company) {
+        return res.status(404).send({
+          message: "Details not found",
+          success: false
+        });
+      }
+      return res.status(200).send({
+        message: "Successfully Got the Details",
+        success: true,
+        company
+      });
+    } catch (error) {
+      res.status(400).send({
+        message: "Internal server error",
+        error: error.message,
+        success: false
+      });
+    }
+  },
+
+  updateCompanyAddress: async (req, res) => {
+    const { user } = req.user;
+    let { register_office_address, corporate_office_address, custom_office_address } = req.body
+    const getCompanydetails = await CompanySchema.findOne({ user_id: user._id });
+    try {
+      const updatedFields = {
+        register_office_address, corporate_office_address, custom_office_address
+      }
+      const updateCompanyAddress = await Overview.findOneAndUpdate(
+        { company_id: getCompanydetails._id },
+        { $set: updatedFields },
+        { new: true }
+      ); if (!updateCompanyAddress) {
+        return res.status(500).send({
+          error: "Update Unsuccessful",
+          success: false,
+        });
+      } else {
+        return res.status(200).send({
+          message: "Update Successful",
+          updateCompanyAddress,
+          success: true,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      return res.status(500).send({
+        error: "Internal Server Error",
+        success: false,
+        technicalError: error.message
+      });
+    }
+  },
+
   // Department
   addDepartment: async (req, res) => {
     try {
@@ -588,7 +675,11 @@ const companyController = {
       console.error(err);
       res.status(500).json({ message: 'Server error' });
     }
-  }
+  },
+
+  // Policies
+  addPolicies: async (req, res) => {
+  },
 };
 
 module.exports = companyController;
