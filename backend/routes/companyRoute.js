@@ -21,11 +21,21 @@ router.post('/addCompanyAddress', verifyToken, companyController.addCompanyAddre
 router.get('/getCompanyAddress', verifyToken, companyController.getCompanyAddress);
 router.put('/updateCompanyAddress/:id', verifyToken, companyController.updateCompanyAddress);
 
+// Department
+router.post('/addDepartment', verifyToken, companyController.addDepartment);
+
+// Designation
+
+// Announcements
+router.post('/addAnnouncement', verifyToken, companyController.addAnnouncement);
+router.get('/getAnnouncement', verifyToken, companyController.getAnnouncement);
+
+
 // Policies
 router.post('/addPolicy', verifyToken, companyController.addPolicy);
 router.get('/getPolicy', verifyToken, companyController.getPolicy);
+router.put('/updatePolicy/:id', verifyToken, companyController.updatePolicy);
+router.delete('/deletePolicy/:id', verifyToken, companyController.deletePolicy);
 
-// Department
-router.post('/addDepartment', verifyToken, companyController.addDepartment);
 
 module.exports = router;

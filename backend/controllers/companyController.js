@@ -15,6 +15,8 @@ const Overview = require('../models/companySchema/overview/overviewSchema');
 const Address = require('../models/companySchema/address/address');
 const Policy = require('../models/companySchema/policy/policy');
 const PolicyData = require('../models/companySchema/policy/policy_data');
+const Announcement = require('../models/companySchema/announcement/announcement');
+const AnnouncementData = require('../models/companySchema/announcement/announcement_data');
 
 // jwt secret
 const jwtSecret = process.env.JWT_SECRET;
@@ -583,6 +585,7 @@ const companyController = {
   getCompanyAddress: async (req, res) => {
     try {
       const { user } = req.user;
+
       const getCompanydetails = await CompanySchema.findOne({ user_id: user._id })
       const company = await Address.findOne({ company_id: getCompanydetails._id })
       if (!company) {
@@ -684,6 +687,144 @@ const companyController = {
   // Designation 
 
   // Announcements
+  addAnnouncement: async (req, res) => {
+    const companyDetails = req.companyDetails;
+    try {
+      let announcement = await Announcement.findOne({ company_id: companyDetails._id })
+      if (!announcement) {
+        // Create a new Announcement record if it doesn't exist
+        announcement = new Announcement({
+          company_id: companyDetails._id,
+          deleted_at: null
+        })
+        await announcement.save();
+      }
+
+      const announcementData = new AnnouncementData({
+        announcement_id: announcement._id,
+        announcement: req.body.announcement
+      });
+      await announcementData.save();
+
+      res.status(200).send({
+        message: "Added Successfully",
+        success: true,
+        announcement,
+        announcementData
+      });
+
+    } catch (error) {
+      console.log(error);
+      return res.status(500).send({
+        error: "Internal Server Error",
+        success: false,
+        technicalError: error.message
+      });
+    }
+  },
+
+  getAnnouncement: async (req, res) => {
+    const companyDetails = req.companyDetails;
+    try {
+      const announcement = await Announcement.findOne({ company_id: companyDetails._id });
+      if (announcement) {
+        const announcementDetails = await Announcement.aggregate([
+          {
+            $match: { _id: new ObjectId(announcement._id) }
+          },
+          {
+            $lookup: {
+              from: "announcement-datas",
+              localField: "_id",
+              foreignField: "announcement_id",
+              as: "announcement_details"
+            }
+          }
+        ]);
+        return res.status(200).send({
+          message: "Got the details",
+          success: true,
+          announcementDetails,
+        });
+      } else {
+        return res.status(200).send({
+          message: "Didn't find the details",
+          success: false,
+        });
+      }
+
+    } catch (error) {
+      console.error('Error getting user:', error.message);
+      return res.status(500).send({
+        message: "Internal server error",
+        error: error.message,
+        success: false
+      });
+    }
+  },
+
+  updateAnnouncement: async (req, res) => {
+    const companyDetails = req.companyDetails;
+    try {
+      const announcement = await Announcement.findOne({ company_id: companyDetails._id })
+      if (!announcement) {
+        return res.status(404).send({
+          message: "Couldn't find announcement",
+          success: false
+        })
+      }
+      const updateAnnouncement = await AnnouncementData.findOneAndDelete(
+        { _id: announcement._id },
+        { $set: { announcement: req.body.announcement } },
+        { news: true }
+      );
+      if (!updateAnnouncement) {
+        return res.status(500).send({
+          error: "Announcement Update Unsuccessful",
+          success: false,
+        });
+      } else {
+        return res.status(200).send({
+          message: "Qualification Updated Successfully",
+          updateAnnouncement,
+          success: true,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      return res.status(500).send({
+        error: "Internal Server Error",
+        success: false,
+        technicalError: error.message
+      });
+    }
+  },
+
+  deleteAnnouncement: async (req, res) => {
+    const companyDetail = req.companyDetail;
+    try {
+      const announcement = await Announcement.findOne({ company_id: companyDetail._id })
+      if (!announcement) {
+        return res.status(404).send({
+          message: "Couldn't find announcement",
+          success: false
+        })
+      }
+      const deleteAnnouncement = await AnnouncementData.findOneAndDelete(id);
+      if (!deleteAnnouncement) {
+        return res.status(404).json({ success: false, message: "Announcement not found" });
+      }
+      return res.status(200).json({ success: true, message: "Announcement deleted successfully" });
+
+    } catch (error) {
+      console.log(error);
+      return res.status(500).send({
+        error: "Internal Server Error",
+        success: false,
+        technicalError: error.message
+      });
+    }
+  },
 
   // Policies
   addPolicy: async (req, res) => {
@@ -732,9 +873,8 @@ const companyController = {
   },
 
   getPolicy: async (req, res) => {
-    const { user } = req.user;
+    const getCompanydetails = req.companyDetails;
     try {
-      const getCompanydetails = await CompanySchema.findOne({ user_id: user._id })
       const policy = await Policy.findOne({ company_id: getCompanydetails._id })
       if (policy) {
         const policyData = await Policy.aggregate([
@@ -774,7 +914,6 @@ const companyController = {
 
   updatePolicy: async (req, res) => {
     try {
-
       const { user } = req.user;
       if (!user) {
         return res.status(401).json({ success: false, message: "Unauthorized: Invalid token" });
