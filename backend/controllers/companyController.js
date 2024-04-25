@@ -764,17 +764,18 @@ const companyController = {
   },
 
   updateAnnouncement: async (req, res) => {
-    const companyDetails = req.companyDetails;
+    const { id } = req.params;
+    // const companyDetails = req.companyDetails;
     try {
-      const announcement = await Announcement.findOne({ company_id: companyDetails._id })
-      if (!announcement) {
-        return res.status(404).send({
-          message: "Couldn't find announcement",
-          success: false
-        })
-      }
+      // const announcement = await Announcement.findOne({ company_id: companyDetails._id })
+      // if (!announcement) {
+      //   return res.status(404).send({
+      //     message: "Couldn't find announcement",
+      //     success: false
+      //   })
+      // }
       const updateAnnouncement = await AnnouncementData.findOneAndDelete(
-        { _id: announcement._id },
+        { _id: id },
         { $set: { announcement: req.body.announcement } },
         { news: true }
       );
@@ -801,15 +802,16 @@ const companyController = {
   },
 
   deleteAnnouncement: async (req, res) => {
-    const companyDetail = req.companyDetail;
+    const { id } = req.params;
+    // const companyDetail = req.companyDetail;
     try {
-      const announcement = await Announcement.findOne({ company_id: companyDetail._id })
-      if (!announcement) {
-        return res.status(404).send({
-          message: "Couldn't find announcement",
-          success: false
-        })
-      }
+      // const announcement = await Announcement.findOne({ company_id: companyDetail._id })
+      // if (!announcement) {
+      //   return res.status(404).send({
+      //     message: "Couldn't find announcement",
+      //     success: false
+      //   })
+      // }
       const deleteAnnouncement = await AnnouncementData.findOneAndDelete(id);
       if (!deleteAnnouncement) {
         return res.status(404).json({ success: false, message: "Announcement not found" });
