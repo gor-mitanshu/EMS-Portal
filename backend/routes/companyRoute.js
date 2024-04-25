@@ -19,7 +19,11 @@ router.put('/updateOverview/:id', verifyToken, companyController.updateOverview)
 // Company Address
 router.post('/addCompanyAddress', verifyToken, companyController.addCompanyAddress);
 router.get('/getCompanyAddress', verifyToken, companyController.getCompanyAddress);
-// router.put('/updateCompanyAddress/:id', verifyToken, companyController.updateCompanyAddress);
+router.put('/updateCompanyAddress/:id', verifyToken, companyController.updateCompanyAddress);
+
+// Policies
+router.post('/addPolicy', verifyToken, companyController.addPolicy);
+router.get('/getPolicy', verifyToken, companyController.getPolicy);
 
 // Department
 router.post('/addDepartment', verifyToken, companyController.addDepartment);

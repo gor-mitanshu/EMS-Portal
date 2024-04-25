@@ -3,6 +3,8 @@ require('dotenv').config();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
+const { ObjectId } = require('mongoose').Types;
+
 
 // Importing models
 const CommonSchema = require('../models/commonSchema/userSchema').UserModel;
@@ -11,6 +13,8 @@ const Department = require('../models/companySchema/department/departmentSchema'
 const SubDepartment = require('../models/companySchema/department/subDepartment');
 const Overview = require('../models/companySchema/overview/overviewSchema');
 const Address = require('../models/companySchema/address/address');
+const Policy = require('../models/companySchema/policy/policy');
+const PolicyData = require('../models/companySchema/policy/policy_data');
 
 // jwt secret
 const jwtSecret = process.env.JWT_SECRET;
@@ -677,9 +681,197 @@ const companyController = {
     }
   },
 
+  // Designation 
+
+  // Announcements
+
   // Policies
-  addPolicies: async (req, res) => {
+  addPolicy: async (req, res) => {
+    const { user } = req.user;
+    let { policy_title, policy_description } = req.body;
+    try {
+      let file = '';
+      if (req.files && req.files.length > 0) {
+        file = req.files[0].filename;
+      }
+      const getCompanydetails = await CompanySchema.findOne({ user_id: user._id })
+
+      let policyDetails = await Policy.findOne({ company_id: getCompanydetails._id });
+      if (!policyDetails) {
+        // Create a new Poilcy record if it doesn't exist
+        policyDetails = new Policy({
+          company_id: getCompanydetails._id,
+          deleted_at: null
+        });
+        await policyDetails.save();
+      }
+
+      // Create a new policy data record associated with the policy record
+      const newPolicyData = new PolicyData({
+        policy_id: policyDetails._id,
+        policy_title,
+        policy_description,
+        policy_file: file,
+        deleted_at: null,
+      });
+      await newPolicyData.save();
+      res.status(200).send({
+        message: "Policy Added Successfully",
+        success: true,
+        policyDetails,
+        newPolicyData
+      })
+    } catch (error) {
+      console.log(error);
+      return res.status(500).send({
+        error: "Internal Server Error",
+        success: false,
+        technicalError: error.message
+      });
+    }
   },
+
+  getPolicy: async (req, res) => {
+    const { user } = req.user;
+    try {
+      const getCompanydetails = await CompanySchema.findOne({ user_id: user._id })
+      const policy = await Policy.findOne({ company_id: getCompanydetails._id })
+      if (policy) {
+        const policyData = await Policy.aggregate([
+          {
+            $match: { _id: new ObjectId(policy._id) }
+          },
+          {
+            $lookup: {
+              from: "policy-datas",
+              localField: "_id",
+              foreignField: "policy_id",
+              as: "policy_details"
+            }
+          }
+        ])
+        return res.status(200).send({
+          message: "Got the Policy Data",
+          success: true,
+          policyData,
+        });
+      } else {
+        return res.status(200).send({
+          message: "Didn't find the User",
+          success: false,
+        });
+      }
+    } catch (error) {
+      console.error('Error getting user:', error.message);
+      return res.status(500).send({
+        message: "Internal server error",
+        error: error.message,
+        success: false
+      });
+    }
+
+  },
+
+  updatePolicy: async (req, res) => {
+    try {
+
+      const { user } = req.user;
+      if (!user) {
+        return res.status(401).json({ success: false, message: "Unauthorized: Invalid token" });
+      }
+      const getCompanydetails = await CompanySchema.findOne({ user_id: user._id })
+      const policy = await Policy.findOne({ company_id: getCompanydetails._id })
+      if (!policy) {
+        return res.status(404).send({
+          message: "Policy not found",
+          success: false,
+        });
+      }
+      const { policy_title, policy_description } = req.body;
+      let policy_file = '';
+      // Check if a new file was uploaded
+      if (req.files && req.files.length > 0) {
+        policy_file = req.files[0].filename;
+        // Delete the old file
+        const existingPolicy = await PolicyData.findById(id);
+        if (existingPolicy && existingPolicy.policy_file) {
+          const filePath = path.join('images', existingPolicy.policy_file);
+          if (fs.existsSync(filePath)) {
+            fs.unlinkSync(filePath);
+          }
+        }
+      } else {
+        // No new file uploaded, keep the existing file
+        const existingPolicy = await PolicyData.findById(id);
+        if (existingPolicy) {
+          policy_file = existingPolicy.policy_file;
+        }
+      }
+      const updatedFields = {
+        policy_title,
+        policy_description,
+        policy_file,
+      }
+      const updatedDocument = await PolicyData.findOneAndUpdate(
+        { _id: id },
+        { $set: updatedFields },
+        { new: true }
+      )
+      if (!updatedDocument) {
+        return res.status(500).send({
+          error: "Policy Update Unsuccessful",
+          success: false,
+        });
+      } else {
+        return res.status(200).send({
+          message: "Policy Updated Successfully",
+          updatedDocument,
+          success: true,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      return res.status(500).send({
+        error: "Internal Server Error",
+        success: false,
+        technicalError: error.message
+      });
+    }
+  },
+
+  deletePolicy: async (req, res) => {
+    const { user } = req.user;
+    if (!user) {
+      return res.status(401).json({ success: false, message: "Unauthorized: Invalid token" });
+    }
+    try {
+      const getCompanydetails = await CompanySchema.findOne({ user_id: user._id })
+      const policy = await Policy.findOne({ company_id: getCompanydetails._id })
+      if (!policy) {
+        return res.status(404).send({
+          message: "Policy not found",
+          success: false,
+        });
+      }
+      const deletePolicy = await PolicyData.findOneAndDelete(id);
+      if (!deletePolicy) {
+        return res.status(404).json({ success: false, message: "Document not found" });
+      }
+      //  Delete the associated file
+      const filePath = path.join(__dirname, 'images', deletePolicy.policy_file);
+      if (fs.existsSync(filePath)) {
+        fs.unlinkSync(filePath);
+      }
+      return res.status(200).json({ success: true, message: "Policy deleted successfully" });
+    } catch (error) {
+      console.log(error);
+      return res.status(500).send({
+        error: "Internal Server Error",
+        success: false,
+        technicalError: error.message
+      });
+    }
+  }
 };
 
 module.exports = companyController;
