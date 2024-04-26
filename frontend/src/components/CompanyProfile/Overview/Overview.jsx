@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import ProfileField from "../../../UI/ProfileFields/ProfileFields";
 import OverViewForm from "./OverViewForm";
 import OverViewItem from "./OverViewItem";
 import SocialProfile from "../../ProfileTab/Profile/SocialProfile/SocialProfile";
 import SocialProfileForm from "../../ProfileTab/Profile/SocialProfile/SocialProfileForm";
+import { toast } from "react-toastify";
 
 const Overview = () => {
   const [editMode, setEditMode] = useState({
@@ -19,6 +21,7 @@ const Overview = () => {
     website: "",
     domain_name: "",
     industry_type: "",
+
     linked_in: "",
     facebook: "",
     twitter: "",
@@ -47,6 +50,24 @@ const Overview = () => {
       [name]: "",
     });
   };
+
+  const getCompanyDetails = async () => {
+    const accessToken = localStorage.getItem("token");
+    const accessTokenwithoutQuotes = JSON.parse(accessToken);
+    const { user } = JSON.parse(atob(accessTokenwithoutQuotes.split(".")[1]));
+    const response = await axios.get(
+      `${process.env.REACT_APP_API}/company/getOverview/${user._id}`,
+      {
+        headers: { Authorization: `Bearer ${accessTokenwithoutQuotes}` },
+      }
+    );
+    const { company } = response.data;
+    setFormData(company);
+  };
+
+  useEffect(() => {
+    getCompanyDetails();
+  }, []);
 
   // Handle Edit Click
   const handleEditClick = (section) => {
@@ -113,6 +134,20 @@ const Overview = () => {
     // If there are no errors, you can submit the form
     if (Object.keys(errors).length === 0) {
       console.log(formData);
+      const accessToken = localStorage.getItem("token");
+      const accessTokenwithoutQuotes = JSON.parse(accessToken);
+      const { user } = JSON.parse(atob(accessTokenwithoutQuotes.split(".")[1]));
+      const response = await axios.put(
+        `${process.env.REACT_APP_API}/company/updateOverview/${user._id}`,
+        formData,
+        {
+          headers: { Authorization: `Bearer ${accessTokenwithoutQuotes}` },
+        }
+      );
+      if (response) {
+        console.log(response);
+        toast.success(response.data.message);
+      }
       // alert("Form submitted successfully!");
       setEditMode({
         overview: false,
@@ -120,7 +155,7 @@ const Overview = () => {
       });
     }
   };
-
+  console.log(formData);
   return (
     <div className="container">
       <form onSubmit={handleSubmit}>

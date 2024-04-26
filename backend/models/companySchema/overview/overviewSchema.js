@@ -13,11 +13,11 @@ const Overview = new mongoose.Schema({
      website: { type: String },
      domain_name: { type: String },
      industry_type: { type: String },
-     company_social_profile: {
-          linked_in: { type: String },
-          facebook: { type: String },
-          twitter: { type: String }
-     },
+
+     linked_in: { type: String },
+     facebook: { type: String },
+     twitter: { type: String },
+
 
      deleted_at: { type: Date }
 }, { timestamps: true });

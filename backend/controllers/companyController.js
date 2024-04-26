@@ -441,11 +441,10 @@ const companyController = {
     let { register_company, brand_name, company_official_email, company_official_contact, website, domain_name, industry_type, linked_in, facebook, twitter, user_id } = req.body
     try {
       const overViewDetails = new Overview({
-        register_company, brand_name, company_official_email, company_official_contact, website, domain_name, industry_type, company_social_profile: {
-          linked_in: linked_in,
-          facebook: facebook,
-          twitter: twitter
-        },
+        register_company, brand_name, company_official_email, company_official_contact, website, domain_name, industry_type,
+        linked_in: linked_in,
+        facebook: facebook,
+        twitter: twitter,
         user_id
       });
       await overViewDetails.save();
@@ -467,6 +466,7 @@ const companyController = {
 
   getOverview: async (req, res) => {
     try {
+      const { id } = req.params;
       const token = req.headers.authorization;
       if (!token) {
         return res.status(500).send({
@@ -474,15 +474,15 @@ const companyController = {
           success: false
         });
       }
-      const data = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
-      if (!data) {
+      const { user } = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
+      if (!user) {
         return res.status(404).send({
-          message: "Unalbe to parse the token",
+          message: "Unable to parse the token",
           success: false,
           error: res.message
         });
       }
-      const company = await Overview.findOne({ user_id: data.user._id })
+      const company = await Overview.findOne({ user_id: id })
       if (!company) {
         return res.status(404).send({
           message: "Details not found",
@@ -504,6 +504,7 @@ const companyController = {
   },
 
   updateOverview: async (req, res) => {
+    const { id } = req.params;
     try {
       const token = req.headers.authorization;
       if (!token) {
@@ -522,14 +523,19 @@ const companyController = {
       }
       let { register_company, brand_name, company_official_email, company_official_contact, website, domain_name, industry_type, linked_in, facebook, twitter } = req.body
       const updatedFields = {
-        register_company, brand_name, company_official_email, company_official_contact, website, domain_name, industry_type, company_social_profile: {
-          linked_in: linked_in,
-          facebook: facebook,
-          twitter: twitter
-        },
+        register_company,
+        brand_name,
+        company_official_email,
+        company_official_contact,
+        website,
+        domain_name,
+        industry_type,
+        linked_in,
+        facebook,
+        twitter,
       }
       const updateOverview = await Overview.findOneAndUpdate(
-        { user_id: user._id },
+        { user_id: id },
         { $set: updatedFields },
         { new: true }
       );

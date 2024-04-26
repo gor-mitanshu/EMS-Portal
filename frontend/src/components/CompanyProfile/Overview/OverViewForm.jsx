@@ -1,11 +1,6 @@
 import React from "react";
 
-const OverViewForm = ({
-  formData,
-  formErrors,
-  handleInputChange,
-  editMode,
-}) => {
+const OverViewForm = ({ formData, formErrors, handleInputChange }) => {
   return (
     <>
       <div className="form-group">

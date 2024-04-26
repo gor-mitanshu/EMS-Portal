@@ -1,4 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, {
+  useState,
+  // , useEffect
+} from "react";
 import CompanyPoliciesModal from "./CompanyPoliciesModal";
 import axios from "axios";
 import ProfileField from "../../../UI/ProfileFields/ProfileFields";
@@ -13,7 +16,7 @@ const CompanyPolices = () => {
   const [policies, setPolicies] = useState([]);
   const [formData, setFormData] = useState(initialState);
   const [formErrors, setFormErrors] = useState(initialState);
-  const [editId, setEditId] = useState(null);
+  // const [editId, setEditId] = useState(null);
 
   const handleShowModal = () => {
     setShowModal(true);
@@ -24,7 +27,7 @@ const CompanyPolices = () => {
     setShowModal(false);
     setFormErrors(initialState);
     setFormData(initialState);
-    setEditId(null);
+    // setEditId(null);
   };
 
   const handleChange = (e) => {
@@ -50,83 +53,83 @@ const CompanyPolices = () => {
     });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    // Error Handling
-    let errors = {};
-    // Validate each field
-    if (!formData.policy_title) {
-      errors.policy_title = "Please Enter Your Policy Title";
-    }
-    if (!formData.policy_description) {
-      errors.policy_description = "Please enter your Policy Description";
-    }
-    if (!formData.policy_file) {
-      errors.policy_file = "Please select any file";
-    }
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   // Error Handling
+  //   let errors = {};
+  //   // Validate each field
+  //   if (!formData.policy_title) {
+  //     errors.policy_title = "Please Enter Your Policy Title";
+  //   }
+  //   if (!formData.policy_description) {
+  //     errors.policy_description = "Please enter your Policy Description";
+  //   }
+  //   if (!formData.policy_file) {
+  //     errors.policy_file = "Please select any file";
+  //   }
 
-    if (Object.keys(errors).length > 0) {
-      setFormErrors(errors);
-      return;
-    }
+  //   if (Object.keys(errors).length > 0) {
+  //     setFormErrors(errors);
+  //     return;
+  //   }
 
-    try {
-      const formDataToSend = new FormData();
-      formDataToSend.append("policy_title", formData.policy_title);
-      formDataToSend.append("policy_description", formData.policy_description);
-      formDataToSend.append("policy_file", formData.policy_file);
+  //   try {
+  //     const formDataToSend = new FormData();
+  //     formDataToSend.append("policy_title", formData.policy_title);
+  //     formDataToSend.append("policy_description", formData.policy_description);
+  //     formDataToSend.append("policy_file", formData.policy_file);
 
-      const accessToken = localStorage.getItem("token");
-      const accessTokenwithoutQuotes = JSON.parse(accessToken);
-      const endpoint = editId
-        ? `${process.env.REACT_APP_API}/company/updatePolicy/${editId}`
-        : `${process.env.REACT_APP_API}/company/addPolicy`;
-      const res = await axios.post(endpoint, formDataToSend, {
-        headers: { Authorization: `Bearer ${accessTokenwithoutQuotes}` },
-      });
-      if (res.data.success) {
-        console.log("Submitted:", formData);
-        handleClose();
-        fetchCertificates();
-      }
-    } catch (error) {
-      console.error("Error submitting form:", error);
-    }
-  };
+  //     const accessToken = localStorage.getItem("token");
+  //     const accessTokenwithoutQuotes = JSON.parse(accessToken);
+  //     const endpoint = editId
+  //       ? `${process.env.REACT_APP_API}/company/updatePolicy/${editId}`
+  //       : `${process.env.REACT_APP_API}/company/addPolicy`;
+  //     const res = await axios.post(endpoint, formDataToSend, {
+  //       headers: { Authorization: `Bearer ${accessTokenwithoutQuotes}` },
+  //     });
+  //     if (res.data.success) {
+  //       console.log("Submitted:", formData);
+  //       handleClose();
+  //       fetchCertificates();
+  //     }
+  //   } catch (error) {
+  //     console.error("Error submitting form:", error);
+  //   }
+  // };
 
-  const fetchCertificates = async () => {
-    try {
-      const accessToken = localStorage.getItem("token");
-      const accessTokenwithoutQuotes = JSON.parse(accessToken);
-      const res = await axios.get(
-        `${process.env.REACT_APP_API}/company/getPolicy`,
-        {
-          headers: { Authorization: `Bearer ${accessTokenwithoutQuotes}` },
-        }
-      );
-      if (res.data) {
-        // console.log(res);
-        setPolicies(res.data.workDetails);
-      }
-    } catch (error) {
-      console.error("Error fetching policies:", error);
-    }
-  };
+  // const fetchCertificates = async () => {
+  //   try {
+  //     const accessToken = localStorage.getItem("token");
+  //     const accessTokenwithoutQuotes = JSON.parse(accessToken);
+  //     const res = await axios.get(
+  //       `${process.env.REACT_APP_API}/company/getPolicy`,
+  //       {
+  //         headers: { Authorization: `Bearer ${accessTokenwithoutQuotes}` },
+  //       }
+  //     );
+  //     if (res.data) {
+  //       // console.log(res);
+  //       setPolicies(res.data.workDetails);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching policies:", error);
+  //   }
+  // };
 
-  const handleEdit = (policy) => {
-    // console.log(certificate);
-    setEditId(policy._id);
-    setFormData({
-      policy_title: policy.policy_title,
-      policy_description: policy.policy_description,
-      policy_file: policy.policy_file,
-    });
-    setShowModal(true);
-  };
+  // const handleEdit = (policy) => {
+  //   // console.log(certificate);
+  //   setEditId(policy._id);
+  //   setFormData({
+  //     policy_title: policy.policy_title,
+  //     policy_description: policy.policy_description,
+  //     policy_file: policy.policy_file,
+  //   });
+  //   setShowModal(true);
+  // };
 
-  useEffect(() => {
-    fetchCertificates();
-  }, []);
+  // useEffect(() => {
+  //   fetchCertificates();
+  // }, []);
 
   const handleDelete = async (policyId) => {
     try {
@@ -162,9 +165,9 @@ const CompanyPolices = () => {
           formErrors={formErrors}
           handleChange={handleChange}
           handleFileChange={handleFileChange}
-          handleSubmit={handleSubmit}
+          // handleSubmit={handleSubmit}
         />
-        {policies.length && policies[0].workDetails.length > 0 ? (
+        {policies.length > 0 && policies[0].policyDetails.length > 0 ? (
           <table className="table">
             <thead>
               <tr>
@@ -181,7 +184,7 @@ const CompanyPolices = () => {
                   <td>
                     <button
                       className="btn btn-primary me-2"
-                      onClick={() => handleEdit(policy)}
+                      // onClick={() => handleEdit(policy)}
                     >
                       Edit
                     </button>

@@ -13,7 +13,7 @@ router.post('/signup', companyController.signup);
 
 // Overview
 router.post('/addOverview', verifyToken, companyController.addOverview);
-router.get('/getOverview', verifyToken, companyController.getOverview);
+router.get('/getOverview/:id', verifyToken, companyController.getOverview);
 router.put('/updateOverview/:id', verifyToken, companyController.updateOverview);
 
 // Company Address
