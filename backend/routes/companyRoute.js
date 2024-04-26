@@ -18,7 +18,7 @@ router.put('/updateOverview/:id', verifyToken, companyController.updateOverview)
 
 // Company Address
 router.post('/addCompanyAddress', verifyToken, companyController.addCompanyAddress);
-router.get('/getCompanyAddress', verifyToken, companyController.getCompanyAddress);
+router.get('/getCompanyAddress/:id', verifyToken, companyController.getCompanyAddress);
 router.put('/updateCompanyAddress/:id', verifyToken, companyController.updateCompanyAddress);
 
 // Department

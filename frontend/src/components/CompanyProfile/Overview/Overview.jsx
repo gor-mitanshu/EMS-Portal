@@ -133,7 +133,6 @@ const Overview = () => {
     setFormErrors(errors);
     // If there are no errors, you can submit the form
     if (Object.keys(errors).length === 0) {
-      console.log(formData);
       const accessToken = localStorage.getItem("token");
       const accessTokenwithoutQuotes = JSON.parse(accessToken);
       const { user } = JSON.parse(atob(accessTokenwithoutQuotes.split(".")[1]));
@@ -145,7 +144,6 @@ const Overview = () => {
         }
       );
       if (response) {
-        console.log(response);
         toast.success(response.data.message);
       }
       // alert("Form submitted successfully!");
@@ -155,7 +153,6 @@ const Overview = () => {
       });
     }
   };
-  console.log(formData);
   return (
     <div className="container">
       <form onSubmit={handleSubmit}>

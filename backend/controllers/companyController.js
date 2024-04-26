@@ -589,11 +589,9 @@ const companyController = {
   },
 
   getCompanyAddress: async (req, res) => {
+    const { id } = req.params;
     try {
-      const { user } = req.user;
-
-      const getCompanydetails = await CompanySchema.findOne({ user_id: user._id })
-      const company = await Address.findOne({ company_id: getCompanydetails._id })
+      const company = await Address.findOne({ user_id: id })
       if (!company) {
         return res.status(404).send({
           message: "Details not found",
@@ -615,15 +613,14 @@ const companyController = {
   },
 
   updateCompanyAddress: async (req, res) => {
-    const { user } = req.user;
+    const { id } = req.params;
     let { register_office_address, corporate_office_address, custom_office_address } = req.body
-    const getCompanydetails = await CompanySchema.findOne({ user_id: user._id });
     try {
       const updatedFields = {
         register_office_address, corporate_office_address, custom_office_address
       }
-      const updateCompanyAddress = await Overview.findOneAndUpdate(
-        { company_id: getCompanydetails._id },
+      const updateCompanyAddress = await Address.findOneAndUpdate(
+        { user_id: id },
         { $set: updatedFields },
         { new: true }
       ); if (!updateCompanyAddress) {

@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ProfileField from "../../../UI/ProfileFields/ProfileFields";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const Address = () => {
   const [editMode, setEditMode] = useState({
@@ -32,6 +34,23 @@ const Address = () => {
     });
   };
 
+  const getCompanyAddress = async () => {
+    const accessToken = localStorage.getItem("token");
+    const accessTokenwithoutQuotes = JSON.parse(accessToken);
+    const { user } = JSON.parse(atob(accessTokenwithoutQuotes.split(".")[1]));
+    const response = await axios.get(
+      `${process.env.REACT_APP_API}/company/getCompanyAddress/${user._id}`,
+      {
+        headers: { Authorization: `Bearer ${accessTokenwithoutQuotes}` },
+      }
+    );
+    const { company } = response.data;
+    setFormData(company);
+  };
+  useEffect(() => {
+    getCompanyAddress();
+  }, []);
+
   const handleEditClick = (section) => {
     setEditMode({
       ...editMode,
@@ -62,6 +81,48 @@ const Address = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    // Error Handling
+    let errors = {};
+    // Validate each field based on the section
+    // Current Address
+    if (editMode.register_office) {
+      if (!formData.register_office_address) {
+        errors.register_office_address = "Please enter a Address";
+      }
+    }
+    if (editMode.corporate_office) {
+      if (!formData.corporate_office_address) {
+        errors.corporate_office_address = "Please enter a Address";
+      }
+    }
+    if (editMode.custom_address_title) {
+      if (!formData.custom_office_address) {
+        errors.custom_office_address = "Please enter a Address";
+      }
+    }
+    setFormErrors(errors);
+    // If there are no errors, you can submit the form
+    if (Object.keys(errors).length === 0) {
+      const accessToken = localStorage.getItem("token");
+      const accessTokenwithoutQuotes = JSON.parse(accessToken);
+      const { user } = JSON.parse(atob(accessTokenwithoutQuotes.split(".")[1]));
+      const response = await axios.put(
+        `${process.env.REACT_APP_API}/company/updateCompanyAddress/${user._id}`,
+        formData,
+        {
+          headers: { Authorization: `Bearer ${accessTokenwithoutQuotes}` },
+        }
+      );
+      if (response) {
+        toast.success(response.data.message);
+      }
+      // alert("Form submitted successfully!");
+      setEditMode({
+        register_office: false,
+        corporate_office: false,
+        custom_address_title: false,
+      });
+    }
   };
 
   return (
@@ -100,6 +161,9 @@ const Address = () => {
                           {formErrors.register_office_address}
                         </small>
                       )}
+                      <button type="submit" className="btn btn-primary mt-2">
+                        Save
+                      </button>
                     </div>
                   </div>
                 ) : (
@@ -190,8 +254,8 @@ const Address = () => {
                   </div>
                 ) : (
                   <p>
-                    {formData.register_office_address
-                      ? formData.register_office_address
+                    {formData.corporate_office_address
+                      ? formData.corporate_office_address
                       : "-"}
                   </p>
                 )}
