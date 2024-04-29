@@ -1,11 +1,11 @@
 import React from "react";
 import SearchBar from "../../../UI/Search/Search";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser, faBell, faBars } from "@fortawesome/free-solid-svg-icons";
+import { faBell } from "@fortawesome/free-solid-svg-icons";
 import Dropdown from "../../../UI/Dropdown/Dropdown";
-import { Link } from "react-router-dom";
+import User from "../../../assets/images/user.jpg";
 
-const NavbarComponent = ({ handleDrawerOpen }) => {
+const NavbarComponent = () => {
   const currentDate = new Date();
   const options = {
     weekday: "short",
@@ -25,44 +25,24 @@ const NavbarComponent = ({ handleDrawerOpen }) => {
 
   return (
     <nav
-      className="navbar navbar-expand-lg navbar-light p-3"
-      style={{
-        background: "rgba(97, 168, 172,0.4)",
-        boxShadow: " 0 4px 8px rgba(0, 0, 0, 0.1)",
-      }}
+      className="navbar navbar-expand-lg navbar-light p-3 px-md-4"
     >
-      <div className="container-fluid d-block">
+      <div className="w-100 d-block">
         <div className="row justify-content-between align-items-center">
-          {/* Menu Item and Brand Name */}
-          <div className="col-lg-2 col-4 d-flex align-items-center p-0">
-            <div className="pe-4" onClick={handleDrawerOpen} role="button">
-              <FontAwesomeIcon icon={faBars} size="lg" />
-            </div>
-            <Link to={"/"} className="navbar-brand brand-name">
-              Karm Digitech
-            </Link>
+          <div className="col-4 d-lg-block d-none">
+            <SearchBar />
           </div>
-
-          {/* Logged User name and search bar */}
-          <div className="col-md-6  col-4 d-none d-md-flex col-0 align-items-center justify-content-center">
-            <div className="col-12 col-lg-3 user-name fs-5">Hi, Mitanshu</div>
-            <div className="col-9 d-lg-block d-none">
-              <SearchBar />
-            </div>
-          </div>
-
-          {/* Settings icon and profile */}
-          <div className="col-lg-4 col-8 d-flex align-items-center justify-content-end">
-            <div className="mr-4">{formattedDate}</div>
-            <div>
+          <div className="col-lg-4 col-12 d-flex align-items-center justify-content-end">
+            <div className="mx-2">{formattedDate}</div>
+            <div className="mx-2">
               <Dropdown
-                icon={<FontAwesomeIcon icon={faBell} />}
+                icon={<FontAwesomeIcon icon={faBell} className="fs-5" />}
                 menuItems={menuItems}
               />
             </div>
             <div>
               <Dropdown
-                icon={<FontAwesomeIcon icon={faUser} />}
+                icon={<img src={User} alt="user_img" height={"100%"} width={"100%"} />}
                 menuItems={menuItems}
               />
             </div>

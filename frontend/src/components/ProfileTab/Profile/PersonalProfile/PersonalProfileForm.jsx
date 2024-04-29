@@ -1,5 +1,5 @@
 import React from "react";
-import User from "../../../../assets/user.jpg";
+import User from "../../../../assets/images/user.jpg";
 
 const PersonalProfileForm = ({
   formData,

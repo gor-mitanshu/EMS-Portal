@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./Register.css";
-import KarmDigitech from "../../assets/karmdigitech.png";
+import KarmDigitech from "../../assets/images/karmdigitech.png";
 import { Link } from "react-router-dom";
 
 const Register = () => {

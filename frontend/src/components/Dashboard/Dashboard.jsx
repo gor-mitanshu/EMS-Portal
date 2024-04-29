@@ -1,18 +1,10 @@
-import {
-  faPlus,
-  faHouse,
-  faSquareCheck,
-  faCircleXmark,
-  faEnvelope,
-  faPhoneSlash,
-  faLessThan,
-  faArrowRightFromBracket,
-  faPerson,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import { faLinkedinIn, faFacebookF, faInstagram } from "@fortawesome/free-brands-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./Dashboard.css";
-import ReactEcharts from "echarts-for-react";
+import KarmDigitech from "../../assets/images/k-logo.svg";
+import Chart from "react-apexcharts";
 
 const Dashboard = () => {
   const [file, setFile] = useState(null);
@@ -24,93 +16,124 @@ const Dashboard = () => {
 
   const cards = [
     {
-      title: "Loss of Pay",
-      icon: faLessThan,
-      color: "#6f1616",
-      backgroundColor: "rgba(247,112,98,0.6)",
+      title: "Total Employees",
       value: 4,
+      icon: "bi-check2-all",
     },
-    {
-      title: "Work from Home",
-      icon: faHouse,
-      color: "#36367e",
-      backgroundColor: "rgba(93,165,218,0.6)",
-      value: 2,
-    },
-    {
-      title: "Total Leave",
-      icon: faArrowRightFromBracket,
-      color: "#c7c754",
-      backgroundColor: "rgba(222,207,63,0.5)",
-      value: 20,
-    },
-    {
-      title: "Comp Off",
-      icon: faPerson,
-      color: "#9c5d9c",
-      backgroundColor: "rgba(193,94,243,0.3)",
-      value: 0,
-    },
-  ];
-
-  const employeeCards = [
     {
       title: "Employees Onboard",
       value: 1,
-      color: "#3c733c",
-      // backgroundColor: "linear-gradient(45deg,#2ed8b6,#59e0c5)",
-      backgroundColor:
-        "linear-gradient(45deg, rgb(152 246 227), rgb(234 234 234))",
-      // backgroundColor: "#29a744",
-      icon: faSquareCheck,
+      icon: "bi-person-workspace",
+    },
+    {
+      title: "Work from Home",
+      value: 2,
+      icon: "bi-house-door",
     },
     {
       title: "Employees No Activated",
-      value: 0,
-      color: "#fc8a81",
-      icon: faCircleXmark,
-      // backgroundColor: "linear-gradient(45deg,#FF5370,#ff869a)",
-      backgroundColor:
-        "linear-gradient(45deg, rgb(207 125 139), rgb(255 212 219))",
-      // backgroundColor: "#dc3546",
+      value: 1,
+      icon: "bi-person-slash",
     },
     {
-      title: "Invaid Email",
-      value: 0,
-      color: "#b9b900",
-      icon: faEnvelope,
-      backgroundColor:
-        "linear-gradient(45deg, rgb(255 212 151), rgb(255 216 160))",
+      title: "Total Leave",
+      value: 18,
+      icon: "bi-box-arrow-right",
     },
     {
-      title: "Mobile Number not verified",
-      value: 0,
-      color: "black",
-      icon: faPhoneSlash,
-      backgroundColor: "#fff",
+      title: "Paid Leave",
+      value: 9,
+      icon: "bi-calendar2-check",
+    },
+    {
+      title: "Unpaid Leave",
+      value: 9,
+      icon: "bi-calendar2-minus",
+    },
+    {
+      title: "Leave Remains",
+      value: 18,
+      icon: "bi-calendar2-week",
     },
   ];
 
   const option = {
-    xAxis: {
-      data: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
-    },
-    yAxis: {},
+
     series: [
       {
-        type: "scatter",
-        data: [220, 182, 191, 234, 290, 330, 310],
-      },
+        data: [
+          {
+            x: 'Code',
+            y: [
+              new Date('2019-03-02').getTime(),
+              new Date('2019-03-04').getTime()
+            ]
+          },
+          {
+            x: 'Test',
+            y: [
+              new Date('2019-03-04').getTime(),
+              new Date('2019-03-08').getTime()
+            ]
+          },
+          {
+            x: 'Validation',
+            y: [
+              new Date('2019-03-08').getTime(),
+              new Date('2019-03-12').getTime()
+            ]
+          },
+          {
+            x: 'Deployment',
+            y: [
+              new Date('2019-03-12').getTime(),
+              new Date('2019-03-18').getTime()
+            ]
+          }
+        ]
+      }
     ],
+    options: {
+      plotOptions: {
+        bar: {
+          horizontal: true
+        }
+      },
+      chart: {
+        zoom: {
+          enabled: false
+        }
+      },
+      yaxis: {
+        show: false
+      },
+      xaxis: {
+        type: 'datetime'
+      },
+      grid: {
+        xaxis: {
+          lines: {
+            show: true
+          }
+        },
+        yaxis: {
+          lines: {
+            show: false
+          }
+        }
+      }
+    },
+
+
   };
+
   return (
     <>
-      <div className="row m-0 px-2">
-        {/* File */}
-        <div className="col-lg-6 py-2">
-          <div className="d-flex flex-column align-items-center">
-            <div className="dropzone d-flex justify-content-center align-items-center flex-column text-center p-4">
-              <label htmlFor="file-upload">
+      <div className="row mb-4">
+        <div className="col-12 col-lg-3 min-h-100">
+          <div className="d-flex flex-column text-center h-100 p-3">
+            <div className="d-flex justify-content-center align-items-center company-logo-wrapper">
+              {/* <label htmlFor="file-upload" className="compony-logo-upload">
                 <FontAwesomeIcon
                   icon={faPlus}
                   className="mb-2"
@@ -124,109 +147,59 @@ const Dashboard = () => {
               <input
                 id="file-upload"
                 type="file"
-                className="file w-100 h-100"
+                className="d-none"
                 onChange={handleFileInputChange}
-              />
+              /> */}
+              <img src={KarmDigitech} alt="" className="object-fit-contain" height={"100%"} width={"100%"} />
             </div>
-            {file && <div>Name: {file.name}</div>}
-            <b className="pt-2">Karm Digitech</b>
+            <h4 className="mt-4">Karm Digitech</h4>
+            <div className="d-flex align-items-center justify-content-center">
+              <Link to={'//www.linkdin.com'} target="_blank" className="linkdin-icon-wrapper">
+                <FontAwesomeIcon icon={faLinkedinIn} />
+              </Link>
+              <Link to={'//www.facebook.com'} target="_blank" className="facebook-icon-wrapper">
+                <FontAwesomeIcon icon={faFacebookF} />
+              </Link>
+              <Link to={'//www.instagram.com'} target="_blank" className="insta-icon-wrapper">
+                <FontAwesomeIcon icon={faInstagram} />
+              </Link>
+            </div>
           </div>
         </div>
 
-        <div className="col-lg-6 py-2">
-          <div className="cards">
-            <ReactEcharts option={option} />
+        <div className="col-12 col-lg-9 min-h-100">
+          <div className="card h-100">
+            <h4 className="p-2">Total working hours</h4>
+            <Chart
+              options={option.options}
+              series={option.series}
+              type="rangeBar"
+              width="100%"
+              height="300"
+            />
           </div>
         </div>
       </div>
 
       {/* Employee Cards */}
-      <div
-        className="col-lg-12 employee-cards py-2"
-        style={{ padding: "0 10rem" }}
-      >
-        <div className="row align-items-center justify-content-between">
-          {employeeCards.map((employeeCard, index) => (
-            <div key={index} className="col-lg-3 col-12 mb-3 px-3 py-2">
-              <div
-                className="card card-hover"
-                style={{
-                  cursor: "pointer",
-                  // background: `${employeeCard.backgroundColor}`,
-                  // border: `1px solid ${employeeCard.color}`,
-                }}
-              >
-                <h6
-                  className="card-title d-flex justify-content-center"
-                  style={{
-                    // color: "#333",
-                    fontSize: "13px",
-                    marginBottom: "5px",
-                  }}
-                >
-                  <FontAwesomeIcon
-                    icon={employeeCard.icon}
-                    size="xl"
-                    className="px-2"
-                    // color={employeeCard.color}
-                  />
-                  {employeeCard.title}
-                </h6>
-                {/* <div className="progress">
-                    <div
-                      className="progress-bar"
-                      role="progressbar"
-                      style={{
-                        width: `${(employeeCard.value / 20) * 100}%`,
-                      }}
-                      aria-valuenow={employeeCard.value}
-                      aria-valuemin="0"
-                      aria-valuemax="20"
-                    >
-                      {employeeCard.value}
-                    </div>
-                  </div> */}
-                <b style={{ color: "#333", fontSize: "1.2rem" }}>
-                  {employeeCard.value}
-                </b>
+      <div className="row justify-content-center">
+        {cards.map((cardData, index) => (
+          <div key={index} className="col-12 col-md-6 col-lg-3 employee-card-wrapper mb-4">
+            <div
+              className="card h-100 m-0"
+            >
+              <div className="d-flex align-items-center mb-3">
+                <div className="icon-wrapper">
+                  <i className={`bi ${cardData.icon}`} />
+                </div>
+                <h3 className="m-0 ps-3">{cardData.value}</h3>
               </div>
+              <h5>
+                {cardData.title}
+              </h5>
             </div>
-          ))}
-
-          {cards.map((card, index) => (
-            <div key={index} className="col-lg-3 col-12 mb-3 px-3 py-2">
-              <div
-                className="card card-hover"
-                style={
-                  {
-                    // background: `${card.backgroundColor}`,
-                    // border: `1px solid ${employeeCard.color}`,
-                  }
-                }
-              >
-                <h6
-                  className="card-title d-flex justify-content-center"
-                  style={{
-                    // color: "#333",
-                    fontSize: "13px",
-                    marginBottom: "5px",
-                  }}
-                >
-                  <FontAwesomeIcon
-                    icon={card.icon}
-                    size="xl"
-                    className="px-2"
-                    // color={card.color}
-                  />
-                  {card.title}
-                </h6>
-                <b style={{ color: "#333", fontSize: "1.2rem" }}>
-                  {card.value}
-                </b>
-              </div>
-            </div>
-          ))}
-        </div>
+          </div>
+        ))}
       </div>
     </>
   );

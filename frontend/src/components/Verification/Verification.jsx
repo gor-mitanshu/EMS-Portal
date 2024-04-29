@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
-import Verified from "../../assets/verified.jpg";
+import Verified from "../../assets/images/verified.jpg";
 
 const UserVerification = () => {
   const navigate = useNavigate();

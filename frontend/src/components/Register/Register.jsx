@@ -57,7 +57,6 @@ const Register = () => {
   return (
     <FormWrapper
       title={"Create an Account"}
-      subtitle={"Sign up to get started"}
     >
       <div>
         {step === 1 && (

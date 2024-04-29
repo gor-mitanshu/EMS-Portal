@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { Link } from "react-router-dom";
 
 const StepOne = ({ formDataStep1, handleChangeStep1, handleNextStep }) => {
   const { firstName, lastName, email, phone, password } = formDataStep1;
@@ -14,10 +15,10 @@ const StepOne = ({ formDataStep1, handleChangeStep1, handleNextStep }) => {
   });
 
   const requiredErrors = {
-    firstName: "First Name is required",
-    lastName: "Last Name is required",
+    firstName: "First name is required",
+    lastName: "Last name is required",
     email: "Email is required",
-    phone: "Phone Number is required",
+    phone: "Phone number is required",
     password: "Password is required",
   };
 
@@ -119,136 +120,108 @@ const StepOne = ({ formDataStep1, handleChangeStep1, handleNextStep }) => {
 
   return (
     <>
-      <div className="d-flex flex-column">
-        <form>
-          <div className="mb-3">
-            <label htmlFor="exampleInputFirstName">First Name</label>
+      <form className="row">
+        <div className="col-6">
+          <div className={`form-input-wrapper ${errors.firstName ? 'error-form-input' : ''}`}>
+            <i className="bi bi-person-fill prefix-icon"></i>
             <input
               type="text"
-              className={
-                errors.firstName
-                  ? `form-control ${errors.firstName ? "is-invalid" : ""}`
-                  : "form-control"
-              }
-              id="exampleInputFirstName"
+              className="form-input"
               name="firstName"
               value={firstName}
               onChange={handleChangeStep1}
               onFocus={() => handleFieldFocus("firstName")}
               placeholder="Enter Your First Name"
             />
-            {errors.firstName && (
-              <div className="invalid-feedback">{errors.firstName}</div>
-            )}
           </div>
+          <div className="input-error">{errors.firstName}</div>
+        </div>
 
-          <div className="mb-3">
-            <label htmlFor="exampleInputLastName">Last Name</label>
+        <div className="col-6">
+          <div className={`form-input-wrapper ${errors.lastName ? 'error-form-input' : ''}`}>
+            <i className="bi bi-person-fill prefix-icon"></i>
             <input
               type="text"
-              className={
-                errors.lastName
-                  ? `form-control ${errors.lastName ? "is-invalid" : ""}`
-                  : "form-control"
-              }
-              id="exampleInputLastName"
+              className="form-input"
               name="lastName"
               value={lastName}
               onChange={handleChangeStep1}
               onFocus={() => handleFieldFocus("lastName")}
               placeholder="Enter Your Last Name"
             />
-            {errors.lastName && (
-              <div className="invalid-feedback">{errors.lastName}</div>
-            )}
           </div>
+          <div className="input-error">{errors.lastName}</div>
+        </div>
 
-          <div className="mb-3">
-            <label htmlFor="exampleInputEmail1">Email</label>
-            <div className="input-group">
-              <input
-                type="email"
-                className={
-                  errors.email
-                    ? `form-control ${errors.email ? "is-invalid" : ""}`
-                    : "form-control"
-                }
-                id="exampleInputEmail1"
-                aria-describedby="emailHelp"
-                name="email"
-                value={email}
-                onChange={handleChangeStep1}
-                onFocus={() => handleFieldFocus("email")}
-                placeholder="Enter Your Email"
-              />
-              {errors.email && (
-                <div className="invalid-feedback">{errors.email}</div>
-              )}
-            </div>
+        <div>
+          <div className={`form-input-wrapper ${errors.email ? 'error-form-input' : ''}`}>
+            <i className="bi bi-envelope-fill prefix-icon"></i>
+            <input
+              type="email"
+              className="form-input"
+              id="exampleInputEmail1"
+              aria-describedby="emailHelp"
+              name="email"
+              value={email}
+              onChange={handleChangeStep1}
+              onFocus={() => handleFieldFocus("email")}
+              placeholder="Enter Your Email"
+            />
           </div>
+          <div className="input-error">{errors.email}</div>
+        </div>
 
-          <div className="mb-3">
-            <label htmlFor="exampleInputPhone" className="form-label">
-              Phone Number
-            </label>
-            <div className="input-group">
-              <input
-                type="number"
-                className={
-                  errors.phone
-                    ? `form-control ${errors.phone ? "is-invalid" : ""}`
-                    : "form-control"
-                }
-                id="exampleInputPhone"
-                name="phone"
-                value={phone}
-                onChange={handleChangeStep1}
-                onFocus={() => handleFieldFocus("phone")}
-                placeholder="Enter Your Phone Number"
-              />
-              {errors.phone && (
-                <div className="invalid-feedback">{errors.phone}</div>
-              )}
-            </div>
+        <div>
+          <div className={`form-input-wrapper ${errors.phone ? 'error-form-input' : ''}`}>
+            <i className="bi bi-telephone-fill prefix-icon"></i>
+            <input
+              type="number"
+              className="form-input"
+              id="exampleInputPhone"
+              name="phone"
+              value={phone}
+              onChange={handleChangeStep1}
+              onFocus={() => handleFieldFocus("phone")}
+              placeholder="Enter Your Phone Number"
+            />
           </div>
+          <div className="input-error">{errors.phone}</div>
+        </div>
 
-          <div className="mb-3">
-            <label htmlFor="exampleInputPassword" className="form-label">
-              Password
-            </label>
-            <div className="input-group">
-              <input
-                type="text"
-                className={
-                  errors.password
-                    ? `form-control ${errors.password ? "is-invalid" : ""}`
-                    : "form-control"
-                }
-                id="exampleInputPassword"
-                name="password"
-                value={password}
-                onChange={handleChangeStep1}
-                onFocus={() => handleFieldFocus("password")}
-                placeholder="Enter a Strong Password"
-              />
-              {errors.password && (
-                <div className="invalid-feedback">{errors.password}</div>
-              )}
-            </div>
+        <div>
+          <div className={`form-input-wrapper ${errors.password ? 'error-form-input' : ''}`}>
+            <i className="bi bi-lock-fill prefix-icon"></i>
+            <input
+              type="text"
+              className="form-input"
+              id="exampleInputPassword"
+              name="password"
+              value={password}
+              onChange={handleChangeStep1}
+              onFocus={() => handleFieldFocus("password")}
+              placeholder="Enter a Strong Password"
+            />
           </div>
+          <div className="input-error">{errors.password}</div>
+        </div>
 
-          <div className="mb-3 text-center">
-            <button
-              type="button"
-              className="btn btn-primary"
-              disabled={isSubmitting}
-              onClick={validateStep1}
-            >
-              {isSubmitting ? "Submitting..." : "Next"}
-            </button>
-          </div>
-        </form>
-      </div>
+        <div>
+          Already have an account? <Link to={'/login'} className="text-decoration-none">
+            Sign in
+          </Link>
+        </div>
+
+        <div className="mt-4">
+          <button
+            type="button"
+            className="btn btn-primary px-5"
+            disabled={isSubmitting}
+            onClick={validateStep1}
+          >
+            {isSubmitting ? "Submitting..." : "Next"}
+          </button>
+        </div>
+      </form>
     </>
   );
 };

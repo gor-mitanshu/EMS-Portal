@@ -1,5 +1,5 @@
 import React from "react";
-import Menu from "../../../assets/menu.png";
+import Menu from "../../../assets/images/menu.png";
 import SearchBar from "../../../UI/Search/Search";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faBell } from "@fortawesome/free-solid-svg-icons";

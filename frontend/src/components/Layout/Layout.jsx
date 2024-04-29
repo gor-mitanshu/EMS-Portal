@@ -7,17 +7,19 @@ import NavbarComponent from "./Navbar/Navbar";
 const Layout = () => {
   const [open, setOpen] = useState(false);
 
-  const handleDrawerOpen = () => {
-    setOpen(!open);
+  const handleDrawerOpen = (isOpen) => {
+    isOpen ? setOpen(true) : setOpen(false)
   };
 
   return (
     <>
       <div className="layout">
-        <NavbarComponent handleDrawerOpen={handleDrawerOpen} />
         <Sidebar open={open} handleDrawerOpen={handleDrawerOpen} />
-        <div className="content">
-          <Outlet />
+        <div className="content-wrapper">
+          <NavbarComponent />
+          <div className="content p-3 p-md-4">
+            <Outlet />
+          </div>
         </div>
       </div>
     </>

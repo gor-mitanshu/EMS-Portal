@@ -1,8 +1,20 @@
+a {
+  color: black !important;
+}
+
 /* Navbar */
+.navbar {
+  background: #F4F5FA;
+  height: 76px;
+}
+
 .brand-name {
-  font-family: "Permanent Marker", cursive;
-  font-weight: 800;
+  font-weight: 700;
   font-style: normal;
+}
+
+.navbar .dropdown-toggle::after {
+  display: none;
 }
 
 .user-name {
@@ -12,46 +24,40 @@
 
 /* Sidebar Styles */
 .sidebar {
-  width: 250px;
-  height: 100%;
-  background-color: rgb(25, 113, 114);
-  color: white;
+  width: 260px;
+  height: 100vh;
+  background: #F4F5FA;
+  color: black;
   overflow-y: auto;
   position: fixed;
   top: 0;
   left: 0;
-  transition-duration: 0.5s;
+  transition-duration: 0.4s;
   z-index: 999;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 4px 8px rgba(0, 0, 0, 0.1);
-  border-top-right-radius: 20px;
-  border-bottom-right-radius: 20px;
   text-wrap: nowrap;
   overflow-x: hidden;
 }
 
-.list {
-  padding: 14px;
-  font-weight: 500;
-  cursor: pointer;
+.sidebar-content {
+  height: calc(100% - 78px);
+  overflow: auto;
 }
 
-.list-btn {
-  background-color: rgb(25, 113, 114) !important;
-  color: white !important;
-  box-shadow: none !important;
-  font-weight: 500;
+.sidebar-content .search-wrapper {
+  padding-left: 20px;
+  border-radius: 0 25rem 25rem 0 !important;
 }
 
 .list-item-body {
-  background-color: rgb(25, 113, 114);
-  color: white;
+  background-color: transparent;
+  color: black;
   padding-top: 0 !important;
   padding-bottom: 0 !important;
 }
 
 .accordion {
-  --bs-accordion-bg: rgb(25, 113, 114) !important;
-  color: white;
+  --bs-accordion-bg: transparent !important;
 }
 
 .sidebar ul {
@@ -60,15 +66,63 @@
 }
 
 .sidebar li {
-  padding: 10px 15px;
+  padding: 10px 0;
   cursor: pointer;
 }
 
-.sidebar li:hover,
-.list-btn:hover,
-.list:hover {
-  background-color: rgba(255, 255, 255, 0.2) !important;
-  border-radius: 12px !important;
+.sidebar .menu-item-wrapper {
+  padding-right: 16px;
+}
+
+.sidebar .menu-item {
+  padding: 10px 20px;
+  margin: 6px 0;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.sidebar .menu-item i {
+  margin-right: 20px;
+  height: 22px;
+  width: 22px;
+  font-size: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sidebar .sidebar-dash {
+  height: 4px;
+  width: 16px;
+  background-image: linear-gradient(to left, #197172, transparent);
+  margin: 0 20px 0 6px;
+}
+
+.sidebar .menu-item h6 {
+  font-weight: normal;
+  line-height: 1.5rem;
+}
+
+.sidebar-sm .menu-item h6,
+.sidebar-sm .accordion-button::after,
+.sidebar-sm .karm-logo {
+  opacity: 0;
+  transition-duration: 0.4s;
+}
+
+.sidebar .menu-item:hover,
+.sidebar .menu-active {
+  background-color: #3f838715;
+  border-radius: 0 25rem 25rem 0 !important;
+}
+
+.sidebar .menu-item .nav-active,
+.sidebar .menu-item.nav-active {
+  color: #fff !important;
+  background-image: linear-gradient(to right, #67ACBA 0%, #197172 100%);
+  border-radius: 0 25rem 25rem 0 !important;
+  box-shadow: 0 .1875rem .375rem rgba(38, 53, 61, 0.18);
 }
 
 .menu-icon {
@@ -78,41 +132,55 @@
 }
 
 .sub-menu-icon {
-  padding-right: 10px;
-  padding-left: 16px;
+  padding: 0 20px 0 2px;
 }
 
 .accordion-button::after {
-  background-image: url("../../assets/filter-arrow-down.svg") !important;
+  transform: rotate(-90deg);
+  background-image: url("../../assets/icons/down-arrow-icon.svg") !important;
+  background-position: center;
+  background-size: contain !important;
+  height: 12px !important;
+  width: 12px !important;
   color: white;
 }
 
 /* Content Styles */
-.content {
+.content-wrapper {
   flex: 1;
-  padding: 16px;
   overflow-y: auto;
   transition: margin-left 0.3s ease;
-  height: calc(100% - 72px);
-  padding-left: 64px;
-  background-color: rgba(0, 102, 102, 0.06);
+  height: 100%;
+  padding-left: 68px;
+  background-color: #F4F5FA;
 }
 
-.close {
-  transition-duration: 0.5s;
-  width: 48px !important;
+.content {
+  height: calc(100% - 76px);
+  overflow: auto;
+}
+
+.sidebar-sm .menu-item-wrapper {
+  padding-right: 6px;
+}
+
+.sidebar-sm {
+  transition-duration: 0.4s;
+  width: 68px !important;
   box-shadow: none;
   overflow: hidden;
 }
 
 /* Active route highlighting */
-.nav-active {
-  background-color: rgba(255, 255, 255, 0.2) !important;
+/* .nav-active {
+  border-radius: 0 25rem 25rem 0 !important;
+  background-color: #2e263d14 !important;
 }
 
 .list-item.nav-active {
-  background-color: rgba(255, 255, 255, 0.2) !important;
-}
+  border-radius: 0 25rem 25rem 0 !important;
+  background-color: #2e263d14 !important;
+} */
 
 /* Media query for smaller screens */
 @media (max-width: 768px) {
@@ -121,7 +189,7 @@
     height: 100%;
   }
 
-  .content {
+  .content-wrapper {
     margin-left: 0;
   }
 }
@@ -134,4 +202,26 @@
 /* Cursor */
 ::-webkit-scrollbar {
   display: none;
+}
+
+.accordion-item a {
+  color: #433c50;
+}
+
+.sidebar .accordion-button:focus {
+  box-shadow: none;
+}
+
+.sidebar .accordion-body {
+  padding: 0;
+}
+
+.sidebar .accordion-body ul {
+  margin: 0;
+}
+
+.sidebar .accordion-button:not(.collapsed) {
+  border-radius: 0 25rem 25rem 0 !important;
+  background: #2e263d14;
+  box-shadow: none;
 }
