@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from "react";
-import ProfileField from "../../../UI/ProfileFields/ProfileFields";
 import PersonalProfileForm from "./PersonalProfile/PersonalProfileForm";
-import PersonalProfile from "./PersonalProfile/PersonalProfile";
+import User from "../../../assets/images/user.jpg";
 import ContactInformationForm from "./ContactInformation/ContactInformationForm";
-import ContactInformation from "./ContactInformation/ContactInformation";
 import AddressForm from "./Address/AddressForm";
 import SocialProfileForm from "./SocialProfile/SocialProfileForm";
-import SocialProfile from "./SocialProfile/SocialProfile";
 import axios from "axios";
+import Card from "../../../UI/ProfileCards/ProfileCard";
+import {
+  faFacebook,
+  faLinkedinIn,
+  faTwitter,
+} from "@fortawesome/free-brands-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const Profile = () => {
   const [editMode, setEditMode] = useState({
@@ -226,6 +230,8 @@ const Profile = () => {
     }
   };
 
+  const formatedDate = formData.birth_date;
+  const newDate = new Date(formatedDate);
   return (
     <div className="container">
       <form onSubmit={handleSubmit}>
@@ -233,7 +239,7 @@ const Profile = () => {
           {/* Card 1 */}
           <div className="col-md-6">
             {/* Personal Profile */}
-            <ProfileField
+            <Card
               title="Personal Profile"
               editMode={editMode.personalProfile}
               handleEditClick={() => handleEditClick("personalProfile")}
@@ -248,12 +254,54 @@ const Profile = () => {
                   />
                 </>
               ) : (
-                <PersonalProfile formData={formData} />
+                <div className="user-details d-flex justify-content-evenly align-items-center flex-wrap">
+                  <div className="pb-sm-3">
+                    <img
+                      src={User}
+                      alt="User"
+                      style={{
+                        width: "150px",
+                        height: "150px",
+                        borderRadius: "50%",
+                      }}
+                    />
+                  </div>
+                  <div>
+                    <p>
+                      <strong>Name: </strong>{" "}
+                      {formData.firstName && formData.lastName
+                        ? formData.firstName + " " + formData.lastName
+                        : "-"}
+                    </p>
+                    <p>
+                      <strong>Date of Birth: </strong>{" "}
+                      {formData.birth_date
+                        ? newDate.toLocaleDateString("en-US", {
+                            day: "numeric",
+                            month: "short",
+                            year: "numeric",
+                          })
+                        : "-"}
+                    </p>
+                    <p>
+                      <strong>Gender: </strong>
+                      {formData.gender ? formData.gender : "-"}
+                    </p>
+                    <p>
+                      <strong>Blood Group: </strong>
+                      {formData.blood_group ? formData.blood_group : "-"}
+                    </p>
+                    <p>
+                      <strong>Marital Status: </strong>
+                      {formData.marital_status ? formData.marital_status : "-"}
+                    </p>
+                  </div>
+                </div>
               )}
-            </ProfileField>
+            </Card>
 
             {/* Contact Information */}
-            <ProfileField
+            <Card
               title="Contact Information"
               // editMode={editMode.contactInformation}
               // handleEditClick={() => handleEditClick("contactInformation")}
@@ -269,16 +317,21 @@ const Profile = () => {
                 </>
               ) : (
                 <>
-                  <ContactInformation formData={formData} />
+                  <p>
+                    <strong>Email:</strong> {formData.email}
+                  </p>
+                  <p>
+                    <strong>Phone Number:</strong> {formData.phone}
+                  </p>
                 </>
               )}
-            </ProfileField>
+            </Card>
           </div>
 
           {/* Card 2 */}
           <div className="col-md-6">
             {/* Address */}
-            <ProfileField
+            <Card
               title="Address"
               editMode={editMode.address}
               handleEditClick={() => handleEditClick("address")}
@@ -299,10 +352,10 @@ const Profile = () => {
                   </p>
                 </>
               )}
-            </ProfileField>
+            </Card>
 
             {/* Social profiles */}
-            <ProfileField
+            <Card
               title="Social Profiles"
               editMode={editMode.socialProfiles}
               handleEditClick={() => handleEditClick("socialProfiles")}
@@ -318,10 +371,49 @@ const Profile = () => {
                 </>
               ) : (
                 <>
-                  <SocialProfile formData={formData} />
+                  <div className="d-flex">
+                    <a
+                      href={
+                        formData.linked_in
+                          ? `//${formData.linked_in}`
+                          : "https://linkedin.com/in/"
+                      }
+                      target="_blank"
+                      className="pe-4"
+                      rel="noreferrer"
+                    >
+                      <FontAwesomeIcon icon={faLinkedinIn} size="2xl" />
+                    </a>
+
+                    <a
+                      href={
+                        formData.facebook
+                          ? `//${formData.facebook}`
+                          : "https://linkedin.com/in/"
+                      }
+                      target="_blank"
+                      className="pe-4"
+                      rel="noreferrer"
+                    >
+                      <FontAwesomeIcon icon={faFacebook} size="2xl" />
+                    </a>
+
+                    <a
+                      href={
+                        formData.twitter
+                          ? `//${formData.twitter}`
+                          : "https://linkedin.com/in/"
+                      }
+                      target="_blank"
+                      className="pe-4"
+                      rel="noreferrer"
+                    >
+                      <FontAwesomeIcon icon={faTwitter} size="2xl" />
+                    </a>
+                  </div>
                 </>
               )}
-            </ProfileField>
+            </Card>
           </div>
         </div>
       </form>

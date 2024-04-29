@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from "react";
-import ProfileField from "../../../UI/ProfileFields/ProfileFields";
 import BasicInfoForm from "./BasicInfo/BasicInfoForm";
-import BasicInfo from "./BasicInfo/BasicInfo";
 import WorkInfoForm from "./WorkInfo/WorkInfoForm";
-import WorkInfo from "./WorkInfo/WorkInfo";
 import ResignationInfoForm from "./ResignationInfo/ResignationInfoForm";
-import ResignationInfo from "./ResignationInfo/ResignationInfo";
 import axios from "axios";
+import Card from "../../../UI/ProfileCards/ProfileCard";
 
 const Work = () => {
   const [editMode, setEditMode] = useState({
@@ -239,7 +236,7 @@ const Work = () => {
           <div className="row">
             {/* Card 1 */}
             <div className="col-md-7">
-              <ProfileField
+              <Card
                 title="Basic Info"
                 editMode={editMode.basicInfo}
                 handleEditClick={() => handleEditClick("basicInfo")}
@@ -256,14 +253,63 @@ const Work = () => {
                   </>
                 ) : (
                   <>
-                    <BasicInfo formData={formData} />
+                    <div className="user-details">
+                      <div className="row">
+                        <div className="col-md-4">
+                          <p>
+                            <strong>Employee ID:</strong>{" "}
+                            {formData.employee_code}
+                          </p>
+                        </div>
+                        <div className="col-md-4">
+                          <p>
+                            <strong>Date of Joining:</strong>{" "}
+                            {formData.date_of_joining}
+                          </p>
+                        </div>
+                        <div className="col-md-4">
+                          <p>
+                            <strong>Probation Period:</strong>{" "}
+                            {formData.probation_period}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="row">
+                        <div className="col-md-4">
+                          <p>
+                            <strong>Employee Type:</strong>{" "}
+                            {formData.employment_type}
+                          </p>
+                        </div>
+                        <div className="col-md-4">
+                          <p>
+                            <strong>Work Location:</strong>{" "}
+                            {formData.work_location}
+                          </p>
+                        </div>
+                        <div className="col-md-4">
+                          <p>
+                            <strong>Employee Status:</strong>{" "}
+                            {formData.employee_status}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="row">
+                        <div className="col-md-6">
+                          <p>
+                            <strong>Work Experience:</strong>{" "}
+                            {formData.work_experience}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
                   </>
                 )}
-              </ProfileField>
+              </Card>
             </div>
             {/* Card 2 */}
             <div className="col-md-5">
-              <ProfileField
+              <Card
                 title="Work Info"
                 editMode={editMode.workInfo}
                 handleEditClick={() => handleEditClick("workInfo")}
@@ -279,15 +325,43 @@ const Work = () => {
                     />
                   </>
                 ) : (
-                  <WorkInfo formData={formData} />
+                  <div className="user-details">
+                    <div className="row">
+                      <div className="col-md-6">
+                        <p>
+                          <strong>Designation:</strong>
+                          {formData.designation || ""}
+                        </p>
+                      </div>
+                      <div className="col-md-6">
+                        <p>
+                          <strong>Job Title:</strong> {formData.job_title || ""}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="row">
+                      <div className="col-md-6">
+                        <p>
+                          <strong>Department:</strong>{" "}
+                          {formData.department || ""}
+                        </p>
+                      </div>
+                      <div className="col-md-6">
+                        <p>
+                          <strong>Sub Department:</strong>{" "}
+                          {formData.sub_department || ""}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
                 )}
-              </ProfileField>
+              </Card>
             </div>
           </div>
           {/* Card 3 */}
           <div className="row">
             <div className="col-md-12">
-              <ProfileField title="Work History">
+              <Card title="Work History">
                 <>
                   <div className="user-details">
                     <div className="row">
@@ -314,13 +388,13 @@ const Work = () => {
                     </div>
                   </div>
                 </>
-              </ProfileField>
+              </Card>
             </div>
           </div>
           {/* Card 4 */}
           <div className="row">
             <div className="col-md-12">
-              <ProfileField
+              <Card
                 title="Resignation Info"
                 editMode={editMode.resignationInfo}
                 handleEditClick={() => handleEditClick("resignationInfo")}
@@ -335,9 +409,34 @@ const Work = () => {
                     />
                   </>
                 ) : (
-                  <ResignationInfo formData={formData} />
+                  <div className="user-details">
+                    <div className="row">
+                      <div className="col-md-6">
+                        <p>
+                          <strong>Resignation Date:</strong> -
+                        </p>
+                      </div>
+                      <div className="col-md-6">
+                        <p>
+                          <strong>Resignation Status:</strong> -
+                        </p>
+                      </div>
+                    </div>
+                    <div className="row">
+                      <div className="col-md-6">
+                        <p>
+                          <strong>Notice Period:</strong> -
+                        </p>
+                      </div>
+                      <div className="col-md-6">
+                        <p>
+                          <strong>Last Working Day:</strong> -
+                        </p>
+                      </div>
+                    </div>
+                  </div>
                 )}
-              </ProfileField>
+              </Card>
             </div>
           </div>
         </form>

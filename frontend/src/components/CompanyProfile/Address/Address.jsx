@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import ProfileField from "../../../UI/ProfileFields/ProfileFields";
 import axios from "axios";
 import { toast } from "react-toastify";
+import Card from "../../../UI/ProfileCards/ProfileCard";
 
 const Address = () => {
   const [editMode, setEditMode] = useState({
@@ -132,7 +132,7 @@ const Address = () => {
           <div className="row">
             {/* Card 1 */}
             <div className="col-md-12">
-              <ProfileField
+              <Card
                 title={"Regsiter Office"}
                 editMode={editMode.register_office}
                 handleEditClick={() => handleEditClick("register_office")}
@@ -173,11 +173,11 @@ const Address = () => {
                       : "-"}
                   </p>
                 )}
-              </ProfileField>
+              </Card>
             </div>
             {/* Card 2 */}
             <div className="col-md-12">
-              <ProfileField
+              <Card
                 title={"Corporate Office"}
                 editMode={editMode.corporate_office}
                 handleEditClick={() => handleEditClick("corporate_office")}
@@ -215,11 +215,11 @@ const Address = () => {
                       : "-"}
                   </p>
                 )}
-              </ProfileField>
+              </Card>
             </div>
             {/* Card 3 */}
             <div className="col-md-12">
-              <ProfileField
+              <Card
                 title={"Custom Address"}
                 editMode={editMode.custom_address_title}
                 handleEditClick={() => handleEditClick("custom_address_title")}
@@ -259,7 +259,7 @@ const Address = () => {
                       : "-"}
                   </p>
                 )}
-              </ProfileField>
+              </Card>
             </div>
           </div>
         </form>

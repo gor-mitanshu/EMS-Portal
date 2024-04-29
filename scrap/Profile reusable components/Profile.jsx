@@ -7,7 +7,7 @@ import {
   faTwitter,
   faLinkedinIn,
 } from "@fortawesome/free-brands-svg-icons";
-import ProfileField from "../../UI/ProfileFields/ProfileFields";
+import Card from "../../frontend/src/UI/ProfileCards/ProfileCard";
 
 const Profile = () => {
   const [editMode, setEditMode] = useState({
@@ -176,7 +176,7 @@ const Profile = () => {
           {/* Card 1 */}
           <div className="col-md-6">
             {/* Personal Profile */}
-            <ProfileField
+            <Card
               title="Personal Profile"
               editMode={editMode.personalProfile}
               handleEditClick={() => handleEditClick("personalProfile")}
@@ -408,10 +408,10 @@ const Profile = () => {
                   </div>
                 </div>
               )}
-            </ProfileField>
+            </Card>
 
             {/* Contact Information */}
-            <ProfileField
+            <Card
               title="Contact Information"
               editMode={editMode.contactInformation}
               handleEditClick={() => handleEditClick("contactInformation")}
@@ -471,13 +471,13 @@ const Profile = () => {
                   </p>
                 </>
               )}
-            </ProfileField>
+            </Card>
           </div>
 
           {/* Card 2 */}
           <div className="col-md-6">
             {/* Address */}
-            <ProfileField
+            <Card
               title="Address"
               editMode={editMode.address}
               handleEditClick={() => handleEditClick("address")}
@@ -519,10 +519,10 @@ const Profile = () => {
                   <p>-</p>
                 </>
               )}
-            </ProfileField>
+            </Card>
 
             {/* Social profiles */}
-            <ProfileField
+            <Card
               title="Social Profiles"
               editMode={editMode.socialProfiles}
               handleEditClick={() => handleEditClick("socialProfiles")}
@@ -615,7 +615,7 @@ const Profile = () => {
                   </div>
                 </>
               )}
-            </ProfileField>
+            </Card>
           </div>
         </div>
       </form>
