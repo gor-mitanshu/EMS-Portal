@@ -233,7 +233,7 @@ const Profile = () => {
   const formatedDate = formData.birth_date;
   const newDate = new Date(formatedDate);
   return (
-    <div className="container">
+    <div>
       <form onSubmit={handleSubmit}>
         <div className="row">
           {/* Card 1 */}
@@ -254,19 +254,11 @@ const Profile = () => {
                   />
                 </>
               ) : (
-                <div className="user-details d-flex justify-content-evenly align-items-center flex-wrap">
-                  <div className="pb-sm-3">
-                    <img
-                      src={User}
-                      alt="User"
-                      style={{
-                        width: "150px",
-                        height: "150px",
-                        borderRadius: "50%",
-                      }}
-                    />
+                <div className="user-details d-flex align-items-center flex-wrap">
+                  <div className="py-4 py-xl-0 col-12 col-xl-5 text-center">
+                    <img src={User} alt="User" className="h-100 w-75 rounded-circle" />
                   </div>
-                  <div>
+                  <div className="col-12 col-xl-7">
                     <p>
                       <strong>Name: </strong>{" "}
                       {formData.firstName && formData.lastName
@@ -277,10 +269,10 @@ const Profile = () => {
                       <strong>Date of Birth: </strong>{" "}
                       {formData.birth_date
                         ? newDate.toLocaleDateString("en-US", {
-                            day: "numeric",
-                            month: "short",
-                            year: "numeric",
-                          })
+                          day: "numeric",
+                          month: "short",
+                          year: "numeric",
+                        })
                         : "-"}
                     </p>
                     <p>
@@ -303,9 +295,9 @@ const Profile = () => {
             {/* Contact Information */}
             <Card
               title="Contact Information"
-              // editMode={editMode.contactInformation}
-              // handleEditClick={() => handleEditClick("contactInformation")}
-              // handleCancelClick={() => handleCancelClick("contactInformation")}
+            // editMode={editMode.contactInformation}
+            // handleEditClick={() => handleEditClick("contactInformation")}
+            // handleCancelClick={() => handleCancelClick("contactInformation")}
             >
               {editMode.contactInformation ? (
                 <>
