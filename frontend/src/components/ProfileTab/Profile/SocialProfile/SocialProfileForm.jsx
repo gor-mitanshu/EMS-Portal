@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 
 const SocialProfileForm = ({ formData, formErrors, handleInputChange }) => {
+  console.log(formData);
   return (
     <>
       <div className="col mb-2">
@@ -24,7 +25,7 @@ const SocialProfileForm = ({ formData, formErrors, handleInputChange }) => {
               className="form-control no-focus-box-shadow"
               placeholder="LinkedIn Profile"
               name="linked_in"
-              value={formData.linked_in}
+              value={formData ? formData.linked_in : ""}
               onChange={handleInputChange}
             />
             {formErrors.linked_in && (
@@ -48,7 +49,7 @@ const SocialProfileForm = ({ formData, formErrors, handleInputChange }) => {
               className="form-control no-focus-box-shadow"
               placeholder="Facebook Profile"
               name="facebook"
-              value={formData.facebook}
+              value={formData ? formData.facebook : ""}
               onChange={handleInputChange}
             />
             {formErrors.facebook && (
@@ -72,7 +73,7 @@ const SocialProfileForm = ({ formData, formErrors, handleInputChange }) => {
               className="form-control no-focus-box-shadow"
               placeholder="Twitter Profile"
               name="twitter"
-              value={formData.twitter}
+              value={formData ? formData.twitter : ""}
               onChange={handleInputChange}
             />
             {formErrors.twitter && (

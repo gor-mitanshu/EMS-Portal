@@ -7,12 +7,15 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 
 const SocialProfile = ({ formData }) => {
-  // console.log(formData);
   return (
     <>
       <div className="d-flex">
         <a
-          href={`${formData.linked_in}`}
+          href={
+            formData.linked_in
+              ? `//${formData.linked_in}`
+              : "https://linkedin.com/in/"
+          }
           target="_blank"
           className="pe-4"
           rel="noreferrer"
@@ -21,7 +24,11 @@ const SocialProfile = ({ formData }) => {
         </a>
 
         <a
-          href="www.linkedin.com"
+          href={
+            formData.facebook
+              ? `//${formData.facebook}`
+              : "https://linkedin.com/in/"
+          }
           target="_blank"
           className="pe-4"
           rel="noreferrer"
@@ -30,7 +37,11 @@ const SocialProfile = ({ formData }) => {
         </a>
 
         <a
-          href={formData.linked_in}
+          href={
+            formData.twitter
+              ? `//${formData.twitter}`
+              : "https://linkedin.com/in/"
+          }
           target="_blank"
           className="pe-4"
           rel="noreferrer"

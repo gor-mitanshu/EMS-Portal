@@ -1,4 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, {
+  useEffect,
+  useState,
+  // , useEffect
+} from "react";
 import CompanyPoliciesModal from "./CompanyPoliciesModal";
 import axios from "axios";
 import ProfileField from "../../../UI/ProfileFields/ProfileFields";
@@ -6,7 +10,7 @@ import ProfileField from "../../../UI/ProfileFields/ProfileFields";
 const initialState = {
   policy_title: "",
   policy_description: "",
-  policy_file: "",
+  policy_file: null,
 };
 const CompanyPolices = () => {
   const [showModal, setShowModal] = useState(false);
@@ -42,13 +46,35 @@ const CompanyPolices = () => {
   const handleFileChange = (e) => {
     setFormData({
       ...formData,
-      work_file: e.target.files[0],
+      policy_file: e.target.files[0],
     });
     setFormErrors({
       ...formErrors,
-      work_file: "",
+      policy_file: "",
     });
   };
+
+  const getPolicies = async () => {
+    try {
+      const accessToken = localStorage.getItem("token");
+      const accessTokenwithoutQuotes = JSON.parse(accessToken);
+      const res = await axios.get(
+        `${process.env.REACT_APP_API}/company/getPolicy`,
+        {
+          headers: { Authorization: `Bearer ${accessTokenwithoutQuotes}` },
+        }
+      );
+      if (res.data) {
+        setPolicies(res.data.policyData);
+      }
+    } catch (error) {
+      console.error("Error fetching works:", error);
+    }
+  };
+
+  useEffect(() => {
+    getPolicies();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -70,8 +96,8 @@ const CompanyPolices = () => {
       return;
     }
 
+    const formDataToSend = new FormData();
     try {
-      const formDataToSend = new FormData();
       formDataToSend.append("policy_title", formData.policy_title);
       formDataToSend.append("policy_description", formData.policy_description);
       formDataToSend.append("policy_file", formData.policy_file);
@@ -84,37 +110,18 @@ const CompanyPolices = () => {
       const res = await axios.post(endpoint, formDataToSend, {
         headers: { Authorization: `Bearer ${accessTokenwithoutQuotes}` },
       });
-      if (res.data.success) {
+      if (res) {
         console.log("Submitted:", formData);
         handleClose();
-        fetchCertificates();
+        setFormData(initialState);
+        getPolicies();
       }
     } catch (error) {
       console.error("Error submitting form:", error);
     }
   };
 
-  const fetchCertificates = async () => {
-    try {
-      const accessToken = localStorage.getItem("token");
-      const accessTokenwithoutQuotes = JSON.parse(accessToken);
-      const res = await axios.get(
-        `${process.env.REACT_APP_API}/company/getPolicy`,
-        {
-          headers: { Authorization: `Bearer ${accessTokenwithoutQuotes}` },
-        }
-      );
-      if (res.data) {
-        // console.log(res);
-        setPolicies(res.data.workDetails);
-      }
-    } catch (error) {
-      console.error("Error fetching policies:", error);
-    }
-  };
-
   const handleEdit = (policy) => {
-    // console.log(certificate);
     setEditId(policy._id);
     setFormData({
       policy_title: policy.policy_title,
@@ -123,10 +130,6 @@ const CompanyPolices = () => {
     });
     setShowModal(true);
   };
-
-  useEffect(() => {
-    fetchCertificates();
-  }, []);
 
   const handleDelete = async (policyId) => {
     try {
@@ -140,15 +143,17 @@ const CompanyPolices = () => {
       );
       if (res.data.success) {
         // Remove the deleted certificate from the state
-        const updatedPolicies = policies[0].policyDetails.filter(
+        const updatedPolicies = policies[0].policy_details.filter(
           (policy) => policy._id !== policyId
         );
-        setPolicies([{ policyDetails: updatedPolicies }]);
+        setPolicies([{ policy_details: updatedPolicies }]);
+        getPolicies();
       }
     } catch (error) {
       console.error("Error deleting certificate:", error);
     }
   };
+
   return (
     <ProfileField title={"Company Policies"}>
       <div>
@@ -161,10 +166,11 @@ const CompanyPolices = () => {
           formData={formData}
           formErrors={formErrors}
           handleChange={handleChange}
-          handleFileChange={handleFileChange}
           handleSubmit={handleSubmit}
+          handleFileChange={handleFileChange}
+          editId={editId}
         />
-        {policies.length && policies[0].workDetails.length > 0 ? (
+        {policies.length > 0 && policies[0].policy_details.length > 0 ? (
           <table className="table">
             <thead>
               <tr>
@@ -174,10 +180,10 @@ const CompanyPolices = () => {
               </tr>
             </thead>
             <tbody>
-              {policies[0].policyDetails.map((policy) => (
+              {policies[0].policy_details.map((policy) => (
                 <tr key={policy._id}>
-                  <td>{policy.work_name}</td>
-                  <td>{policy.work_description}</td>
+                  <td>{policy.policy_title}</td>
+                  <td>{policy.policy_description}</td>
                   <td>
                     <button
                       className="btn btn-primary me-2"

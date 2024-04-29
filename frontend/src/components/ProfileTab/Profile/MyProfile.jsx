@@ -47,35 +47,6 @@ const Profile = () => {
     // twitter: "",
   });
 
-  // Get the User
-  useEffect(() => {
-    const getUser = async () => {
-      const accessToken = localStorage.getItem("token");
-      const accessTokenwithoutQuotes = JSON.parse(accessToken);
-      if (accessToken) {
-        const res = await axios.get(`${process.env.REACT_APP_API}/getprofile`, {
-          headers: { Authorization: `Bearer ${accessTokenwithoutQuotes}` },
-        });
-        const { user } = res.data;
-        setFormData({
-          firstName: user.firstName,
-          lastName: user.lastName,
-          birth_date: user.birth_date,
-          gender: user.gender,
-          blood_group: user.blood_group,
-          marital_status: user.marital_status,
-          email: user.email,
-          phone: user.phone,
-          current_address: user.current_address,
-          linked_in: user.linked_in,
-          facebook: user.facebook,
-          twitter: user.twitter,
-        });
-      }
-    };
-    getUser();
-  }, []);
-
   // Handle Change
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -89,6 +60,36 @@ const Profile = () => {
       [name]: "",
     });
   };
+
+  // Get the User
+  const getUser = async () => {
+    const accessToken = localStorage.getItem("token");
+    const accessTokenwithoutQuotes = JSON.parse(accessToken);
+    if (accessToken) {
+      const res = await axios.get(`${process.env.REACT_APP_API}/getprofile`, {
+        headers: { Authorization: `Bearer ${accessTokenwithoutQuotes}` },
+      });
+      const { user } = res.data;
+      setFormData({
+        firstName: user.firstName,
+        lastName: user.lastName,
+        birth_date: user.birth_date,
+        gender: user.gender,
+        blood_group: user.blood_group,
+        marital_status: user.marital_status,
+        email: user.email,
+        phone: user.phone,
+        current_address: user.current_address,
+        linked_in: user.linked_in,
+        facebook: user.facebook,
+        twitter: user.twitter,
+      });
+    }
+  };
+
+  useEffect(() => {
+    getUser();
+  }, []);
 
   // Handle Edit Click
   const handleEditClick = (section) => {

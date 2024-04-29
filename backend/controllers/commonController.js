@@ -137,7 +137,7 @@ const commonController = {
                          message: "All Fields are required",
                          success: false,
                          errors: {
-                              email: !email ? "Firstname is required" : "",
+                              email: !email ? "Email is required" : "",
                               password: !password ? "Password is required" : "",
                          }
                     });
