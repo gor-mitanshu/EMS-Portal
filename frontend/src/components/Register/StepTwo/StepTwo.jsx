@@ -86,77 +86,56 @@ const StepTwo = ({ formDataStep2, handleChangeStep2, handleBackStep }) => {
 
   return (
     <>
-      <div className="d-flex flex-column">
-        <form onSubmit={validateStep2}>
-          <div className="mb-3">
-            <label htmlFor="exampleInputCompanyName">Company Name</label>
+      <form onSubmit={validateStep2}>
+        <div>
+          <div className={`form-input-wrapper ${errors.companyName ? 'error-form-input' : ''}`}>
+            <i className="bi bi-building-fill prefix-icon"></i>
             <input
               type="text"
-              className={`form-control ${
-                errors.companyName ? "is-invalid" : ""
-              }`}
-              id="exampleInputCompanyName"
+              className="form-input"
               name="companyName"
               value={companyName}
               onChange={handleChangeStep2}
               onFocus={() => handleFieldFocus("companyName")}
               placeholder="Enter Your Company Name"
             />
-            <div className="invalid-feedback">{errors.companyName}</div>
           </div>
-          <div className="mb-3">
-            <label htmlFor="exampleInputCompanySize">Company Size</label>
+          <div className="input-error">{errors.companyName}</div>
+        </div>
+
+        <div>
+          <div className={`form-input-wrapper ${errors.employeeStrength ? 'error-form-input' : ''}`}>
+            <i className="bi bi-people-fill prefix-icon"></i>
             <input
-              type="text"
-              className={`form-control ${
-                errors.companySize ? "is-invalid" : ""
-              }`}
-              id="exampleInputCompanySize"
-              name="companySize"
-              value={companySize}
-              onChange={handleChangeStep2}
-              onFocus={() => handleFieldFocus("companySize")}
-              placeholder="Enter Your Company Size"
-            />
-            <div className="invalid-feedback">{errors.companySize}</div>
-          </div>
-          <div className="mb-3">
-            <label htmlFor="exampleInputEmployeeStrength">
-              Employee Strength
-            </label>
-            <input
-              type="text"
-              className={`form-control ${
-                errors.employeeStrength ? "is-invalid" : ""
-              }`}
-              id="exampleInputEmployeeStrength"
+              type="number"
+              className="form-input"
               name="employeeStrength"
               value={employeeStrength}
               onChange={handleChangeStep2}
               onFocus={() => handleFieldFocus("employeeStrength")}
               placeholder="Enter Your Employee Strength"
             />
-            <div className="invalid-feedback">{errors.employeeStrength}</div>
           </div>
-          <div className="mb-3">
-            <button
-              type="button"
-              className="btn btn-primary"
-              onClick={handleBackStep}
-              style={{ marginRight: "6px" }}
-            >
-              Back
-            </button>
-            <button
-              type="submit"
-              className="btn btn-primary"
-              disabled={isSubmitting}
-            >
-              {isSubmitting ? "Submitting..." : "Submit"}
-            </button>
-          </div>
-        </form>
-      </div>
+          <div className="input-error">{errors.employeeStrength}</div>
+        </div>
+
+        <div className="mt-3">
+          <button
+            type="button"
+            className="btn btn-light px-4"
+            onClick={handleBackStep}
+          >
+            Back
+          </button>
+          <button
+            type="submit"
+            className="btn btn-primary px-4 ms-3"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? "Submitting..." : "Sign up"}
+          </button>
+        </div>
+      </form>
     </>
   );
 };

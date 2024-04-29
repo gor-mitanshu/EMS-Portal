@@ -135,63 +135,58 @@ const Login = () => {
 
   return (
     <FormWrapper
-      title={"Welcome Back!"}
-      subtitle={"Sign in to continue to system"}
+      title={"Welcome back :)"}
     >
       <div>
         <div className="d-flex flex-column">
           <form onSubmit={handleSubmit}>
-            <div className="mb-3">
-              <label htmlFor="email" className="form-label">
-                Email
-              </label>
-              <input
-                type="text"
-                className={`form-control no-focus-box-shadow ${
-                  errors.email ? "is-invalid" : ""
-                }`}
-                id="email"
-                aria-describedby="emailHelp"
-                placeholder="Enter Your Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                onFocus={() => handleFieldFocus("email")}
-              />
-              <div className="invalid-feedback">{errors.email}</div>
+            <div className="text-start">
+              <div className={`form-input-wrapper ${errors.email ? 'error-form-input' : ''}`}>
+                <i className="bi bi-person-fill prefix-icon"></i>
+                <input
+                  type="text"
+                  className="form-input"
+                  id="email"
+                  aria-describedby="emailHelp"
+                  placeholder="Enter Your Email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  onFocus={() => handleFieldFocus("email")}
+                />
+              </div>
+              <div className="input-error">{errors.email}</div>
             </div>
-            <div className="mb-3">
-              <label htmlFor="password" className="form-label">
-                Password
-              </label>
-              <input
-                type="password"
-                className={`form-control no-focus-box-shadow ${
-                  errors.password ? "is-invalid" : ""
-                }`}
-                id="password"
-                placeholder="Enter Your Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                onFocus={() => handleFieldFocus("password")}
-              />
-              <div className="invalid-feedback">{errors.password}</div>
+            <div className="text-start">
+              <div className={`form-input-wrapper ${errors.password ? 'error-form-input' : ''}`}>
+                <i className="bi bi-lock-fill prefix-icon"></i>
+                <input
+                  type="password"
+                  className="form-input"
+                  id="password"
+                  placeholder="Enter Your Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  onFocus={() => handleFieldFocus("password")}
+                />
+              </div>
+              <div className="input-error">{errors.password}</div>
             </div>
 
-            <div className="text-center">
-              <button type="submit" className="btn btn-primary w-75">
-                Submit
-              </button>
-            </div>
-
-            <div className="mt-3 text-center">
+            <div>
               <Link to="/forgetpassword" className="text-decoration-none">
                 Forgot Password?
               </Link>
             </div>
 
-            <div className="mt-3 text-center">
-              Don't have an account? <Link to="/register">Sign Up</Link>
+            <div className="mt-4">
+              <button type="submit" className="btn btn-primary px-4">
+                Sign in
+              </button>
+              <Link to={'/register'} className="btn btn-light px-4 ms-3">
+                Create Account
+              </Link>
             </div>
+
 
             {verificationLinkStatus && verificationLinkStatus !== "sent" && (
               <div

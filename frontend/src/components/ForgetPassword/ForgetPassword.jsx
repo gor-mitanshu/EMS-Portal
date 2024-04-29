@@ -102,30 +102,31 @@ const ForgotPassword = () => {
       >
         {showOTPInput ? (
           <div className="d-flex flex-column">
-            {errorMessage && (
+            {/* {errorMessage && (
               <div className="alert alert-danger mt-3" role="alert">
                 {errorMessage}
               </div>
-            )}
+            )} */}
             <form onSubmit={handleOTPSuccess}>
-              <div className="mb-3">
-                <label htmlFor="exampleInputOTP" className="form-label">
-                  OTP
-                </label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="exampleInputOTP"
-                  placeholder="Enter OTP"
-                  value={user.otp}
-                  onChange={handleChange}
-                  name="otp"
-                />
+              <div>
+                <div className={`form-input-wrapper ${errorMessage ? 'error-form-input' : ''}`}>
+                  <i className="bi bi-lock-fill prefix-icon"></i>
+                  <input
+                    type="text"
+                    className="form-input"
+                    id="exampleInputOTP"
+                    placeholder="Enter OTP"
+                    value={user.otp}
+                    onChange={handleChange}
+                    name="otp"
+                  />
+                </div>
+                <div className="input-error">{errorMessage}</div>
               </div>
-              <div className="text-center">
+              <div className="mt-4 text-center">
                 <button
                   type="submit"
-                  className="btn btn-primary w-75"
+                  className="btn btn-primary px-4"
                   disabled={verifyingOTP}
                 >
                   {verifyingOTP ? "Verifying..." : "Verify OTP"}
@@ -135,44 +136,42 @@ const ForgotPassword = () => {
           </div>
         ) : (
           <div className="d-flex flex-column">
-            {errorMessage && (
+            {/* {errorMessage && (
               <div className="alert alert-danger mt-3" role="alert">
                 {errorMessage}
               </div>
-            )}
+            )} */}
             <form onSubmit={handleSubmit}>
-              <div className="mb-3">
-                <label htmlFor="exampleInputEmail1" className="form-label">
-                  Email
-                </label>
-                <input
-                  type="email"
-                  className="form-control"
-                  id="exampleInputEmail1"
-                  aria-describedby="emailHelp"
-                  placeholder="Enter Your Email"
-                  value={user.email}
-                  onChange={handleChange}
-                  name="email"
-                />
+              <div>
+                <div className={`form-input-wrapper ${errorMessage ? 'error-form-input' : ''}`}>
+                  <i className="bi bi-person-fill prefix-icon"></i>
+                  <input
+                    type="email"
+                    className="form-input"
+                    id="exampleInputEmail1"
+                    aria-describedby="emailHelp"
+                    placeholder="Enter Your Email"
+                    value={user.email}
+                    onChange={handleChange}
+                    name="email"
+                  />
+                </div>
+                <div className="input-error">{errorMessage}</div>
               </div>
 
-              <div className="text-center">
+              <div className="mt-4">
                 <button
                   type="submit"
-                  className="btn btn-primary w-75"
+                  className="btn btn-primary px-4"
                   disabled={emailStatus !== "idle"}
                 >
                   {emailStatus === "sending"
                     ? "Sending..."
                     : emailStatus === "sent"
-                    ? "Email Sent"
-                    : "Submit"}
+                      ? "Email Sent"
+                      : "Get OTP"}
                 </button>
-              </div>
-
-              <div className="mt-3 text-center">
-                <Link to="/login" className="text-decoration-none">
+                <Link to="/login" className="btn btn-light text-decoration-none ms-3 px-3">
                   Back to Login
                 </Link>
               </div>

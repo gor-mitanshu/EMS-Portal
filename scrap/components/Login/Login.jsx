@@ -1,6 +1,6 @@
 import React from "react";
 import "./Login.css";
-import KarmDigitech from "../../assets/karmdigitech.png";
+import KarmDigitech from "../../assets/images/karmdigitech.png";
 import { Link } from "react-router-dom";
 
 const Login = () => {

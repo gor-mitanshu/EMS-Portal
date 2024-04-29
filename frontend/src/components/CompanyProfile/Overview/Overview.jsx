@@ -122,11 +122,11 @@ const Overview = () => {
   };
 
   return (
-    <div className="container">
+    <div>
       <form onSubmit={handleSubmit}>
         <div className="row">
           {/* Card 1 */}
-          <div className="col-md-12">
+          <div className="col-md-9">
             {/* Personal Profile */}
             <ProfileField
               title="Overview"
@@ -149,7 +149,7 @@ const Overview = () => {
           </div>
 
           {/* Card 2 */}
-          <div className="col-md-12">
+          <div className="col-md-3 h-100">
             {/* Social profiles */}
             <ProfileField
               title="Social Profiles"

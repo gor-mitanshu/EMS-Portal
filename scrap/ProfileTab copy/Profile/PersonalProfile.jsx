@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import User from "../../../assets/user.jpg";
+import User from "../../../assets/images/user.jpg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faFacebook,

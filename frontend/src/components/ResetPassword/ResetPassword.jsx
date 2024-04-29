@@ -62,34 +62,36 @@ const ResetPassword = () => {
                 {error}
               </div>
             )}
-            <div className="mb-3">
-              <label htmlFor="password" className="form-label">
-                New Password
-              </label>
-              <input
-                type="password"
-                className="form-control"
-                id="password"
-                placeholder="Enter New Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
+            <div>
+              <div className={`form-input-wrapper ${error ? 'error-form-input' : ''}`}>
+                <i className="bi bi-lock-fill prefix-icon"></i>
+                <input
+                  type="password"
+                  className="form-input"
+                  id="password"
+                  placeholder="Enter New Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </div>
+              <div className="input-error">{error}</div>
             </div>
-            <div className="mb-3">
-              <label htmlFor="confirmPassword" className="form-label">
-                Confirm Password
-              </label>
-              <input
-                type="password"
-                className="form-control"
-                id="confirmPassword"
-                placeholder="Confirm New Password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-              />
+            <div>
+              <div className={`form-input-wrapper ${error ? 'error-form-input' : ''}`}>
+                <i className="bi bi-lock-fill prefix-icon"></i>
+                <input
+                  type="password"
+                  className="form-input"
+                  id="confirmPassword"
+                  placeholder="Confirm New Password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                />
+              </div>
+              <div className="input-error">{error}</div>
             </div>
-            <div className="text-center">
-              <button type="submit" className="btn btn-primary w-75">
+            <div className="text-center mt-4">
+              <button type="submit" className="btn btn-primary px-4">
                 Reset Password
               </button>
             </div>

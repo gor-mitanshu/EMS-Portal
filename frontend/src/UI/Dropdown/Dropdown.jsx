@@ -2,7 +2,7 @@ const Dropdown = ({ icon, menuItems }) => {
   return (
     <div className="dropdown">
       <button
-        className="btn  dropdown-toggle"
+        className="btn dropdown-toggle"
         type="button"
         id="dropdownMenuButton"
         data-bs-toggle="dropdown"
@@ -15,7 +15,7 @@ const Dropdown = ({ icon, menuItems }) => {
         aria-labelledby="dropdownMenuButton"
       >
         {menuItems.map((item) => (
-          <li key={item.text}>
+          <li key={item.text} className="d-flex align-items-center">
             <a className="dropdown-item" href="/">
               {item.text}
             </a>

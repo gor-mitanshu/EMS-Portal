@@ -1,34 +1,29 @@
 import React from "react";
-import KarmDigitech from "../../assets/karmdigitech.png";
+import KarmDigitech from "../../assets/images/karmdigitech.png";
+import loginVector from "../../assets/images/login-vector.jpg"
 
-const FormWrapper = ({ children, title, subtitle }) => {
+const FormWrapper = ({ children, title }) => {
   return (
     <>
-      <div className="container-fluid d-flex flex-wrap w-100 p-0 vh-100">
-        <div className="form">
-          <div className="wrapper-box">
-            <div className="text-center">
-              <img
-                src={KarmDigitech}
-                alt="Logo"
-                width={200}
-                height={30}
-                className="mb-5 text-center"
-              />
-            </div>
-            <div>
-              <h5 className="text-center m-0 title">
-                {title}
-                <p className="mt-2 mb-4 subtitle">{subtitle}</p>
-              </h5>
-              {children}
+      <div className="vh-100 container">
+        <div className="d-flex align-items-center justify-content-center h-100 position-relative">
+          <div className="col-12 col-md-10">
+            <div className="row align-items-center">
+              <div className="col-12 col-lg-7 text-center text-lg-start">
+                <img
+                  src={KarmDigitech}
+                  alt="Logo"
+                  width={200}
+                  height={30}
+                />
+                <img src={loginVector} height={"90%"} width={"90%"} className="object-fit-contain d-none d-lg-block" alt="" />
+              </div>
+              <div className="col-12 col-lg-5 p-5 p-lg-3 p-xxl-5">
+                <h1 className="mb-5 text-center text-lg-start">{title}</h1>
+                {children}
+              </div>
             </div>
           </div>
-        </div>
-
-        <div className="bg-wrapper">
-          <div className="bg-image"></div>
-          <div className="background-color"></div>
         </div>
       </div>
     </>
