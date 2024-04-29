@@ -4,6 +4,8 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
 const { ObjectId } = require('mongoose').Types;
+const fs = require('fs');
+const path = require('path');
 
 
 // Importing models
@@ -919,11 +921,7 @@ const companyController = {
 
   updatePolicy: async (req, res) => {
     try {
-      const { user } = req.user;
-      if (!user) {
-        return res.status(401).json({ success: false, message: "Unauthorized: Invalid token" });
-      }
-      const getCompanydetails = await CompanySchema.findOne({ user_id: user._id })
+      const getCompanydetails = req.companyDetails;
       const policy = await Policy.findOne({ company_id: getCompanydetails._id })
       if (!policy) {
         return res.status(404).send({
@@ -931,13 +929,14 @@ const companyController = {
           success: false,
         });
       }
+      console.log(req.body);
       const { policy_title, policy_description } = req.body;
       let policy_file = '';
       // Check if a new file was uploaded
       if (req.files && req.files.length > 0) {
         policy_file = req.files[0].filename;
         // Delete the old file
-        const existingPolicy = await PolicyData.findById(id);
+        const existingPolicy = await PolicyData.findById({ id: policy_file._id });
         if (existingPolicy && existingPolicy.policy_file) {
           const filePath = path.join('images', existingPolicy.policy_file);
           if (fs.existsSync(filePath)) {
@@ -946,7 +945,7 @@ const companyController = {
         }
       } else {
         // No new file uploaded, keep the existing file
-        const existingPolicy = await PolicyData.findById(id);
+        const existingPolicy = await PolicyData.findById({ id: policy_file._id });
         if (existingPolicy) {
           policy_file = existingPolicy.policy_file;
         }
@@ -957,7 +956,7 @@ const companyController = {
         policy_file,
       }
       const updatedDocument = await PolicyData.findOneAndUpdate(
-        { _id: id },
+        { _id: policy._id },
         { $set: updatedFields },
         { new: true }
       )
@@ -984,6 +983,7 @@ const companyController = {
   },
 
   deletePolicy: async (req, res) => {
+    const { id } = req.params;
     const { user } = req.user;
     if (!user) {
       return res.status(401).json({ success: false, message: "Unauthorized: Invalid token" });

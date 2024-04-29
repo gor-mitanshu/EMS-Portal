@@ -9,14 +9,12 @@ const CompanyPoliciesModal = ({
   handleChange,
   handleFileChange,
   handleSubmit,
+  editId,
 }) => {
   return (
     <Modal show={show} onHide={handleClose}>
       <Modal.Header closeButton>
-        <Modal.Title>
-          {" "}
-          {formData._id ? "Edit Policy" : "Add Policy"}
-        </Modal.Title>
+        <Modal.Title> {editId ? "Edit Policy" : "Add Policy"}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={handleSubmit}>

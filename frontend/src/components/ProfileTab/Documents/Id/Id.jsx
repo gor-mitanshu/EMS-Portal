@@ -228,6 +228,7 @@ const Id = () => {
           (work) => work._id !== workId
         );
         setDocuments([{ documentDetails: updatedCertificates }]);
+        fetchDocuments();
       }
     } catch (error) {
       console.error("Error deleting certificate:", error);

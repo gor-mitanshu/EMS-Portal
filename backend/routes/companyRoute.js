@@ -7,6 +7,26 @@ const router = express.Router();
 const companyController = require('../controllers/companyController');
 // Middleware
 const verifyToken = require('../helpers/authMiddleware');
+const path = require('path');
+const multer = require('multer');
+
+const storage = multer.diskStorage({
+     destination: (req, file, cb) => {
+          cb(null, './images/');
+     },
+     filename: (req, file, cb) => {
+          const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+          const fileExtension = path.extname(file.originalname);
+          const fileName = uniqueSuffix + fileExtension;
+          cb(null, fileName);
+     }
+});
+const upload = multer({
+     storage: storage,
+     limits: {
+          fileSize: 1024 * 1024 * 5
+     }
+});
 
 // All the list of routes
 router.post('/signup', companyController.signup);
@@ -32,9 +52,9 @@ router.get('/getAnnouncement', verifyToken, companyController.getAnnouncement);
 
 
 // Policies
-router.post('/addPolicy', verifyToken, companyController.addPolicy);
+router.post('/addPolicy', verifyToken, upload.any(), companyController.addPolicy);
 router.get('/getPolicy', verifyToken, companyController.getPolicy);
-router.put('/updatePolicy/:id', verifyToken, companyController.updatePolicy);
+router.post('/updatePolicy/:id', verifyToken, upload.any(), companyController.updatePolicy);
 router.delete('/deletePolicy/:id', verifyToken, companyController.deletePolicy);
 
 
