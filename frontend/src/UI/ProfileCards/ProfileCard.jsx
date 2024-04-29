@@ -1,7 +1,7 @@
 import { faPencilAlt, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-const ProfileSection = ({
+const Card = ({
   title,
   editMode,
   handleEditClick,
@@ -41,4 +41,4 @@ const ProfileSection = ({
   );
 };
 
-export default ProfileSection;
+export default Card;

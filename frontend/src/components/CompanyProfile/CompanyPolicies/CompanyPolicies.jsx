@@ -5,7 +5,7 @@ import React, {
 } from "react";
 import CompanyPoliciesModal from "./CompanyPoliciesModal";
 import axios from "axios";
-import ProfileField from "../../../UI/ProfileFields/ProfileFields";
+import Card from "../../../UI/ProfileCards/ProfileCard";
 
 const initialState = {
   policy_title: "",
@@ -155,7 +155,7 @@ const CompanyPolices = () => {
   };
 
   return (
-    <ProfileField title={"Company Policies"}>
+    <Card title={"Company Policies"}>
       <div>
         <button className="btn btn-primary" onClick={handleShowModal}>
           Add
@@ -206,7 +206,7 @@ const CompanyPolices = () => {
           <h6 className="pt-4">No Policies uploaded yet!!!</h6>
         )}
       </div>
-    </ProfileField>
+    </Card>
   );
 };
 

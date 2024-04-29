@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import ProfileField from "../../../UI/ProfileFields/ProfileFields";
 import OverViewForm from "./OverViewForm";
 import OverViewItem from "./OverViewItem";
 import SocialProfile from "../../ProfileTab/Profile/SocialProfile/SocialProfile";
 import SocialProfileForm from "../../ProfileTab/Profile/SocialProfile/SocialProfileForm";
 import { toast } from "react-toastify";
+import Card from "../../../UI/ProfileCards/ProfileCard";
 
 const Overview = () => {
   const [editMode, setEditMode] = useState({
@@ -160,7 +160,7 @@ const Overview = () => {
           {/* Card 1 */}
           <div className="col-md-9">
             {/* Personal Profile */}
-            <ProfileField
+            <Card
               title="Overview"
               editMode={editMode.overview}
               handleEditClick={() => handleEditClick("overview")}
@@ -177,13 +177,13 @@ const Overview = () => {
               ) : (
                 <OverViewItem formData={formData} />
               )}
-            </ProfileField>
+            </Card>
           </div>
 
           {/* Card 2 */}
           <div className="col-md-3 h-100">
             {/* Social profiles */}
-            <ProfileField
+            <Card
               title="Social Profiles"
               editMode={editMode.socialProfiles}
               handleEditClick={() => handleEditClick("socialProfiles")}
@@ -202,7 +202,7 @@ const Overview = () => {
                   <SocialProfile formData={formData} />
                 </>
               )}
-            </ProfileField>
+            </Card>
           </div>
         </div>
       </form>

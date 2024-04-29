@@ -1,10 +1,10 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import ProfileField from "../../../UI/ProfileFields/ProfileFields";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import EducationForm from "./EducationForm";
 import EducationItem from "./EducationItem";
 import axios from "axios";
+import Card from "../../frontend/src/UI/ProfileCards/ProfileCard";
 
 const Education = () => {
   const [showForm, setShowForm] = useState(false);
@@ -146,7 +146,7 @@ const Education = () => {
   return (
     <>
       <div className="col-md-12">
-        <ProfileField title={"Education"}>
+        <Card title={"Education"}>
           <>
             {!showForm ? (
               <button className="btn btn-primary mb-4" onClick={handleAddClick}>
@@ -191,7 +191,7 @@ const Education = () => {
               )}
             </div>
           </>
-        </ProfileField>
+        </Card>
       </div>
     </>
   );

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import ProfileField from "../../../UI/ProfileFields/ProfileFields";
 import DepartmentForm from "./DepartmentForm";
 import DepartmentItem from "./DepartmentList";
 import axios from "axios";
+import Card from "../../../UI/ProfileCards/ProfileCard";
 
 const Department = () => {
   const [fields, setFields] = useState([]);
@@ -71,7 +71,7 @@ const Department = () => {
 
   return (
     <>
-      <ProfileField title={"Department"}>
+      <Card title={"Department"}>
         <DepartmentForm
           fields={fields}
           fieldValues={fieldValues}
@@ -92,7 +92,7 @@ const Department = () => {
             />
           );
         })}
-      </ProfileField>
+      </Card>
     </>
   );
 };

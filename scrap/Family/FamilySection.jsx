@@ -1,9 +1,9 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import ProfileField from "../../../UI/ProfileFields/ProfileFields";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 import FamilyForm from "./FamilyForm";
 import FamilyItem from "./FamilyItem";
+import Card from "../../frontend/src/UI/ProfileCards/ProfileCard";
 
 const FamilySection = ({ title }) => {
   const [showForm, setShowForm] = useState(false);
@@ -72,7 +72,7 @@ const FamilySection = ({ title }) => {
   return (
     <div className="row">
       <div className="col-md-12">
-        <ProfileField title={title}>
+        <Card title={title}>
           <>
             {!showForm ? (
               <button className="btn btn-primary mb-4" onClick={handleAddClick}>
@@ -110,7 +110,7 @@ const FamilySection = ({ title }) => {
               )}
             </div>
           </>
-        </ProfileField>
+        </Card>
       </div>
     </div>
   );

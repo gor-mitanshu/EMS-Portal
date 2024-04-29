@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import ProfileField from "../../../UI/ProfileFields/ProfileFields";
+import Card from "../../../UI/ProfileCards/ProfileCard";
 
 const Settings = () => {
   const [isFinancialYearCycleEnabled, setIsFinancialYearCycleEnabled] =
@@ -18,7 +18,7 @@ const Settings = () => {
   return (
     <>
       <div className="col-md-12">
-        <ProfileField title={"Annual Leave Cycle"}>
+        <Card title={"Annual Leave Cycle"}>
           <div className="d-flex justify-content-between">
             <div>
               Enable Financial Year Cycle (Default is Calendar Year Cycle)
@@ -37,8 +37,8 @@ const Settings = () => {
               </label>
             </div>
           </div>
-        </ProfileField>
-        <ProfileField title={"Multi-Level Approval"}>
+        </Card>
+        <Card title={"Multi-Level Approval"}>
           <div className="d-flex justify-content-between">
             <div>Enable Skip Level Approval (Your Manager's Reporter)</div>
             <div className="form-check form-switch">
@@ -55,7 +55,7 @@ const Settings = () => {
               </label>
             </div>
           </div>
-        </ProfileField>
+        </Card>
       </div>
     </>
   );

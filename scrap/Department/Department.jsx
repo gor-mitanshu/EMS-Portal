@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import ProfileField from "../../../UI/ProfileFields/ProfileFields";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
+import Card from "../../frontend/src/UI/ProfileCards/ProfileCard";
 
 const Department = () => {
   const [fields, setFields] = useState([]);
@@ -43,7 +43,7 @@ const Department = () => {
 
   return (
     <>
-      <ProfileField title={"Department"}>
+      <Card title={"Department"}>
         {fields.map((field) => (
           <div key={field.id} className="row mb-2">
             <div className="form-group col-md-5">
@@ -144,7 +144,7 @@ const Department = () => {
             </div>
           </>
         )}
-      </ProfileField>
+      </Card>
     </>
   );
 };
