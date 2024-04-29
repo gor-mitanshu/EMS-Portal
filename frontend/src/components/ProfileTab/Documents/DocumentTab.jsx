@@ -24,7 +24,7 @@ const DocumentTab = () => {
 
   const tabItems = ["ID", "Certificate", "Work"];
   return (
-    <div className="container">
+    <div>
       <div className="card text-start">
         <div className="card-header">
           <ul className="nav nav-tabs card-header-tabs">

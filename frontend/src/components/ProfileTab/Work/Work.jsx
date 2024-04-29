@@ -231,7 +231,7 @@ const Work = () => {
 
   return (
     <>
-      <div className="container">
+      <div>
         <form onSubmit={handleSubmit}>
           <div className="row">
             {/* Card 1 */}
