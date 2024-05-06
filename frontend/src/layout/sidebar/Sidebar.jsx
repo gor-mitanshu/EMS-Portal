@@ -189,15 +189,14 @@ const Sidebar = ({ open, handleDrawerOpen }) => {
           </div>
         )}
 
-        {menuItems.map((item) => (
-          <React.Fragment key={item.id}>
-            {item.content ? (
-              <div className="accordion">
+        <div className="accordion" id="sideBarMenuAccordion">
+          {menuItems.map((item) => (
+            <React.Fragment key={item.id}>
+              {item.content ? (
                 <div className="accordion-item border-0 menu-item-wrapper">
                   <button
-                    className={`accordion-button collapsed menu-item ${
-                      location.pathname.includes(item.link) ? "menu-active" : ""
-                    } ${open ? "" : "collapsed"}`}
+                    className={`accordion-button collapsed menu-item ${location.pathname.includes(item.link) ? "menu-active" : ""
+                      } ${open ? "" : "collapsed"}`}
                     // onClick={() => handleAccordionClick(item)}
                     onClick={() => {
                       handleDrawerOpen(true);
@@ -213,10 +212,10 @@ const Sidebar = ({ open, handleDrawerOpen }) => {
                   </button>
                   <div
                     id={open ? `collapse${item.id}` : ""}
-                    className={`accordion-collapse collapse ${
-                      open ? "" : "hide"
-                    } `}
+                    className={`accordion-collapse collapse ${open ? "" : "hide"
+                      } `}
                     aria-labelledby={`heading${item.id}`}
+                    data-bs-parent="#sideBarMenuAccordion"
                   >
                     <div className="accordion-body list-item-body">
                       {item.content.map((subItem, index) => (
@@ -226,11 +225,10 @@ const Sidebar = ({ open, handleDrawerOpen }) => {
                           }}
                           key={index}
                           to={subItem.link}
-                          className={`menu-item ${
-                            location.pathname === subItem.link
+                          className={`menu-item ${location.pathname === subItem.link
                               ? "nav-active"
                               : ""
-                          }`}
+                            }`}
                         >
                           <div className="sidebar-dash"></div>
                           <h6 className="m-0">{subItem.title}</h6>
@@ -239,25 +237,24 @@ const Sidebar = ({ open, handleDrawerOpen }) => {
                     </div>
                   </div>
                 </div>
-              </div>
-            ) : (
-              <div className="menu-item-wrapper">
-                <Link
-                  to={item.link}
-                  onClick={() => {
-                    handleDrawerOpen(false);
-                  }}
-                  className={`menu-item ${
-                    location.pathname === item.link ? "nav-active" : ""
-                  }`}
-                >
-                  <i className={`bi ${item.icon}`}></i>
-                  <h6 className="m-0">{item.title}</h6>
-                </Link>
-              </div>
-            )}
-          </React.Fragment>
-        ))}
+              ) : (
+                <div className="menu-item-wrapper">
+                  <Link
+                    to={item.link}
+                    onClick={() => {
+                      handleDrawerOpen(false);
+                    }}
+                    className={`menu-item ${location.pathname === item.link ? "nav-active" : ""
+                      }`}
+                  >
+                    <i className={`bi ${item.icon}`}></i>
+                    <h6 className="m-0">{item.title}</h6>
+                  </Link>
+                </div>
+              )}
+            </React.Fragment>
+          ))}
+        </div>
       </div>
     </div>
   );

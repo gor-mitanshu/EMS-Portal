@@ -402,14 +402,13 @@ const companyController = {
       // Create a new user in the CompanySchema model
       if (companyName !== undefined) {
         // Validations
-        if (!user_id || !companyName || !companySize || !employeeStrength) {
+        if (!user_id || !companyName || !employeeStrength) {
           return res.status(409).send({
             message: "All Fields are required",
             success: false,
             errors: {
               user_id: !user_id ? "user_id is requierd" : "",
               companyName: !companyName ? "Company name is required" : "",
-              companySize: !companySize ? "Company Size is required" : "",
               employeeStrength: !employeeStrength ? "Employee Strength is required" : "",
             }
           });

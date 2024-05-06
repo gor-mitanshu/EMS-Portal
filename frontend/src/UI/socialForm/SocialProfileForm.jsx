@@ -1,5 +1,5 @@
 import {
-  faFacebook,
+  faFacebookF,
   faLinkedinIn,
   faTwitter,
 } from "@fortawesome/free-brands-svg-icons";
@@ -10,79 +10,57 @@ const SocialProfileForm = ({ formData, formErrors, handleInputChange }) => {
   console.log(formData);
   return (
     <>
-      <div className="col mb-2">
-        <div className="d-flex align-items-top justify-content-between">
-          <FontAwesomeIcon
-            icon={faLinkedinIn}
-            size="xl"
-            className="pe-3 pt-2"
-            color="blue"
-            style={{ height: "21px", width: "21px" }}
-          />
-          <div className="w-100">
-            <input
-              type="text"
-              className="form-control no-focus-box-shadow"
-              placeholder="LinkedIn Profile"
-              name="linked_in"
-              value={formData ? formData.linked_in : ""}
-              onChange={handleInputChange}
-            />
-            {formErrors.linked_in && (
-              <small className="text-danger">{formErrors.linked_in}</small>
-            )}
-          </div>
-        </div>
+      <div className="form-input-wrapper w-100">
+        <FontAwesomeIcon
+          icon={faLinkedinIn}
+          className="prefix-icon"
+          color="#0077B5"
+          style={{ height: "21px", width: "21px" }}
+        />
+        <input
+          type="text"
+          className="form-input pe-0"
+          placeholder="LinkedIn Profile"
+          name="linked_in"
+          value={formData ? formData.linked_in : ""}
+          onChange={handleInputChange}
+        />
       </div>
-      <div className="col mb-2">
-        <div className="d-flex align-items-top justify-content-between">
-          <FontAwesomeIcon
-            icon={faFacebook}
-            size="xl"
-            className="pe-3 pt-2"
-            color="blue"
-            style={{ height: "21px", width: "21px" }}
-          />
-          <div className="w-100">
-            <input
-              type="text"
-              className="form-control no-focus-box-shadow"
-              placeholder="Facebook Profile"
-              name="facebook"
-              value={formData ? formData.facebook : ""}
-              onChange={handleInputChange}
-            />
-            {formErrors.facebook && (
-              <small className="text-danger">{formErrors.facebook}</small>
-            )}
-          </div>
-        </div>
+      <div className="form-input-wrapper w-100">
+        <FontAwesomeIcon
+          icon={faFacebookF}
+          className="prefix-icon"
+          color="#316FF6"
+          style={{ height: "21px", width: "21px" }}
+        />
+        <input
+          type="text"
+          className="form-input pe-0"
+          placeholder="Facebook Profile"
+          name="facebook"
+          value={formData ? formData.facebook : ""}
+          onChange={handleInputChange}
+        />
       </div>
-      <div className="col mb-2">
-        <div className="d-flex align-items-top justify-content-between">
-          <FontAwesomeIcon
-            icon={faTwitter}
-            size="xl"
-            className="pe-3 pt-2"
-            color="blue"
-            style={{ height: "21px", width: "21px" }}
-          />
-          <div className="w-100">
-            <input
-              type="text"
-              className="form-control no-focus-box-shadow"
-              placeholder="Twitter Profile"
-              name="twitter"
-              value={formData ? formData.twitter : ""}
-              onChange={handleInputChange}
-            />
-            {formErrors.twitter && (
-              <small className="text-danger">{formErrors.twitter}</small>
-            )}
-          </div>
-        </div>
+      <div className="form-input-wrapper w-100">
+        <FontAwesomeIcon
+          icon={faTwitter}
+          className="prefix-icon"
+          color="#1DA1F2"
+          style={{ height: "21px", width: "21px" }}
+        />
+        <input
+          type="text"
+          className="form-input pe-0"
+          placeholder="Twitter Profile"
+          name="twitter"
+          value={formData ? formData.twitter : ""}
+          onChange={handleInputChange}
+        />
       </div>
-      <button className="btn btn-primary mr-2">Save</button>
+      <div className="text-end">
+        <button className="btn btn-primary px-4">Save</button>
+      </div>
     </>
   );
 };

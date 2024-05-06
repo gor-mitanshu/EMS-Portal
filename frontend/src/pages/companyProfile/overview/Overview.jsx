@@ -17,6 +17,7 @@ const Overview = () => {
     socialProfiles: false,
   });
 
+  const [companyData, setComapnyData] = useState({})
   const [formData, setFormData] = useState({
     register_company: "",
     brand_name: "",
@@ -66,6 +67,7 @@ const Overview = () => {
       }
     );
     const { company } = response.data;
+    setComapnyData(company);
     setFormData(company);
   };
 
@@ -162,10 +164,10 @@ const Overview = () => {
       <form onSubmit={handleSubmit}>
         <div className="row">
           {/* Card 1 */}
-          <div className="col-md-9">
+          <div className="col-lg-8">
             {/* Personal Profile */}
             <Card
-              title="Overview"
+              title="Company Profile"
               editMode={editMode.overview}
               handleEditClick={() => handleEditClick("overview")}
               handleCancelClick={() => handleCancelClick("overview")}
@@ -173,58 +175,41 @@ const Overview = () => {
               {editMode.overview ? (
                 <>
                   <OverViewForm
-                    formData={formData}
+                    formData={companyData}
                     formErrors={formErrors}
                     handleInputChange={handleInputChange}
                   />
                 </>
               ) : (
                 <>
-                  <div className="user-details">
+                  <div className="user-details mt-2">
                     <div className="row">
-                      <div className="col-md-4">
-                        <p>
-                          <strong>Registered Company Name:</strong>{" "}
-                          {formData.register_company}
-                        </p>
-                      </div>
-                      <div className="col-md-4">
-                        <p>
-                          <strong>Brand Name:</strong> {formData.brand_name}
-                        </p>
-                      </div>
-                      <div className="col-md-4">
-                        <p>
-                          <strong>Company Official Email:</strong>{" "}
-                          {formData.company_official_email}
-                        </p>
-                      </div>
+                      <h6 className="text-black fw-bold text-truncate col-12 col-md-6">Company Name</h6>
+                      <h6 className="text-gray text-truncate col-12 col-md-6">{companyData.register_company}</h6>
                     </div>
-                    <div className="row">
-                      <div className="col-md-4">
-                        <p>
-                          <strong>Company Official Contact:</strong>{" "}
-                          {formData.company_official_contact}
-                        </p>
-                      </div>
-                      <div className="col-md-4">
-                        <p>
-                          <strong>Website:</strong> {formData.website}
-                        </p>
-                      </div>
-                      <div className="col-md-4">
-                        <p>
-                          <strong>Domain Name:</strong> {formData.domain_name}
-                        </p>
-                      </div>
+                    <div className="row mt-4">
+                      <h6 className="text-black fw-bold text-truncate col-12 col-md-6">Brand Name</h6>
+                      <h6 className="text-gray text-truncate col-12 col-md-6">{companyData.brand_name}</h6>
                     </div>
-                    <div className="row">
-                      <div className="col-md-6">
-                        <p>
-                          <strong>Industry Type:</strong>{" "}
-                          {formData.industry_type}
-                        </p>
-                      </div>
+                    <div className="row mt-4">
+                      <h6 className="text-black fw-bold text-truncate col-12 col-md-6">Company Email</h6>
+                      <h6 className="text-gray text-truncate col-12 col-md-6">{companyData.company_official_email}</h6>
+                    </div>
+                    <div className="row mt-4">
+                      <h6 className="text-black fw-bold text-truncate col-12 col-md-6">Company Contact</h6>
+                      <h6 className="text-gray text-truncate col-12 col-md-6">{companyData.company_official_contact}</h6>
+                    </div>
+                    <div className="row mt-4">
+                      <h6 className="text-black fw-bold text-truncate col-12 col-md-6">Website</h6>
+                      <h6 className="text-gray text-truncate col-12 col-md-6">{companyData.website}</h6>
+                    </div>
+                    <div className="row mt-4">
+                      <h6 className="text-black fw-bold text-truncate col-12 col-md-6">Domain Name</h6>
+                      <h6 className="text-gray text-truncate col-12 col-md-6">{companyData.domain_name}</h6>
+                    </div>
+                    <div className="row mt-4">
+                      <h6 className="text-black fw-bold text-truncate col-12 col-md-6">Industry Type</h6>
+                      <h6 className="text-gray text-truncate col-12 col-md-6">{companyData.industry_type}</h6>
                     </div>
                   </div>
                 </>
@@ -233,7 +218,7 @@ const Overview = () => {
           </div>
 
           {/* Card 2 */}
-          <div className="col-md-3 h-100">
+          <div className="col-lg-4">
             {/* Social profiles */}
             <Card
               title="Social Profiles"
@@ -262,33 +247,33 @@ const Overview = () => {
                       className="pe-4"
                       rel="noreferrer"
                     >
-                      <FontAwesomeIcon icon={faLinkedinIn} size="2xl" />
+                        <FontAwesomeIcon icon={faLinkedinIn} color="#0077B5" size="2xl" />
                     </a>
 
                     <a
                       href={
                         formData.facebook
                           ? `//${formData.facebook}`
-                          : "https://linkedin.com/in/"
+                          : "https://facebook.com/in/"
                       }
                       target="_blank"
                       className="pe-4"
                       rel="noreferrer"
                     >
-                      <FontAwesomeIcon icon={faFacebook} size="2xl" />
+                      <FontAwesomeIcon icon={faFacebook} color="#316FF6" size="2xl" />
                     </a>
 
                     <a
                       href={
                         formData.twitter
                           ? `//${formData.twitter}`
-                          : "https://linkedin.com/in/"
+                          : "https://twitter.com/in/"
                       }
                       target="_blank"
                       className="pe-4"
                       rel="noreferrer"
                     >
-                      <FontAwesomeIcon icon={faTwitter} size="2xl" />
+                        <FontAwesomeIcon icon={faTwitter} color="#1DA1F2" size="2xl" />
                     </a>
                   </div>{" "}
                 </>

@@ -12,7 +12,7 @@ const OverViewForm = ({ formData, formErrors, handleInputChange }) => {
             </label>
             <input
               type="text"
-              className="form-input"
+              className="form-input px-0"
               placeholder="Please Enter Registered Company"
               name="register_company"
               value={formData.register_company}
@@ -29,14 +29,14 @@ const OverViewForm = ({ formData, formErrors, handleInputChange }) => {
             </label>
             <input
               type="text"
-              className="form-input"
+              className="form-input px-0"
               placeholder="Please Enter Brand Name"
               name="brand_name"
               value={formData.brand_name}
               onChange={handleInputChange}
             />
-            <div className="input-error">{formErrors.brand_name}</div>
           </div>
+          <div className="input-error">{formErrors.brand_name}</div>
         </div>
 
         <div className="col-md-4">
@@ -46,14 +46,14 @@ const OverViewForm = ({ formData, formErrors, handleInputChange }) => {
             </label>
             <input
               type="text"
-              className="form-input"
+              className="form-input px-0"
               placeholder="Please Enter Company's Offical Email"
               name="company_official_email"
               value={formData.company_official_email}
               onChange={handleInputChange}
             />
-            <div className="input-error">{formErrors.company_official_email}</div>
           </div>
+          <div className="input-error">{formErrors.company_official_email}</div>
         </div>
 
         <div className="col-md-4">
@@ -63,14 +63,14 @@ const OverViewForm = ({ formData, formErrors, handleInputChange }) => {
             </label>
             <input
               type="text"
-              className="form-input"
+              className="form-input px-0"
               placeholder="Please Enter Company's Official Contact"
               name="company_official_contact"
               value={formData.company_official_contact}
               onChange={handleInputChange}
             />
-            <div className="input-error">{formErrors.company_official_contact}</div>
           </div>
+          <div className="input-error">{formErrors.company_official_contact}</div>
         </div>
 
         <div className="col-md-4">
@@ -80,7 +80,7 @@ const OverViewForm = ({ formData, formErrors, handleInputChange }) => {
             </label>
             <input
               type="text"
-              className="form-input"
+              className="form-input px-0"
               placeholder="Please Enter Registered Company"
               name="website"
               value={formData.website}
@@ -97,7 +97,7 @@ const OverViewForm = ({ formData, formErrors, handleInputChange }) => {
             </label>
             <input
               type="text"
-              className="form-input"
+              className="form-input px-0"
               placeholder="Please Enter Registered Company"
               name="domain_name"
               value={formData.domain_name}
@@ -114,7 +114,7 @@ const OverViewForm = ({ formData, formErrors, handleInputChange }) => {
             </label>
             <input
               type="text"
-              className="form-input"
+              className="form-input px-0"
               placeholder="Please Enter Industry Type"
               name="industry_type"
               value={formData.industry_type}
