@@ -51,10 +51,6 @@ const Department = () => {
     axios
       .post("http://localhost:3001/departments", data)
       .then((response) => {
-        console.log(response);
-        // console.log("Data submitted:", data);
-        console.log(data);
-        console.log(departments);
         setDepartments([...departments, ...data]);
       })
       .catch((error) => {
@@ -84,7 +80,7 @@ const Department = () => {
         {departments.map((data, index) => {
           // console.log(data);
           return (
-            <div style={{ marginBottom: "20px" }}>
+            <div>
               <h3>Department: {data.department}</h3>
               <ul>
                 {data.subdepartments.map((subdepartment, index) => (

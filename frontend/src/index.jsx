@@ -49,319 +49,69 @@ import { RequireAuth, RequireLogout } from "./authGuard/AuthGuard";
 import { AuthProvider } from "./authGuard/useAuth";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
+
 root.render(
   <>
     <AuthProvider>
       <BrowserRouter>
         <Routes>
-          <Route
-            path="/login"
-            element={
-              <RequireLogout>
-                <Login />
-              </RequireLogout>
-            }
-          />
+          {/* Auth Routes */}
+          <Route path="/login" element={<RequireLogout><Login /></RequireLogout>} />
           <Route path="/forgetpassword" element={<ForgotPassword />} />
           <Route path="/resetpassword/:id/:token" element={<ResetPassword />} />
           <Route path="/register" element={<Register />} />
-          <Route
-            path="/verify/:verificationToken"
-            element={<UserVerification />}
-          />
+          <Route path="/verify/:verificationToken" element={<UserVerification />} />
           {/* Layout Routes */}
-          <Route
-            path="/"
-            element={
-              <RequireAuth>
-                <App />
-              </RequireAuth>
-            }
-          >
+          <Route path="/" element={<RequireAuth><App /></RequireAuth>}>
             <Route index element={<Navigate to="dashboard" replace />} />
-            <Route
-              path="dashboard"
-              element={
-                <RequireAuth>
-                  <Dashboard />
-                </RequireAuth>
-              }
-            />
+            <Route path="dashboard" element={<Dashboard />} />
 
             {/* Company Routes */}
-            <Route
-              path="/company-profile"
-              element={
-                <RequireAuth>
-                  <CompanyProfile />
-                </RequireAuth>
-              }
-            >
+            <Route path="/company-profile" element={<CompanyProfile />}>
               <Route index element={<Navigate to="overview" replace />} />
-              <Route
-                path="overview"
-                element={
-                  <RequireAuth>
-                    <Overview />
-                  </RequireAuth>
-                }
-              />
-              <Route
-                path="address"
-                element={
-                  <RequireAuth>
-                    <Address />
-                  </RequireAuth>
-                }
-              />
-              <Route
-                path="department"
-                element={
-                  <RequireAuth>
-                    <Department />{" "}
-                  </RequireAuth>
-                }
-              />
-              <Route
-                path="designation"
-                element={
-                  <RequireAuth>
-                    <Designation />{" "}
-                  </RequireAuth>
-                }
-              />
-              <Route
-                path="announcements"
-                element={
-                  <RequireAuth>
-                    <Announcement />{" "}
-                  </RequireAuth>
-                }
-              />
-              <Route
-                path="policies"
-                element={
-                  <RequireAuth>
-                    <CompanyPolices />{" "}
-                  </RequireAuth>
-                }
-              />
-              <Route
-                path="admin"
-                element={
-                  <RequireAuth>
-                    <Admin />{" "}
-                  </RequireAuth>
-                }
-              />
-              <Route
-                path="statutory"
-                element={
-                  <RequireAuth>
-                    <Statutory />{" "}
-                  </RequireAuth>
-                }
-              />
-              <Route
-                path="my-plan"
-                element={
-                  <RequireAuth>
-                    <Plan />{" "}
-                  </RequireAuth>
-                }
-              />
+              <Route path="overview" element={<Overview />} />
+              <Route path="address" element={<Address />} />
+              <Route path="department" element={<Department />} />
+              <Route path="designation" element={<Designation />} />
+              <Route path="announcements" element={<Announcement />} />
+              <Route path="policies" element={<CompanyPolices />} />
+              <Route path="admin" element={<Admin />} />
+              <Route path="statutory" element={<Statutory />} />
+              <Route path="my-plan" element={<Plan />} />
             </Route>
 
             {/* My Profile Routes */}
-            <Route
-              path="/my-profile"
-              element={
-                <RequireAuth>
-                  <TabsComponent />{" "}
-                </RequireAuth>
-              }
-            >
+            <Route path="/my-profile" element={<TabsComponent />}>
               <Route index element={<Navigate to="personal" replace />} />
-              <Route
-                path="personal"
-                element={
-                  <RequireAuth>
-                    <Profile />{" "}
-                  </RequireAuth>
-                }
-              />
-              <Route
-                path="work"
-                element={
-                  <RequireAuth>
-                    <Work />{" "}
-                  </RequireAuth>
-                }
-              />
-              <Route
-                path="team"
-                element={
-                  <RequireAuth>
-                    <Team />{" "}
-                  </RequireAuth>
-                }
-              />
-              <Route
-                path="education"
-                element={
-                  <RequireAuth>
-                    <Education />{" "}
-                  </RequireAuth>
-                }
-              />
-              <Route
-                path="family"
-                element={
-                  <RequireAuth>
-                    <Family />{" "}
-                  </RequireAuth>
-                }
-              />
-              <Route
-                path="documents"
-                element={
-                  <RequireAuth>
-                    <DocumentTab />{" "}
-                  </RequireAuth>
-                }
-              />
-              <Route
-                path="work-week"
-                element={
-                  <RequireAuth>
-                    <WorkWeek />{" "}
-                  </RequireAuth>
-                }
-              />
-              <Route
-                path="file-manager"
-                element={
-                  <RequireAuth>
-                    <FileManager />{" "}
-                  </RequireAuth>
-                }
-              />
+              <Route path="personal" element={<Profile />} />
+              <Route path="work" element={<Work />} />
+              <Route path="team" element={<Team />} />
+              <Route path="education" element={<Education />} />
+              <Route path="family" element={<Family />} />
+              <Route path="documents" element={<DocumentTab />} />
+              <Route path="work-week" element={<WorkWeek />} />
+              <Route path="file-manager" element={<FileManager />} />
             </Route>
 
-            <Route
-              path="directory"
-              element={
-                <RequireAuth>
-                  <Directory />{" "}
-                </RequireAuth>
-              }
-            />
-
-            <Route
-              path="attendance"
-              element={
-                <RequireAuth>
-                  <Attendance />{" "}
-                </RequireAuth>
-              }
-            />
-
-            {/* <Route path="leave" element={<Leave />} /> */}
             {/* Leave Routes */}
-            <Route
-              path="/leave"
-              element={
-                <RequireAuth>
-                  <Leave />
-                </RequireAuth>
-              }
-            >
+            <Route path="/leave" element={<Leave />}>
               <Route index element={<Navigate to="logs" replace />} />
-              <Route
-                path="logs"
-                element={
-                  <RequireAuth>
-                    <Logs />{" "}
-                  </RequireAuth>
-                }
-              />
-              {/* Leave's Rules route */}
-              <Route
-                path="rules"
-                element={
-                  <RequireAuth>
-                    <Rules />{" "}
-                  </RequireAuth>
-                }
-              />
-              <Route
-                path="balance"
-                element={
-                  <RequireAuth>
-                    <Balance />{" "}
-                  </RequireAuth>
-                }
-              />
-              <Route
-                path="settings"
-                element={
-                  <RequireAuth>
-                    <Settings />{" "}
-                  </RequireAuth>
-                }
-              />
+              <Route path="logs" element={<Logs />} />
+              <Route path="rules" element={<Rules />} />
+              <Route path="balance" element={<Balance />} />
+              <Route path="settings" element={<Settings />} />
             </Route>
 
-            <Route
-              path="payroll"
-              element={
-                <RequireAuth>
-                  <Payroll />{" "}
-                </RequireAuth>
-              }
-            />
-
-            <Route
-              path="organizing-chart"
-              element={
-                <RequireAuth>
-                  <Chart />{" "}
-                </RequireAuth>
-              }
-            />
-
-            <Route
-              path="holiday-calender"
-              element={
-                <RequireAuth>
-                  <Calender />{" "}
-                </RequireAuth>
-              }
-            />
-
-            <Route
-              path="rewards"
-              element={
-                <RequireAuth>
-                  <Rewards />{" "}
-                </RequireAuth>
-              }
-            />
+            <Route path="directory" element={<Directory />} />
+            <Route path="attendance" element={<Attendance />} />
+            <Route path="payroll" element={<Payroll />} />
+            <Route path="organizing-chart" element={<Chart />} />
+            <Route path="holiday-calender" element={<Calender />} />
+            <Route path="rewards" element={<Rewards />} />
           </Route>
         </Routes>
       </BrowserRouter>
     </AuthProvider>
-
-    <ToastContainer
-      theme="colored"
-      position="top-right"
-      autoClose={3000}
-      hideProgressBar={false}
-      newestOnTop={false}
-      closeOnClick
-      rtl={false}
-      draggable
-      pauseOnHover
-    />
+    <ToastContainer theme="colored" position="top-right" autoClose={3000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} draggable pauseOnHover />
   </>
 );

@@ -10,22 +10,21 @@ const Address = () => {
     custom_address_title: false,
   });
 
-  const [formData, setFormData] = useState({
+  const initForm = {
     register_office_address: "",
     corporate_office_address: "",
     custom_office_address: "",
-  });
+  }
 
-  const [formErrors, setFormErrors] = useState({
-    register_office_address: "",
-    corporate_office_address: "",
-    custom_office_address: "",
-  });
+  const [addressData, setAddressData] = useState({})
+  const [addressForm, setAddressForm] = useState(initForm);
+
+  const [formErrors, setFormErrors] = useState(initForm);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
+    setAddressForm({
+      ...addressForm,
       [name]: value,
     });
     setFormErrors({
@@ -45,8 +44,10 @@ const Address = () => {
       }
     );
     const { company } = response.data;
-    setFormData(company);
+    setAddressData(company);
+    setAddressForm(company);
   };
+
   useEffect(() => {
     getCompanyAddress();
   }, []);
@@ -59,6 +60,7 @@ const Address = () => {
   };
 
   const handleCancelClick = (section) => {
+    setAddressForm(addressData);
     setEditMode({
       ...editMode,
       [section]: false,
@@ -86,17 +88,17 @@ const Address = () => {
     // Validate each field based on the section
     // Current Address
     if (editMode.register_office) {
-      if (!formData.register_office_address) {
+      if (!addressForm.register_office_address) {
         errors.register_office_address = "Please enter a Address";
       }
     }
     if (editMode.corporate_office) {
-      if (!formData.corporate_office_address) {
+      if (!addressForm.corporate_office_address) {
         errors.corporate_office_address = "Please enter a Address";
       }
     }
     if (editMode.custom_address_title) {
-      if (!formData.custom_office_address) {
+      if (!addressForm.custom_office_address) {
         errors.custom_office_address = "Please enter a Address";
       }
     }
@@ -108,12 +110,13 @@ const Address = () => {
       const { user } = JSON.parse(atob(accessTokenwithoutQuotes.split(".")[1]));
       const response = await axios.put(
         `${process.env.REACT_APP_API}/company/updateCompanyAddress/${user._id}`,
-        formData,
+        addressForm,
         {
           headers: { Authorization: `Bearer ${accessTokenwithoutQuotes}` },
         }
       );
       if (response) {
+        getCompanyAddress()
         toast.success(response.data.message);
       }
       // alert("Form submitted successfully!");
@@ -127,143 +130,133 @@ const Address = () => {
 
   return (
     <>
-      <div className="container">
-        <form onSubmit={handleSubmit}>
-          <div className="row">
-            {/* Card 1 */}
-            <div className="col-md-12">
-              <Card
-                title={"Regsiter Office"}
-                editMode={editMode.register_office}
-                handleEditClick={() => handleEditClick("register_office")}
-                handleCancelClick={() => handleCancelClick("register_office")}
-              >
-                {editMode.register_office ? (
-                  <div className="form-group row">
-                    <div className="col mb-10">
-                      <label
-                        htmlFor="register_office_address"
-                        className="font-weight-bold"
-                      >
-                        Current Address:
-                      </label>
-                      <textarea
-                        type="text"
-                        className="form-control no-focus-box-shadow"
-                        placeholder="Enter Full Address"
-                        name="register_office_address"
-                        value={formData.register_office_address}
-                        onChange={handleInputChange}
-                        style={{ height: "150px" }}
-                      />
-                      {formErrors.register_office_address && (
-                        <small className="text-danger">
-                          {formErrors.register_office_address}
-                        </small>
-                      )}
-                      <button type="submit" className="btn btn-primary mt-2">
-                        Save
-                      </button>
-                    </div>
+      <form onSubmit={handleSubmit}>
+        <div className="row">
+          {/* Card 1 */}
+          <div className="col-md-12">
+            <Card
+              title={"Regsiter Office"}
+              editMode={editMode.register_office}
+              handleEditClick={() => handleEditClick("register_office")}
+              handleCancelClick={() => handleCancelClick("register_office")}
+            >
+              {editMode.register_office ? (
+                <div>
+                  <div
+                    className={`form-input-wrapper ${formErrors.register_office_address ? "error-form-input" : ""
+                      }`}
+                  >
+                    <label htmlFor="register_office_address" className="fw-medium">Current Address</label>
+                    <textarea
+                      type="text"
+                      className="form-input px-0"
+                      placeholder="Enter Full Address"
+                      name="register_office_address"
+                      value={addressForm.register_office_address}
+                      rows={1}
+                      onChange={handleInputChange}
+                    />
                   </div>
-                ) : (
-                  <p>
-                    {formData.register_office_address
-                      ? formData.register_office_address
-                      : "-"}
-                  </p>
-                )}
-              </Card>
-            </div>
-            {/* Card 2 */}
-            <div className="col-md-12">
-              <Card
-                title={"Corporate Office"}
-                editMode={editMode.corporate_office}
-                handleEditClick={() => handleEditClick("corporate_office")}
-                handleCancelClick={() => handleCancelClick("corporate_office")}
-              >
-                {editMode.corporate_office ? (
-                  <div className="form-group row">
-                    <div className="col mb-10">
-                      <label
-                        htmlFor="corporate_office_address"
-                        className="font-weight-bold"
-                      >
-                        Corporate Office Address:
-                      </label>
-                      <textarea
-                        type="text"
-                        className="form-control no-focus-box-shadow"
-                        placeholder="Enter Full Address"
-                        name="corporate_office_address"
-                        value={formData.corporate_office_address}
-                        onChange={handleInputChange}
-                        style={{ height: "150px" }}
-                      />
-                      {formErrors.corporate_office_address && (
-                        <small className="text-danger">
-                          {formErrors.corporate_office_address}
-                        </small>
-                      )}
-                    </div>
-                  </div>
-                ) : (
-                  <p>
-                    {formData.corporate_office_address
-                      ? formData.corporate_office_address
-                      : "-"}
-                  </p>
-                )}
-              </Card>
-            </div>
-            {/* Card 3 */}
-            <div className="col-md-12">
-              <Card
-                title={"Custom Address"}
-                editMode={editMode.custom_address_title}
-                handleEditClick={() => handleEditClick("custom_address_title")}
-                handleCancelClick={() =>
-                  handleCancelClick("custom_address_title")
-                }
-              >
-                {editMode.custom_address_title ? (
-                  <div className="form-group row">
-                    <div className="col mb-10">
-                      <label
-                        htmlFor="custom_office_address"
-                        className="font-weight-bold"
-                      >
-                        Custom Office Address:
-                      </label>
-                      <textarea
-                        type="text"
-                        className="form-control no-focus-box-shadow"
-                        placeholder="Enter Full Address"
-                        name="custom_office_address"
-                        value={formData.custom_office_address}
-                        onChange={handleInputChange}
-                        style={{ height: "150px" }}
-                      />
-                      {formErrors.custom_office_address && (
-                        <small className="text-danger">
-                          {formErrors.custom_office_address}
-                        </small>
-                      )}
-                    </div>
-                  </div>
-                ) : (
-                  <p>
-                    {formData.corporate_office_address
-                      ? formData.corporate_office_address
-                      : "-"}
-                  </p>
-                )}
-              </Card>
-            </div>
+                  <div className="input-error">{formErrors.register_office_address}</div>
+                  <button type="submit" className="btn btn-primary px-4">Save</button>
+                </div>
+              ) : (
+                <p>
+                  {addressData.register_office_address
+                    ? addressData.register_office_address
+                    : "-"}
+                </p>
+              )}
+            </Card>
           </div>
-        </form>
-      </div>
+          {/* Card 2 */}
+          <div className="col-md-12">
+            <Card
+              title={"Corporate Office"}
+              editMode={editMode.corporate_office}
+              handleEditClick={() => handleEditClick("corporate_office")}
+              handleCancelClick={() => handleCancelClick("corporate_office")}
+            >
+              {editMode.corporate_office ? (
+                <div>
+                  <div
+                    className={`form-input-wrapper ${formErrors.corporate_office_address ? "error-form-input" : ""
+                      }`}
+                  >
+                    <label
+                      htmlFor="corporate_office_address"
+                      className="fw-medium"
+                    >
+                      Corporate Office Address:
+                    </label>
+                    <textarea
+                      type="text"
+                      className="form-input px-0"
+                      placeholder="Enter Full Address"
+                      name="corporate_office_address"
+                      value={addressForm.corporate_office_address}
+                      onChange={handleInputChange}
+                      rows={1}
+                    />
+                  </div>
+                  <div className="input-error">{formErrors.corporate_office_address}</div>
+                  <button type="submit" className="btn btn-primary px-4">Save</button>
+                </div>
+              ) : (
+                <p>
+                  {addressData.corporate_office_address
+                    ? addressData.corporate_office_address
+                    : "-"}
+                </p>
+              )}
+            </Card>
+          </div>
+          {/* Card 3 */}
+          <div className="col-md-12">
+            <Card
+              title={"Custom Address"}
+              editMode={editMode.custom_address_title}
+              handleEditClick={() => handleEditClick("custom_address_title")}
+              handleCancelClick={() =>
+                handleCancelClick("custom_address_title")
+              }
+            >
+              {editMode.custom_address_title ? (
+                <div>
+                  <div
+                    className={`form-input-wrapper ${formErrors.custom_office_address ? "error-form-input" : ""
+                      }`}
+                  >
+                    <label
+                      htmlFor="custom_office_address"
+                      className="fw-medium"
+                    >
+                      Custom Office Address:
+                    </label>
+                    <textarea
+                      type="text"
+                      className="form-input px-0"
+                      placeholder="Enter Full Address"
+                      name="custom_office_address"
+                      value={addressForm.custom_office_address}
+                      onChange={handleInputChange}
+                      rows={1}
+                    />
+                  </div>
+                  <div className="input-error">{formErrors.custom_office_address}</div>
+                  <button type="submit" className="btn btn-primary px-4">Save</button>
+                </div>
+              ) : (
+                <p>
+                  {addressData.custom_office_address
+                    ? addressData.custom_office_address
+                    : "-"}
+                </p>
+              )}
+            </Card>
+          </div>
+        </div>
+      </form>
     </>
   );
 };

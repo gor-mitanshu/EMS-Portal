@@ -90,7 +90,7 @@ const Announcement = () => {
   };
 
   return (
-    <div className="container mt-5">
+    <div>
       <div className="card w-100 mb-3">
         <div className="card-body">
           <h5 className="card-title">Announcements</h5>

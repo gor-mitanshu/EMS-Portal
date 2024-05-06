@@ -103,7 +103,8 @@ input[type="number"]::-webkit-outer-spin-button {
   transform: translate(0, -50%);
 }
 
-input.form-input {
+input.form-input,
+textarea.form-input {
   background: transparent;
   border: none;
   color: black;
@@ -126,11 +127,16 @@ input.form-input {
   color: #ba1a1a;
 }
 
-input:focus-visible {
+input:focus-visible,
+textarea:focus-visible {
   outline: none;
 }
 
 .no-focus-box-shadow:focus {
   box-shadow: none !important;
   border-color: rgb(36 146 147) !important;
+}
+
+.overflow-ellipsis{
+  text-overflow: ellipsis;
 }

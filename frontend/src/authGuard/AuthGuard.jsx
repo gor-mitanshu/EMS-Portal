@@ -29,7 +29,7 @@ export const RequireLogout = ({ children }) => {
   return authed === true ? (
     children
   ) : data && !isTokenInvalid ? (
-    <Navigate to="/dashboard" replace state={{ path: location.pathname }} />
+    <Navigate to="/" replace state={{ path: location.pathname }} />
   ) : (
     children
   );
