@@ -4,6 +4,10 @@ import Step1Register from "./stepOne/StepOne";
 import Step2Register from "./stepTwo/StepTwo";
 import FormWrapper from "../../UI/formWrapper/FormWrapper";
 import "../../UI/formWrapper/FormWrapper.css";
+import {
+  registerStepOneValidations,
+  registerStepTwoValidations,
+} from "../../utils/formValidations";
 
 const setFormDataStepOneinitialState = {
   firstName: "",
@@ -27,10 +31,7 @@ const Register = () => {
   const [formDataStep2, setFormDataStep2] = useState(
     setFormDataStepTwoinitialState
   );
-  const [errors, setErrors] = useState({
-    ...setFormDataStepTwoinitialState,
-    ...setFormDataStepOneinitialState,
-  });
+  const [errors, setErrors] = useState({});
 
   const handleNextStep = () => {
     setStep(step + 1);
@@ -40,14 +41,28 @@ const Register = () => {
     setStep(step - 1);
   };
 
-  const handleChangeStep1 = (e) => {
+  const handleChangeStep1 = (e, fieldName) => {
     const { name, value } = e.target;
     setFormDataStep1({ ...formDataStep1, [name]: value });
+
+    // Validate the field that changed
+    const newErrors = registerStepOneValidations({
+      [name]: value,
+    });
+
+    setErrors(newErrors);
   };
 
   const handleChangeStep2 = (e) => {
     const { name, value } = e.target;
     setFormDataStep2({ ...formDataStep2, [name]: value });
+
+    // Validate the field that changed
+    const newErrors = registerStepTwoValidations({
+      ...formDataStep2,
+      [name]: value,
+    });
+    setErrors({ ...errors, ...newErrors });
   };
 
   const isStep1Valid =
@@ -66,7 +81,7 @@ const Register = () => {
             handleChangeStep1={handleChangeStep1}
             isStep1Valid={isStep1Valid}
             handleNextStep={handleNextStep}
-            errors={errors}
+            validations={errors}
             setErrors={setErrors}
           />
         )}

@@ -1,4 +1,17 @@
+import { useNavigate } from "react-router-dom";
+import useAuth from "../../authGuard/useAuth";
+import { toast } from "react-toastify";
+
 const Dropdown = ({ icon, menuItems }) => {
+  const navigate = useNavigate();
+  const { logout } = useAuth();
+
+  const handleLogout = () => {
+    logout();
+    localStorage.removeItem("token");
+    navigate("/login");
+    toast.success("Logout Successfully");
+  };
   return (
     <div className="dropdown">
       <button
@@ -16,9 +29,13 @@ const Dropdown = ({ icon, menuItems }) => {
       >
         {menuItems.map((item) => (
           <li key={item.text} className="d-flex align-items-center">
-            <a className="dropdown-item" href="/">
+            <button
+              className="dropdown-item"
+              href="/"
+              onClick={item.text === "Logout" ? handleLogout : null}
+            >
               {item.text}
-            </a>
+            </button>
           </li>
         ))}
       </ul>

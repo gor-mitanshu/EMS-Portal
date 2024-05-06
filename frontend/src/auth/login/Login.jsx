@@ -5,54 +5,41 @@ import { toast } from "react-toastify";
 import FormWrapper from "../../UI/formWrapper/FormWrapper";
 import "../../UI/formWrapper/FormWrapper.css";
 import "./Login.css";
-import { loginValidations } from "../../utils/validations";
+import { loginValidations } from "../../utils/formValidations";
 
+const initLoginForm = { email: "", password: "" };
 const Login = () => {
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [errors, setErrors] = useState({
-    email: "",
-    password: "",
-  });
+  const [loginData, setData] = useState(initLoginForm);
+  const [errors, setErrors] = useState({});
   const [verificationLinkStatus, setVerificationLinkStatus] = useState("");
 
-  // Function to validate the form fields
+  const handleChange = (e, fieldName) => {
+    const { name, value } = e.target;
 
-  const validateForm = () => {
-    let formIsValid = true;
-    const newErrors = {};
-
-    Object.keys(loginValidations).forEach((field) => {
-      const rules = loginValidations[field];
-      if (rules.required && !email) {
-        newErrors[field] = rules.required;
-        formIsValid = false;
-      } else if (rules.pattern && !rules.pattern.value.test(email)) {
-        newErrors[field] = rules.pattern.message;
-        formIsValid = false;
-      } else if (rules.minLength && password.length < rules.minLength.value) {
-        newErrors[field] = rules.minLength.message;
-        formIsValid = false;
-      }
+    setData({ ...loginData, [name]: value });
+    const { errors: loginErrors } = loginValidations({
+      [name]: value,
     });
-
-    setErrors(newErrors);
-    return formIsValid;
+    setErrors(loginErrors);
   };
 
   // Function to handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (validateForm()) {
-      try {
-        const body = {
-          email,
-          password,
-        };
+    const { errors: loginErrors, isValid: loginValid } =
+      loginValidations(loginData);
+    if (!loginValid) {
+      setErrors(loginErrors);
+      return;
+    }
+    try {
+      if (loginData.email === "" || loginData.password === "") {
+        return;
+      } else {
         const res = await axios.post(
           `${process.env.REACT_APP_API}/signin`,
-          body
+          loginData
         );
         if (res) {
           const data = res.data.token;
@@ -60,26 +47,26 @@ const Login = () => {
           toast.success(res.data.message);
           navigate("/");
         }
-      } catch (error) {
-        console.log(error);
-        if (error && error.response && error.response.data) {
-          const { errors, status } = error.response.data;
-          if (errors) {
-            console.log("email verified error", errors);
-            if (status === 300) {
-              setVerificationLinkStatus("pending");
-            }
-            toast.error(errors);
-            setErrors(errors);
-          } else {
-            const { message } = error.response.data;
-            console.log(error);
-            toast.error(message);
+      }
+    } catch (error) {
+      console.log(error);
+      if (error && error.response && error.response.data) {
+        const { errors, status } = error.response.data;
+        if (errors) {
+          console.log("email verified error", errors);
+          if (status === 300) {
+            setVerificationLinkStatus("pending");
           }
+          toast.error(errors);
+          setErrors(errors);
         } else {
+          const { message } = error.response.data;
           console.log(error);
-          setErrors({ general: "Something went wrong" });
+          toast.error(message);
         }
+      } else {
+        console.log(error);
+        setErrors({ general: "Something went wrong" });
       }
     }
   };
@@ -88,7 +75,7 @@ const Login = () => {
   const handleResendVerification = async () => {
     try {
       const body = {
-        email,
+        email: loginData.email,
       };
       setVerificationLinkStatus("sending");
       const res = await axios.post(
@@ -113,12 +100,6 @@ const Login = () => {
     }
   };
 
-  // Function to handle focus on form fields and clear related errors
-  const handleFieldFocus = (fieldName) => {
-    const newErrors = { ...errors, [fieldName]: "" };
-    setErrors(newErrors);
-  };
-
   return (
     <FormWrapper title={"Welcome back :)"}>
       <div>
@@ -135,11 +116,10 @@ const Login = () => {
                   type="text"
                   className="form-input"
                   id="email"
-                  aria-describedby="emailHelp"
                   placeholder="Enter Your Email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  onFocus={() => handleFieldFocus("email")}
+                  name="email"
+                  value={loginData.email}
+                  onChange={(e) => handleChange(e, "email")}
                 />
               </div>
               <div className="input-error">{errors.email}</div>
@@ -156,9 +136,9 @@ const Login = () => {
                   className="form-input"
                   id="password"
                   placeholder="Enter Your Password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  onFocus={() => handleFieldFocus("password")}
+                  name="password"
+                  value={loginData.password}
+                  onChange={(e) => handleChange(e, "password")}
                 />
               </div>
               <div className="input-error">{errors.password}</div>
