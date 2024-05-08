@@ -6,7 +6,7 @@ const router = express.Router();
 // user controller
 const employeeController = require('../controllers/employeeController');
 // Middleware
-const verifyToken = require('../helpers/authMiddleware');
+const verifyToken = require('../middleware/authMiddleware');
 const path = require('path');
 const multer = require('multer');
 

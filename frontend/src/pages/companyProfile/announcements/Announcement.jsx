@@ -1,27 +1,17 @@
 import React, { useState, useEffect } from "react";
-import AddAnnouncementForm from "./AnnouncementForm";
 import AnnouncementList from "./AnnouncementList";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMessage } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 
 const Announcement = () => {
-  const [showForm, setShowForm] = useState(false);
+  const [isEdit, setIsEdit] = useState(false);
   const [formData, setFormData] = useState({ announcement: "" });
   const [error, setError] = useState("");
   const [announcements, setAnnouncements] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleAddForm = () => {
-    setShowForm(true);
-  };
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+    setFormData({ ...formData, [name]: value });
     if (value.trim() === "") {
       setError("Field cannot be empty");
     } else if (value.length > 100) {
@@ -53,7 +43,7 @@ const Announcement = () => {
       setFormData({
         announcement: "",
       });
-      setShowForm(false);
+      setIsEdit(false);
       getAnnouncementDetails();
     } catch (error) {
       console.error("Error adding announcement:", error);
@@ -81,7 +71,7 @@ const Announcement = () => {
   };
 
   const handleCancel = () => {
-    setShowForm(false);
+    setIsEdit(false);
     setFormData({
       announcement: "",
     });
@@ -92,31 +82,46 @@ const Announcement = () => {
   return (
     <div>
       <div className="card w-100 mb-3">
-        <div className="card-body">
-          <h5 className="card-title">Announcements</h5>
-        </div>
-      </div>
-
-      <div className="card w-100 mb-3">
-        <div className="card-body">
-          {showForm ? (
-            <AddAnnouncementForm
-              announcement={formData.announcement}
-              error={error}
-              handleInputChange={handleInputChange}
-              handleSubmit={handleSubmit}
-              handleCancel={handleCancel}
-              isEdit={false}
-              isSubmitting={isSubmitting}
-              setIsSubmitting={setIsSubmitting}
-            />
+        <div className="card-body mt-2">
+          {isEdit ? (
+            <form action="" onSubmit={handleSubmit}>
+              <div className="text-start">
+                <div
+                  className={`form-input-wrapper ${error ? "error-form-input" : ""
+                    }`}
+                >
+                  <i className="bi bi-chat-left-quote-fill prefix-icon"></i>
+                  <textarea
+                    className="form-input"
+                    placeholder="Add Announcement"
+                    name="announcement"
+                    rows="1"
+                    value={formData.announcement}
+                    onChange={handleInputChange}
+                  />
+                </div>
+                <div className="input-error">{error}</div>
+              </div>
+              <div >
+                <button className="btn btn-danger me-3" onClick={handleCancel}>
+                  Cancel
+                </button>
+                <button
+                  className="btn btn-primary"
+                  type="submit"
+                >
+                  {isSubmitting ? "Posting..." : "Post Announcement"}
+                </button>
+              </div>
+            </form>
           ) : (
             <h5
-              className="card-title"
+              className="d-flex align-items-center"
               style={{ cursor: "pointer" }}
-              onClick={handleAddForm}
+              onClick={() => setIsEdit(true)}
             >
-              <FontAwesomeIcon icon={faMessage} className="pe-2" size="lg" />
+              {/* <FontAwesomeIcon icon={faMessage} className="pe-2" size="lg" /> */}
+              <i className="bi bi-chat-left-quote-fill me-2 fs-4"></i>
               Click here to add an announcement
             </h5>
           )}

@@ -3,23 +3,23 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const path = require('path');
-require('dotenv').config();
-
-// middlewares
 const app = express();
-app.use(cors());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-
-// configuration files
+require('dotenv').config();
 require('./config/database');
-app.use("./images", express.static(path.join(__dirname, 'images')));
-
 
 // routes
 const companyRoutes = require('./routes/companyRoute');
 const commonRoutes = require('./routes/commonRoutes');
 const employeeRoutes = require('./routes/employeeRoute');
+
+// middlewares
+app.use(cors());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+// configuration files
+app.use("./images", express.static(path.join(__dirname, 'images')));
+
 
 // use of routes
 app.use('', commonRoutes);
