@@ -11,6 +11,9 @@ const ResetPassword = () => {
   const [error, setError] = useState(null);
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleClickShowPassword = () => setShowPassword((prev) => !prev);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -70,13 +73,24 @@ const ResetPassword = () => {
               >
                 <i className="bi bi-lock-fill prefix-icon"></i>
                 <input
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   className="form-input"
                   id="password"
                   placeholder="Enter New Password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
+                {!showPassword ? (
+                  <i
+                    onClick={handleClickShowPassword}
+                    className="bi bi-eye-fill postfix-icon"
+                  ></i>
+                ) : (
+                  <i
+                    onClick={handleClickShowPassword}
+                    className="bi bi-eye-slash-fill postfix-icon"
+                  ></i>
+                )}
               </div>
               <div className="input-error">{error}</div>
             </div>
@@ -88,13 +102,24 @@ const ResetPassword = () => {
               >
                 <i className="bi bi-lock-fill prefix-icon"></i>
                 <input
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   className="form-input"
                   id="confirmPassword"
                   placeholder="Confirm New Password"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                 />
+                {!showPassword ? (
+                  <i
+                    onClick={handleClickShowPassword}
+                    className="bi bi-eye-fill postfix-icon"
+                  ></i>
+                ) : (
+                  <i
+                    onClick={handleClickShowPassword}
+                    className="bi bi-eye-slash-fill postfix-icon"
+                  ></i>
+                )}
               </div>
               <div className="input-error">{error}</div>
             </div>

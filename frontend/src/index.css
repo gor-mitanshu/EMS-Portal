@@ -102,6 +102,13 @@ input[type="number"]::-webkit-outer-spin-button {
   left: 0;
   transform: translate(0, -50%);
 }
+.postfix-icon {
+  font-size: 18px;
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translate(0, -50%);
+}
 
 input.form-input,
 textarea.form-input {

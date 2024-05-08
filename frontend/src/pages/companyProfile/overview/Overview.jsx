@@ -17,7 +17,7 @@ const Overview = () => {
     socialProfiles: false,
   });
 
-  const [companyData, setComapnyData] = useState({})
+  const [companyData, setComapnyData] = useState({});
   const [formData, setFormData] = useState({
     register_company: "",
     brand_name: "",
@@ -66,9 +66,15 @@ const Overview = () => {
         headers: { Authorization: `Bearer ${accessTokenwithoutQuotes}` },
       }
     );
-    const { company } = response.data;
-    setComapnyData(company);
-    setFormData(company);
+    if (response) {
+      const { company } = response.data;
+      if (company) {
+        setComapnyData(company);
+        setFormData(company);
+      }
+    } else {
+      console.log(response);
+    }
   };
 
   useEffect(() => {
@@ -161,77 +167,108 @@ const Overview = () => {
   };
   return (
     <div>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={ handleSubmit }>
         <div className="row">
-          {/* Card 1 */}
+          {/* Card 1 */ }
           <div className="col-lg-8">
-            {/* Personal Profile */}
+            {/* Personal Profile */ }
             <Card
               title="Company Profile"
-              editMode={editMode.overview}
-              handleEditClick={() => handleEditClick("overview")}
-              handleCancelClick={() => handleCancelClick("overview")}
+              editMode={ editMode.overview }
+              handleEditClick={ () => handleEditClick("overview") }
+              handleCancelClick={ () => handleCancelClick("overview") }
             >
-              {editMode.overview ? (
+              { editMode.overview ? (
                 <>
                   <OverViewForm
-                    formData={companyData}
-                    formErrors={formErrors}
-                    handleInputChange={handleInputChange}
+                    formData={ companyData }
+                    formErrors={ formErrors }
+                    handleInputChange={ handleInputChange }
                   />
                 </>
               ) : (
                 <>
-                  <div className="user-details mt-2">
-                    <div className="row">
-                      <h6 className="text-black fw-bold text-truncate col-12 col-md-6">Company Name</h6>
-                      <h6 className="text-gray text-truncate col-12 col-md-6">{companyData.register_company}</h6>
-                    </div>
-                    <div className="row mt-4">
-                      <h6 className="text-black fw-bold text-truncate col-12 col-md-6">Brand Name</h6>
-                      <h6 className="text-gray text-truncate col-12 col-md-6">{companyData.brand_name}</h6>
-                    </div>
-                    <div className="row mt-4">
-                      <h6 className="text-black fw-bold text-truncate col-12 col-md-6">Company Email</h6>
-                      <h6 className="text-gray text-truncate col-12 col-md-6">{companyData.company_official_email}</h6>
-                    </div>
-                    <div className="row mt-4">
-                      <h6 className="text-black fw-bold text-truncate col-12 col-md-6">Company Contact</h6>
-                      <h6 className="text-gray text-truncate col-12 col-md-6">{companyData.company_official_contact}</h6>
-                    </div>
-                    <div className="row mt-4">
-                      <h6 className="text-black fw-bold text-truncate col-12 col-md-6">Website</h6>
-                      <h6 className="text-gray text-truncate col-12 col-md-6">{companyData.website}</h6>
-                    </div>
-                    <div className="row mt-4">
-                      <h6 className="text-black fw-bold text-truncate col-12 col-md-6">Domain Name</h6>
-                      <h6 className="text-gray text-truncate col-12 col-md-6">{companyData.domain_name}</h6>
-                    </div>
-                    <div className="row mt-4">
-                      <h6 className="text-black fw-bold text-truncate col-12 col-md-6">Industry Type</h6>
-                      <h6 className="text-gray text-truncate col-12 col-md-6">{companyData.industry_type}</h6>
-                    </div>
-                  </div>
+                  { formData ?
+                    <div className="user-details mt-2">
+                      <div className="row">
+                        <h6 className="text-black fw-bold text-truncate col-12 col-md-6">
+                          Company Name
+                        </h6>
+                        <h6 className="text-gray text-truncate col-12 col-md-6">
+                          { companyData.register_company }
+                        </h6>
+                      </div>
+                      <div className="row mt-4">
+                        <h6 className="text-black fw-bold text-truncate col-12 col-md-6">
+                          Brand Name
+                        </h6>
+                        <h6 className="text-gray text-truncate col-12 col-md-6">
+                          { companyData.brand_name }
+                        </h6>
+                      </div>
+                      <div className="row mt-4">
+                        <h6 className="text-black fw-bold text-truncate col-12 col-md-6">
+                          Company Email
+                        </h6>
+                        <h6 className="text-gray text-truncate col-12 col-md-6">
+                          { companyData.company_official_email }
+                        </h6>
+                      </div>
+                      <div className="row mt-4">
+                        <h6 className="text-black fw-bold text-truncate col-12 col-md-6">
+                          Company Contact
+                        </h6>
+                        <h6 className="text-gray text-truncate col-12 col-md-6">
+                          { companyData.company_official_contact }
+                        </h6>
+                      </div>
+                      <div className="row mt-4">
+                        <h6 className="text-black fw-bold text-truncate col-12 col-md-6">
+                          Website
+                        </h6>
+                        <h6 className="text-gray text-truncate col-12 col-md-6">
+                          { companyData.website }
+                        </h6>
+                      </div>
+                      <div className="row mt-4">
+                        <h6 className="text-black fw-bold text-truncate col-12 col-md-6">
+                          Domain Name
+                        </h6>
+                        <h6 className="text-gray text-truncate col-12 col-md-6">
+                          { companyData.domain_name }
+                        </h6>
+                      </div>
+                      <div className="row mt-4">
+                        <h6 className="text-black fw-bold text-truncate col-12 col-md-6">
+                          Industry Type
+                        </h6>
+                        <h6 className="text-gray text-truncate col-12 col-md-6">
+                          { companyData.industry_type }
+                        </h6>
+                      </div>
+                    </div> : "No data found"
+                  }
+
                 </>
-              )}
+              ) }
             </Card>
           </div>
 
-          {/* Card 2 */}
+          {/* Card 2 */ }
           <div className="col-lg-4">
-            {/* Social profiles */}
+            {/* Social profiles */ }
             <Card
               title="Social Profiles"
-              editMode={editMode.socialProfiles}
-              handleEditClick={() => handleEditClick("socialProfiles")}
-              handleCancelClick={() => handleCancelClick("socialProfiles")}
+              editMode={ editMode.socialProfiles }
+              handleEditClick={ () => handleEditClick("socialProfiles") }
+              handleCancelClick={ () => handleCancelClick("socialProfiles") }
             >
-              {editMode.socialProfiles ? (
+              { editMode.socialProfiles ? (
                 <>
                   <SocialProfileForm
-                    formData={formData}
-                    formErrors={formErrors}
-                    handleInputChange={handleInputChange}
+                    formData={ formData }
+                    formErrors={ formErrors }
+                    handleInputChange={ handleInputChange }
                   />
                 </>
               ) : (
@@ -247,7 +284,11 @@ const Overview = () => {
                       className="pe-4"
                       rel="noreferrer"
                     >
-                        <FontAwesomeIcon icon={faLinkedinIn} color="#0077B5" size="2xl" />
+                      <FontAwesomeIcon
+                        icon={ faLinkedinIn }
+                        color="#0077B5"
+                        size="2xl"
+                      />
                     </a>
 
                     <a
@@ -260,7 +301,11 @@ const Overview = () => {
                       className="pe-4"
                       rel="noreferrer"
                     >
-                      <FontAwesomeIcon icon={faFacebook} color="#316FF6" size="2xl" />
+                      <FontAwesomeIcon
+                        icon={ faFacebook }
+                        color="#316FF6"
+                        size="2xl"
+                      />
                     </a>
 
                     <a
@@ -273,11 +318,15 @@ const Overview = () => {
                       className="pe-4"
                       rel="noreferrer"
                     >
-                        <FontAwesomeIcon icon={faTwitter} color="#1DA1F2" size="2xl" />
+                      <FontAwesomeIcon
+                        icon={ faTwitter }
+                        color="#1DA1F2"
+                        size="2xl"
+                      />
                     </a>
-                  </div>{" "}
+                  </div>{ " " }
                 </>
-              )}
+              ) }
             </Card>
           </div>
         </div>

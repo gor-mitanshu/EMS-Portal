@@ -42,7 +42,7 @@ const companyController = {
     try {
       // getting the body part from request
       let { firstName, lastName, email, phone, password } = req.body;
-      let { companyName, companySize, employeeStrength, user_id } = req.body;
+      let { companyName, employeeStrength, user_id } = req.body;
 
       // creating the new user in the CommonSchema model
       if (password !== undefined) {
@@ -415,7 +415,7 @@ const companyController = {
         }
 
         const newUserCompanyUser = new CompanySchema({
-          user_id, company_name: companyName, company_size: companySize, employee_no: employeeStrength,
+          user_id, company_name: companyName, employee_no: employeeStrength,
         });
         await newUserCompanyUser.save();
 
@@ -484,12 +484,12 @@ const companyController = {
         });
       }
       const company = await Overview.findOne({ user_id: id })
-      if (!company) {
-        return res.status(404).send({
-          message: "Details not found",
-          success: false
-        });
-      }
+      // if (!company) {
+      //   return res.status(404).send({
+      //     message: "Details not found",
+      //     success: false
+      //   });
+      // }
       return res.status(200).send({
         message: "Successfully Got the Details",
         success: true,

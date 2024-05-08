@@ -8,11 +8,14 @@ const StepOne = ({
   formDataStep1,
   handleChangeStep1,
   handleNextStep,
-  validations,
+  errors,
+  setErrors,
 }) => {
   const { firstName, lastName, email, phone, password } = formDataStep1;
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [errors, setErrors] = useState(validations);
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleClickShowPassword = () => setShowPassword((prev) => !prev);
 
   const validateStep1 = async (e) => {
     e.preventDefault();
@@ -39,6 +42,9 @@ const StepOne = ({
           console.log(res);
         }
       } catch (error) {
+        if (error.name === "AxiosError" && error.message === "Network Error") {
+          toast.error("Connection to server lost");
+        }
         if (
           error.response &&
           error.response.data &&
@@ -113,8 +119,6 @@ const StepOne = ({
             <input
               type="email"
               className="form-input"
-              id="exampleInputEmail1"
-              aria-describedby="emailHelp"
               name="email"
               value={email}
               onChange={(e) => handleChangeStep1(e, "email")}
@@ -135,7 +139,6 @@ const StepOne = ({
             <input
               type="number"
               className="form-input"
-              id="exampleInputPhone"
               name="phone"
               value={phone}
               onChange={(e) => handleChangeStep1(e, "phone")}
@@ -154,15 +157,25 @@ const StepOne = ({
           >
             <i className="bi bi-lock-fill prefix-icon"></i>
             <input
-              type="text"
+              type={showPassword ? "text" : "password"}
               className="form-input"
-              id="exampleInputPassword"
               name="password"
               value={password}
               onChange={(e) => handleChangeStep1(e, "password")}
               // onFocus={() => handleFieldFocus("password")}
               placeholder="Enter a Strong Password"
             />
+            {!showPassword ? (
+              <i
+                onClick={handleClickShowPassword}
+                className="bi bi-eye-fill postfix-icon"
+              ></i>
+            ) : (
+              <i
+                onClick={handleClickShowPassword}
+                className="bi bi-eye-slash-fill postfix-icon"
+              ></i>
+            )}
           </div>
           <div className="input-error">{errors.password}</div>
         </div>

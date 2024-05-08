@@ -2,55 +2,32 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { registerStepTwoValidations } from "../../../utils/formValidations";
 
-const StepTwo = ({ formDataStep2, handleChangeStep2, handleBackStep }) => {
-  const { companyName, companySize, employeeStrength } = formDataStep2;
-  const navigate = useNavigate();
+const StepTwo = ({
+  formDataStep2,
+  handleChangeStep2,
+  handleBackStep,
+  errors,
+  setErrors,
+}) => {
+  const { companyName, employeeStrength } = formDataStep2;
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [errors, setErrors] = useState({
-    user_id: "",
-    companyName: "",
-    companySize: "",
-    employeeStrength: "",
-  });
 
-  const requiredErrors = {
-    companyName: "Company Name is required",
-    companySize: "Company Size is required",
-    employeeStrength: "Employee Strength is required",
-  };
+  const navigate = useNavigate();
 
   const validateStep2 = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    let formIsValid = true;
-    const newErrors = { ...errors };
-
-    // Reset errors
-    Object.keys(newErrors).forEach((key) => {
-      newErrors[key] = "";
-    });
-
-    const validateField = (fieldName, errorMessage) => {
-      if (!formDataStep2[fieldName]) {
-        newErrors[fieldName] = requiredErrors[fieldName];
-        formIsValid = false;
-      } else {
-        newErrors[fieldName] = "";
-      }
-    };
-
-    validateField("companyName", requiredErrors.companyName);
-    validateField("companySize", requiredErrors.companySize);
-    validateField("employeeStrength", requiredErrors.employeeStrength);
-
+    // Validate all fields
+    const newErrors = registerStepTwoValidations(formDataStep2);
     setErrors(newErrors);
 
-    if (formIsValid) {
+    if (Object.keys(newErrors).length === 0) {
       try {
         const user_id = localStorage.getItem("user_id");
-        const body = { companyName, companySize, employeeStrength, user_id };
+        const body = { companyName, employeeStrength, user_id };
         const res = await axios.post(
           `${process.env.REACT_APP_API}/company/signup`,
           body
@@ -63,6 +40,10 @@ const StepTwo = ({ formDataStep2, handleChangeStep2, handleBackStep }) => {
           console.log(res);
         }
       } catch (error) {
+        if (error.name === "AxiosError" && error.message === "Network Error") {
+          toast.error("Connection to server lost");
+        }
+
         console.log(error.response.data.errors);
         if (
           error.response &&
@@ -79,24 +60,23 @@ const StepTwo = ({ formDataStep2, handleChangeStep2, handleBackStep }) => {
     setIsSubmitting(false);
   };
 
-  const handleFieldFocus = (fieldName) => {
-    const newErrors = { ...errors, [fieldName]: "" };
-    setErrors(newErrors);
-  };
-
   return (
     <>
       <form onSubmit={validateStep2}>
         <div>
-          <div className={`form-input-wrapper ${errors.companyName ? 'error-form-input' : ''}`}>
+          <div
+            className={`form-input-wrapper ${
+              errors.companyName ? "error-form-input" : ""
+            }`}
+          >
             <i className="bi bi-building-fill prefix-icon"></i>
             <input
               type="text"
               className="form-input"
               name="companyName"
               value={companyName}
-              onChange={handleChangeStep2}
-              onFocus={() => handleFieldFocus("companyName")}
+              onChange={(e) => handleChangeStep2(e, "companyName")}
+              // onFocus={() => handleFieldFocus("companyName")}
               placeholder="Enter Your Company Name"
             />
           </div>
@@ -104,15 +84,19 @@ const StepTwo = ({ formDataStep2, handleChangeStep2, handleBackStep }) => {
         </div>
 
         <div>
-          <div className={`form-input-wrapper ${errors.employeeStrength ? 'error-form-input' : ''}`}>
+          <div
+            className={`form-input-wrapper ${
+              errors.employeeStrength ? "error-form-input" : ""
+            }`}
+          >
             <i className="bi bi-people-fill prefix-icon"></i>
             <input
               type="number"
               className="form-input"
               name="employeeStrength"
               value={employeeStrength}
-              onChange={handleChangeStep2}
-              onFocus={() => handleFieldFocus("employeeStrength")}
+              onChange={(e) => handleChangeStep2(e, "employeeStrength")}
+              // onFocus={() => handleFieldFocus("employeeStrength")}
               placeholder="Enter Your Employee Strength"
             />
           </div>
