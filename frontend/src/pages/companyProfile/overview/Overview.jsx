@@ -157,6 +157,7 @@ const Overview = () => {
       );
       if (response) {
         toast.success(response.data.message);
+        getCompanyDetails();
       }
       // alert("Form submitted successfully!");
       setEditMode({
@@ -181,9 +182,9 @@ const Overview = () => {
               { editMode.overview ? (
                 <>
                   <OverViewForm
-                    formData={ companyData }
-                    formErrors={ formErrors }
-                    handleInputChange={ handleInputChange }
+                    formData={formData}
+                    formErrors={formErrors}
+                    handleInputChange={handleInputChange}
                   />
                 </>
               ) : (

@@ -6,7 +6,7 @@ const router = express.Router();
 // user controller
 const commonController = require('../controllers/commonController');
 // Middleware
-const verifyToken = require('../helpers/authMiddleware');
+const verifyToken = require('../middleware/authMiddleware');
 
 // All the list of routes
 router.post('/resendVerificationLink', commonController.resendVerificationLink);

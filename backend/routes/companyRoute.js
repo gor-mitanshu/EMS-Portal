@@ -4,7 +4,7 @@ const express = require('express');
 // router 
 const router = express.Router();
 // Middleware
-const verifyToken = require('../helpers/authMiddleware');
+const verifyToken = require('../middleware/authMiddleware');
 // user controller
 const companyController = require('../controllers/companyController');
 const path = require('path');

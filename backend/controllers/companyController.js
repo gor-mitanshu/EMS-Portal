@@ -879,9 +879,8 @@ const companyController = {
   },
 
   getPolicy: async (req, res) => {
-    const getCompanydetails = req.companyDetails;
     try {
-      const policy = await Policy.findOne({ company_id: getCompanydetails._id })
+      const policy = await Policy.findOne({ company_id: req.companyDetails._id })
       if (policy) {
         const policyData = await Policy.aggregate([
           {
