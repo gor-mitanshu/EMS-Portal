@@ -37,7 +37,7 @@ const ForgotPassword = () => {
         email: user.email,
       };
       const res = await axios.post(
-        `${process.env.REACT_APP_API}/forgetpassword`,
+        `${process.env.REACT_APP_API}/user/forgetpassword`,
         body
       );
       if (res.status === 200) {
@@ -70,7 +70,7 @@ const ForgotPassword = () => {
 
     try {
       const res = await axios.post(
-        `${process.env.REACT_APP_API}/verifyOtp`,
+        `${process.env.REACT_APP_API}/user/verifyOtp`,
         body
       );
       if (res.status === 200) {
@@ -93,26 +93,25 @@ const ForgotPassword = () => {
   return (
     <>
       <FormWrapper
-        title={showOTPInput ? "OTP Verification" : "Forgot Password"}
+        title={ showOTPInput ? "OTP Verification" : "Forgot Password" }
         subtitle={
           showOTPInput
             ? "Please enter the OTP sent to your email"
             : "Enter your email address below to reset your password"
         }
       >
-        {showOTPInput ? (
+        { showOTPInput ? (
           <div className="d-flex flex-column">
             {/* {errorMessage && (
               <div className="alert alert-danger mt-3" role="alert">
                 {errorMessage}
               </div>
             )} */}
-            <form onSubmit={handleOTPSuccess}>
+            <form onSubmit={ handleOTPSuccess }>
               <div>
                 <div
-                  className={`form-input-wrapper ${
-                    errorMessage ? "error-form-input" : ""
-                  }`}
+                  className={ `form-input-wrapper ${errorMessage ? "error-form-input" : ""
+                    }` }
                 >
                   <i className="bi bi-lock-fill prefix-icon"></i>
                   <input
@@ -120,20 +119,20 @@ const ForgotPassword = () => {
                     className="form-input"
                     id="exampleInputOTP"
                     placeholder="Enter OTP"
-                    value={user.otp}
-                    onChange={handleChange}
+                    value={ user.otp }
+                    onChange={ handleChange }
                     name="otp"
                   />
                 </div>
-                <div className="input-error">{errorMessage}</div>
+                <div className="input-error">{ errorMessage }</div>
               </div>
               <div className="mt-4 text-center">
                 <button
                   type="submit"
                   className="btn btn-primary px-4"
-                  disabled={verifyingOTP}
+                  disabled={ verifyingOTP }
                 >
-                  {verifyingOTP ? "Verifying..." : "Verify OTP"}
+                  { verifyingOTP ? "Verifying..." : "Verify OTP" }
                 </button>
               </div>
             </form>
@@ -145,12 +144,11 @@ const ForgotPassword = () => {
                 {errorMessage}
               </div>
             )} */}
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={ handleSubmit }>
               <div>
                 <div
-                  className={`form-input-wrapper ${
-                    errorMessage ? "error-form-input" : ""
-                  }`}
+                  className={ `form-input-wrapper ${errorMessage ? "error-form-input" : ""
+                    }` }
                 >
                   <i className="bi bi-person-fill prefix-icon"></i>
                   <input
@@ -159,25 +157,25 @@ const ForgotPassword = () => {
                     id="exampleInputEmail1"
                     aria-describedby="emailHelp"
                     placeholder="Enter Your Email"
-                    value={user.email}
-                    onChange={handleChange}
+                    value={ user.email }
+                    onChange={ handleChange }
                     name="email"
                   />
                 </div>
-                <div className="input-error">{errorMessage}</div>
+                <div className="input-error">{ errorMessage }</div>
               </div>
 
               <div className="mt-4">
                 <button
                   type="submit"
                   className="btn btn-primary px-4"
-                  disabled={emailStatus !== "idle"}
+                  disabled={ emailStatus !== "idle" }
                 >
-                  {emailStatus === "sending"
+                  { emailStatus === "sending"
                     ? "Sending..."
                     : emailStatus === "sent"
-                    ? "Email Sent"
-                    : "Get OTP"}
+                      ? "Email Sent"
+                      : "Get OTP" }
                 </button>
                 <Link
                   to="/login"
@@ -188,7 +186,7 @@ const ForgotPassword = () => {
               </div>
             </form>
           </div>
-        )}
+        ) }
       </FormWrapper>
     </>
   );

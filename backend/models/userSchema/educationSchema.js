@@ -2,9 +2,8 @@
 const mongoose = require('mongoose');
 
 // Schema setup
-const qualificationSchema = new mongoose.Schema({
-     education_id: { type: mongoose.Schema.Types.ObjectId, ref: 'education' },
-
+const educationSchema = new mongoose.Schema({
+     user_id: { type: mongoose.Schema.ObjectId, ref: 'user' },
      qualification_type: { type: String },
      course_name: { type: String },
      course_type: { type: String },
@@ -13,12 +12,11 @@ const qualificationSchema = new mongoose.Schema({
      course_end_date: { type: String },
      college_name: { type: String },
      university_name: { type: String },
-
      deleted_at: { type: Date }
 }, { timestamps: true });
 
 // exports and databse collection setup
-const Qualification = mongoose.model('qualification', qualificationSchema);
+const Education = mongoose.model('education', educationSchema);
 
 // Export the model 
-module.exports = Qualification;
+module.exports = Education;

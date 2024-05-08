@@ -1,12 +1,10 @@
-// --------------------------------Basic Imports--------------------------------
-// importing express to build a web application that stores data in MongoDB.
 const express = require('express');
-// router 
 const router = express.Router();
+const companyController = require('../controllers/companyController');
 // Middleware
 const verifyToken = require('../middleware/authMiddleware');
-// user controller
-const companyController = require('../controllers/companyController');
+
+// File store process
 const path = require('path');
 const multer = require('multer');
 
@@ -28,29 +26,19 @@ const upload = multer({
      }
 });
 
-// All the list of routes
-router.post('/signup', companyController.signup);
-
-// Overview
-router.post('/addOverview', verifyToken, companyController.addOverview);
-router.get('/getOverview/:id', verifyToken, companyController.getOverview);
-router.put('/updateOverview/:id', verifyToken, companyController.updateOverview);
-
+// Company Details
+router.post('/addCompanyDetails', verifyToken, companyController.addCompanyDetails);
+router.get('/getCompanyDetails/:id', verifyToken, companyController.getCompanyDetails);
+router.put('/updateCompanyDetails/:id', verifyToken, companyController.updateCompanyDetails);
 // Company Address
 router.post('/addCompanyAddress', verifyToken, companyController.addCompanyAddress);
 router.get('/getCompanyAddress/:id', verifyToken, companyController.getCompanyAddress);
 router.put('/updateCompanyAddress/:id', verifyToken, companyController.updateCompanyAddress);
-
 // Department
 router.post('/addDepartment', verifyToken, companyController.addDepartment);
-
-// Designation
-
 // Announcements
 router.post('/addAnnouncement', verifyToken, companyController.addAnnouncement);
 router.get('/getAnnouncement', verifyToken, companyController.getAnnouncement);
-
-
 // Policies
 router.post('/addPolicy', verifyToken, upload.any(), companyController.addPolicy);
 router.get('/getPolicy', verifyToken, companyController.getPolicy);

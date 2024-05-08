@@ -6,21 +6,18 @@ const fs = require('fs');
 const path = require('path');
 
 // Importing models
-const CommonSchema = require('../models/commonSchema/userSchema').UserModel;
+const CommonSchema = require('../models/userSchema/userSchema').UserModel;
 const EmployeeSchema = require('../models/employeeSchema/employeeSchema');
-const EducationSchema = require('../models/commonSchema/education/educationSchema');
-const QualificationSchema = require('../models/commonSchema/education/qualificationSchema');
-const FamilySchema = require('../models/commonSchema/family/familySchema');
-const FamilyMemberSchema = require('../models/commonSchema/family/familyMember');
-const EmergencyFamilyMemberSchema = require('../models/commonSchema/family/emergencyFamilyMember');
-const DocumentListSchema = require('../models/commonSchema/document/documentSchema');
-const DocumentSchema = require('../models/commonSchema/document/document_id');
-const CertificateSchema = require('../models/commonSchema/document/certificate');
-const WorkSchema = require('../models/commonSchema/document/work');
+const EducationSchema = require('../models/userSchema/educationSchema');
+const FamilyMemberSchema = require('../models/userSchema/familyMemberSchema');
+const EmergencyFamilyMemberSchema = require('../models/userSchema/emergencyFamilySchema');
+const DocumentSchema = require('../models/userSchema/documentIdSchema');
+const CertificateSchema = require('../models/userSchema/certificateSchema');
+const WorkSchema = require('../models/userSchema/workSchema');
 
 // List of the controllers
 const employeeController = {
-     signup: async (req, res) => {
+     addEmployee: async (req, res) => {
           try {
                // getting the body part from request
                let { name, email, phone, password, birth_date, gender, blood_group, marital_status } = req.body;
@@ -95,7 +92,7 @@ const employeeController = {
           }
      },
 
-     getworkDetails: async (req, res) => {
+     getWorkDetails: async (req, res) => {
           try {
                const token = req.headers.authorization;
                if (!token) {

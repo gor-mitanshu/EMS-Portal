@@ -1,8 +1,6 @@
-// mongoose import
 const mongoose = require('mongoose');
 
-// Schema setup
-const CompanyAddress = new mongoose.Schema({
+const addressSchema = new mongoose.Schema({
      user_id: { type: mongoose.Schema.ObjectId },
      company_id: { type: mongoose.Schema.ObjectId },
 
@@ -13,8 +11,6 @@ const CompanyAddress = new mongoose.Schema({
      deleted_at: { type: Date }
 }, { timestamps: true });
 
-// exports and databse collection setup
-const CompanyAddressModel = mongoose.model('company-address', CompanyAddress);
+const CompanyAddressModel = mongoose.model('company-address', addressSchema);
 
-// Export the model and the UserRole enum
 module.exports = CompanyAddressModel;

@@ -47,7 +47,7 @@ const Login = () => {
         return;
       } else {
         const res = await axios.post(
-          `${process.env.REACT_APP_API}/signin`,
+          `${process.env.REACT_APP_API}/user/loginUser`,
           loginData
         );
         if (res) {
@@ -98,7 +98,7 @@ const Login = () => {
       };
       setVerificationLinkStatus("sending");
       const res = await axios.post(
-        `${process.env.REACT_APP_API}/resendVerificationLink`,
+        `${process.env.REACT_APP_API}/user/sendVerificationLink`,
         body
       );
       if (res) {
@@ -120,15 +120,14 @@ const Login = () => {
   };
 
   return (
-    <FormWrapper title={"Welcome back :)"}>
+    <FormWrapper title={ "Welcome back :)" }>
       <div>
         <div className="d-flex flex-column">
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={ handleSubmit }>
             <div className="text-start">
               <div
-                className={`form-input-wrapper ${
-                  error.email ? "error-form-input" : ""
-                }`}
+                className={ `form-input-wrapper ${error.email ? "error-form-input" : ""
+                  }` }
               >
                 <i className="bi bi-person-fill prefix-icon"></i>
                 <input
@@ -137,41 +136,40 @@ const Login = () => {
                   id="email"
                   placeholder="Enter Your Email"
                   name="email"
-                  value={loginData.email}
-                  onChange={(e) => handleChange(e, "email")}
+                  value={ loginData.email }
+                  onChange={ (e) => handleChange(e, "email") }
                 />
               </div>
-              <div className="input-error">{error.email}</div>
+              <div className="input-error">{ error.email }</div>
             </div>
             <div className="text-start">
               <div
-                className={`form-input-wrapper ${
-                  error.password ? "error-form-input" : ""
-                }`}
+                className={ `form-input-wrapper ${error.password ? "error-form-input" : ""
+                  }` }
               >
                 <i className="bi bi-lock-fill prefix-icon"></i>
                 <input
-                  type={showPassword ? "text" : "password"}
+                  type={ showPassword ? "text" : "password" }
                   className="form-input"
                   id="password"
                   placeholder="Enter Your Password"
                   name="password"
-                  value={loginData.password}
-                  onChange={(e) => handleChange(e, "password")}
+                  value={ loginData.password }
+                  onChange={ (e) => handleChange(e, "password") }
                 />
-                {!showPassword ? (
+                { !showPassword ? (
                   <i
-                    onClick={handleClickShowPassword}
+                    onClick={ handleClickShowPassword }
                     className="bi bi-eye-fill postfix-icon"
                   ></i>
                 ) : (
                   <i
-                    onClick={handleClickShowPassword}
+                    onClick={ handleClickShowPassword }
                     className="bi bi-eye-slash-fill postfix-icon"
                   ></i>
-                )}
+                ) }
               </div>
-              <div className="input-error">{error.password}</div>
+              <div className="input-error">{ error.password }</div>
             </div>
 
             <div>
@@ -184,22 +182,22 @@ const Login = () => {
               <button type="submit" className="btn btn-primary px-4">
                 Sign in
               </button>
-              <Link to={"/register"} className="btn btn-light px-4 ms-3">
+              <Link to={ "/register" } className="btn btn-light px-4 ms-3">
                 Create Account
               </Link>
             </div>
 
-            {verificationLinkStatus && verificationLinkStatus !== "sent" && (
+            { verificationLinkStatus && verificationLinkStatus !== "sent" && (
               <div
                 className="btn btn-secondary w-100 mt-3"
-                onClick={handleResendVerification}
-                disabled={verificationLinkStatus === "sending"}
+                onClick={ handleResendVerification }
+                disabled={ verificationLinkStatus === "sending" }
               >
-                {verificationLinkStatus === "sending"
+                { verificationLinkStatus === "sending"
                   ? "Sending..."
-                  : "Click here to resend the Verification Link"}
+                  : "Click here to resend the Verification Link" }
               </div>
-            )}
+            ) }
           </form>
         </div>
       </div>

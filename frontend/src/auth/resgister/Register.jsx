@@ -16,7 +16,6 @@ const setFormDataStepOneinitialState = {
   phone: "",
   password: "",
 };
-
 const setFormDataStepTwoinitialState = {
   companyName: "",
   employeeStrength: "",
@@ -31,9 +30,11 @@ const Register = () => {
     setFormDataStepTwoinitialState
   );
   const [errors, setErrors] = useState({});
+  const [userId, setUserId] = useState()
 
-  const handleNextStep = () => {
+  const handleNextStep = (id) => {
     setStep(step + 1);
+    setUserId(id)
   };
 
   const handleBackStep = () => {
@@ -71,27 +72,28 @@ const Register = () => {
     formDataStep1.password !== "";
 
   return (
-    <FormWrapper title={"Create an Account"}>
+    <FormWrapper title={ "Create an Account" }>
       <div>
-        {step === 1 && (
+        { step === 1 && (
           <Step1Register
-            formDataStep1={formDataStep1}
-            handleChangeStep1={handleChangeStep1}
-            isStep1Valid={isStep1Valid}
-            handleNextStep={handleNextStep}
-            errors={errors}
-            setErrors={setErrors}
+            formDataStep1={ formDataStep1 }
+            handleChangeStep1={ handleChangeStep1 }
+            isStep1Valid={ isStep1Valid }
+            handleNextStep={ handleNextStep }
+            errors={ errors }
+            setErrors={ setErrors }
           />
-        )}
-        {step === 2 && (
+        ) }
+        { step === 2 && (
           <Step2Register
-            formDataStep2={formDataStep2}
-            handleChangeStep2={handleChangeStep2}
-            handleBackStep={handleBackStep}
-            errors={errors}
-            setErrors={setErrors}
+            user_id={ userId }
+            formDataStep2={ formDataStep2 }
+            handleChangeStep2={ handleChangeStep2 }
+            handleBackStep={ handleBackStep }
+            errors={ errors }
+            setErrors={ setErrors }
           />
-        )}
+        ) }
       </div>
     </FormWrapper>
   );

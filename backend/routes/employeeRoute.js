@@ -1,12 +1,9 @@
-// --------------------------------Basic Imports--------------------------------
-// importing express to build a web application that stores data in MongoDB.
 const express = require('express');
-// router 
 const router = express.Router();
-// user controller
 const employeeController = require('../controllers/employeeController');
 // Middleware
 const verifyToken = require('../middleware/authMiddleware');
+// File store process
 const path = require('path');
 const multer = require('multer');
 
@@ -28,27 +25,26 @@ const upload = multer({
      }
 });
 
-// All the list of routes
-router.post('/signup', employeeController.signup);
+router.post('/addEmployee', employeeController.addEmployee);
 
-router.post('/addworkdetails', verifyToken, employeeController.addWorkDetails);
-router.get('/getworkdetails', verifyToken, employeeController.getworkDetails);
-router.put('/updateworkdetails/:id', verifyToken, employeeController.updateWorkDetails);
+router.post('/addWorkDetails', verifyToken, employeeController.addWorkDetails);
+router.get('/getWorkDetails', verifyToken, employeeController.getWorkDetails);
+router.put('/updateWorkDetails/:id', verifyToken, employeeController.updateWorkDetails);
 
-router.post('/addeducationdetails', verifyToken, employeeController.addEducationDetails);
-router.get('/geteducationdetails', verifyToken, employeeController.getEducationDetails);
-router.put('/updateeducationdetails/:id', verifyToken, employeeController.updateEducationDetails);
-router.delete('/deletequalification/:id', verifyToken, employeeController.deleteEducationDetails);
+router.post('/addEducationdetails', verifyToken, employeeController.addEducationDetails);
+router.get('/getEducationdetails', verifyToken, employeeController.getEducationDetails);
+router.put('/updateEducationdetails/:id', verifyToken, employeeController.updateEducationDetails);
+router.delete('/deleteEducationdetails/:id', verifyToken, employeeController.deleteEducationDetails);
 
 router.post('/addFamilyDetails', verifyToken, employeeController.addFamilyDetails);
 router.get('/getFamilyDetails', verifyToken, employeeController.getFamilyDetails);
 router.put('/updateFamilyDetails/:id', verifyToken, employeeController.updateFamilyDetails);
 router.delete('/deleteFamilyMemberDetails/:id', verifyToken, employeeController.deleteFamilyDetails);
 
-router.post('/addemergencyFamilyDetails', verifyToken, employeeController.emergencyaddFamilyDetails);
-router.get('/getemergencyFamilyDetails', verifyToken, employeeController.emergencygetFamilyDetails);
-router.put('/updateemergencyFamilyDetails/:id', verifyToken, employeeController.emergencyupdateFamilyDetails);
-router.delete('/deleteemergencyFamilyMemberDetails/:id', verifyToken, employeeController.emergencydeleteFamilyDetails);
+router.post('/addEmergencyFamilyDetails', verifyToken, employeeController.emergencyaddFamilyDetails);
+router.get('/getEmergencyFamilyDetails', verifyToken, employeeController.emergencygetFamilyDetails);
+router.put('/updateEmergencyFamilyDetails/:id', verifyToken, employeeController.emergencyupdateFamilyDetails);
+router.delete('/deleteEmergencyFamilyMemberDetails/:id', verifyToken, employeeController.emergencydeleteFamilyDetails);
 
 router.post('/addDocument', verifyToken, upload.any(), employeeController.addDocuments);
 router.get('/getDocument', verifyToken, employeeController.getDocuments);
@@ -60,9 +56,9 @@ router.get('/getCertificate', verifyToken, employeeController.getCertificate);
 router.post('/updateCertificate/:id', verifyToken, upload.any(), employeeController.updateCertificate);
 router.delete('/deleteCertificate/:id', verifyToken, employeeController.deleteCertificate);
 
-router.post('/addWork', verifyToken, upload.any(), employeeController.addWork);
-router.get('/getWork', verifyToken, employeeController.getWork);
-router.post('/updateWork/:id', verifyToken, upload.any(), employeeController.updateWork);
-router.delete('/deleteWork/:id', verifyToken, employeeController.deleteWork);
+router.post('/addWorkDocument', verifyToken, upload.any(), employeeController.addWork);
+router.get('/getWorkDocument', verifyToken, employeeController.getWork);
+router.post('/updateWorkDocument/:id', verifyToken, upload.any(), employeeController.updateWork);
+router.delete('/deleteWorkDocument/:id', verifyToken, employeeController.deleteWork);
 
 module.exports = router;

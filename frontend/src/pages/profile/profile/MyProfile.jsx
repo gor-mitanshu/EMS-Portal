@@ -35,6 +35,7 @@ const Profile = () => {
     facebook: "",
     twitter: "",
   });
+  const [user, setUser] = useState({})
 
   const [formErrors, setFormErrors] = useState({
     firstName: "",
@@ -46,13 +47,11 @@ const Profile = () => {
     email: "",
     phone: "",
     current_address: "",
-    // linked_in: "",
-    // facebook: "",
-    // twitter: "",
   });
 
   // Handle Change
   const handleInputChange = (e) => {
+    debugger
     const { name, value } = e.target;
     setFormData({
       ...formData,
@@ -70,24 +69,12 @@ const Profile = () => {
     const accessToken = localStorage.getItem("token");
     const accessTokenwithoutQuotes = JSON.parse(accessToken);
     if (accessToken) {
-      const res = await axios.get(`${process.env.REACT_APP_API}/getprofile`, {
+      const res = await axios.get(`${process.env.REACT_APP_API}/user/getUserDetails`, {
         headers: { Authorization: `Bearer ${accessTokenwithoutQuotes}` },
       });
-      const { user } = res.data;
-      setFormData({
-        firstName: user.firstName,
-        lastName: user.lastName,
-        birth_date: user.birth_date,
-        gender: user.gender,
-        blood_group: user.blood_group,
-        marital_status: user.marital_status,
-        email: user.email,
-        phone: user.phone,
-        current_address: user.current_address,
-        linked_in: user.linked_in,
-        facebook: user.facebook,
-        twitter: user.twitter,
-      });
+      const { userData } = res.data;
+      setFormData(userData);
+      setUser(userData);
     }
   };
 
@@ -185,18 +172,7 @@ const Profile = () => {
         errors.current_address = "Address is required";
       }
     }
-    // Social Profiles Section
-    // if (editMode.socialProfiles) {
-    //   if (!formData.linked_in) {
-    //     errors.linked_in = "LinkedIn profile is required";
-    //   }
-    //   if (!formData.facebook) {
-    //     errors.facebook = "Facebook profile is required";
-    //   }
-    //   if (!formData.twitter) {
-    //     errors.twitter = "Twitter profile is required";
-    //   }
-    // }
+
     setFormErrors(errors);
     // If there are no errors, you can submit the form
     if (Object.keys(errors).length === 0) {
@@ -209,7 +185,7 @@ const Profile = () => {
 
         if (accessToken) {
           await axios.put(
-            `${process.env.REACT_APP_API}/updateprofile/${user._id}`,
+            `${process.env.REACT_APP_API}/user/updateUserDetails/${user._id}`,
             formData,
             {
               headers: { Authorization: `Bearer ${accessTokenwithoutQuotes}` },
@@ -230,139 +206,139 @@ const Profile = () => {
     }
   };
 
-  const formatedDate = formData.birth_date;
+  const formatedDate = user.birth_date;
   const newDate = new Date(formatedDate);
   return (
     <div>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={ handleSubmit }>
         <div className="row">
-          {/* Card 1 */}
+          {/* Card 1 */ }
           <div className="col-md-6">
-            {/* Personal Profile */}
+            {/* Personal Profile */ }
             <Card
               title="Personal Profile"
-              editMode={editMode.personalProfile}
-              handleEditClick={() => handleEditClick("personalProfile")}
-              handleCancelClick={() => handleCancelClick("personalProfile")}
+              editMode={ editMode.personalProfile }
+              handleEditClick={ () => handleEditClick("personalProfile") }
+              handleCancelClick={ () => handleCancelClick("personalProfile") }
             >
-              {editMode.personalProfile ? (
+              { editMode.personalProfile ? (
                 <>
                   <PersonalProfileForm
-                    formData={formData}
-                    formErrors={formErrors}
-                    handleInputChange={handleInputChange}
+                    formData={ formData }
+                    formErrors={ formErrors }
+                    handleInputChange={ handleInputChange }
                   />
                 </>
               ) : (
                 <div className="user-details d-flex align-items-center flex-wrap">
                   <div className="py-4 py-xl-0 col-12 col-xl-5 text-center">
                     <img
-                      src={User}
+                      src={ User }
                       alt="User"
                       className="h-100 w-75 rounded-circle"
                     />
                   </div>
                   <div className="col-12 col-xl-7">
                     <p>
-                      <strong>Name: </strong>{" "}
-                      {formData.firstName && formData.lastName
-                        ? formData.firstName + " " + formData.lastName
-                        : "-"}
+                      <strong>Name: </strong>{ " " }
+                      { user.firstName && user.lastName
+                        ? user.firstName + " " + user.lastName
+                        : "-" }
                     </p>
                     <p>
-                      <strong>Date of Birth: </strong>{" "}
-                      {formData.birth_date
+                      <strong>Date of Birth: </strong>{ " " }
+                      { user.birth_date
                         ? newDate.toLocaleDateString("en-US", {
-                            day: "numeric",
-                            month: "short",
-                            year: "numeric",
-                          })
-                        : "-"}
+                          day: "numeric",
+                          month: "short",
+                          year: "numeric",
+                        })
+                        : "-" }
                     </p>
                     <p>
                       <strong>Gender: </strong>
-                      {formData.gender ? formData.gender : "-"}
+                      { user.gender ? user.gender : "-" }
                     </p>
                     <p>
                       <strong>Blood Group: </strong>
-                      {formData.blood_group ? formData.blood_group : "-"}
+                      { user.blood_group ? user.blood_group : "-" }
                     </p>
                     <p>
                       <strong>Marital Status: </strong>
-                      {formData.marital_status ? formData.marital_status : "-"}
+                      { user.marital_status ? user.marital_status : "-" }
                     </p>
                   </div>
                 </div>
-              )}
+              ) }
             </Card>
 
-            {/* Contact Information */}
+            {/* Contact Information */ }
             <Card
               title="Contact Information"
-              // editMode={editMode.contactInformation}
-              // handleEditClick={() => handleEditClick("contactInformation")}
-              // handleCancelClick={() => handleCancelClick("contactInformation")}
+            // editMode={editMode.contactInformation}
+            // handleEditClick={() => handleEditClick("contactInformation")}
+            // handleCancelClick={() => handleCancelClick("contactInformation")}
             >
-              {editMode.contactInformation ? (
+              { editMode.contactInformation ? (
                 <>
                   <ContactInformationForm
-                    formData={formData}
-                    formErrors={formErrors}
-                    handleInputChange={handleInputChange}
+                    formData={ formData }
+                    formErrors={ formErrors }
+                    handleInputChange={ handleInputChange }
                   />
                 </>
               ) : (
                 <>
                   <p>
-                    <strong>Email:</strong> {formData.email}
+                    <strong>Email:</strong> { user.email }
                   </p>
                   <p>
-                    <strong>Phone Number:</strong> {formData.phone}
+                    <strong>Phone Number:</strong> { user.phone }
                   </p>
                 </>
-              )}
+              ) }
             </Card>
           </div>
 
-          {/* Card 2 */}
+          {/* Card 2 */ }
           <div className="col-md-6">
-            {/* Address */}
+            {/* Address */ }
             <Card
               title="Address"
-              editMode={editMode.address}
-              handleEditClick={() => handleEditClick("address")}
-              handleCancelClick={() => handleCancelClick("address")}
+              editMode={ editMode.address }
+              handleEditClick={ () => handleEditClick("address") }
+              handleCancelClick={ () => handleCancelClick("address") }
             >
-              {editMode.address ? (
+              { editMode.address ? (
                 <>
                   <AddressForm
-                    formData={formData}
-                    formErrors={formErrors}
-                    handleInputChange={handleInputChange}
+                    formData={ formData }
+                    formErrors={ formErrors }
+                    handleInputChange={ handleInputChange }
                   />
                 </>
               ) : (
                 <>
                   <p>
-                    {formData.current_address ? formData.current_address : "-"}
+                    { user.current_address ? user.current_address : "-" }
                   </p>
                 </>
-              )}
+              ) }
             </Card>
 
-            {/* Social profiles */}
+            {/* Social profiles */ }
             <Card
               title="Social Profiles"
-              editMode={editMode.socialProfiles}
-              handleEditClick={() => handleEditClick("socialProfiles")}
-              handleCancelClick={() => handleCancelClick("socialProfiles")}
+              editMode={ editMode.socialProfiles }
+              handleEditClick={ () => handleEditClick("socialProfiles") }
+              handleCancelClick={ () => handleCancelClick("socialProfiles") }
             >
-              {editMode.socialProfiles ? (
+              { editMode.socialProfiles ? (
                 <>
                   <SocialProfileForm
-                    formData={formData}
-                    formErrors={formErrors}
-                    handleInputChange={handleInputChange}
+                    formData={ formData }
+                    formErrors={ formErrors }
+                    handleInputChange={ handleInputChange }
                   />
                 </>
               ) : (
@@ -370,45 +346,45 @@ const Profile = () => {
                   <div className="d-flex">
                     <a
                       href={
-                        formData.linked_in
-                          ? `//${formData.linked_in}`
+                        user.linked_in
+                          ? `//${user.linked_in}`
                           : "https://linkedin.com/in/"
                       }
                       target="_blank"
                       className="pe-4"
                       rel="noreferrer"
                     >
-                      <FontAwesomeIcon icon={faLinkedinIn} size="2xl" />
+                      <FontAwesomeIcon icon={ faLinkedinIn } size="2xl" />
                     </a>
 
                     <a
                       href={
-                        formData.facebook
-                          ? `//${formData.facebook}`
+                        user.facebook
+                          ? `//${user.facebook}`
                           : "https://linkedin.com/in/"
                       }
                       target="_blank"
                       className="pe-4"
                       rel="noreferrer"
                     >
-                      <FontAwesomeIcon icon={faFacebook} size="2xl" />
+                      <FontAwesomeIcon icon={ faFacebook } size="2xl" />
                     </a>
 
                     <a
                       href={
-                        formData.twitter
-                          ? `//${formData.twitter}`
+                        user.twitter
+                          ? `//${user.twitter}`
                           : "https://linkedin.com/in/"
                       }
                       target="_blank"
                       className="pe-4"
                       rel="noreferrer"
                     >
-                      <FontAwesomeIcon icon={faTwitter} size="2xl" />
+                      <FontAwesomeIcon icon={ faTwitter } size="2xl" />
                     </a>
                   </div>
                 </>
-              )}
+              ) }
             </Card>
           </div>
         </div>

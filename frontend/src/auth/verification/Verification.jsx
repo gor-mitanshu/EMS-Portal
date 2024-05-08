@@ -15,7 +15,7 @@ const UserVerification = () => {
       const verifyUser = async () => {
         try {
           const res = await axios.post(
-            `${process.env.REACT_APP_API}/verify/${verificationToken}`
+            `${process.env.REACT_APP_API}/user/emailVerification/${verificationToken}`
           );
 
           if (res.status === 200) {
@@ -46,12 +46,12 @@ const UserVerification = () => {
   return (
     <div className="container">
       <div className="row justify-content-evenly align-items-center vh-100">
-        <img src={Verified} alt="" style={{ height: "50%", width: "30%" }} />
+        <img src={ Verified } alt="" style={ { height: "50%", width: "30%" } } />
         <div className="col-md-6">
           <div className="card">
             <div className="card-body">
-              <h2 className="card-title">{verificationStatus}</h2>
-              <p>Redirecting in {redirectTimer} seconds...</p>
+              <h2 className="card-title">{ verificationStatus }</h2>
+              <p>Redirecting in { redirectTimer } seconds...</p>
             </div>
           </div>
         </div>

@@ -9,7 +9,7 @@ require('./config/database');
 
 // routes
 const companyRoutes = require('./routes/companyRoute');
-const commonRoutes = require('./routes/commonRoutes');
+const userRoutes = require('./routes/userRoutes');
 const employeeRoutes = require('./routes/employeeRoute');
 
 // middlewares
@@ -22,7 +22,7 @@ app.use("./images", express.static(path.join(__dirname, 'images')));
 
 
 // use of routes
-app.use('', commonRoutes);
+app.use('/user', userRoutes);
 app.use('/company', companyRoutes);
 app.use('/employee', employeeRoutes);
 

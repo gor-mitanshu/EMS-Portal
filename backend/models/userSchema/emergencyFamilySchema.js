@@ -3,8 +3,7 @@ const mongoose = require('mongoose');
 
 // Schema setup
 const emergencyfamilyMemberSchema = new mongoose.Schema({
-     family_id: { type: mongoose.Schema.Types.ObjectId, ref: 'family' },
-
+     user_id: { type: mongoose.Schema.ObjectId, ref: 'user' },
      family_name: { type: String },
      family_relationship: { type: String },
      family_birth_date: { type: Date },
