@@ -19,7 +19,6 @@ const setFormDataStepOneinitialState = {
 
 const setFormDataStepTwoinitialState = {
   companyName: "",
-  companySize: "",
   employeeStrength: "",
 };
 
@@ -53,16 +52,15 @@ const Register = () => {
     setErrors(newErrors);
   };
 
-  const handleChangeStep2 = (e) => {
+  const handleChangeStep2 = (e, fieldName) => {
     const { name, value } = e.target;
     setFormDataStep2({ ...formDataStep2, [name]: value });
 
     // Validate the field that changed
     const newErrors = registerStepTwoValidations({
-      ...formDataStep2,
       [name]: value,
     });
-    setErrors({ ...errors, ...newErrors });
+    setErrors(newErrors);
   };
 
   const isStep1Valid =
@@ -81,7 +79,7 @@ const Register = () => {
             handleChangeStep1={handleChangeStep1}
             isStep1Valid={isStep1Valid}
             handleNextStep={handleNextStep}
-            validations={errors}
+            errors={errors}
             setErrors={setErrors}
           />
         )}

@@ -12,19 +12,21 @@ export const loginValidations = (inputValues) => {
      if (("email" in inputValues) && inputValues.email === "") {
           errors.email = "Email is required."
           isValid = false;
-     } else if (!!inputValues.email && !inputValues.email.match(emailPattern)) {
-          errors.email = "Please enter a valid Email."
-          isValid = false;
      }
+     //  else if (!!inputValues.email && !inputValues.email.match(emailPattern)) {
+     //      errors.email = "Please enter a valid Email."
+     //      isValid = false;
+     // }
 
      // Password validations
      if (('password' in inputValues) && inputValues.password === "") {
           errors.password = "Password is required."
           isValid = false;
-     } else if (!!inputValues.password && !inputValues.password.match(passwordPattern)) {
-          errors.password = "Password should be 5 to 10 characters long and can contain letters, digits, and some special characters"
-          isValid = false;
      }
+     // else if (!!inputValues.password && !inputValues.password.match(passwordPattern)) {
+     //      errors.password = "Password should be 5 to 10 characters long and can contain letters, digits, and some special characters"
+     //      isValid = false;
+     // }
 
      return { errors, isValid };
 }
@@ -80,17 +82,12 @@ export const registerStepTwoValidations = (inputValues) => {
      const errors = {};
 
      // Company Name Validations
-     if (inputValues.companyName === "") {
+     if (("companyName" in inputValues) && inputValues.companyName === "") {
           errors.companyName = "Please select a company name";
      }
 
-     // Company Size Validations
-     if (inputValues.companySize === "") {
-          errors.companySize = "Please select a company name";
-     }
-
      // Employee Strength Validations
-     if (inputValues.employeeStrength === "") {
+     if (("employeeStrength" in inputValues) && inputValues.employeeStrength === "") {
           errors.employeeStrength = "Please select a company name";
      }
 

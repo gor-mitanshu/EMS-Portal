@@ -11,8 +11,11 @@ const initLoginForm = { email: "", password: "" };
 const Login = () => {
   const navigate = useNavigate();
   const [loginData, setData] = useState(initLoginForm);
-  const [errors, setErrors] = useState({});
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState({});
   const [verificationLinkStatus, setVerificationLinkStatus] = useState("");
+
+  const handleClickShowPassword = () => setShowPassword((prev) => !prev);
 
   const handleChange = (e, fieldName) => {
     const { name, value } = e.target;
@@ -21,7 +24,13 @@ const Login = () => {
     const { errors: loginErrors } = loginValidations({
       [name]: value,
     });
-    setErrors(loginErrors);
+    setError(loginErrors);
+    // const filterErrors = Object.assign({}, error, loginErrors);
+    // console.log(loginErrors);
+    // console.log(error);
+    // console.log(filterErrors);
+
+    // setError(filetredErrors);
   };
 
   // Function to handle form submission
@@ -30,7 +39,7 @@ const Login = () => {
     const { errors: loginErrors, isValid: loginValid } =
       loginValidations(loginData);
     if (!loginValid) {
-      setErrors(loginErrors);
+      setError(loginErrors);
       return;
     }
     try {
@@ -46,9 +55,21 @@ const Login = () => {
           localStorage.setItem("token", JSON.stringify(data));
           toast.success(res.data.message);
           navigate("/");
+        } else {
+          console.log(res);
         }
       }
     } catch (error) {
+      if (error.name === "AxiosError" && error.message === "Network Error") {
+        toast.error("Connection to server lost");
+      }
+      if (
+        error.response.data.errors &&
+        error.response.data.errors.password &&
+        error.response.data.errors.password === "Password does not match"
+      ) {
+        toast.error(error.response.data.errors.password);
+      }
       console.log(error);
       if (error && error.response && error.response.data) {
         const { errors, status } = error.response.data;
@@ -58,15 +79,13 @@ const Login = () => {
             setVerificationLinkStatus("pending");
           }
           toast.error(errors);
-          setErrors(errors);
         } else {
           const { message } = error.response.data;
-          console.log(error);
           toast.error(message);
         }
       } else {
         console.log(error);
-        setErrors({ general: "Something went wrong" });
+        setError({ general: "Something went wrong" });
       }
     }
   };
@@ -95,7 +114,7 @@ const Login = () => {
         toast.error(message);
       } else {
         console.log(error);
-        setErrors({ general: "Something went wrong" });
+        setError({ general: "Something went wrong" });
       }
     }
   };
@@ -108,7 +127,7 @@ const Login = () => {
             <div className="text-start">
               <div
                 className={`form-input-wrapper ${
-                  errors.email ? "error-form-input" : ""
+                  error.email ? "error-form-input" : ""
                 }`}
               >
                 <i className="bi bi-person-fill prefix-icon"></i>
@@ -122,17 +141,17 @@ const Login = () => {
                   onChange={(e) => handleChange(e, "email")}
                 />
               </div>
-              <div className="input-error">{errors.email}</div>
+              <div className="input-error">{error.email}</div>
             </div>
             <div className="text-start">
               <div
                 className={`form-input-wrapper ${
-                  errors.password ? "error-form-input" : ""
+                  error.password ? "error-form-input" : ""
                 }`}
               >
                 <i className="bi bi-lock-fill prefix-icon"></i>
                 <input
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   className="form-input"
                   id="password"
                   placeholder="Enter Your Password"
@@ -140,8 +159,19 @@ const Login = () => {
                   value={loginData.password}
                   onChange={(e) => handleChange(e, "password")}
                 />
+                {!showPassword ? (
+                  <i
+                    onClick={handleClickShowPassword}
+                    className="bi bi-eye-fill postfix-icon"
+                  ></i>
+                ) : (
+                  <i
+                    onClick={handleClickShowPassword}
+                    className="bi bi-eye-slash-fill postfix-icon"
+                  ></i>
+                )}
               </div>
-              <div className="input-error">{errors.password}</div>
+              <div className="input-error">{error.password}</div>
             </div>
 
             <div>

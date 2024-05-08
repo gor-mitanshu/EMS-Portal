@@ -59,9 +59,6 @@ export const stepTwoValidations = {
      companyName: {
           required: "Company Name is required",
      },
-     companySize: {
-          required: "Company Size is required",
-     },
      employeeStrength: {
           required: "Employee Strength is required",
      },

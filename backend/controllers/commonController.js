@@ -149,7 +149,7 @@ const commonController = {
 
                const compareHashedPassword = await bcrypt.compare(password, user.password);
                if (!compareHashedPassword) {
-                    return res.status(401).send({ errors: { password: "Password does not match" }, success: false });
+                    return res.status(401).send({ errors: { password: "Password does not match" }, success: false, });
                }
 
                if (user.is_email_verified) {
