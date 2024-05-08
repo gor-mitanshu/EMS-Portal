@@ -130,21 +130,21 @@ const Address = () => {
 
   return (
     <>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={ handleSubmit }>
         <div className="row">
-          {/* Card 1 */}
+          {/* Card 1 */ }
           <div className="col-md-12">
             <Card
-              title={"Regsiter Office"}
-              editMode={editMode.register_office}
-              handleEditClick={() => handleEditClick("register_office")}
-              handleCancelClick={() => handleCancelClick("register_office")}
+              title={ "Regsiter Office" }
+              editMode={ editMode.register_office }
+              handleEditClick={ () => handleEditClick("register_office") }
+              handleCancelClick={ () => handleCancelClick("register_office") }
             >
-              {editMode.register_office ? (
+              { editMode.register_office ? (
                 <div>
                   <div
-                    className={`form-input-wrapper ${formErrors.register_office_address ? "error-form-input" : ""
-                      }`}
+                    className={ `form-input-wrapper ${formErrors.register_office_address ? "error-form-input" : ""
+                      }` }
                   >
                     <label htmlFor="register_office_address" className="fw-medium">Current Address</label>
                     <textarea
@@ -152,36 +152,36 @@ const Address = () => {
                       className="form-input px-0"
                       placeholder="Enter Full Address"
                       name="register_office_address"
-                      value={addressForm.register_office_address}
-                      rows={1}
-                      onChange={handleInputChange}
+                      value={ addressForm.register_office_address }
+                      rows={ 1 }
+                      onChange={ handleInputChange }
                     />
                   </div>
-                  <div className="input-error">{formErrors.register_office_address}</div>
+                  <div className="input-error">{ formErrors.register_office_address }</div>
                   <button type="submit" className="btn btn-primary px-4">Save</button>
                 </div>
               ) : (
                 <p>
-                  {addressData.register_office_address
+                  { addressData.register_office_address
                     ? addressData.register_office_address
-                    : "-"}
+                    : "-" }
                 </p>
-              )}
+              ) }
             </Card>
           </div>
-          {/* Card 2 */}
+          {/* Card 2 */ }
           <div className="col-md-12">
             <Card
-              title={"Corporate Office"}
-              editMode={editMode.corporate_office}
-              handleEditClick={() => handleEditClick("corporate_office")}
-              handleCancelClick={() => handleCancelClick("corporate_office")}
+              title={ "Corporate Office" }
+              editMode={ editMode.corporate_office }
+              handleEditClick={ () => handleEditClick("corporate_office") }
+              handleCancelClick={ () => handleCancelClick("corporate_office") }
             >
-              {editMode.corporate_office ? (
+              { editMode.corporate_office ? (
                 <div>
                   <div
-                    className={`form-input-wrapper ${formErrors.corporate_office_address ? "error-form-input" : ""
-                      }`}
+                    className={ `form-input-wrapper ${formErrors.corporate_office_address ? "error-form-input" : ""
+                      }` }
                   >
                     <label
                       htmlFor="corporate_office_address"
@@ -194,38 +194,38 @@ const Address = () => {
                       className="form-input px-0"
                       placeholder="Enter Full Address"
                       name="corporate_office_address"
-                      value={addressForm.corporate_office_address}
-                      onChange={handleInputChange}
-                      rows={1}
+                      value={ addressForm.corporate_office_address }
+                      onChange={ handleInputChange }
+                      rows={ 1 }
                     />
                   </div>
-                  <div className="input-error">{formErrors.corporate_office_address}</div>
+                  <div className="input-error">{ formErrors.corporate_office_address }</div>
                   <button type="submit" className="btn btn-primary px-4">Save</button>
                 </div>
               ) : (
                 <p>
-                  {addressData.corporate_office_address
+                  { addressData.corporate_office_address
                     ? addressData.corporate_office_address
-                    : "-"}
+                    : "-" }
                 </p>
-              )}
+              ) }
             </Card>
           </div>
-          {/* Card 3 */}
+          {/* Card 3 */ }
           <div className="col-md-12">
             <Card
-              title={"Custom Address"}
-              editMode={editMode.custom_address_title}
-              handleEditClick={() => handleEditClick("custom_address_title")}
-              handleCancelClick={() =>
+              title={ "Custom Address" }
+              editMode={ editMode.custom_address_title }
+              handleEditClick={ () => handleEditClick("custom_address_title") }
+              handleCancelClick={ () =>
                 handleCancelClick("custom_address_title")
               }
             >
-              {editMode.custom_address_title ? (
+              { editMode.custom_address_title ? (
                 <div>
                   <div
-                    className={`form-input-wrapper ${formErrors.custom_office_address ? "error-form-input" : ""
-                      }`}
+                    className={ `form-input-wrapper ${formErrors.custom_office_address ? "error-form-input" : ""
+                      }` }
                   >
                     <label
                       htmlFor="custom_office_address"
@@ -238,21 +238,21 @@ const Address = () => {
                       className="form-input px-0"
                       placeholder="Enter Full Address"
                       name="custom_office_address"
-                      value={addressForm.custom_office_address}
-                      onChange={handleInputChange}
-                      rows={1}
+                      value={ addressForm.custom_office_address }
+                      onChange={ handleInputChange }
+                      rows={ 1 }
                     />
                   </div>
-                  <div className="input-error">{formErrors.custom_office_address}</div>
+                  <div className="input-error">{ formErrors.custom_office_address }</div>
                   <button type="submit" className="btn btn-primary px-4">Save</button>
                 </div>
               ) : (
                 <p>
-                  {addressData.custom_office_address
+                  { addressData.custom_office_address
                     ? addressData.custom_office_address
-                    : "-"}
+                    : "-" }
                 </p>
-              )}
+              ) }
             </Card>
           </div>
         </div>

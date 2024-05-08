@@ -17,7 +17,7 @@ const Overview = () => {
     socialProfiles: false,
   });
 
-  const [companyData, setComapnyData] = useState({});
+  const [companyData, setCompanyData] = useState({});
   const [formData, setFormData] = useState({
     register_company: "",
     brand_name: "",
@@ -61,16 +61,17 @@ const Overview = () => {
     const accessTokenwithoutQuotes = JSON.parse(accessToken);
     const { user } = JSON.parse(atob(accessTokenwithoutQuotes.split(".")[1]));
     const response = await axios.get(
-      `${process.env.REACT_APP_API}/company/getOverview/${user._id}`,
+      `${process.env.REACT_APP_API}/company/getCompanyDetails/${user._id}`,
       {
         headers: { Authorization: `Bearer ${accessTokenwithoutQuotes}` },
       }
     );
+    console.log(response)
     if (response) {
       const { company } = response.data;
       if (company) {
-        setComapnyData(company);
         setFormData(company);
+        setCompanyData(company);
       }
     } else {
       console.log(response);
@@ -149,7 +150,7 @@ const Overview = () => {
       const accessTokenwithoutQuotes = JSON.parse(accessToken);
       const { user } = JSON.parse(atob(accessTokenwithoutQuotes.split(".")[1]));
       const response = await axios.put(
-        `${process.env.REACT_APP_API}/company/updateOverview/${user._id}`,
+        `${process.env.REACT_APP_API}/company/updateCompanyDetails/${user._id}`,
         formData,
         {
           headers: { Authorization: `Bearer ${accessTokenwithoutQuotes}` },
@@ -182,9 +183,9 @@ const Overview = () => {
               { editMode.overview ? (
                 <>
                   <OverViewForm
-                    formData={formData}
-                    formErrors={formErrors}
-                    handleInputChange={handleInputChange}
+                    formData={ formData }
+                    formErrors={ formErrors }
+                    handleInputChange={ handleInputChange }
                   />
                 </>
               ) : (
@@ -196,7 +197,7 @@ const Overview = () => {
                           Company Name
                         </h6>
                         <h6 className="text-gray text-truncate col-12 col-md-6">
-                          { companyData.register_company }
+                          { companyData.company_name }
                         </h6>
                       </div>
                       <div className="row mt-4">

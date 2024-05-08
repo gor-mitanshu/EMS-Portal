@@ -3,16 +3,13 @@ const mongoose = require('mongoose');
 
 // Schema setup
 const documentSchema = new mongoose.Schema({
-     document_list_id: { type: mongoose.Schema.ObjectId, ref: 'document-list' },
-
+     user_id: { type: mongoose.Schema.ObjectId, ref: 'user' },
      document_type: { type: String },
      document_id: { type: String },
-     proof: {
-          photo_id: Boolean,
-          date_of_birth: Boolean,
-          current_address: Boolean,
-          permanent_address: Boolean,
-     },
+     photo_id: { type: Boolean },
+     date_of_birth: { type: Boolean },
+     current_address: { type: Boolean },
+     permanent_address: { type: Boolean },
      document_file: { type: String },
      deleted_at: { type: Date }
 

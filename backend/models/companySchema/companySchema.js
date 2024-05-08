@@ -6,8 +6,8 @@ const Company = new mongoose.Schema({
      user_id: { type: mongoose.Schema.ObjectId },
 
      company_name: { type: String },
-     register_office: { type: String },
      company_size: { type: String },
+     register_office: { type: String },
      employee_no: { type: String },
      set_time_shift: {
           inTime: { type: Date },
@@ -15,6 +15,22 @@ const Company = new mongoose.Schema({
           garce_time: { type: Date },
           working_hours: { type: String }
      },
+     register_company: { type: String },
+     brand_name: { type: String },
+     company_official_email: { type: String },
+     company_official_contact: { type: String },
+     website: { type: String },
+     domain_name: { type: String },
+     industry_type: { type: String },
+
+     linked_in: { type: String },
+     facebook: { type: String },
+     twitter: { type: String },
+
+     register_office_address: { type: String },
+     corporate_office_address: { type: String },
+     custom_office_address: { type: String },
+
      deleted_at: { type: Date }
 }, { timestamps: true });
 

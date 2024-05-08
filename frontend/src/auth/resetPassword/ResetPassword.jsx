@@ -38,7 +38,7 @@ const ResetPassword = () => {
         password,
       };
       const res = await axios.post(
-        `${process.env.REACT_APP_API}/resetPassword/${id}/${token}`,
+        `${process.env.REACT_APP_API}/user/resetPassword/${id}/${token}`,
         body
       );
       if (res.status === 200) {
@@ -57,71 +57,69 @@ const ResetPassword = () => {
 
   return (
     <>
-      <FormWrapper title={"Reset Password"}>
+      <FormWrapper title={ "Reset Password" }>
         <div className="d-flex flex-column">
-          <form onSubmit={handleSubmit}>
-            {error && (
+          <form onSubmit={ handleSubmit }>
+            { error && (
               <div className="alert alert-danger" role="alert">
-                {error}
+                { error }
               </div>
-            )}
+            ) }
             <div>
               <div
-                className={`form-input-wrapper ${
-                  error ? "error-form-input" : ""
-                }`}
+                className={ `form-input-wrapper ${error ? "error-form-input" : ""
+                  }` }
               >
                 <i className="bi bi-lock-fill prefix-icon"></i>
                 <input
-                  type={showPassword ? "text" : "password"}
+                  type={ showPassword ? "text" : "password" }
                   className="form-input"
                   id="password"
                   placeholder="Enter New Password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  value={ password }
+                  onChange={ (e) => setPassword(e.target.value) }
                 />
-                {!showPassword ? (
+                { !showPassword ? (
                   <i
-                    onClick={handleClickShowPassword}
+                    onClick={ handleClickShowPassword }
                     className="bi bi-eye-fill postfix-icon"
                   ></i>
                 ) : (
                   <i
-                    onClick={handleClickShowPassword}
+                    onClick={ handleClickShowPassword }
                     className="bi bi-eye-slash-fill postfix-icon"
                   ></i>
-                )}
+                ) }
               </div>
-              <div className="input-error">{error}</div>
+              <div className="input-error">{ error }</div>
             </div>
             <div>
               <div
-                className={`form-input-wrapper ${
-                  error ? "error-form-input" : ""
-                }`}
+                className={ `form-input-wrapper ${error ? "error-form-input" : ""
+                  }` }
               >
                 <i className="bi bi-lock-fill prefix-icon"></i>
                 <input
-                  type={showPassword ? "text" : "password"}
+                  type={ showPassword ? "text" : "password" }
                   className="form-input"
                   id="confirmPassword"
                   placeholder="Confirm New Password"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  value={ confirmPassword }
+                  onChange={ (e) => setConfirmPassword(e.target.value) }
                 />
-                {!showPassword ? (
+                { !showPassword ? (
                   <i
-                    onClick={handleClickShowPassword}
+                    onClick={ handleClickShowPassword }
                     className="bi bi-eye-fill postfix-icon"
                   ></i>
                 ) : (
                   <i
-                    onClick={handleClickShowPassword}
+                    onClick={ handleClickShowPassword }
                     className="bi bi-eye-slash-fill postfix-icon"
                   ></i>
-                )}
+                ) }
               </div>
-              <div className="input-error">{error}</div>
+              <div className="input-error">{ error }</div>
             </div>
             <div className="text-center mt-4">
               <button type="submit" className="btn btn-primary px-4">
