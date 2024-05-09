@@ -3,7 +3,7 @@ import DepartmentForm from "./DepartmentForm";
 import axios from "axios";
 import Card from "../../../UI/profileCards/ProfileCard";
 
-const Department = () => {
+const Department = ({ userId }) => {
   const [fields, setFields] = useState([]);
   const [fieldValues, setFieldValues] = useState({});
   const [submittedData, setSubmittedData] = useState([]);
@@ -66,32 +66,32 @@ const Department = () => {
 
   return (
     <>
-      <Card title={"Department"}>
+      <Card title={ "Department" }>
         <DepartmentForm
-          fields={fields}
-          fieldValues={fieldValues}
-          handleChange={handleChange}
-          setFieldValues={setFieldValues}
-          removeField={removeField}
-          addField={addField}
-          handleCancel={handleCancel}
-          handleSubmit={handleSubmit}
+          fields={ fields }
+          fieldValues={ fieldValues }
+          handleChange={ handleChange }
+          setFieldValues={ setFieldValues }
+          removeField={ removeField }
+          addField={ addField }
+          handleCancel={ handleCancel }
+          handleSubmit={ handleSubmit }
         />
-        {departments.map((data, index) => {
+        { departments.map((data, index) => {
           // console.log(data);
           return (
             <div>
-              <h3>Department: {data.department}</h3>
+              <h3>Department: { data.department }</h3>
               <ul>
-                {data.subdepartments.map((subdepartment, index) => (
-                  <li key={index}>
-                    Subdepartment {index + 1}: {subdepartment}
+                { data.subdepartments.map((subdepartment, index) => (
+                  <li key={ index }>
+                    Subdepartment { index + 1 }: { subdepartment }
                   </li>
-                ))}
+                )) }
               </ul>
             </div>
           );
-        })}
+        }) }
       </Card>
     </>
   );
