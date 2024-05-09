@@ -31,7 +31,7 @@ const Work = () => {
     notice_period: "",
     last_working_day: "",
   });
-
+  const [employee, setEmployee] = useState({})
   const [formErrors, setFormErrors] = useState({
     employee_code: "",
     date_of_joining: "",
@@ -109,32 +109,16 @@ const Work = () => {
       const accessToken = localStorage.getItem("token");
       const accessTokenwithoutQuotes = JSON.parse(accessToken);
       const res = await axios.get(
-        `${process.env.REACT_APP_API}/employee/getworkdetails`,
+        `${process.env.REACT_APP_API}/employee/getWorkDetails`,
         {
           headers: { Authorization: `Bearer ${accessTokenwithoutQuotes}` },
         }
       );
       if (res && res.status === 200) {
+        console.log(res)
         const { workDetails } = res.data;
-        setFormData({
-          employee_code: workDetails.employee_code,
-          date_of_joining: workDetails.date_of_joining,
-          probation_period: workDetails.probation_period,
-          employment_type: workDetails.employment_type,
-          work_location: workDetails.work_location,
-          employee_status: workDetails.employee_status,
-          work_experience: workDetails.work_experience,
-
-          designation: workDetails.designation,
-          job_title: workDetails.job_title,
-          department: workDetails.department,
-          sub_department: workDetails.sub_department,
-
-          resignation_date: workDetails.resignation_date,
-          resignation_status: workDetails.resignation_status,
-          notice_period: workDetails.notice_period,
-          last_working_day: workDetails.last_working_day,
-        });
+        setFormData(workDetails);
+        setEmployee(workDetails)
       }
     };
     getWorkData();
@@ -209,7 +193,7 @@ const Work = () => {
 
         if (accessToken) {
           await axios.put(
-            `${process.env.REACT_APP_API}/employee/updateworkdetails/${user._id}`,
+            `${process.env.REACT_APP_API}/employee/updateWorkDetails/${user._id}`,
             formData,
             {
               headers: { Authorization: `Bearer ${accessTokenwithoutQuotes}` },
@@ -232,133 +216,153 @@ const Work = () => {
   return (
     <>
       <div>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={ handleSubmit }>
           <div className="row">
-            {/* Card 1 */}
+            {/* Card 1 */ }
             <div className="col-md-7">
               <Card
                 title="Basic Info"
-                editMode={editMode.basicInfo}
-                handleEditClick={() => handleEditClick("basicInfo")}
-                handleCancelClick={() => handleCancelClick("basicInfo")}
+                editMode={ editMode.basicInfo }
+                handleEditClick={ () => handleEditClick("basicInfo") }
+                handleCancelClick={ () => handleCancelClick("basicInfo") }
               >
-                {editMode.basicInfo ? (
+                { editMode.basicInfo ? (
                   <>
                     <BasicInfoForm
-                      formData={formData}
-                      formErrors={formErrors}
-                      handleInputChange={handleInputChange}
-                      editMode={editMode}
+                      formData={ formData }
+                      formErrors={ formErrors }
+                      handleInputChange={ handleInputChange }
+                      editMode={ editMode }
                     />
                   </>
                 ) : (
                   <>
                     <div className="user-details">
                       <div className="row">
-                        <div className="col-md-4">
-                          <p>
-                            <strong>Employee ID:</strong>{" "}
-                            {formData.employee_code}
-                          </p>
-                        </div>
-                        <div className="col-md-4">
-                          <p>
-                            <strong>Date of Joining:</strong>{" "}
-                            {formData.date_of_joining}
-                          </p>
-                        </div>
-                        <div className="col-md-4">
-                          <p>
-                            <strong>Probation Period:</strong>{" "}
-                            {formData.probation_period}
-                          </p>
-                        </div>
+                        { employee ?
+                          <>
+                            <div className="col-md-4">
+                              <p>
+                                <strong>Employee ID:</strong>{ " " }
+                                { employee.employee_code || "" }
+                              </p>
+                            </div><div className="col-md-4">
+                              <p>
+                                <strong>Date of Joining:</strong>{ " " }
+                                { employee.date_of_joining && employee.date_of_joining }
+                              </p>
+                            </div><div className="col-md-4">
+                              <p>
+                                <strong>Probation Period:</strong>{ " " }
+                                { employee.probation_period && employee.probation_period }
+                              </p>
+                            </div>
+                          </> : "No data found"
+                        }
                       </div>
                       <div className="row">
-                        <div className="col-md-4">
-                          <p>
-                            <strong>Employee Type:</strong>{" "}
-                            {formData.employment_type}
-                          </p>
-                        </div>
-                        <div className="col-md-4">
-                          <p>
-                            <strong>Work Location:</strong>{" "}
-                            {formData.work_location}
-                          </p>
-                        </div>
-                        <div className="col-md-4">
-                          <p>
-                            <strong>Employee Status:</strong>{" "}
-                            {formData.employee_status}
-                          </p>
-                        </div>
+                        {
+                          employee ?
+                            <>
+                              <div className="col-md-4">
+                                <p>
+                                  <strong>Employee Type:</strong>{ " " }
+                                  { employee.employment_type && employee.employment_type }
+                                </p>
+                              </div>
+                              <div className="col-md-4">
+                                <p>
+                                  <strong>Work Location:</strong>{ " " }
+                                  { employee.work_location && employee.work_location }
+                                </p>
+                              </div>
+                              <div className="col-md-4">
+                                <p>
+                                  <strong>Employee Status:</strong>{ " " }
+                                  { employee.employee_status && employee.employee_status }
+                                </p>
+                              </div>
+                            </> : "No data found"
+                        }
+
                       </div>
                       <div className="row">
-                        <div className="col-md-6">
-                          <p>
-                            <strong>Work Experience:</strong>{" "}
-                            {formData.work_experience}
-                          </p>
-                        </div>
+                        {
+                          employee ?
+
+                            <div className="col-md-6">
+                              <p>
+                                <strong>Work Experience:</strong>{ " " }
+                                { employee.work_experience && employee.work_experience }
+                              </p>
+                            </div> : "No data found"
+
+                        }
                       </div>
                     </div>
                   </>
-                )}
+                ) }
               </Card>
             </div>
-            {/* Card 2 */}
+            {/* Card 2 */ }
             <div className="col-md-5">
               <Card
                 title="Work Info"
-                editMode={editMode.workInfo}
-                handleEditClick={() => handleEditClick("workInfo")}
-                handleCancelClick={() => handleCancelClick("workInfo")}
+                editMode={ editMode.workInfo }
+                handleEditClick={ () => handleEditClick("workInfo") }
+                handleCancelClick={ () => handleCancelClick("workInfo") }
               >
-                {editMode.workInfo ? (
+                { editMode.workInfo ? (
                   <>
                     <WorkInfoForm
-                      formData={formData}
-                      formErrors={formErrors}
-                      handleInputChange={handleInputChange}
-                      editMode={editMode}
+                      formData={ formData }
+                      formErrors={ formErrors }
+                      handleInputChange={ handleInputChange }
+                      editMode={ editMode }
                     />
                   </>
                 ) : (
                   <div className="user-details">
                     <div className="row">
-                      <div className="col-md-6">
-                        <p>
-                          <strong>Designation:</strong>
-                          {formData.designation || ""}
-                        </p>
-                      </div>
-                      <div className="col-md-6">
-                        <p>
-                          <strong>Job Title:</strong> {formData.job_title || ""}
-                        </p>
-                      </div>
+                      {
+                        employee ?
+                          <>
+                            <div className="col-md-6">
+                              <p>
+                                <strong>Designation:</strong>
+                                { employee.designation || "" }
+                              </p>
+                            </div><div className="col-md-6">
+                              <p>
+                                <strong>Job Title:</strong> { employee.job_title || "" }
+                              </p>
+                            </div>
+                          </> : "No data found"
+                      }
                     </div>
                     <div className="row">
-                      <div className="col-md-6">
-                        <p>
-                          <strong>Department:</strong>{" "}
-                          {formData.department || ""}
-                        </p>
-                      </div>
-                      <div className="col-md-6">
-                        <p>
-                          <strong>Sub Department:</strong>{" "}
-                          {formData.sub_department || ""}
-                        </p>
-                      </div>
+                      { employee ?
+                        <>
+                          <div className="col-md-6">
+                            <p>
+                              <strong>Department:</strong>{ " " }
+                              { employee.department || "" }
+                            </p>
+                          </div>
+                          <div className="col-md-6">
+                            <p>
+                              <strong>Sub Department:</strong>{ " " }
+                              { employee.sub_department || "" }
+                            </p>
+                          </div>
+                        </> : "NO data found" }
                     </div>
                   </div>
-                )}
+                ) }
               </Card>
             </div>
           </div>
-          {/* Card 3 */}
+          {/* Card 3 */ }
           <div className="row">
             <div className="col-md-12">
               <Card title="Work History">
@@ -372,7 +376,7 @@ const Work = () => {
                       </div>
                       <div className="col-md-3">
                         <p>
-                          <strong>Designation</strong>{" "}
+                          <strong>Designation</strong>{ " " }
                         </p>
                       </div>
                       <div className="col-md-3">
@@ -391,21 +395,21 @@ const Work = () => {
               </Card>
             </div>
           </div>
-          {/* Card 4 */}
+          {/* Card 4 */ }
           <div className="row">
             <div className="col-md-12">
               <Card
                 title="Resignation Info"
-                editMode={editMode.resignationInfo}
-                handleEditClick={() => handleEditClick("resignationInfo")}
-                handleCancelClick={() => handleCancelClick("resignationInfo")}
+                editMode={ editMode.resignationInfo }
+                handleEditClick={ () => handleEditClick("resignationInfo") }
+                handleCancelClick={ () => handleCancelClick("resignationInfo") }
               >
-                {editMode.resignationInfo ? (
+                { editMode.resignationInfo ? (
                   <>
                     <ResignationInfoForm
-                      formData={formData}
-                      formErrors={formErrors}
-                      handleInputChange={handleInputChange}
+                      formData={ formData }
+                      formErrors={ formErrors }
+                      handleInputChange={ handleInputChange }
                     />
                   </>
                 ) : (
@@ -435,7 +439,7 @@ const Work = () => {
                       </div>
                     </div>
                   </div>
-                )}
+                ) }
               </Card>
             </div>
           </div>

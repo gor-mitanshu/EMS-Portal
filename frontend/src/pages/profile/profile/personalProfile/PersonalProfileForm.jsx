@@ -97,12 +97,12 @@ const PersonalProfileForm = ({
                       className="form-check-input"
                       type="radio"
                       name="gender"
-                      id="male"
-                      value="male"
-                      checked={ formData.gender === "male" }
+                      id="Male"
+                      value="Male"
+                      checked={ formData.gender === "Male" }
                       onChange={ handleInputChange }
                     />
-                    <label className="form-check-label" htmlFor="male">
+                    <label className="form-check-label" htmlFor="Male">
                       Male
                     </label>
                   </div>
@@ -111,12 +111,12 @@ const PersonalProfileForm = ({
                       className="form-check-input"
                       type="radio"
                       name="gender"
-                      id="female"
-                      value="female"
-                      checked={ formData.gender === "female" }
+                      id="Female"
+                      value="Female"
+                      checked={ formData.gender === "Female" }
                       onChange={ handleInputChange }
                     />
-                    <label className="form-check-label" htmlFor="female">
+                    <label className="form-check-label" htmlFor="Female">
                       Female
                     </label>
                   </div>
@@ -125,12 +125,12 @@ const PersonalProfileForm = ({
                       className="form-check-input"
                       type="radio"
                       name="gender"
-                      id="other"
-                      value="other"
-                      checked={ formData.gender === "other" }
+                      id="Others"
+                      value="Others"
+                      checked={ formData.gender === "Others" }
                       onChange={ handleInputChange }
                     />
-                    <label className="form-check-label" htmlFor="other">
+                    <label className="form-check-label" htmlFor="Others">
                       Other
                     </label>
                   </div>
