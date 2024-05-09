@@ -13,7 +13,6 @@ const UserSchema = require('../models/userSchema/userSchema').UserModel;
 const CompanySchema = require('../models/companySchema/companySchema');
 const DepartmentSchema = require('../models/companySchema/departmentSchema');
 const SubDepartment = require('../models/companySchema/subdepartmentSchema');
-const Address = require('../models/companySchema/addressSchema');
 const Policy = require('../models/companySchema/policySchema');
 const Announcement = require('../models/companySchema/announcementSchema');
 
@@ -167,7 +166,7 @@ const companyController = {
     let { register_office_address, corporate_office_address, custom_office_address } = req.body
     const getCompanydetails = await CompanySchema.findOne({ user_id: user._id })
     try {
-      const addressDetails = new Address({
+      const addressDetails = new CompanySchema({
         register_office_address, corporate_office_address, custom_office_address, user_id: user._id, company_id: getCompanydetails._id
       });
       await addressDetails.save();
@@ -292,35 +291,23 @@ const companyController = {
   addAnnouncement: async (req, res) => {
     const companyDetails = req.companyDetails;
     try {
-      let announcement = await Announcement.findOne({ company_id: companyDetails._id })
-      if (!announcement) {
-        // Create a new Announcement record if it doesn't exist
-        announcement = new Announcement({
-          company_id: companyDetails._id,
-          deleted_at: null
-        })
-        await announcement.save();
-      }
+      // Create a new Announcement record if it doesn't exist
+      const announcement = new Announcement({
+        company_id: companyDetails._id,
+        announcement: req.body.announcement,
 
-      const announcementData = new AnnouncementData({
-        announcement_id: announcement._id,
-        announcement: req.body.announcement
-      });
-      await announcementData.save();
+        deleted_at: null
+      })
+      await announcement.save();
 
       res.status(200).send({
         message: "Added Successfully",
-        success: true,
-        announcement,
-        announcementData
       });
 
     } catch (error) {
-      console.log(error);
       return res.status(500).send({
-        error: "Internal Server Error",
-        success: false,
-        technicalError: error.message
+        message: "Internal Server Error",
+        error: error.message
       });
     }
   },
@@ -328,39 +315,20 @@ const companyController = {
   getAnnouncement: async (req, res) => {
     const companyDetails = req.companyDetails;
     try {
-      const announcement = await Announcement.findOne({ company_id: companyDetails._id });
+      const announcement = await Announcement.find({ company_id: companyDetails._id });
       if (announcement) {
-        const announcementDetails = await Announcement.aggregate([
-          {
-            $match: { _id: new ObjectId(announcement._id) }
-          },
-          {
-            $lookup: {
-              from: "announcement-datas",
-              localField: "_id",
-              foreignField: "announcement_id",
-              as: "announcement_details"
-            }
-          }
-        ]);
         return res.status(200).send({
-          message: "Got the details",
-          success: true,
-          announcementDetails,
+          announcement,
         });
       } else {
         return res.status(200).send({
           message: "Didn't find the details",
-          success: false,
         });
       }
-
     } catch (error) {
-      console.error('Error getting user:', error.message);
       return res.status(500).send({
         message: "Internal server error",
         error: error.message,
-        success: false
       });
     }
   },

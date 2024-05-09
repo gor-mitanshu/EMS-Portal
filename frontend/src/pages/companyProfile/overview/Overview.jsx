@@ -11,36 +11,29 @@ import {
   faTwitter,
 } from "@fortawesome/free-brands-svg-icons";
 
+const initialCompanyData = {
+  company_name: "",
+  brand_name: "",
+  company_official_email: "",
+  company_official_contact: "",
+  website: "",
+  domain_name: "",
+  industry_type: "",
+}
+const initialSocialData = {
+  linked_in: "",
+  facebook: "",
+  twitter: "",
+}
 const Overview = () => {
   const [editMode, setEditMode] = useState({
     overview: false,
     socialProfiles: false,
   });
-
   const [companyData, setCompanyData] = useState({});
-  const [formData, setFormData] = useState({
-    register_company: "",
-    brand_name: "",
-    company_official_email: "",
-    company_official_contact: "",
-    website: "",
-    domain_name: "",
-    industry_type: "",
+  const [formData, setFormData] = useState({ ...initialCompanyData, ...initialSocialData });
 
-    linked_in: "",
-    facebook: "",
-    twitter: "",
-  });
-
-  const [formErrors, setFormErrors] = useState({
-    register_company: "",
-    brand_name: "",
-    company_official_email: "",
-    company_official_contact: "",
-    website: "",
-    domain_name: "",
-    industry_type: "",
-  });
+  const [formErrors, setFormErrors] = useState(initialCompanyData);
 
   // Handle Change
   const handleInputChange = (e) => {
@@ -66,7 +59,6 @@ const Overview = () => {
         headers: { Authorization: `Bearer ${accessTokenwithoutQuotes}` },
       }
     );
-    console.log(response)
     if (response) {
       const { company } = response.data;
       if (company) {
@@ -101,13 +93,7 @@ const Overview = () => {
     if (section === "overview") {
       setFormErrors((prevFormErrors) => ({
         ...prevFormErrors,
-        register_company: "",
-        brand_name: "",
-        company_official_email: "",
-        company_official_contact: "",
-        website: "",
-        domain_name: "",
-        industry_type: "",
+        ...initialCompanyData
       }));
     }
   };
@@ -120,14 +106,14 @@ const Overview = () => {
     // Validate each field based on the section
     // Personal Profile Section
     if (editMode.overview) {
-      if (!formData.register_company) {
-        errors.register_company = "Register Company Name is required";
+      if (!formData.company_name) {
+        errors.company_name = "Company Name is required";
       }
       if (!formData.brand_name) {
         errors.brand_name = "Brand Name is required";
       }
       if (!formData.company_official_email) {
-        errors.company_official_email = "Company's Official Name is required";
+        errors.company_official_email = "Company's Official Email is required";
       }
       if (!formData.company_official_contact) {
         errors.company_official_contact = "Company's Contact is required";
@@ -210,7 +196,7 @@ const Overview = () => {
                       </div>
                       <div className="row mt-4">
                         <h6 className="text-black fw-bold text-truncate col-12 col-md-6">
-                          Company Email
+                          Email
                         </h6>
                         <h6 className="text-gray text-truncate col-12 col-md-6">
                           { companyData.company_official_email }
@@ -218,7 +204,7 @@ const Overview = () => {
                       </div>
                       <div className="row mt-4">
                         <h6 className="text-black fw-bold text-truncate col-12 col-md-6">
-                          Company Contact
+                          Contact
                         </h6>
                         <h6 className="text-gray text-truncate col-12 col-md-6">
                           { companyData.company_official_contact }
@@ -248,9 +234,9 @@ const Overview = () => {
                           { companyData.industry_type }
                         </h6>
                       </div>
-                    </div> : "No data found"
+                    </div> :
+                    <h3>No data found</h3>
                   }
-
                 </>
               ) }
             </Card>

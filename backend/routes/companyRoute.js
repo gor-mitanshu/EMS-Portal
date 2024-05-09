@@ -39,11 +39,12 @@ router.post('/addDepartment', verifyToken, companyController.addDepartment);
 // Announcements
 router.post('/addAnnouncement', verifyToken, companyController.addAnnouncement);
 router.get('/getAnnouncement', verifyToken, companyController.getAnnouncement);
+router.get('/updateAnnouncement/:id', verifyToken, companyController.updateAnnouncement);
+router.get('/deleteAnnouncement/:id', verifyToken, companyController.deleteAnnouncement);
 // Policies
 router.post('/addPolicy', verifyToken, upload.any(), companyController.addPolicy);
 router.get('/getPolicy', verifyToken, companyController.getPolicy);
 router.post('/updatePolicy/:id', verifyToken, upload.any(), companyController.updatePolicy);
 router.delete('/deletePolicy/:id', verifyToken, companyController.deletePolicy);
-
 
 module.exports = router;

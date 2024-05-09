@@ -698,8 +698,8 @@ const userController = {
 
           try {
                const updateUserFields = {
-                    firstname: firstName,
-                    lastname: lastName,
+                    firstName: firstName,
+                    lastName: lastName,
                     birth_date: birth_date,
                     gender: gender,
                     blood_group: blood_group,

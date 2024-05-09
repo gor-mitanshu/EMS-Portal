@@ -28,8 +28,6 @@ const employeeController = {
                if (!!oldUser) {
                     return res.status(409).send({
                          message: "Already Registered",
-                         success: false,
-                         data: null
                     });
                }
                const hashedPassword = await bcrypt.hash(password, 10);
@@ -54,8 +52,6 @@ const employeeController = {
 
                res.status(201).send({
                     message: "Registered Successfully",
-                    success: true,
-                    data: { newUserCommonSchema, newUserCompanyUser }
                });
 
           } catch (error) {
@@ -79,8 +75,6 @@ const employeeController = {
 
                res.status(200).send({
                     message: "Added Successfully",
-                    success: true,
-                    workDetails
                });
           } catch (error) {
                console.log(error);
@@ -94,14 +88,7 @@ const employeeController = {
 
      getWorkDetails: async (req, res) => {
           try {
-               const token = req.headers.authorization;
-               if (!token) {
-                    return res.status(500).send({
-                         error: "Token not found",
-                         success: false
-                    });
-               }
-               const { user } = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
+               const { user } = req.user;
                if (!user) {
                     return res.status(404).send({
                          message: "Unable to parse the token",
@@ -119,15 +106,12 @@ const employeeController = {
                } else {
                     return res.status(200).send({
                          message: "Didn't find the User",
-                         res,
-                         success: false,
                     });
                }
           } catch (error) {
                console.error('Error getting user:', error.message);
                return res.status(500).send({
-                    message: "Internal server error",
-                    error: error.message,
+                    message: "Internal server error", error: error.message,
                     success: false
                });
           }

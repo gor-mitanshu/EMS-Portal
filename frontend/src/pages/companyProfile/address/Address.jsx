@@ -3,19 +3,18 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import Card from "../../../UI/profileCards/ProfileCard";
 
+const initForm = {
+  register_office_address: "",
+  corporate_office_address: "",
+  custom_office_address: "",
+}
+
 const Address = () => {
   const [editMode, setEditMode] = useState({
     register_office: false,
     corporate_office: false,
     custom_address_title: false,
   });
-
-  const initForm = {
-    register_office_address: "",
-    corporate_office_address: "",
-    custom_office_address: "",
-  }
-
   const [addressData, setAddressData] = useState({})
   const [addressForm, setAddressForm] = useState(initForm);
 
@@ -164,7 +163,7 @@ const Address = () => {
                 <p>
                   { addressData.register_office_address
                     ? addressData.register_office_address
-                    : "-" }
+                    : <h3>No Data Found!</h3> }
                 </p>
               ) }
             </Card>
@@ -206,7 +205,7 @@ const Address = () => {
                 <p>
                   { addressData.corporate_office_address
                     ? addressData.corporate_office_address
-                    : "-" }
+                    : <h3>No Data Found!</h3> }
                 </p>
               ) }
             </Card>
@@ -250,7 +249,7 @@ const Address = () => {
                 <p>
                   { addressData.custom_office_address
                     ? addressData.custom_office_address
-                    : "-" }
+                    : <h3>No Data Found!</h3> }
                 </p>
               ) }
             </Card>

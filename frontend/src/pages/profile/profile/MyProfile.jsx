@@ -12,6 +12,7 @@ import {
   faTwitter,
 } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { toast } from 'react-toastify'
 
 const Profile = () => {
   const [editMode, setEditMode] = useState({
@@ -51,7 +52,6 @@ const Profile = () => {
 
   // Handle Change
   const handleInputChange = (e) => {
-    debugger
     const { name, value } = e.target;
     setFormData({
       ...formData,
@@ -184,21 +184,27 @@ const Profile = () => {
         );
 
         if (accessToken) {
-          await axios.put(
+          debugger
+          const response = await axios.put(
             `${process.env.REACT_APP_API}/user/updateUserDetails/${user._id}`,
             formData,
             {
               headers: { Authorization: `Bearer ${accessTokenwithoutQuotes}` },
             }
           );
+          if (response) {
+            console.log(response)
+            toast.success(response.data.message);
+            getUser();
+            setEditMode({
+              personalProfile: false,
+              contactInformation: false,
+              address: false,
+              socialProfiles: false,
+            });
+          }
           // console.log(formData);
           // alert("Form submitted successfully!");
-          setEditMode({
-            personalProfile: false,
-            contactInformation: false,
-            address: false,
-            socialProfiles: false,
-          });
         }
       } catch (error) {
         console.error("Error updating profile:", error);
