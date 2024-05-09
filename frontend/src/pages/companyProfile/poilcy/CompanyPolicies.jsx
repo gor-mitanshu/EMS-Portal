@@ -1,4 +1,5 @@
 import React, {
+  useCallback,
   useEffect,
   useState,
   // , useEffect
@@ -6,13 +7,14 @@ import React, {
 import CompanyPoliciesModal from "./CompanyPoliciesModal";
 import axios from "axios";
 import Card from "../../../UI/profileCards/ProfileCard";
+import { toast } from "react-toastify";
 
 const initialState = {
   policy_title: "",
   policy_description: "",
   policy_file: null,
 };
-const CompanyPolices = () => {
+const CompanyPolices = ({ accessToken, companyId }) => {
   const [showModal, setShowModal] = useState(false);
   const [policies, setPolicies] = useState([]);
   const [formData, setFormData] = useState(initialState);
@@ -54,27 +56,25 @@ const CompanyPolices = () => {
     });
   };
 
-  const getPolicies = async () => {
+  const getPolicies = useCallback(async () => {
     try {
-      const accessToken = localStorage.getItem("token");
-      const accessTokenwithoutQuotes = JSON.parse(accessToken);
       const res = await axios.get(
-        `${process.env.REACT_APP_API}/company/getPolicy`,
+        `${process.env.REACT_APP_API}/company/getPolicy/${companyId}`,
         {
-          headers: { Authorization: `Bearer ${accessTokenwithoutQuotes}` },
+          headers: { Authorization: `Bearer ${accessToken}` },
         }
       );
       if (res.data) {
-        setPolicies(res.data.policyData);
+        setPolicies(res.data.policy);
       }
     } catch (error) {
       console.error("Error fetching works:", error);
     }
-  };
+  }, [accessToken, companyId]);
 
   useEffect(() => {
     getPolicies();
-  }, []);
+  }, [getPolicies]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -102,16 +102,14 @@ const CompanyPolices = () => {
       formDataToSend.append("policy_description", formData.policy_description);
       formDataToSend.append("policy_file", formData.policy_file);
 
-      const accessToken = localStorage.getItem("token");
-      const accessTokenwithoutQuotes = JSON.parse(accessToken);
       const endpoint = editId
         ? `${process.env.REACT_APP_API}/company/updatePolicy/${editId}`
         : `${process.env.REACT_APP_API}/company/addPolicy`;
       const res = await axios.post(endpoint, formDataToSend, {
-        headers: { Authorization: `Bearer ${accessTokenwithoutQuotes}` },
+        headers: { Authorization: `Bearer ${accessToken}` },
       });
       if (res) {
-        console.log("Submitted:", formData);
+        toast.success(res.data.message)
         handleClose();
         setFormData(initialState);
         getPolicies();
@@ -133,44 +131,38 @@ const CompanyPolices = () => {
 
   const handleDelete = async (policyId) => {
     try {
-      const accessToken = localStorage.getItem("token");
-      const accessTokenwithoutQuotes = JSON.parse(accessToken);
       const res = await axios.delete(
         `${process.env.REACT_APP_API}/company/deletePolicy/${policyId}`,
         {
-          headers: { Authorization: `Bearer ${accessTokenwithoutQuotes}` },
+          headers: { Authorization: `Bearer ${accessToken}` },
         }
       );
-      if (res.data.success) {
+      if (res.data) {
         // Remove the deleted certificate from the state
-        const updatedPolicies = policies[0].policy_details.filter(
-          (policy) => policy._id !== policyId
-        );
-        setPolicies([{ policy_details: updatedPolicies }]);
+        toast.success(res.data.message)
         getPolicies();
       }
     } catch (error) {
       console.error("Error deleting certificate:", error);
     }
   };
-
   return (
-    <Card title={"Company Policies"}>
+    <Card title={ "Company Policies" }>
       <div>
-        <button className="btn btn-primary" onClick={handleShowModal}>
+        <button className="btn btn-primary" onClick={ handleShowModal }>
           Add
         </button>
         <CompanyPoliciesModal
-          show={showModal}
-          handleClose={handleClose}
-          formData={formData}
-          formErrors={formErrors}
-          handleChange={handleChange}
-          handleSubmit={handleSubmit}
-          handleFileChange={handleFileChange}
-          editId={editId}
+          show={ showModal }
+          handleClose={ handleClose }
+          formData={ formData }
+          formErrors={ formErrors }
+          handleChange={ handleChange }
+          handleSubmit={ handleSubmit }
+          handleFileChange={ handleFileChange }
+          editId={ editId }
         />
-        {policies.length > 0 && policies[0].policy_details.length > 0 ? (
+        { policies.length > 0 ? (
           <table className="table">
             <thead>
               <tr>
@@ -180,31 +172,31 @@ const CompanyPolices = () => {
               </tr>
             </thead>
             <tbody>
-              {policies[0].policy_details.map((policy) => (
-                <tr key={policy._id}>
-                  <td>{policy.policy_title}</td>
-                  <td>{policy.policy_description}</td>
+              { policies.map((policy) => (
+                <tr key={ policy._id }>
+                  <td>{ policy.policy_title }</td>
+                  <td>{ policy.policy_description }</td>
                   <td>
                     <button
                       className="btn btn-primary me-2"
-                      onClick={() => handleEdit(policy)}
+                      onClick={ () => handleEdit(policy) }
                     >
                       Edit
                     </button>
                     <button
                       className="btn btn-danger"
-                      onClick={() => handleDelete(policy._id)}
+                      onClick={ () => handleDelete(policy._id) }
                     >
                       Delete
                     </button>
                   </td>
                 </tr>
-              ))}
+              )) }
             </tbody>
           </table>
         ) : (
           <h6 className="pt-4">No Policies uploaded yet!!!</h6>
-        )}
+        ) }
       </div>
     </Card>
   );

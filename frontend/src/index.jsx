@@ -47,71 +47,87 @@ import Statutory from "./pages/companyProfile/statutory/Statutory";
 import Plan from "./pages/companyProfile/plan/Plan";
 import { RequireAuth, RequireLogout } from "./authGuard/AuthGuard";
 import { AuthProvider } from "./authGuard/useAuth";
+import axios from "axios";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
+
+const accessToken = JSON.parse(localStorage.getItem("token"));
+if (accessToken) {
+  var { user } = JSON.parse(atob(accessToken.split(".")[1]));
+  const response = await axios.get(
+    `${process.env.REACT_APP_API}/company/getUserDetailsByUserId/${user._id}`,
+    {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    }
+  );
+  if (response) {
+    const { company } = response.data;
+    var companyId = company._id
+  }
+}
 
 root.render(
   <>
     <AuthProvider>
       <BrowserRouter>
         <Routes>
-          {/* Auth Routes */}
-          <Route path="/login" element={<RequireLogout><Login /></RequireLogout>} />
-          <Route path="/forgetpassword" element={<ForgotPassword />} />
-          <Route path="/resetpassword/:id/:token" element={<ResetPassword />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/verify/:verificationToken" element={<UserVerification />} />
-          {/* Layout Routes */}
-          <Route path="/" element={<RequireAuth><App /></RequireAuth>}>
-            <Route index element={<Navigate to="dashboard" replace />} />
-            <Route path="dashboard" element={<Dashboard />} />
+          {/* Auth Routes */ }
+          <Route path="/login" element={ <RequireLogout><Login /></RequireLogout> } />
+          <Route path="/forgetpassword" element={ <ForgotPassword /> } />
+          <Route path="/resetpassword/:id/:token" element={ <ResetPassword /> } />
+          <Route path="/register" element={ <Register /> } />
+          <Route path="/verify/:verificationToken" element={ <UserVerification /> } />
+          {/* Layout Routes */ }
+          <Route path="/" element={ <RequireAuth><App /></RequireAuth> }>
+            <Route index element={ <Navigate to="dashboard" replace /> } />
+            <Route path="dashboard" element={ <Dashboard /> } />
 
-            {/* Company Routes */}
-            <Route path="/company-profile" element={<CompanyProfile />}>
-              <Route index element={<Navigate to="overview" replace />} />
-              <Route path="overview" element={<Overview />} />
-              <Route path="address" element={<Address />} />
-              <Route path="department" element={<Department />} />
-              <Route path="designation" element={<Designation />} />
-              <Route path="announcements" element={<Announcement />} />
-              <Route path="policies" element={<CompanyPolices />} />
-              <Route path="admin" element={<Admin />} />
-              <Route path="statutory" element={<Statutory />} />
-              <Route path="my-plan" element={<Plan />} />
+            {/* Company Routes */ }
+            <Route path="/company-profile" element={ <CompanyProfile /> }>
+              <Route index element={ <Navigate to="overview" replace /> } />
+              <Route path="overview" element={ <Overview companyId={ companyId } accessToken={ accessToken } /> } />
+              <Route path="address" element={ <Address /> } />
+              <Route path="department" element={ <Department companyId={ companyId } accessToken={ accessToken } /> } />
+              <Route path="designation" element={ <Designation companyId={ companyId } accessToken={ accessToken } /> } />
+              <Route path="announcements" element={ <Announcement companyId={ companyId } accessToken={ accessToken } /> } />
+              <Route path="policies" element={ <CompanyPolices companyId={ companyId } accessToken={ accessToken } /> } />
+              <Route path="admin" element={ <Admin companyId={ companyId } accessToken={ accessToken } /> } />
+              <Route path="statutory" element={ <Statutory companyId={ companyId } accessToken={ accessToken } /> } />
+              <Route path="my-plan" element={ <Plan companyId={ companyId } accessToken={ accessToken } /> } />
             </Route>
 
-            {/* My Profile Routes */}
-            <Route path="/my-profile" element={<TabsComponent />}>
-              <Route index element={<Navigate to="personal" replace />} />
-              <Route path="personal" element={<Profile />} />
-              <Route path="work" element={<Work />} />
-              <Route path="team" element={<Team />} />
-              <Route path="education" element={<Education />} />
-              <Route path="family" element={<Family />} />
-              <Route path="documents" element={<DocumentTab />} />
-              <Route path="work-week" element={<WorkWeek />} />
-              <Route path="file-manager" element={<FileManager />} />
+            {/* My Profile Routes */ }
+            <Route path="/my-profile" element={ <TabsComponent /> }>
+              <Route index element={ <Navigate to="personal" replace /> } />
+              <Route path="personal" element={ <Profile userId={ user._id } accessToken={ accessToken } /> } />
+              <Route path="work" element={ <Work userId={ user._id } accessToken={ accessToken } /> } />
+              <Route path="team" element={ <Team userId={ user._id } accessToken={ accessToken } /> } />
+              <Route path="education" element={ <Education userId={ user._id } accessToken={ accessToken } /> } />
+              <Route path="family" element={ <Family userId={ user._id } accessToken={ accessToken } /> } />
+              <Route path="documents" element={ <DocumentTab userId={ user._id } accessToken={ accessToken } /> } />
+              <Route path="work-week" element={ <WorkWeek userId={ user._id } accessToken={ accessToken } /> } />
+              <Route path="file-manager" element={ <FileManager userId={ user._id } accessToken={ accessToken } /> } />
             </Route>
 
-            {/* Leave Routes */}
-            <Route path="/leave" element={<Leave />}>
-              <Route index element={<Navigate to="logs" replace />} />
-              <Route path="logs" element={<Logs />} />
-              <Route path="rules" element={<Rules />} />
-              <Route path="balance" element={<Balance />} />
-              <Route path="settings" element={<Settings />} />
+            {/* Leave Routes */ }
+            <Route path="/leave" element={ <Leave /> }>
+              <Route index element={ <Navigate to="logs" replace /> } />
+              <Route path="logs" element={ <Logs userId={ user._id } accessToken={ accessToken } /> } />
+              <Route path="rules" element={ <Rules userId={ user._id } accessToken={ accessToken } /> } />
+              <Route path="balance" element={ <Balance userId={ user._id } accessToken={ accessToken } /> } />
+              <Route path="settings" element={ <Settings userId={ user._id } accessToken={ accessToken } /> } />
             </Route>
 
-            <Route path="directory" element={<Directory />} />
-            <Route path="attendance" element={<Attendance />} />
-            <Route path="payroll" element={<Payroll />} />
-            <Route path="organizing-chart" element={<Chart />} />
-            <Route path="holiday-calender" element={<Calender />} />
-            <Route path="rewards" element={<Rewards />} />
+            <Route path="directory" element={ <Directory userId={ user._id } accessToken={ accessToken } /> } />
+            <Route path="attendance" element={ <Attendance userId={ user._id } accessToken={ accessToken } /> } />
+            <Route path="payroll" element={ <Payroll userId={ user._id } accessToken={ accessToken } /> } />
+            <Route path="organizing-chart" element={ <Chart userId={ user._id } accessToken={ accessToken } /> } />
+            <Route path="holiday-calender" element={ <Calender userId={ user._id } accessToken={ accessToken } /> } />
+            <Route path="rewards" element={ <Rewards userId={ user._id } accessToken={ accessToken } /> } />
           </Route>
         </Routes>
       </BrowserRouter>
     </AuthProvider>
-    <ToastContainer theme="colored" position="top-right" autoClose={3000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} draggable pauseOnHover />
+    <ToastContainer theme="colored" position="top-right" autoClose={ 3000 } hideProgressBar={ false } newestOnTop={ false } closeOnClick rtl={ false } draggable pauseOnHover />
   </>
 );

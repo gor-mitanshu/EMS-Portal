@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import AnnouncementList from "./AnnouncementList";
 import axios from "axios";
 import { toast } from "react-toastify";
 
-const Announcement = () => {
+const Announcement = ({ companyId, accessToken }) => {
   const [isEdit, setIsEdit] = useState(false);
   const [formData, setFormData] = useState({ announcement: "" });
   const [error, setError] = useState("");
@@ -21,40 +21,33 @@ const Announcement = () => {
       setError("");
     }
   };
-
-  const getAnnouncementDetails = async () => {
+  const getAnnouncementDetails = useCallback(async () => {
     try {
-      const accessToken = localStorage.getItem("token");
-      const accessTokenwithoutQuotes = JSON.parse(accessToken);
       const response = await axios.get(
-        `${process.env.REACT_APP_API}/company/getAnnouncement`,
+        `${process.env.REACT_APP_API}/company/getAnnouncement/${companyId}`,
         {
-          headers: { Authorization: `Bearer ${accessTokenwithoutQuotes}` },
+          headers: { Authorization: `Bearer ${accessToken}` },
         }
       );
-      console.log(response)
       const { announcement } = response.data
-      // const response = await axios.get("http://localhost:3001/announcements");
       setAnnouncements(announcement);
     } catch (error) {
       console.error("Error fetching announcements:", error);
     }
-  };
+  }, [accessToken, companyId]);
 
   useEffect(() => {
     getAnnouncementDetails();
-  }, []);
+  }, [getAnnouncementDetails]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const accessToken = localStorage.getItem("token");
-      const accessTokenwithoutQuotes = JSON.parse(accessToken);
       const response = await axios.post(
         `${process.env.REACT_APP_API}/company/addAnnouncement`,
         formData,
         {
-          headers: { Authorization: `Bearer ${accessTokenwithoutQuotes}` },
+          headers: { Authorization: `Bearer ${accessToken}` },
         }
       );
       if (response) {
@@ -71,12 +64,17 @@ const Announcement = () => {
     }
   };
 
-  const handleEdit = async (id, updatedAnnouncement) => {
+  const handleEdit = async (id, announcement) => {
     try {
-      await axios.put(`http://localhost:3001/announcements/${id}`, {
-        content: updatedAnnouncement,
-      });
-      getAnnouncementDetails();
+      const res = await axios.put(`${process.env.REACT_APP_API}/company/updateAnnouncement/${id}`,
+        { announcement: announcement }, {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      }
+      );
+      if (res) {
+        toast.success(res.data.message)
+        getAnnouncementDetails();
+      }
     } catch (error) {
       console.error("Error editing announcement:", error);
     }
@@ -84,8 +82,13 @@ const Announcement = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:3001/announcements/${id}`);
-      getAnnouncementDetails();
+      const res = await axios.delete(`${process.env.REACT_APP_API}/company/deleteAnnouncement/${id}`, {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      });
+      if (res) {
+        toast.success(res.data.message)
+        getAnnouncementDetails();
+      }
     } catch (error) {
       console.error("Error deleting announcement:", error);
     }
@@ -162,7 +165,7 @@ const Announcement = () => {
               handleInputChange={ handleInputChange }
               index={ index }
               id={ announcement.id }
-              handleDelete={ () => handleDelete(announcement.id) }
+              handleDelete={ () => handleDelete(announcement._id) }
               handleEdit={ handleEdit }
               handleCancel={ handleCancel }
             />

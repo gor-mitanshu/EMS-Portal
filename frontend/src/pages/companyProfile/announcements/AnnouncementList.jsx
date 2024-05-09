@@ -10,41 +10,31 @@ const AnnouncementList = ({
   handleEdit,
 }) => {
   const [isEdit, setIsEdit] = useState(false);
-  const [announcement, setAnnouncement] = useState(announcements.content);
+  const [announcement, setAnnouncement] = useState(announcements.announcement);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleEditClick = () => {
-    setAnnouncement(announcements.content);
+    setAnnouncement(announcements.announcement);
     setError("");
     setIsEdit(true);
   };
 
   const handleSave = (e) => {
     e.preventDefault();
-    console.log(announcements.id);
-    console.log(announcement);
-    handleEdit(announcements.id, announcement);
+    handleEdit(announcements._id, announcement);
     setIsEdit(false);
     setIsSubmitting(true)
   };
 
   const handleCancelEdit = () => {
     setIsEdit(false);
-    setAnnouncement(announcements.content);
+    setAnnouncement(announcements.announcement);
     setError("");
   };
 
   return (
     <>
       { isEdit ? (
-        // <AddAnnouncementForm
-        //   announcement={announcement}
-        //   error={error}
-        //   handleInputChange={(e) => setAnnouncement(e.target.value)}
-        //   handleSubmit={handleSave}
-        //   handleCancel={handleCancelEdit}
-        //   isEdit={true}
-        // />
         <form action="" onSubmit={ handleSave }>
           <div className="text-start">
             <div
@@ -77,7 +67,7 @@ const AnnouncementList = ({
         </form>
       ) : (
         <div>
-          <strong>{ announcements.announcement }</strong> {/* Render content here */ }
+          <strong>{ announcements.announcement }</strong>
         </div>
       ) }
       <div className="d-flex justify-content-end">

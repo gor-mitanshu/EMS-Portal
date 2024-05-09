@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import axios from "axios";
 import OverViewForm from "./OverViewForm";
 import SocialProfileForm from "../../../UI/socialForm/SocialProfileForm";
@@ -25,7 +25,7 @@ const initialSocialData = {
   facebook: "",
   twitter: "",
 }
-const Overview = () => {
+const Overview = ({ companyId, accessToken }) => {
   const [editMode, setEditMode] = useState({
     overview: false,
     socialProfiles: false,
@@ -49,30 +49,25 @@ const Overview = () => {
     });
   };
 
-  const getCompanyDetails = async () => {
-    const accessToken = localStorage.getItem("token");
-    const accessTokenwithoutQuotes = JSON.parse(accessToken);
-    const { user } = JSON.parse(atob(accessTokenwithoutQuotes.split(".")[1]));
+  const getCompanyDetails = useCallback(async () => {
     const response = await axios.get(
-      `${process.env.REACT_APP_API}/company/getCompanyDetails/${user._id}`,
+      `${process.env.REACT_APP_API}/company/getCompanyDetailsById/${companyId}`,
       {
-        headers: { Authorization: `Bearer ${accessTokenwithoutQuotes}` },
+        headers: { Authorization: `Bearer ${accessToken}` },
       }
     );
     if (response) {
       const { company } = response.data;
-      if (company) {
-        setFormData(company);
-        setCompanyData(company);
-      }
+      setFormData(company);
+      setCompanyData(company);
     } else {
       console.log(response);
     }
-  };
+  }, [accessToken, companyId]);
 
   useEffect(() => {
     getCompanyDetails();
-  }, []);
+  }, [getCompanyDetails]);
 
   // Handle Edit Click
   const handleEditClick = (section) => {
@@ -132,14 +127,11 @@ const Overview = () => {
     setFormErrors(errors);
     // If there are no errors, you can submit the form
     if (Object.keys(errors).length === 0) {
-      const accessToken = localStorage.getItem("token");
-      const accessTokenwithoutQuotes = JSON.parse(accessToken);
-      const { user } = JSON.parse(atob(accessTokenwithoutQuotes.split(".")[1]));
       const response = await axios.put(
-        `${process.env.REACT_APP_API}/company/updateCompanyDetails/${user._id}`,
+        `${process.env.REACT_APP_API}/company/updateCompanyDetails/${companyId}`,
         formData,
         {
-          headers: { Authorization: `Bearer ${accessTokenwithoutQuotes}` },
+          headers: { Authorization: `Bearer ${accessToken}` },
         }
       );
       if (response) {
