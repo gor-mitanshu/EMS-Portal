@@ -31,10 +31,6 @@ router.post('/addCompanyDetails', verifyToken, companyController.addCompanyDetai
 router.get('/getUserDetailsByUserId/:id', verifyToken, companyController.getUserDetailsByUserId);
 router.get('/getCompanyDetailsById/:id', verifyToken, companyController.getCompanyDetailsById);
 router.put('/updateCompanyDetails/:id', verifyToken, companyController.updateCompanyDetails);
-// Company Address
-router.post('/addCompanyAddress', verifyToken, companyController.addCompanyAddress);
-router.get('/getCompanyAddress/:id', verifyToken, companyController.getCompanyAddress);
-router.put('/updateCompanyAddress/:id', verifyToken, companyController.updateCompanyAddress);
 // Department
 router.post('/addDepartment', verifyToken, companyController.addDepartment);
 // Announcements

@@ -15,13 +15,13 @@ const Company = new mongoose.Schema({
           garce_time: { type: Date },
           working_hours: { type: String }
      },
-     register_company: { type: String },
      brand_name: { type: String },
      company_official_email: { type: String },
      company_official_contact: { type: String },
      website: { type: String },
      domain_name: { type: String },
      industry_type: { type: String },
+     company_address: { type: String },
 
      linked_in: { type: String },
      facebook: { type: String },

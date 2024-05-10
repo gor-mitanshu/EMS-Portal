@@ -19,8 +19,7 @@ import Attendance from "./pages/attendance/Attendance";
 import Leave from "./pages/leave/Leave";
 import Payroll from "./pages/payroll/Payroll";
 import CompanyProfile from "./pages/companyProfile/CompanyProfile";
-import Overview from "./pages/companyProfile/overview/Overview";
-import Address from "./pages/companyProfile/address/Address";
+import Company from "./pages/companyProfile/company/Company";
 import Department from "./pages/companyProfile/department/Department";
 import Profile from "./pages/profile/profile/MyProfile";
 import Announcement from "./pages/companyProfile/announcements/Announcement";
@@ -53,8 +52,9 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 
 const accessToken = JSON.parse(localStorage.getItem("token"));
 var jwtPayload = 0;
-jwtPayload = accessToken ? JSON.parse(window.atob(accessToken.split(".")[1])) : 0;
+jwtPayload = accessToken ? JSON.parse(window.atob(accessToken.split('.')[1])) : 0;
 const isTokenInvalid = Date.now() >= jwtPayload.exp * 1000;
+
 if (accessToken && !isTokenInvalid) {
   var { user } = JSON.parse(atob(accessToken.split(".")[1]));
   if (user && !isTokenInvalid) {
@@ -95,8 +95,7 @@ root.render(
             {/* Company Routes */ }
             <Route path="/company-profile" element={ <CompanyProfile /> }>
               <Route index element={ <Navigate to="overview" replace /> } />
-              <Route path="overview" element={ <Overview companyId={ companyId } accessToken={ accessToken } /> } />
-              <Route path="address" element={ <Address /> } />
+              <Route path="overview" element={ <Company companyId={ companyId } accessToken={ accessToken } /> } />
               <Route path="department" element={ <Department companyId={ companyId } accessToken={ accessToken } /> } />
               <Route path="designation" element={ <Designation companyId={ companyId } accessToken={ accessToken } /> } />
               <Route path="announcements" element={ <Announcement companyId={ companyId } accessToken={ accessToken } /> } />

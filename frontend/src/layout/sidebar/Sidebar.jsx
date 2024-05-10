@@ -23,7 +23,6 @@ const menuItems = [
     color: "black",
     content: [
       { title: "Company", link: "/company-profile/overview" },
-      { title: "Address", link: "/company-profile/address" },
       { title: "Department", link: "/company-profile/department" },
       { title: "Designations", link: "/company-profile/designations" },
       { title: "Announcements", link: "/company-profile/announcements" },
