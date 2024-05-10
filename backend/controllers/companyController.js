@@ -88,8 +88,7 @@ const companyController = {
       );
       if (!updateOverview) {
         return res.status(500).send({
-          error: "Update Unsuccessful",
-          success: false,
+          message: "Update Unsuccessful",
         });
       } else {
         return res.status(200).send({
@@ -118,15 +117,12 @@ const companyController = {
 
       res.status(200).send({
         message: "Added Successfully",
-        success: true,
-        addressDetails
       });
     } catch (error) {
       console.log(error);
       return res.status(500).send({
-        error: "Internal Server Error",
-        success: false,
-        technicalError: error.message
+        message: "Internal Server Error",
+        error: error.message
       });
     }
   },
@@ -138,19 +134,15 @@ const companyController = {
       if (!company) {
         return res.status(404).send({
           message: "Details not found",
-          success: false
         });
       }
       return res.status(200).send({
-        message: "Successfully Got the Details",
-        success: true,
         company
       });
     } catch (error) {
       res.status(400).send({
         message: "Internal server error",
         error: error.message,
-        success: false
       });
     }
   },
@@ -169,21 +161,16 @@ const companyController = {
       ); if (!updateCompanyAddress) {
         return res.status(500).send({
           error: "Update Unsuccessful",
-          success: false,
         });
       } else {
         return res.status(200).send({
           message: "Update Successful",
-          updateCompanyAddress,
-          success: true,
         });
       }
     } catch (error) {
-      console.log(error);
       return res.status(500).send({
-        error: "Internal Server Error",
-        success: false,
-        technicalError: error.message
+        message: "Internal Server Error",
+        error: error.message
       });
     }
   },
@@ -295,13 +282,10 @@ const companyController = {
       if (!updateAnnouncement) {
         return res.status(500).send({
           error: "AnnouncementSchema Update Unsuccessful",
-          success: false,
         });
       } else {
         return res.status(200).send({
           message: "AnnouncementSchema Updated Successfully",
-          updateAnnouncement,
-          success: true,
         });
       }
     } catch (error) {
@@ -454,7 +438,6 @@ const companyController = {
       }
       return res.status(200).json({ success: true, message: "PolicySchema deleted successfully" });
     } catch (error) {
-      console.log(error);
       return res.status(500).send({
         message: "Internal Server Error",
         error: error.message

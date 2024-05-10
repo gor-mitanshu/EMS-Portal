@@ -57,51 +57,51 @@ const FamilySection = ({
   return (
     <div className="row">
       <div className="col-md-12">
-        <Card title={title}>
+        <Card title={ title }>
           <>
-            {!showForm ? (
-              <button className="btn btn-primary mb-4" onClick={handleAddClick}>
+            { !showForm ? (
+              <button className="btn btn-primary mb-4" onClick={ handleAddClick }>
                 <FontAwesomeIcon
-                  icon={faPlus}
+                  icon={ faPlus }
                   size="sm"
                   color="white"
-                  style={{ paddingRight: "10px" }}
+                  style={ { paddingRight: "10px" } }
                 />
                 Add
               </button>
             ) : (
               <FamilyForm
-                formData={formData}
-                formErrors={formErrors}
-                handleInputChange={handleInputChange}
-                handleSubmit={handleSubmit}
-                handleCancel={handleCancel}
-                handleCheckboxChange={handleCheckboxChange}
+                formData={ formData }
+                formErrors={ formErrors }
+                handleInputChange={ handleInputChange }
+                handleSubmit={ handleSubmit }
+                handleCancel={ handleCancel }
+                handleCheckboxChange={ handleCheckboxChange }
               />
-            )}
+            ) }
 
             <div className="p-4 m-0">
-              {familyList.length > 0 && (
+              { familyList.length > 0 && (
                 <>
-                  {familyList[0].familyMemberDetails.map((family, index) => (
+                  { familyList.map((family, index) => (
                     <FamilyItem
-                      key={index}
-                      family={family}
-                      formErrors={formErrors}
-                      setFormErrors={setFormErrors}
-                      valueIndex={index}
-                      id={family._id}
-                      handleDeleteClick={() =>
+                      key={ index }
+                      family={ family }
+                      formErrors={ formErrors }
+                      setFormErrors={ setFormErrors }
+                      valueIndex={ index }
+                      id={ family._id }
+                      handleDeleteClick={ () =>
                         handleDeleteClick(index, family._id)
                       }
-                      onSaveEdit={handleSaveEdit}
-                      handleCancel={handleCancel}
-                      handleCheckboxChange={handleCheckboxChange}
-                      emergency={emergency}
+                      onSaveEdit={ handleSaveEdit }
+                      handleCancel={ handleCancel }
+                      handleCheckboxChange={ handleCheckboxChange }
+                      emergency={ emergency }
                     />
-                  ))}
+                  )) }
                 </>
-              )}
+              ) }
             </div>
           </>
         </Card>

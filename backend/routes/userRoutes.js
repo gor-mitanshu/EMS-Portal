@@ -5,7 +5,7 @@ const userController = require('../controllers/userController');
 const verifyToken = require('../middleware/authMiddleware');
 
 router.post('/addUser', userController.addUser);
-router.get('/getUserDetails', verifyToken, userController.getUserDetails);
+router.get('/getUserDetails/:id', verifyToken, userController.getUserDetails);
 router.put('/updateUserDetails/:id', verifyToken, userController.updateUserDetails);
 router.post('/sendVerificationLink', userController.sendVerificationLink);
 router.post('/emailVerification/:verificationToken', userController.verifyEmail);

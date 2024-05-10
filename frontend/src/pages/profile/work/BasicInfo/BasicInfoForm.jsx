@@ -12,13 +12,12 @@ const BasicInfoForm = ({
   formData = initialFormData,
   formErrors,
   handleInputChange,
-  editMode,
 }) => {
   return (
     <>
       <div className="form-group">
         <div className="row">
-          {/* Employee ID */}
+          {/* Employee ID */ }
           <div className="col-md-4">
             <div className="form-group row">
               <div className="col mb-3">
@@ -30,18 +29,18 @@ const BasicInfoForm = ({
                   className="form-control no-focus-box-shadow"
                   placeholder="Employee ID"
                   name="employee_code"
-                  value={formData.employee_code}
-                  onChange={handleInputChange}
+                  value={ formData.employee_code }
+                  onChange={ handleInputChange }
                 />
-                {formErrors.employee_code && (
+                { formErrors.employee_code && (
                   <small className="text-danger">
-                    {formErrors.employee_code}
+                    { formErrors.employee_code }
                   </small>
-                )}
+                ) }
               </div>
             </div>
           </div>
-          {/* Employee Select */}
+          {/* Employee Select */ }
           <div className="col-md-4">
             <div className="form-group row">
               <div className="col mb-3">
@@ -51,9 +50,8 @@ const BasicInfoForm = ({
                 <select
                   className="form-select no-focus-box-shadow"
                   name="employment_type"
-                  value={formData.employment_type}
-                  onChange={handleInputChange}
-                  disabled={!editMode}
+                  value={ formData.employment_type }
+                  onChange={ handleInputChange }
                 >
                   <option value="">Select Employment Type</option>
                   <option value="Full Time">Full Time</option>
@@ -61,15 +59,15 @@ const BasicInfoForm = ({
                   <option value="On Contract">On Contract</option>
                   <option value="Intern">Intern</option>
                 </select>
-                {formErrors.employment_type && (
+                { formErrors.employment_type && (
                   <small className="text-danger">
-                    {formErrors.employment_type}
+                    { formErrors.employment_type }
                   </small>
-                )}
+                ) }
               </div>
             </div>
           </div>
-          {/* Date of Joining */}
+          {/* Date of Joining */ }
           <div className="col-md-4">
             <div className="form-group row">
               <div className="col mb-3">
@@ -81,21 +79,21 @@ const BasicInfoForm = ({
                   className="form-control no-focus-box-shadow"
                   placeholder="Date of Joining"
                   name="date_of_joining"
-                  value={formData.date_of_joining || ""}
-                  onChange={handleInputChange}
+                  value={ formData.date_of_joining || "" }
+                  onChange={ handleInputChange }
                 />
-                {formErrors.date_of_joining && (
+                { formErrors.date_of_joining && (
                   <small className="text-danger">
-                    {formErrors.date_of_joining}
+                    { formErrors.date_of_joining }
                   </small>
-                )}
+                ) }
               </div>
             </div>
           </div>
         </div>
 
         <div className="row">
-          {/* Work Location */}
+          {/* Work Location */ }
           <div className="col-md-4">
             <div className="form-group row">
               <div className="col mb-3">
@@ -105,22 +103,21 @@ const BasicInfoForm = ({
                 <select
                   className="form-select no-focus-box-shadow"
                   name="work_location"
-                  value={formData.work_location}
-                  onChange={handleInputChange}
-                  disabled={!editMode}
+                  value={ formData.work_location }
+                  onChange={ handleInputChange }
                 >
                   <option value="">Select Work Location</option>
                   <option value="Ahmedabad">Ahmedabad</option>
                 </select>
-                {formErrors.work_location && (
+                { formErrors.work_location && (
                   <small className="text-danger">
-                    {formErrors.work_location}
+                    { formErrors.work_location }
                   </small>
-                )}
+                ) }
               </div>
             </div>
           </div>
-          {/* Work Experience */}
+          {/* Work Experience */ }
           <div className="col-md-4">
             <div className="form-group row">
               <div className="col mb-3">
@@ -132,18 +129,18 @@ const BasicInfoForm = ({
                   className="form-control no-focus-box-shadow"
                   placeholder="Experience in months"
                   name="work_experience"
-                  value={formData.work_experience || ""}
-                  onChange={handleInputChange}
+                  value={ formData.work_experience || "" }
+                  onChange={ handleInputChange }
                 />
-                {formErrors.work_experience && (
+                { formErrors.work_experience && (
                   <small className="text-danger">
-                    {formErrors.work_experience}
+                    { formErrors.work_experience }
                   </small>
-                )}
+                ) }
               </div>
             </div>
           </div>
-          {/* Date of Joining */}
+          {/* Date of Joining */ }
           <div className="col-md-4">
             <div className="form-group row">
               <div className="col mb-3">
@@ -155,14 +152,14 @@ const BasicInfoForm = ({
                   className="form-control no-focus-box-shadow"
                   placeholder="Date of Joining"
                   name="probation_period"
-                  value={formData.probation_period}
-                  onChange={handleInputChange}
+                  value={ formData.probation_period }
+                  onChange={ handleInputChange }
                 />
-                {formErrors.probation_period && (
+                { formErrors.probation_period && (
                   <small className="text-danger">
-                    {formErrors.probation_period}
+                    { formErrors.probation_period }
                   </small>
-                )}
+                ) }
               </div>
             </div>
           </div>

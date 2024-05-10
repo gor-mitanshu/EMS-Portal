@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import PersonalProfileForm from "./personalProfile/PersonalProfileForm";
 import User from "../../../assets/images/user.jpg";
 import ContactInformationForm from "./contactInformation/ContactInformationForm";
@@ -14,7 +14,23 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { toast } from 'react-toastify'
 
-const Profile = () => {
+const profileInitialState = {
+  firstName: "",
+  lastName: "",
+  birth_date: "",
+  gender: "",
+  blood_group: "",
+  marital_status: "",
+  email: "",
+  phone: "",
+  current_address: "",
+}
+const socialInitialState = {
+  linked_in: "",
+  facebook: "",
+  twitter: "",
+}
+const Profile = ({ accessToken, userId }) => {
   const [editMode, setEditMode] = useState({
     personalProfile: false,
     contactInformation: false,
@@ -23,32 +39,10 @@ const Profile = () => {
   });
 
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    birth_date: "",
-    gender: "",
-    blood_group: "",
-    marital_status: "",
-    email: "",
-    phone: "",
-    current_address: "",
-    linked_in: "",
-    facebook: "",
-    twitter: "",
+    ...profileInitialState, ...socialInitialState
   });
   const [user, setUser] = useState({})
-
-  const [formErrors, setFormErrors] = useState({
-    firstName: "",
-    lastName: "",
-    birth_date: "",
-    gender: "",
-    blood_group: "",
-    marital_status: "",
-    email: "",
-    phone: "",
-    current_address: "",
-  });
+  const [formErrors, setFormErrors] = useState(profileInitialState);
 
   // Handle Change
   const handleInputChange = (e) => {
@@ -63,24 +57,6 @@ const Profile = () => {
       [name]: "",
     });
   };
-
-  // Get the User
-  const getUser = async () => {
-    const accessToken = localStorage.getItem("token");
-    const accessTokenwithoutQuotes = JSON.parse(accessToken);
-    if (accessToken) {
-      const res = await axios.get(`${process.env.REACT_APP_API}/user/getUserDetails`, {
-        headers: { Authorization: `Bearer ${accessTokenwithoutQuotes}` },
-      });
-      const { userData } = res.data;
-      setFormData(userData);
-      setUser(userData);
-    }
-  };
-
-  useEffect(() => {
-    getUser();
-  }, []);
 
   // Handle Edit Click
   const handleEditClick = (section) => {
@@ -130,6 +106,22 @@ const Profile = () => {
     // }
   };
 
+  // Get the User
+  const getUser = useCallback(async () => {
+    if (accessToken) {
+      const res = await axios.get(`${process.env.REACT_APP_API}/user/getUserDetails/${userId}`, {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      });
+      const { userData } = res.data;
+      setFormData(userData);
+      setUser(userData);
+    }
+  }, [accessToken, userId]);
+
+  useEffect(() => {
+    getUser();
+  }, [getUser]);
+
   // Update the data
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -177,23 +169,15 @@ const Profile = () => {
     // If there are no errors, you can submit the form
     if (Object.keys(errors).length === 0) {
       try {
-        const accessToken = localStorage.getItem("token");
-        const accessTokenwithoutQuotes = JSON.parse(accessToken);
-        const { user } = JSON.parse(
-          atob(accessTokenwithoutQuotes.split(".")[1])
-        );
-
         if (accessToken) {
-          debugger
           const response = await axios.put(
-            `${process.env.REACT_APP_API}/user/updateUserDetails/${user._id}`,
+            `${process.env.REACT_APP_API}/user/updateUserDetails/${userId}`,
             formData,
             {
-              headers: { Authorization: `Bearer ${accessTokenwithoutQuotes}` },
+              headers: { Authorization: `Bearer ${accessToken}` },
             }
           );
           if (response) {
-            console.log(response)
             toast.success(response.data.message);
             getUser();
             setEditMode({
@@ -203,8 +187,6 @@ const Profile = () => {
               socialProfiles: false,
             });
           }
-          // console.log(formData);
-          // alert("Form submitted successfully!");
         }
       } catch (error) {
         console.error("Error updating profile:", error);

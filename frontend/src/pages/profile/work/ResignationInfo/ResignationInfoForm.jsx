@@ -1,11 +1,17 @@
 import React from "react";
 
-const ResignationInfoForm = ({ formData, formErrors, handleInputChange }) => {
+const initialFormData = {
+  resignation_date: "",
+  resignation_status: "",
+  notice_period: "",
+  last_working_day: "",
+};
+const ResignationInfoForm = ({ formData = initialFormData, formErrors, handleInputChange }) => {
   return (
     <>
       <div className="form-group">
         <div className="row">
-          {/* Resignation Date */}
+          {/* Resignation Date */ }
           <div className="col-md-6">
             <div className="form-group row">
               <div className="col mb-3">
@@ -17,18 +23,18 @@ const ResignationInfoForm = ({ formData, formErrors, handleInputChange }) => {
                   className="form-control no-focus-box-shadow"
                   placeholder="Resignation Date"
                   name="resignation_date"
-                  value={formData.resignation_date}
-                  onChange={handleInputChange}
+                  value={ formData.resignation_date }
+                  onChange={ handleInputChange }
                 />
-                {formErrors.resignation_date && (
+                { formErrors.resignation_date && (
                   <small className="text-danger">
-                    {formErrors.resignation_date}
+                    { formErrors.resignation_date }
                   </small>
-                )}
+                ) }
               </div>
             </div>
           </div>
-          {/* Resignation Status*/}
+          {/* Resignation Status*/ }
           <div className="col-md-6">
             <div className="form-group row">
               <div className="col mb-3">
@@ -43,21 +49,21 @@ const ResignationInfoForm = ({ formData, formErrors, handleInputChange }) => {
                   className="form-control no-focus-box-shadow"
                   placeholder="Resignation Status"
                   name="resignation_status"
-                  value={formData.resignation_status}
-                  onChange={handleInputChange}
+                  value={ formData.resignation_status }
+                  onChange={ handleInputChange }
                 />
-                {formErrors.resignation_status && (
+                { formErrors.resignation_status && (
                   <small className="text-danger">
-                    {formErrors.resignation_status}
+                    { formErrors.resignation_status }
                   </small>
-                )}
+                ) }
               </div>
             </div>
           </div>
         </div>
 
         <div className="row">
-          {/* Notice Period */}
+          {/* Notice Period */ }
           <div className="col-md-6">
             <div className="form-group row">
               <div className="col mb-3">
@@ -69,18 +75,18 @@ const ResignationInfoForm = ({ formData, formErrors, handleInputChange }) => {
                   className="form-control no-focus-box-shadow"
                   placeholder="Notice Period"
                   name="notice_period"
-                  value={formData.notice_period}
-                  onChange={handleInputChange}
+                  value={ formData.notice_period }
+                  onChange={ handleInputChange }
                 />
-                {formErrors.notice_period && (
+                { formErrors.notice_period && (
                   <small className="text-danger">
-                    {formErrors.notice_period}
+                    { formErrors.notice_period }
                   </small>
-                )}
+                ) }
               </div>
             </div>
           </div>
-          {/* Last Working Day*/}
+          {/* Last Working Day*/ }
           <div className="col-md-6">
             <div className="form-group row">
               <div className="col mb-3">
@@ -92,14 +98,14 @@ const ResignationInfoForm = ({ formData, formErrors, handleInputChange }) => {
                   className="form-control no-focus-box-shadow"
                   placeholder="Last Working Day"
                   name="last_working_day"
-                  value={formData.last_working_day}
-                  onChange={handleInputChange}
+                  value={ formData.last_working_day }
+                  onChange={ handleInputChange }
                 />
-                {formErrors.last_working_day && (
+                { formErrors.last_working_day && (
                   <small className="text-danger">
-                    {formErrors.last_working_day}
+                    { formErrors.last_working_day }
                   </small>
-                )}
+                ) }
               </div>
             </div>
           </div>
