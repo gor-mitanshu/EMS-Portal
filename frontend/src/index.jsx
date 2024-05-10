@@ -52,18 +52,28 @@ import axios from "axios";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 const accessToken = JSON.parse(localStorage.getItem("token"));
-if (accessToken) {
+var jwtPayload = 0;
+jwtPayload = accessToken ? JSON.parse(window.atob(accessToken.split(".")[1])) : 0;
+const isTokenInvalid = Date.now() >= jwtPayload.exp * 1000;
+if (accessToken && !isTokenInvalid) {
   var { user } = JSON.parse(atob(accessToken.split(".")[1]));
-  const response = await axios.get(
-    `${process.env.REACT_APP_API}/company/getUserDetailsByUserId/${user._id}`,
-    {
-      headers: { Authorization: `Bearer ${accessToken}` },
-    }
-  );
-  if (response) {
-    const { company } = response.data;
-    var companyId = company._id
+  if (user && !isTokenInvalid) {
+    var userId = user._id
   }
+  if (user) {
+    const response = await axios.get(
+      `${process.env.REACT_APP_API}/company/getUserDetailsByUserId/${user._id}`,
+      {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      }
+    );
+    if (response) {
+      const { company } = response.data;
+      var companyId = company._id
+    }
+  }
+} else {
+  <Navigate to={ '/login' } />
 }
 
 root.render(
@@ -99,31 +109,31 @@ root.render(
             {/* My Profile Routes */ }
             <Route path="/my-profile" element={ <TabsComponent /> }>
               <Route index element={ <Navigate to="personal" replace /> } />
-              <Route path="personal" element={ <Profile userId={ user._id } accessToken={ accessToken } /> } />
-              <Route path="work" element={ <Work userId={ user._id } accessToken={ accessToken } /> } />
-              <Route path="team" element={ <Team userId={ user._id } accessToken={ accessToken } /> } />
-              <Route path="education" element={ <Education userId={ user._id } accessToken={ accessToken } /> } />
-              <Route path="family" element={ <Family userId={ user._id } accessToken={ accessToken } /> } />
-              <Route path="documents" element={ <DocumentTab userId={ user._id } accessToken={ accessToken } /> } />
-              <Route path="work-week" element={ <WorkWeek userId={ user._id } accessToken={ accessToken } /> } />
-              <Route path="file-manager" element={ <FileManager userId={ user._id } accessToken={ accessToken } /> } />
+              <Route path="personal" element={ <Profile userId={ userId } accessToken={ accessToken } /> } />
+              <Route path="work" element={ <Work userId={ userId } accessToken={ accessToken } /> } />
+              <Route path="team" element={ <Team userId={ userId } accessToken={ accessToken } /> } />
+              <Route path="education" element={ <Education userId={ userId } accessToken={ accessToken } /> } />
+              <Route path="family" element={ <Family userId={ userId } accessToken={ accessToken } /> } />
+              <Route path="documents" element={ <DocumentTab userId={ userId } accessToken={ accessToken } /> } />
+              <Route path="work-week" element={ <WorkWeek userId={ userId } accessToken={ accessToken } /> } />
+              <Route path="file-manager" element={ <FileManager userId={ userId } accessToken={ accessToken } /> } />
             </Route>
 
             {/* Leave Routes */ }
             <Route path="/leave" element={ <Leave /> }>
               <Route index element={ <Navigate to="logs" replace /> } />
-              <Route path="logs" element={ <Logs userId={ user._id } accessToken={ accessToken } /> } />
-              <Route path="rules" element={ <Rules userId={ user._id } accessToken={ accessToken } /> } />
-              <Route path="balance" element={ <Balance userId={ user._id } accessToken={ accessToken } /> } />
-              <Route path="settings" element={ <Settings userId={ user._id } accessToken={ accessToken } /> } />
+              <Route path="logs" element={ <Logs userId={ userId } accessToken={ accessToken } /> } />
+              <Route path="rules" element={ <Rules userId={ userId } accessToken={ accessToken } /> } />
+              <Route path="balance" element={ <Balance userId={ userId } accessToken={ accessToken } /> } />
+              <Route path="settings" element={ <Settings userId={ userId } accessToken={ accessToken } /> } />
             </Route>
 
-            <Route path="directory" element={ <Directory userId={ user._id } accessToken={ accessToken } /> } />
-            <Route path="attendance" element={ <Attendance userId={ user._id } accessToken={ accessToken } /> } />
-            <Route path="payroll" element={ <Payroll userId={ user._id } accessToken={ accessToken } /> } />
-            <Route path="organizing-chart" element={ <Chart userId={ user._id } accessToken={ accessToken } /> } />
-            <Route path="holiday-calender" element={ <Calender userId={ user._id } accessToken={ accessToken } /> } />
-            <Route path="rewards" element={ <Rewards userId={ user._id } accessToken={ accessToken } /> } />
+            <Route path="directory" element={ <Directory userId={ userId } accessToken={ accessToken } /> } />
+            <Route path="attendance" element={ <Attendance userId={ userId } accessToken={ accessToken } /> } />
+            <Route path="payroll" element={ <Payroll userId={ userId } accessToken={ accessToken } /> } />
+            <Route path="organizing-chart" element={ <Chart userId={ userId } accessToken={ accessToken } /> } />
+            <Route path="holiday-calender" element={ <Calender userId={ userId } accessToken={ accessToken } /> } />
+            <Route path="rewards" element={ <Rewards userId={ userId } accessToken={ accessToken } /> } />
           </Route>
         </Routes>
       </BrowserRouter>

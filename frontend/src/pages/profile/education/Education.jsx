@@ -1,13 +1,13 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import EducationForm from "./EducationForm";
 import EducationItem from "./EducationItem";
 import axios from "axios";
 import { toast } from "react-toastify";
 import Card from "../../../UI/profileCards/ProfileCard";
 
-const Education = () => {
+const Education = ({ userId, accessToken }) => {
   const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState({
     qualification_type: "",
@@ -34,16 +34,6 @@ const Education = () => {
   // For showing and hiding the form
   const handleAddClick = () => {
     setShowForm(true);
-    // setFormData({
-    //   qualification_type: "Graduation",
-    //   course_name: "CE",
-    //   course_type: "Full Time",
-    //   course_stream: "XYZ",
-    //   course_start_date: "2024-03-15",
-    //   course_end_date: "2024-03-30",
-    //   college_name: "AIET",
-    //   university_name: "GTU",
-    // });
   };
 
   // For onchange property
@@ -60,24 +50,23 @@ const Education = () => {
     });
   };
 
-  const getEducationDetails = async () => {
+  const getEducationDetails = useCallback(async () => {
     try {
-      const accessToken = localStorage.getItem("token");
-      const accessTokenwithoutQuotes = JSON.parse(accessToken);
       const res = await axios.get(
-        `${process.env.REACT_APP_API}/employee/geteducationdetails`,
+        `${process.env.REACT_APP_API}/employee/geteducationdetails/${userId}`,
         {
-          headers: { Authorization: `Bearer ${accessTokenwithoutQuotes}` },
+          headers: { Authorization: `Bearer ${accessToken}` },
         }
       );
-      setEducationList(res.data.educationDetails);
+      setEducationList(res.data.educationData);
     } catch (error) {
       console.error("Error getting education details:", error);
     }
-  };
+  }, [accessToken, userId]);
+
   useEffect(() => {
     getEducationDetails();
-  }, []);
+  }, [getEducationDetails]);
 
   // for Education form for adding the main form
   const handleSubmit = async (e) => {
@@ -117,18 +106,15 @@ const Education = () => {
 
     // Add the current form data to the educationList
     try {
-      const accessToken = localStorage.getItem("token");
-      const accessTokenwithoutQuotes = JSON.parse(accessToken);
       const res = await axios.post(
-        `${process.env.REACT_APP_API}/employee/addeducationdetails`,
+        `${process.env.REACT_APP_API}/employee/addEducationDetails/${userId}`,
         formData,
         {
-          headers: { Authorization: `Bearer ${accessTokenwithoutQuotes}` },
+          headers: { Authorization: `Bearer ${accessToken}` },
         }
       );
       if (res && res.status === 200) {
-        // console.log(res);
-        setEducationList([...educationList, res.data.newQualification]);
+        toast.success(res.data.message)
         setShowForm(false);
         setFormData({
           qualification_type: "",
@@ -163,19 +149,15 @@ const Education = () => {
     setShowForm(false);
   };
   const handleDeleteClick = async (index, id) => {
+    console.log(id)
     try {
-      const accessToken = localStorage.getItem("token");
-      const accessTokenWithoutQuotes = JSON.parse(accessToken);
       const res = await axios.delete(
-        `${process.env.REACT_APP_API}/employee/deletequalification/${id}`,
+        `${process.env.REACT_APP_API}/employee/deleteEducationDetails/${id}`,
         {
-          headers: { Authorization: `Bearer ${accessTokenWithoutQuotes}` },
+          headers: { Authorization: `Bearer ${accessToken}` },
         }
       );
       if (res) {
-        console.log(res);
-        const updatedList = educationList.filter((_, i) => i !== index);
-        setEducationList(updatedList);
         toast.success(res.data.message);
         getEducationDetails();
       }
@@ -186,13 +168,11 @@ const Education = () => {
 
   const handleSaveEdit = async (id, formData) => {
     try {
-      const accessToken = localStorage.getItem("token");
-      const accessTokenwithoutQuotes = JSON.parse(accessToken);
       const res = await axios.put(
-        `${process.env.REACT_APP_API}/employee/updateeducationdetails/${id}`,
+        `${process.env.REACT_APP_API}/employee/updateEducationDetails/${id}`,
         formData,
         {
-          headers: { Authorization: `Bearer ${accessTokenwithoutQuotes}` },
+          headers: { Authorization: `Bearer ${accessToken}` },
         }
       );
       if (res && res.status === 200) {
@@ -226,50 +206,50 @@ const Education = () => {
   return (
     <>
       <div className="col-md-12">
-        <Card title={"Education"}>
+        <Card title={ "Education" }>
           <>
-            {!showForm ? (
-              <button className="btn btn-primary mb-4" onClick={handleAddClick}>
+            { !showForm ? (
+              <button className="btn btn-primary mb-4" onClick={ handleAddClick }>
                 <FontAwesomeIcon
-                  icon={faPlus}
+                  icon={ faPlus }
                   size="sm"
                   color="white"
-                  style={{ paddingRight: "10px" }}
+                  style={ { paddingRight: "10px" } }
                 />
                 Add
               </button>
             ) : (
               <EducationForm
-                formData={formData}
-                formErrors={formErrors}
-                handleInputChange={handleInputChange}
-                handleSubmit={handleSubmit}
-                handleCancel={handleCancel}
+                formData={ formData }
+                formErrors={ formErrors }
+                handleInputChange={ handleInputChange }
+                handleSubmit={ handleSubmit }
+                handleCancel={ handleCancel }
               />
-            )}
+            ) }
 
             <div className="p-4 m-0">
-              {educationList.length > 0 && (
+              { educationList.length > 0 && (
                 <>
-                  {educationList[0].qualifications.map(
+                  { educationList.map(
                     (qualificationData, index) => (
                       <EducationItem
-                        key={index}
-                        education={qualificationData}
-                        formErrors={formErrors}
-                        setFormErrors={setFormErrors}
-                        index={index}
-                        id={qualificationData._id}
-                        handleDeleteClick={() =>
+                        key={ index }
+                        education={ qualificationData }
+                        formErrors={ formErrors }
+                        setFormErrors={ setFormErrors }
+                        index={ index }
+                        id={ qualificationData._id }
+                        handleDeleteClick={ () =>
                           handleDeleteClick(index, qualificationData._id)
                         }
-                        onSaveEdit={handleSaveEdit}
-                        handleCancel={handleCancel}
+                        onSaveEdit={ handleSaveEdit }
+                        handleCancel={ handleCancel }
                       />
                     )
-                  )}
+                  ) }
                 </>
-              )}
+              ) }
             </div>
           </>
         </Card>

@@ -669,9 +669,9 @@ const userController = {
      },
 
      getUserDetails: async (req, res) => {
+          const { id } = req.params;
           try {
-               const { user } = req.user
-               const userData = await UserSchema.findOne({ _id: user._id })
+               const userData = await UserSchema.findOne({ _id: id })
                if (!userData) {
                     return res.status(404).send({
                          message: "User not found",

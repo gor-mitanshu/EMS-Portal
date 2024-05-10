@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import FamilySection from "./FamilySection";
 import axios from "axios";
 import { toast } from "react-toastify";
 
-const Family = () => {
+const Family = ({ accessToken, userId }) => {
   const [showForm, setShowForm] = useState(false);
   const [emergencyShowForm, setEmergencyShowForm] = useState(false);
   const [formData, setFormData] = useState({
@@ -78,47 +78,37 @@ const Family = () => {
     });
   };
 
-  const getFamilyDetails = async () => {
-    const accessToken = localStorage.getItem("token");
-    const accessTokenwithoutQuotes = JSON.parse(accessToken);
-    // const url = emergency
-    //   ? `${process.env.REACT_APP_API}/employee/getemergencyFamilyDetails`
-    //   : `${process.env.REACT_APP_API}/employee/getFamilyDetails`;
+  const getFamilyDetails = useCallback(async () => {
     const res = await axios.get(
-      `${process.env.REACT_APP_API}/employee/getFamilyDetails`,
+      `${process.env.REACT_APP_API}/employee/getFamilyDetails/${userId}`,
       {
-        headers: { Authorization: `Bearer ${accessTokenwithoutQuotes}` },
+        headers: { Authorization: `Bearer ${accessToken}` },
       }
     );
     if (res) {
       setFamilyList(res.data.familyDetails);
     }
-  };
+  }, [accessToken, userId]);
 
   useEffect(() => {
     getFamilyDetails();
-  }, []);
+  }, [getFamilyDetails]);
 
-  const getEmergencyFamilyDetails = async () => {
-    const accessToken = localStorage.getItem("token");
-    const accessTokenwithoutQuotes = JSON.parse(accessToken);
-    // const url = emergency
-    //   ? `${process.env.REACT_APP_API}/employee/getemergencyFamilyDetails`
-    //   : `${process.env.REACT_APP_API}/employee/getFamilyDetails`;
+  const getEmergencyFamilyDetails = useCallback(async () => {
     const res = await axios.get(
-      `${process.env.REACT_APP_API}/employee/getemergencyFamilyDetails`,
+      `${process.env.REACT_APP_API}/employee/getEmergencyFamilyDetails/${userId}`,
       {
-        headers: { Authorization: `Bearer ${accessTokenwithoutQuotes}` },
+        headers: { Authorization: `Bearer ${accessToken}` },
       }
     );
     if (res) {
       setEmergencyFamilyList(res.data.familyDetails);
     }
-  };
+  }, [accessToken, userId]);
 
   useEffect(() => {
     getEmergencyFamilyDetails();
-  }, []);
+  }, [getEmergencyFamilyDetails]);
 
   // for Family form for adding the main form
   const handleSubmit = async (e) => {
@@ -141,24 +131,19 @@ const Family = () => {
       return;
     }
     try {
-      const accessToken = localStorage.getItem("token");
-      const accessTokenwithoutQuotes = JSON.parse(accessToken);
-      // const url = emergency
-      //   ? `${process.env.REACT_APP_API}/employee/addemergencyFamilyDetails`
-      //   : `${process.env.REACT_APP_API}/employee/addFamilyDetails`;
       const res = await axios.post(
-        `${process.env.REACT_APP_API}/employee/addFamilyDetails`,
+        `${process.env.REACT_APP_API}/employee/addFamilyDetails/${userId}`,
         formData,
         {
-          headers: { Authorization: `Bearer ${accessTokenwithoutQuotes}` },
+          headers: { Authorization: `Bearer ${accessToken}` },
         }
       );
       if (res) {
-        setFamilyList([...familyList, formData]);
+        // setFamilyList([...familyList, formData]);
         toast.success(res.data.message);
         getFamilyDetails();
       }
-    } catch (error) {}
+    } catch (error) { }
     // Add the current form data to the FamilyList
 
     // Reset the form data
@@ -194,24 +179,19 @@ const Family = () => {
       return;
     }
     try {
-      const accessToken = localStorage.getItem("token");
-      const accessTokenwithoutQuotes = JSON.parse(accessToken);
-      // const url = emergency
-      //   ? `${process.env.REACT_APP_API}/employee/addemergencyFamilyDetails`
-      //   : `${process.env.REACT_APP_API}/employee/addFamilyDetails`;
       const res = await axios.post(
-        `${process.env.REACT_APP_API}/employee/addemergencyFamilyDetails`,
+        `${process.env.REACT_APP_API}/employee/addemergencyFamilyDetails/${userId}`,
         emergencyformData,
         {
-          headers: { Authorization: `Bearer ${accessTokenwithoutQuotes}` },
+          headers: { Authorization: `Bearer ${accessToken}` },
         }
       );
       if (res) {
-        emergencyfamilyList([...emergencyfamilyList, emergencyformData]);
+        // emergencyfamilyList([...emergencyfamilyList, emergencyformData]);
         toast.success(res.data.message);
         getEmergencyFamilyDetails();
       }
-    } catch (error) {}
+    } catch (error) { }
     // Add the current form data to the FamilyList
 
     // Reset the form data
@@ -229,123 +209,115 @@ const Family = () => {
   // For deleting the form entry entered
   const handleDeleteClick = async (index, id) => {
     try {
-      const accessToken = localStorage.getItem("token");
-      const accessTokenWithoutQuotes = JSON.parse(accessToken);
       const res = await axios.delete(
         `${process.env.REACT_APP_API}/employee/deleteFamilyMemberDetails/${id}`,
         {
-          headers: { Authorization: `Bearer ${accessTokenWithoutQuotes}` },
+          headers: { Authorization: `Bearer ${accessToken}` },
         }
       );
       if (res) {
         // console.log(res);
-        const updatedList = familyList.filter((_, i) => i !== index);
-        setFamilyList(updatedList);
+        // const updatedList = familyList.filter((_, i) => i !== index);
+        // setFamilyList(updatedList);
         toast.success(res.data.message);
         getFamilyDetails();
       }
-    } catch (error) {}
+    } catch (error) { }
   };
 
   // For deleting the form entry entered
   const handleEmergencyDeleteClick = async (index, id) => {
     try {
-      const accessToken = localStorage.getItem("token");
-      const accessTokenWithoutQuotes = JSON.parse(accessToken);
       const res = await axios.delete(
-        `${process.env.REACT_APP_API}/employee/deleteemergencyFamilyMemberDetails/${id}`,
+        `${process.env.REACT_APP_API}/employee/deleteEmergencyFamilyMemberDetails/${id}`,
         {
-          headers: { Authorization: `Bearer ${accessTokenWithoutQuotes}` },
+          headers: { Authorization: `Bearer ${accessToken}` },
         }
       );
       if (res) {
         // console.log(res);
-        const updatedList = emergencyfamilyList.filter((_, i) => i !== index);
-        setEmergencyFamilyList(updatedList);
+        // const updatedList = emergencyfamilyList.filter((_, i) => i !== index);
+        // setEmergencyFamilyList(updatedList);
         toast.success(res.data.message);
         getEmergencyFamilyDetails();
       }
-    } catch (error) {}
+    } catch (error) { }
   };
 
   // for editing the form and submit the data through this
   const handleSaveEdit = async (id, updatedData) => {
     try {
-      const accessToken = localStorage.getItem("token");
-      const accessTokenwithoutQuotes = JSON.parse(accessToken);
       const res = await axios.put(
         `${process.env.REACT_APP_API}/employee/updateFamilyDetails/${id}`,
         updatedData,
         {
-          headers: { Authorization: `Bearer ${accessTokenwithoutQuotes}` },
+          headers: { Authorization: `Bearer ${accessToken}` },
         }
       );
       if (res && res.status === 200) {
-        const updatedFamilyList = familyList.map((item) =>
-          item.id === id ? { ...item, ...updatedData } : item
-        );
-        setFamilyList(updatedFamilyList);
+        // const updatedFamilyList = familyList.map((item) =>
+        //   item.id === id ? { ...item, ...updatedData } : item
+        // );
+        // setFamilyList(updatedFamilyList);
         toast.success(res.data.message);
         getFamilyDetails();
       }
-    } catch (error) {}
+    } catch (error) { }
   };
 
   // for editing the form and submit the data through this
   const handleEmergencySaveEdit = async (id, updatedData) => {
     try {
-      const accessToken = localStorage.getItem("token");
-      const accessTokenwithoutQuotes = JSON.parse(accessToken);
       const res = await axios.put(
-        `${process.env.REACT_APP_API}/employee/updateemergencyFamilyDetails/${id}`,
+        `${process.env.REACT_APP_API}/employee/updateEmergencyFamilyDetails/${id}`,
         updatedData,
         {
-          headers: { Authorization: `Bearer ${accessTokenwithoutQuotes}` },
+          headers: { Authorization: `Bearer ${accessToken}` },
         }
       );
       if (res && res.status === 200) {
-        const updatedFamilyList = familyList.map((item) =>
-          item.id === id ? { ...item, ...updatedData } : item
-        );
-        setEmergencyFamilyList(updatedFamilyList);
+        // const updatedFamilyList = familyList.map((item) =>
+        //   item.id === id ? { ...item, ...updatedData } : item
+        // );
+        // setEmergencyFamilyList(updatedFamilyList);
         toast.success(res.data.message);
         getEmergencyFamilyDetails();
       }
-    } catch (error) {}
+    } catch (error) { }
   };
   return (
     <>
       <FamilySection
         title="Family Members"
-        emergency={false}
-        setShowForm={setShowForm}
-        setFormData={setFormData}
-        handleInputChange={handleInputChange}
-        handleCheckboxChange={handleCheckboxChange}
-        setFormErrors={setFormErrors}
-        formData={formData}
-        showForm={showForm}
-        formErrors={formErrors}
-        handleSubmit={handleSubmit}
-        familyList={familyList}
-        handleDeleteClick={handleDeleteClick}
-        handleSaveEdit={handleSaveEdit}
+        emergency={ false }
+        setShowForm={ setShowForm }
+        setFormData={ setFormData }
+        handleInputChange={ handleInputChange }
+        handleCheckboxChange={ handleCheckboxChange }
+        setFormErrors={ setFormErrors }
+        formData={ formData }
+        showForm={ showForm }
+        formErrors={ formErrors }
+        handleSubmit={ handleSubmit }
+        familyList={ familyList }
+        handleDeleteClick={ handleDeleteClick }
+        handleSaveEdit={ handleSaveEdit }
       />
       <FamilySection
         title="Emergency Contact"
-        emergency={true}
-        setShowForm={setEmergencyShowForm}
-        setFormData={setEmergencyFormData}
-        handleInputChange={handleEmergencyInputChange}
-        handleCheckboxChange={handleEmergencyCheckboxChange}
-        setFormErrors={setEmergencyFormErrors}
-        formData={emergencyformData}
-        showForm={emergencyShowForm}
-        formErrors={emergencyformErrors}
-        handleSubmit={handleEmergencySubmit}
-        familyList={emergencyfamilyList}
-        handleDeleteClick={handleEmergencyDeleteClick}
-        handleSaveEdit={handleEmergencySaveEdit}
+        emergency={ true }
+        setShowForm={ setEmergencyShowForm }
+        setFormData={ setEmergencyFormData }
+        handleInputChange={ handleEmergencyInputChange }
+        handleCheckboxChange={ handleEmergencyCheckboxChange }
+        setFormErrors={ setEmergencyFormErrors }
+        formData={ emergencyformData }
+        showForm={ emergencyShowForm }
+        formErrors={ emergencyformErrors }
+        handleSubmit={ handleEmergencySubmit }
+        familyList={ emergencyfamilyList }
+        handleDeleteClick={ handleEmergencyDeleteClick }
+        handleSaveEdit={ handleEmergencySaveEdit }
       />
     </>
   );

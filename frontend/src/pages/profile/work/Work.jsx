@@ -1,57 +1,42 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import BasicInfoForm from "./BasicInfo/BasicInfoForm";
 import WorkInfoForm from "./WorkInfo/WorkInfoForm";
 import ResignationInfoForm from "./ResignationInfo/ResignationInfoForm";
 import axios from "axios";
 import Card from "../../../UI/profileCards/ProfileCard";
+import { toast } from "react-toastify";
 
-const Work = () => {
+const initialState = {
+  employee_code: "",
+  date_of_joining: "",
+  probation_period: "",
+  employment_type: "",
+  work_location: "",
+  employee_status: "",
+  work_experience: "",
+
+  designation: "",
+  job_title: "",
+  department: "",
+  sub_department: "",
+
+  resignation_date: "",
+  resignation_status: "",
+  notice_period: "",
+  last_working_day: "",
+}
+const Work = ({ accessToken, userId }) => {
   const [editMode, setEditMode] = useState({
     basicInfo: false,
     workInfo: false,
     resignationInfo: false,
   });
 
-  const [formData, setFormData] = useState({
-    employee_code: "",
-    date_of_joining: "",
-    probation_period: "",
-    employment_type: "",
-    work_location: "",
-    employee_status: "",
-    work_experience: "",
-
-    designation: "",
-    job_title: "",
-    department: "",
-    sub_department: "",
-
-    resignation_date: "",
-    resignation_status: "",
-    notice_period: "",
-    last_working_day: "",
-  });
+  const [formData, setFormData] = useState(initialState);
   const [employee, setEmployee] = useState({})
-  const [formErrors, setFormErrors] = useState({
-    employee_code: "",
-    date_of_joining: "",
-    probation_period: "",
-    employment_type: "",
-    work_location: "",
-    employee_status: "",
-    work_experience: "",
+  const [formErrors, setFormErrors] = useState(initialState);
 
-    designation: "",
-    job_title: "",
-    department: "",
-    sub_department: "",
-
-    resignation_date: "",
-    resignation_status: "",
-    notice_period: "",
-    last_working_day: "",
-  });
-
+  // Handle Change
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -64,18 +49,20 @@ const Work = () => {
     });
   };
 
+  // Handle Edit Click
   const handleEditClick = (section) => {
-    setEditMode({
-      ...editMode,
+    setEditMode((prevEditMode) => ({
+      ...prevEditMode,
       [section]: true,
-    });
+    }));
   };
 
+  //Handle Cancel Click
   const handleCancelClick = (section) => {
-    setEditMode({
-      ...editMode,
+    setEditMode((prevEditMode) => ({
+      ...prevEditMode,
       [section]: false,
-    });
+    }));
 
     // Reset validation errors for all fields in the specific card
     setFormErrors((prevFormErrors) => ({
@@ -104,25 +91,23 @@ const Work = () => {
     }));
   };
 
-  useEffect(() => {
-    const getWorkData = async () => {
-      const accessToken = localStorage.getItem("token");
-      const accessTokenwithoutQuotes = JSON.parse(accessToken);
-      const res = await axios.get(
-        `${process.env.REACT_APP_API}/employee/getWorkDetails`,
-        {
-          headers: { Authorization: `Bearer ${accessTokenwithoutQuotes}` },
-        }
-      );
-      if (res && res.status === 200) {
-        console.log(res)
-        const { workDetails } = res.data;
-        setFormData(workDetails);
-        setEmployee(workDetails)
+  const getWorkData = useCallback(async () => {
+    const res = await axios.get(
+      `${process.env.REACT_APP_API}/employee/getWorkDetails/${userId}`,
+      {
+        headers: { Authorization: `Bearer ${accessToken}` },
       }
-    };
+    );
+    if (res && res.status === 200) {
+      const { workDetails } = res.data;
+      setFormData(workDetails);
+      setEmployee(workDetails)
+    }
+  }, [accessToken, userId]);
+
+  useEffect(() => {
     getWorkData();
-  }, []);
+  }, [getWorkData]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -131,10 +116,10 @@ const Work = () => {
     // Validate each field based on the section
     // Basic Info Section
     if (editMode.basicInfo) {
-      if (!formData.employee_code.trim()) {
+      if (!formData.employee_code) {
         errors.employee_code = "Employee Id is required";
       }
-      if (!formData.employment_type.trim()) {
+      if (!formData.employment_type) {
         errors.employment_type = "Employment Type is required";
       }
       if (!formData.date_of_joining) {
@@ -143,25 +128,25 @@ const Work = () => {
       if (!formData.work_location) {
         errors.work_location = "Work Location is required";
       }
-      if (!formData.work_experience.trim()) {
+      if (!formData.work_experience) {
         errors.work_experience = "Work Experience is required";
       }
-      if (!formData.probation_period.trim()) {
+      if (!formData.probation_period) {
         errors.probation_period = "Probation Period is required";
       }
     }
     // Work Info Section
     if (editMode.workInfo) {
-      if (!formData.designation.trim()) {
+      if (!formData.designation) {
         errors.designation = "Designation is required";
       }
-      if (!formData.job_title.trim()) {
+      if (!formData.job_title) {
         errors.job_title = "Job Title is required";
       }
-      if (!formData.department.trim()) {
+      if (!formData.department) {
         errors.department = "Department is required";
       }
-      if (!formData.sub_department.trim()) {
+      if (!formData.sub_department) {
         errors.sub_department = "Sub-Department is required";
       }
     }
@@ -185,34 +170,41 @@ const Work = () => {
     // If there are no errors, you can submit the form
     if (Object.keys(errors).length === 0) {
       try {
-        const accessToken = localStorage.getItem("token");
-        const accessTokenwithoutQuotes = JSON.parse(accessToken);
-        const { user } = JSON.parse(
-          atob(accessTokenwithoutQuotes.split(".")[1])
-        );
-
-        if (accessToken) {
-          await axios.put(
-            `${process.env.REACT_APP_API}/employee/updateWorkDetails/${user._id}`,
+        if (!!employee) {
+          const res = await axios.put(`${process.env.REACT_APP_API}/employee/updateWorkDetails/${employee._id}`,
             formData,
             {
-              headers: { Authorization: `Bearer ${accessTokenwithoutQuotes}` },
+              headers: { Authorization: `Bearer ${accessToken}` },
             }
-          );
-          console.log(formData);
-          // alert("Form submitted successfully!");
-          setEditMode({
-            basicInfo: false,
-            workInfo: false,
-            resignationInfo: false,
-          });
+          )
+          if (res) {
+            toast.success(res.data.message);
+            getWorkData();
+            setEditMode({
+              basicInfo: false,
+              workInfo: false,
+              resignationInfo: false,
+            });
+          }
+        } else {
+          const res = await axios.post(`${process.env.REACT_APP_API}/employee/addWorkDetails/${userId}`, formData, {
+            headers: { Authorization: `Bearer ${accessToken}` },
+          })
+          if (res) {
+            toast.success(res.data.message)
+            getWorkData();
+            setEditMode({
+              basicInfo: false,
+              workInfo: false,
+              resignationInfo: false,
+            });
+          }
         }
       } catch (error) {
         console.error("Error updating profile:", error);
       }
     }
   };
-
   return (
     <>
       <div>
@@ -232,78 +224,75 @@ const Work = () => {
                       formData={ formData }
                       formErrors={ formErrors }
                       handleInputChange={ handleInputChange }
-                      editMode={ editMode }
                     />
                   </>
                 ) : (
                   <>
                     <div className="user-details">
-                      <div className="row">
-                        { employee ?
-                          <>
+                      { employee ?
+                        <>
+                          <div className="row">
                             <div className="col-md-4">
                               <p>
-                                <strong>Employee ID:</strong>{ " " }
+                                <strong>Employee ID:</strong>
                                 { employee.employee_code || "" }
                               </p>
-                            </div><div className="col-md-4">
+                            </div>
+
+                            <div className="col-md-4">
                               <p>
-                                <strong>Date of Joining:</strong>{ " " }
-                                { employee.date_of_joining && employee.date_of_joining }
-                              </p>
-                            </div><div className="col-md-4">
-                              <p>
-                                <strong>Probation Period:</strong>{ " " }
-                                { employee.probation_period && employee.probation_period }
+                                <strong>Date of Joining:</strong>
+                                { employee.date_of_joining || "" }
                               </p>
                             </div>
-                          </> : "No data found"
-                        }
-                      </div>
-                      <div className="row">
-                        {
-                          employee ?
-                            <>
-                              <div className="col-md-4">
-                                <p>
-                                  <strong>Employee Type:</strong>{ " " }
-                                  { employee.employment_type && employee.employment_type }
-                                </p>
-                              </div>
-                              <div className="col-md-4">
-                                <p>
-                                  <strong>Work Location:</strong>{ " " }
-                                  { employee.work_location && employee.work_location }
-                                </p>
-                              </div>
-                              <div className="col-md-4">
-                                <p>
-                                  <strong>Employee Status:</strong>{ " " }
-                                  { employee.employee_status && employee.employee_status }
-                                </p>
-                              </div>
-                            </> : "No data found"
-                        }
 
-                      </div>
-                      <div className="row">
-                        {
-                          employee ?
+                            <div className="col-md-4">
+                              <p>
+                                <strong>Probation Period:</strong>
+                                { employee.probation_period || "" }
+                              </p>
+                            </div>
+                          </div>
 
+                          <div className="row">
+                            <div className="col-md-4">
+                              <p>
+                                <strong>Employee Type:</strong>
+                                { employee.employment_type || "" }
+                              </p>
+                            </div>
+
+                            <div className="col-md-4">
+                              <p>
+                                <strong>Work Location:</strong>
+                                { employee.work_location || "" }
+                              </p>
+                            </div>
+
+                            <div className="col-md-4">
+                              <p>
+                                <strong>Employee Status:</strong>
+                                { employee.employee_status || "" }
+                              </p>
+                            </div>
+                          </div>
+
+                          <div className="row">
                             <div className="col-md-6">
                               <p>
-                                <strong>Work Experience:</strong>{ " " }
-                                { employee.work_experience && employee.work_experience }
+                                <strong>Work Experience:</strong>
+                                { employee.work_experience || "" }
                               </p>
-                            </div> : "No data found"
-
-                        }
-                      </div>
+                            </div>
+                          </div>
+                        </> : <h3>No Data Found</h3>
+                      }
                     </div>
                   </>
                 ) }
               </Card>
             </div>
+
             {/* Card 2 */ }
             <div className="col-md-5">
               <Card
@@ -318,52 +307,50 @@ const Work = () => {
                       formData={ formData }
                       formErrors={ formErrors }
                       handleInputChange={ handleInputChange }
-                      editMode={ editMode }
                     />
                   </>
                 ) : (
                   <div className="user-details">
-                    <div className="row">
-                      {
-                        employee ?
-                          <>
-                            <div className="col-md-6">
-                              <p>
-                                <strong>Designation:</strong>
-                                { employee.designation || "" }
-                              </p>
-                            </div><div className="col-md-6">
-                              <p>
-                                <strong>Job Title:</strong> { employee.job_title || "" }
-                              </p>
-                            </div>
-                          </> : "No data found"
-                      }
-                    </div>
-                    <div className="row">
-                      { employee ?
-                        <>
+                    { employee ?
+                      <>
+                        <div className="row">
                           <div className="col-md-6">
                             <p>
-                              <strong>Department:</strong>{ " " }
+                              <strong>Designation:</strong>
+                              { employee.designation || "" }
+                            </p>
+                          </div>
+                          <div className="col-md-6">
+                            <p>
+                              <strong>Job Title:</strong> { employee.job_title || "" }
+                            </p>
+                          </div>
+                        </div><div className="row">
+                          <div className="col-md-6">
+                            <p>
+                              <strong>Department:</strong>
                               { employee.department || "" }
                             </p>
                           </div>
                           <div className="col-md-6">
                             <p>
-                              <strong>Sub Department:</strong>{ " " }
+                              <strong>Sub Department:</strong>
                               { employee.sub_department || "" }
                             </p>
                           </div>
-                        </> : "NO data found" }
-                    </div>
+                        </div>
+                      </> :
+                      <h3>No Data Found</h3>
+                    }
+
                   </div>
                 ) }
               </Card>
             </div>
-          </div>
+          </div >
+
           {/* Card 3 */ }
-          <div className="row">
+          < div className="row" >
             <div className="col-md-12">
               <Card title="Work History">
                 <>
@@ -376,7 +363,7 @@ const Work = () => {
                       </div>
                       <div className="col-md-3">
                         <p>
-                          <strong>Designation</strong>{ " " }
+                          <strong>Designation</strong>
                         </p>
                       </div>
                       <div className="col-md-3">
@@ -394,9 +381,10 @@ const Work = () => {
                 </>
               </Card>
             </div>
-          </div>
+          </div >
+
           {/* Card 4 */ }
-          <div className="row">
+          <div div className="row" >
             <div className="col-md-12">
               <Card
                 title="Resignation Info"
@@ -414,37 +402,42 @@ const Work = () => {
                   </>
                 ) : (
                   <div className="user-details">
-                    <div className="row">
-                      <div className="col-md-6">
-                        <p>
-                          <strong>Resignation Date:</strong> -
-                        </p>
-                      </div>
-                      <div className="col-md-6">
-                        <p>
-                          <strong>Resignation Status:</strong> -
-                        </p>
-                      </div>
-                    </div>
-                    <div className="row">
-                      <div className="col-md-6">
-                        <p>
-                          <strong>Notice Period:</strong> -
-                        </p>
-                      </div>
-                      <div className="col-md-6">
-                        <p>
-                          <strong>Last Working Day:</strong> -
-                        </p>
-                      </div>
-                    </div>
+                    { employee ?
+
+                      <>
+                        <div className="row">
+                          <div className="col-md-6">
+                            <p>
+                              <strong>Resignation Date:</strong> { formData.resignation_date || "" }
+                            </p>
+                          </div>
+                          <div className="col-md-6">
+                            <p>
+                              <strong>Resignation Status:</strong> { formData.resignation_status || "" }
+                            </p>
+                          </div>
+                        </div><div className="row">
+                          <div className="col-md-6">
+                            <p>
+                              <strong>Notice Period:</strong> { formData.notice_period || "" }
+                            </p>
+                          </div>
+                          <div className="col-md-6">
+                            <p>
+                              <strong>Last Working Day:</strong> { formData.last_working_day || "" }
+                            </p>
+                          </div>
+                        </div>
+                      </> : <h3>
+                        No data found</h3>
+                    }
                   </div>
                 ) }
               </Card>
             </div>
-          </div>
-        </form>
-      </div>
+          </div >
+        </form >
+      </div >
     </>
   );
 };

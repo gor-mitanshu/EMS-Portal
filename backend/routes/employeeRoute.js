@@ -27,22 +27,22 @@ const upload = multer({
 
 router.post('/addEmployee', employeeController.addEmployee);
 
-router.post('/addWorkDetails', verifyToken, employeeController.addWorkDetails);
-router.get('/getWorkDetails', verifyToken, employeeController.getWorkDetails);
+router.post('/addWorkDetails/:id', verifyToken, employeeController.addWorkDetails);
+router.get('/getWorkDetails/:id', verifyToken, employeeController.getWorkDetails);
 router.put('/updateWorkDetails/:id', verifyToken, employeeController.updateWorkDetails);
 
-router.post('/addEducationdetails', verifyToken, employeeController.addEducationDetails);
-router.get('/getEducationdetails', verifyToken, employeeController.getEducationDetails);
-router.put('/updateEducationdetails/:id', verifyToken, employeeController.updateEducationDetails);
-router.delete('/deleteEducationdetails/:id', verifyToken, employeeController.deleteEducationDetails);
+router.post('/addEducationDetails/:id', verifyToken, employeeController.addEducationDetails);
+router.get('/getEducationDetails/:id', verifyToken, employeeController.getEducationDetails);
+router.put('/updateEducationDetails/:id', verifyToken, employeeController.updateEducationDetails);
+router.delete('/deleteEducationDetails/:id', verifyToken, employeeController.deleteEducationDetails);
 
-router.post('/addFamilyDetails', verifyToken, employeeController.addFamilyDetails);
-router.get('/getFamilyDetails', verifyToken, employeeController.getFamilyDetails);
+router.post('/addFamilyDetails/:id', verifyToken, employeeController.addFamilyDetails);
+router.get('/getFamilyDetails/:id', verifyToken, employeeController.getFamilyDetails);
 router.put('/updateFamilyDetails/:id', verifyToken, employeeController.updateFamilyDetails);
 router.delete('/deleteFamilyMemberDetails/:id', verifyToken, employeeController.deleteFamilyDetails);
 
-router.post('/addEmergencyFamilyDetails', verifyToken, employeeController.emergencyaddFamilyDetails);
-router.get('/getEmergencyFamilyDetails', verifyToken, employeeController.emergencygetFamilyDetails);
+router.post('/addEmergencyFamilyDetails/:id', verifyToken, employeeController.emergencyaddFamilyDetails);
+router.get('/getEmergencyFamilyDetails/:id', verifyToken, employeeController.emergencygetFamilyDetails);
 router.put('/updateEmergencyFamilyDetails/:id', verifyToken, employeeController.emergencyupdateFamilyDetails);
 router.delete('/deleteEmergencyFamilyMemberDetails/:id', verifyToken, employeeController.emergencydeleteFamilyDetails);
 
