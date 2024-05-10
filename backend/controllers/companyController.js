@@ -68,7 +68,7 @@ const companyController = {
     const { id } = req.params;
     try {
 
-      let { company_name, brand_name, company_official_email, company_official_contact, website, domain_name, industry_type, linked_in, facebook, twitter } = req.body
+      let { company_name, brand_name, company_official_email, company_official_contact, website, domain_name, industry_type, company_address, linked_in, facebook, twitter } = req.body
       const updatedFields = {
         company_name,
         brand_name,
@@ -77,6 +77,7 @@ const companyController = {
         website,
         domain_name,
         industry_type,
+        company_address,
         linked_in,
         facebook,
         twitter,
@@ -93,78 +94,6 @@ const companyController = {
       } else {
         return res.status(200).send({
           message: "Update Successful"
-        });
-      }
-    } catch (error) {
-      return res.status(500).send({
-        message: "Internal Server Error",
-        error: error.message
-      });
-    }
-  },
-
-  // Address
-  addCompanyAddress: async (req, res) => {
-    // console.log(req.user)
-    const { user } = req.user;
-    let { register_office_address, corporate_office_address, custom_office_address } = req.body
-    const getCompanydetails = await CompanySchema.findOne({ user_id: user._id })
-    try {
-      const addressDetails = new CompanySchema({
-        register_office_address, corporate_office_address, custom_office_address, user_id: user._id, company_id: getCompanydetails._id
-      });
-      await addressDetails.save();
-
-      res.status(200).send({
-        message: "Added Successfully",
-      });
-    } catch (error) {
-      console.log(error);
-      return res.status(500).send({
-        message: "Internal Server Error",
-        error: error.message
-      });
-    }
-  },
-
-  getCompanyAddress: async (req, res) => {
-    const { id } = req.params;
-    try {
-      const company = await CompanySchema.findOne({ user_id: id })
-      if (!company) {
-        return res.status(404).send({
-          message: "Details not found",
-        });
-      }
-      return res.status(200).send({
-        company
-      });
-    } catch (error) {
-      res.status(400).send({
-        message: "Internal server error",
-        error: error.message,
-      });
-    }
-  },
-
-  updateCompanyAddress: async (req, res) => {
-    const { id } = req.params;
-    let { register_office_address, corporate_office_address, custom_office_address } = req.body
-    try {
-      const updatedFields = {
-        register_office_address, corporate_office_address, custom_office_address
-      }
-      const updateCompanyAddress = await CompanySchema.findOneAndUpdate(
-        { user_id: id },
-        { $set: updatedFields },
-        { new: true }
-      ); if (!updateCompanyAddress) {
-        return res.status(500).send({
-          error: "Update Unsuccessful",
-        });
-      } else {
-        return res.status(200).send({
-          message: "Update Successful",
         });
       }
     } catch (error) {
