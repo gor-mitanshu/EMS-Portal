@@ -8,6 +8,7 @@ import CompanyPoliciesModal from "./CompanyPoliciesModal";
 import axios from "axios";
 import Card from "../../../UI/profileCards/ProfileCard";
 import { toast } from "react-toastify";
+import Swal from "sweetalert2";
 
 const initialState = {
   policy_title: "",
@@ -131,17 +132,31 @@ const CompanyPolices = ({ accessToken, companyId }) => {
 
   const handleDelete = async (policyId) => {
     try {
-      const res = await axios.delete(
-        `${process.env.REACT_APP_API}/company/deletePolicy/${policyId}`,
-        {
-          headers: { Authorization: `Bearer ${accessToken}` },
+      Swal.fire({
+        title: 'Confirm Delete',
+        text: "Are you sure you want to delete?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, Delete!'
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          const res = await axios.delete(
+            `${process.env.REACT_APP_API}/company/deletePolicy/${policyId}`,
+            {
+              headers: { Authorization: `Bearer ${accessToken}` },
+            }
+          );
+          if (res.data) {
+            toast.success(res.data.message)
+            getPolicies();
+          }
+        } else {
+          return;
         }
-      );
-      if (res.data) {
-        // Remove the deleted certificate from the state
-        toast.success(res.data.message)
-        getPolicies();
-      }
+      })
+
     } catch (error) {
       console.error("Error deleting certificate:", error);
     }

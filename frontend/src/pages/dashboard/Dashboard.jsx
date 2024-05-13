@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React
+  // , { useState }
+  from "react";
 import { Link } from "react-router-dom";
 import {
   faLinkedinIn,
@@ -11,12 +13,12 @@ import KarmDigitech from "../../assets/images/k-logo.svg";
 import Chart from "react-apexcharts";
 
 const Dashboard = () => {
-  const [file, setFile] = useState(null);
+  // const [file, setFile] = useState(null);
 
-  const handleFileInputChange = (e) => {
-    const selectedFile = e.target.files[0];
-    setFile(selectedFile);
-  };
+  // const handleFileInputChange = (e) => {
+  //   const selectedFile = e.target.files[0];
+  //   setFile(selectedFile);
+  // };
 
   const cards = [
     {
@@ -152,35 +154,35 @@ const Dashboard = () => {
                 onChange={handleFileInputChange}
               /> */}
               <img
-                src={KarmDigitech}
+                src={ KarmDigitech }
                 alt=""
                 className="object-fit-contain"
-                height={"100%"}
-                width={"100%"}
+                height={ "100%" }
+                width={ "100%" }
               />
             </div>
             <h4 className="mt-4">Karm Digitech</h4>
             <div className="d-flex align-items-center justify-content-center">
               <Link
-                to={"//www.linkdin.com"}
+                to={ "//www.linkdin.com" }
                 target="_blank"
                 className="linkdin-icon-wrapper"
               >
-                <FontAwesomeIcon icon={faLinkedinIn} />
+                <FontAwesomeIcon icon={ faLinkedinIn } />
               </Link>
               <Link
-                to={"//www.facebook.com"}
+                to={ "//www.facebook.com" }
                 target="_blank"
                 className="facebook-icon-wrapper"
               >
-                <FontAwesomeIcon icon={faFacebookF} />
+                <FontAwesomeIcon icon={ faFacebookF } />
               </Link>
               <Link
-                to={"//www.instagram.com"}
+                to={ "//www.instagram.com" }
                 target="_blank"
                 className="insta-icon-wrapper"
               >
-                <FontAwesomeIcon icon={faInstagram} />
+                <FontAwesomeIcon icon={ faInstagram } />
               </Link>
             </div>
           </div>
@@ -190,8 +192,8 @@ const Dashboard = () => {
           <div className="card h-100">
             <h4 className="p-2">Total working hours</h4>
             <Chart
-              options={option.options}
-              series={option.series}
+              options={ option.options }
+              series={ option.series }
               type="rangeBar"
               width="100%"
               height="300"
@@ -200,24 +202,24 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* Employee Cards */}
+      {/* Employee Cards */ }
       <div className="row justify-content-center">
-        {cards.map((cardData, index) => (
+        { cards.map((cardData, index) => (
           <div
-            key={index}
+            key={ index }
             className="col-12 col-md-6 col-lg-3 employee-card-wrapper mb-4"
           >
             <div className="card h-100 m-0">
               <div className="d-flex align-items-center mb-3">
                 <div className="icon-wrapper">
-                  <i className={`bi ${cardData.icon}`} />
+                  <i className={ `bi ${cardData.icon}` } />
                 </div>
-                <h3 className="m-0 ps-3">{cardData.value}</h3>
+                <h3 className="m-0 ps-3">{ cardData.value }</h3>
               </div>
-              <h5>{cardData.title}</h5>
+              <h5>{ cardData.title }</h5>
             </div>
           </div>
-        ))}
+        )) }
       </div>
     </>
   );

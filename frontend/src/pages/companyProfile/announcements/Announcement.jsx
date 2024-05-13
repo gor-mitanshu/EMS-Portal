@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import AnnouncementList from "./AnnouncementList";
 import axios from "axios";
 import { toast } from "react-toastify";
+import Swal from "sweetalert2";
 
 const Announcement = ({ companyId, accessToken }) => {
   const [isEdit, setIsEdit] = useState(false);
@@ -82,13 +83,27 @@ const Announcement = ({ companyId, accessToken }) => {
 
   const handleDelete = async (id) => {
     try {
-      const res = await axios.delete(`${process.env.REACT_APP_API}/company/deleteAnnouncement/${id}`, {
-        headers: { Authorization: `Bearer ${accessToken}` },
-      });
-      if (res) {
-        toast.success(res.data.message)
-        getAnnouncementDetails();
-      }
+      Swal.fire({
+        title: 'Confirm Delete',
+        text: "Are you sure you want to delete?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, Delete!'
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          const res = await axios.delete(`${process.env.REACT_APP_API}/company/deleteAnnouncement/${id}`, {
+            headers: { Authorization: `Bearer ${accessToken}` },
+          });
+          if (res) {
+            toast.success(res.data.message)
+            getAnnouncementDetails();
+          }
+        } else {
+          return;
+        }
+      })
     } catch (error) {
       console.error("Error deleting announcement:", error);
     }
