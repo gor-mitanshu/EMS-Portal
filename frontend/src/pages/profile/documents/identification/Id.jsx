@@ -3,6 +3,7 @@ import { useState } from "react";
 import IdModal from "./IdModal";
 import axios from "axios";
 import { toast } from "react-toastify";
+import Swal from "sweetalert2";
 
 const initialFormData = {
   document_type: "",
@@ -209,19 +210,28 @@ const Id = ({ userId, accessToken }) => {
 
   const handleDelete = async (workId) => {
     try {
-      const accessToken = localStorage.getItem("token");
-      const accessTokenwithoutQuotes = JSON.parse(accessToken);
-      const res = await axios.delete(
-        `${process.env.REACT_APP_API}/employee/deleteDocument/${workId}`,
-        {
-          headers: { Authorization: `Bearer ${accessTokenwithoutQuotes}` },
+      Swal.fire({
+        title: 'Confirm Delete',
+        text: "Are you sure you want to delete?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, Delete!'
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          const res = await axios.delete(
+            `${process.env.REACT_APP_API}/employee/deleteDocument/${workId}`,
+            { headers: { Authorization: `Bearer ${accessToken}` } }
+          );
+          if (res.data) {
+            fetchDocuments();
+            toast.success(res.data.message)
+          }
+        } else {
+          return;
         }
-      );
-      if (res.data) {
-        // Remove the deleted certificate from the state
-        fetchDocuments();
-        toast.success(res.data.message)
-      }
+      })
     } catch (error) {
       console.error("Error deleting certificate:", error);
     }

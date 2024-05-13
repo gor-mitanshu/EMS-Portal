@@ -6,6 +6,7 @@ import EducationItem from "./EducationItem";
 import axios from "axios";
 import { toast } from "react-toastify";
 import Card from "../../../UI/profileCards/ProfileCard";
+import Swal from "sweetalert2";
 
 const Education = ({ userId, accessToken }) => {
   const [showForm, setShowForm] = useState(false);
@@ -145,22 +146,32 @@ const Education = ({ userId, accessToken }) => {
       university_name: "",
     });
     setFormErrors({});
-    // If all things work fine then setting the form back to false
     setShowForm(false);
   };
   const handleDeleteClick = async (index, id) => {
-    console.log(id)
     try {
-      const res = await axios.delete(
-        `${process.env.REACT_APP_API}/employee/deleteEducationDetails/${id}`,
-        {
-          headers: { Authorization: `Bearer ${accessToken}` },
+      Swal.fire({
+        title: 'Confirm Delete',
+        text: "Are you sure you want to delete?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, Delete!'
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          const res = await axios.delete(
+            `${process.env.REACT_APP_API}/employee/deleteEducationDetails/${id}`,
+            { headers: { Authorization: `Bearer ${accessToken}` } }
+          );
+          if (res) {
+            toast.success(res.data.message);
+            getEducationDetails();
+          }
+        } else {
+          return;
         }
-      );
-      if (res) {
-        toast.success(res.data.message);
-        getEducationDetails();
-      }
+      })
     } catch (error) {
       console.error("Error deleting education details:", error);
     }

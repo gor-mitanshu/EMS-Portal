@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import WorkModal from "../work/WorkModal";
 import { toast } from 'react-toastify'
+import Swal from "sweetalert2";
 
 const Work = ({ userId, accessToken }) => {
   const [showModal, setShowModal] = useState(false);
@@ -140,16 +141,28 @@ const Work = ({ userId, accessToken }) => {
 
   const handleDelete = async (workId) => {
     try {
-      const res = await axios.delete(
-        `${process.env.REACT_APP_API}/employee/deleteWorkDocument/${workId}`,
-        {
-          headers: { Authorization: `Bearer ${accessToken}` },
+      Swal.fire({
+        title: 'Confirm Delete',
+        text: "Are you sure you want to delete?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, Delete!'
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          const res = await axios.delete(
+            `${process.env.REACT_APP_API}/employee/deleteWorkDocument/${workId}`,
+            { headers: { Authorization: `Bearer ${accessToken}` } }
+          );
+          if (res.data) {
+            toast.success(res.data.message)
+            getWorkDetails()
+          }
+        } else {
+          return;
         }
-      );
-      if (res.data) {
-        toast.success(res.data.message)
-        getWorkDetails()
-      }
+      })
     } catch (error) {
       console.error("Error deleting certificate:", error);
     }

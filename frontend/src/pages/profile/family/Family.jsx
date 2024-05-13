@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import FamilySection from "./FamilySection";
 import axios from "axios";
 import { toast } from "react-toastify";
+import Swal from "sweetalert2";
 
 const Family = ({ accessToken, userId }) => {
   const [showForm, setShowForm] = useState(false);
@@ -209,19 +210,30 @@ const Family = ({ accessToken, userId }) => {
   // For deleting the form entry entered
   const handleDeleteClick = async (index, id) => {
     try {
-      const res = await axios.delete(
-        `${process.env.REACT_APP_API}/employee/deleteFamilyMemberDetails/${id}`,
-        {
-          headers: { Authorization: `Bearer ${accessToken}` },
+      Swal.fire({
+        title: 'Confirm Delete',
+        text: "Are you sure you want to delete?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, Delete!'
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          const res = await axios.delete(
+            `${process.env.REACT_APP_API}/employee/deleteFamilyMemberDetails/${id}`,
+            {
+              headers: { Authorization: `Bearer ${accessToken}` },
+            }
+          );
+          if (res) {
+            toast.success(res.data.message);
+            getFamilyDetails();
+          }
+        } else {
+          return;
         }
-      );
-      if (res) {
-        // console.log(res);
-        // const updatedList = familyList.filter((_, i) => i !== index);
-        // setFamilyList(updatedList);
-        toast.success(res.data.message);
-        getFamilyDetails();
-      }
+      })
     } catch (error) { }
   };
 

@@ -10,7 +10,7 @@ import {
   faLinkedinIn,
   faTwitter,
 } from "@fortawesome/free-brands-svg-icons";
-import { useOutletContext } from "react-router-dom";
+// import { useOutletContext } from "react-router-dom";
 
 const initialCompanyData = {
   company_name: "",
@@ -158,35 +158,35 @@ const Overview = ({ companyId, accessToken }) => {
 
   return (
     <div>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={ handleSubmit }>
         <div className="row">
-          {/* Company Details */}
+          {/* Company Details */ }
           <div className="col-lg-8">
-            {/* Personal Profile */}
+            {/* Personal Profile */ }
             <Card
               title="Company Profile"
-              editMode={editMode.overview}
-              handleEditClick={() => handleEditClick("overview")}
-              handleCancelClick={() => handleCancelClick("overview")}
+              editMode={ editMode.overview }
+              handleEditClick={ () => handleEditClick("overview") }
+              handleCancelClick={ () => handleCancelClick("overview") }
             >
-              {editMode.overview ? (
+              { editMode.overview ? (
                 <>
                   <OverViewForm
-                    formData={formData}
-                    formErrors={formErrors}
-                    handleInputChange={handleInputChange}
+                    formData={ formData }
+                    formErrors={ formErrors }
+                    handleInputChange={ handleInputChange }
                   />
                 </>
               ) : (
                 <>
-                  {formData ?
+                  { formData ?
                     <div className="user-details mt-2">
                       <div className="row">
                         <h6 className="text-black fw-bold text-truncate col-12 col-md-6">
                           Company Name
                         </h6>
                         <h6 className="text-gray text-truncate col-12 col-md-6">
-                          {companyData.company_name}
+                          { companyData.company_name }
                         </h6>
                       </div>
                       <div className="row mt-4">
@@ -194,7 +194,7 @@ const Overview = ({ companyId, accessToken }) => {
                           Brand Name
                         </h6>
                         <h6 className="text-gray text-truncate col-12 col-md-6">
-                          {companyData.brand_name}
+                          { companyData.brand_name }
                         </h6>
                       </div>
                       <div className="row mt-4">
@@ -202,7 +202,7 @@ const Overview = ({ companyId, accessToken }) => {
                           Email
                         </h6>
                         <h6 className="text-gray text-truncate col-12 col-md-6">
-                          {companyData.company_official_email}
+                          { companyData.company_official_email }
                         </h6>
                       </div>
                       <div className="row mt-4">
@@ -210,7 +210,7 @@ const Overview = ({ companyId, accessToken }) => {
                           Contact
                         </h6>
                         <h6 className="text-gray text-truncate col-12 col-md-6">
-                          {companyData.company_official_contact}
+                          { companyData.company_official_contact }
                         </h6>
                       </div>
                       <div className="row mt-4">
@@ -218,7 +218,7 @@ const Overview = ({ companyId, accessToken }) => {
                           Website
                         </h6>
                         <h6 className="text-gray text-truncate col-12 col-md-6">
-                          {companyData.website}
+                          { companyData.website }
                         </h6>
                       </div>
                       <div className="row mt-4">
@@ -226,7 +226,7 @@ const Overview = ({ companyId, accessToken }) => {
                           Domain Name
                         </h6>
                         <h6 className="text-gray text-truncate col-12 col-md-6">
-                          {companyData.domain_name}
+                          { companyData.domain_name }
                         </h6>
                       </div>
                       <div className="row mt-4">
@@ -234,31 +234,31 @@ const Overview = ({ companyId, accessToken }) => {
                           Industry Type
                         </h6>
                         <h6 className="text-gray text-truncate col-12 col-md-6">
-                          {companyData.industry_type}
+                          { companyData.industry_type }
                         </h6>
                       </div>
                     </div> :
                     <h3>No data found</h3>
                   }
                 </>
-              )}
+              ) }
             </Card>
           </div>
 
           <div className="col-lg-4">
-            {/* Social profiles */}
+            {/* Social profiles */ }
             <Card
               title="Social Profiles"
-              editMode={editMode.socialProfiles}
-              handleEditClick={() => handleEditClick("socialProfiles")}
-              handleCancelClick={() => handleCancelClick("socialProfiles")}
+              editMode={ editMode.socialProfiles }
+              handleEditClick={ () => handleEditClick("socialProfiles") }
+              handleCancelClick={ () => handleCancelClick("socialProfiles") }
             >
-              {editMode.socialProfiles ? (
+              { editMode.socialProfiles ? (
                 <>
                   <SocialProfileForm
-                    formData={formData}
-                    formErrors={formErrors}
-                    handleInputChange={handleInputChange}
+                    formData={ formData }
+                    formErrors={ formErrors }
+                    handleInputChange={ handleInputChange }
                   />
                 </>
               ) : (
@@ -274,7 +274,7 @@ const Overview = ({ companyId, accessToken }) => {
                       className="pe-4"
                       rel="noreferrer"
                     >
-                      <FontAwesomeIcon icon={faLinkedinIn} color="#0077B5" size="2xl" />
+                      <FontAwesomeIcon icon={ faLinkedinIn } color="#0077B5" size="2xl" />
                     </a>
 
                     <a
@@ -288,7 +288,7 @@ const Overview = ({ companyId, accessToken }) => {
                       rel="noreferrer"
                     >
                       <FontAwesomeIcon
-                        icon={faFacebook}
+                        icon={ faFacebook }
                         color="#316FF6"
                         size="2xl"
                       />
@@ -305,28 +305,28 @@ const Overview = ({ companyId, accessToken }) => {
                       rel="noreferrer"
                     >
                       <FontAwesomeIcon
-                        icon={faTwitter}
+                        icon={ faTwitter }
                         color="#1DA1F2"
                         size="2xl"
                       />
                     </a>
-                  </div>{" "}
+                  </div>{ " " }
                 </>
-              )}
+              ) }
             </Card>
 
-            {/* Address */}
+            {/* Address */ }
             <Card
-              title={"Company Address"}
-              editMode={editMode.companyAddress}
-              handleEditClick={() => handleEditClick('companyAddress')}
-              handleCancelClick={() => handleCancelClick('companyAddress')}
+              title={ "Company Address" }
+              editMode={ editMode.companyAddress }
+              handleEditClick={ () => handleEditClick('companyAddress') }
+              handleCancelClick={ () => handleCancelClick('companyAddress') }
             >
-              {editMode.companyAddress ? (
+              { editMode.companyAddress ? (
                 <div>
                   <div
-                    className={`form-input-wrapper ${formErrors.company_address ? "error-form-input" : ""
-                      }`}
+                    className={ `form-input-wrapper ${formErrors.company_address ? "error-form-input" : ""
+                      }` }
                   >
                     <label htmlFor="company_address" className="fw-medium">Current Address</label>
                     <textarea
@@ -334,21 +334,21 @@ const Overview = ({ companyId, accessToken }) => {
                       className="form-input px-0"
                       placeholder="Enter Full Address"
                       name="company_address"
-                      value={formData.company_address}
-                      rows={3}
-                      onChange={handleInputChange}
+                      value={ formData.company_address }
+                      rows={ 3 }
+                      onChange={ handleInputChange }
                     />
                   </div>
-                  <div className="input-error">{formErrors.company_address}</div>
+                  <div className="input-error">{ formErrors.company_address }</div>
                   <button type="submit" className="btn btn-primary px-4">Save</button>
                 </div>
               ) : (
                 <span>
-                  {formData.company_address
+                  { formData.company_address
                     ? formData.company_address
-                    : <h3>No Data Found!</h3>}
+                    : <h3>No Data Found!</h3> }
                 </span>
-              )}
+              ) }
             </Card>
           </div>
 
