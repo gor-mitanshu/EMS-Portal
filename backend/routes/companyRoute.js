@@ -25,21 +25,20 @@ const upload = multer({
           fileSize: 1024 * 1024 * 5
      }
 });
-
 // Company Details
 router.post('/addCompanyDetails', verifyToken, companyController.addCompanyDetails);
-router.get('/getUserDetailsByUserId/:id', verifyToken, companyController.getUserDetailsByUserId);
+router.get('/getCompanyDetailsByUserId/:id', verifyToken, companyController.getCompanyDetailsByUserId);
 router.get('/getCompanyDetailsById/:id', verifyToken, companyController.getCompanyDetailsById);
 router.put('/updateCompanyDetails/:id', verifyToken, companyController.updateCompanyDetails);
 // Department
 router.post('/addDepartment', verifyToken, companyController.addDepartment);
 // Announcements
-router.post('/addAnnouncement', verifyToken, companyController.addAnnouncement);
+router.post('/addAnnouncement/:id', verifyToken, companyController.addAnnouncement);
 router.get('/getAnnouncement/:id', verifyToken, companyController.getAnnouncement);
 router.put('/updateAnnouncement/:id', verifyToken, companyController.updateAnnouncement);
 router.delete('/deleteAnnouncement/:id', verifyToken, companyController.deleteAnnouncement);
 // Policies
-router.post('/addPolicy', verifyToken, upload.any(), companyController.addPolicy);
+router.post('/addPolicy/:id', verifyToken, upload.any(), companyController.addPolicy);
 router.get('/getPolicy/:id', verifyToken, companyController.getPolicy);
 router.post('/updatePolicy/:id', verifyToken, upload.any(), companyController.updatePolicy);
 router.delete('/deletePolicy/:id', verifyToken, companyController.deletePolicy);

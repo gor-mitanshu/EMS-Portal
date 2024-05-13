@@ -34,7 +34,6 @@ export const loginValidations = (inputValues) => {
 // Register
 export const registerStepOneValidations = (inputValues) => {
      const errors = {};
-     console.log(inputValues)
      // Firstname Validations
      if (('firstName' in inputValues) && inputValues.firstName === "") {
           errors.firstName = "Firstname is required."

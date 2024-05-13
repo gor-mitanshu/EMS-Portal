@@ -1,7 +1,4 @@
-// mongoose import
 const mongoose = require('mongoose');
-
-// Schema setup
 const familyMemberSchema = new mongoose.Schema({
      user_id: { type: mongoose.Schema.ObjectId, ref: 'user' },
 
@@ -9,11 +6,8 @@ const familyMemberSchema = new mongoose.Schema({
      family_relationship: { type: String },
      family_birth_date: { type: Date },
      dependant: { type: String },
-     deleted_at: { type: Date }
+     deleted_at: { type: Date, default: null }
+
 }, { timestamps: true });
-
-// exports and databse collection setup
-const familyMember = mongoose.model('family-member', familyMemberSchema);
-
-// Export the model 
-module.exports = familyMember;
+const FamilyMemberSchema = mongoose.model('family-member', familyMemberSchema);
+module.exports = FamilyMemberSchema;

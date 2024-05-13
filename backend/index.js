@@ -20,7 +20,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // configuration files
 app.use("./images", express.static(path.join(__dirname, 'images')));
 
-
 // use of routes
 app.use('/user', userRoutes);
 app.use('/company', companyRoutes);

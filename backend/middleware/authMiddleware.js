@@ -7,7 +7,6 @@ const verifyToken = async (req, res, next) => {
      if (!token) {
           return res.status(401).send({ success: false, message: 'Unauthorized: No valid token provided' });
      }
-
      try {
           const tokenToVerify = token.startsWith('Bearer ') ? token.slice(7) : token;
           const decoded = jwt.verify(tokenToVerify, process.env.JWT_SECRET);
@@ -29,7 +28,6 @@ const verifyToken = async (req, res, next) => {
 
           next();
      } catch (error) {
-          console.error('Error in token verification:', error);
           if (error.name === 'TokenExpiredError') {
                return res.status(401).send({ success: false, message: 'Unauthorized: Token expired' });
           } else {

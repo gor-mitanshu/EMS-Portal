@@ -104,7 +104,7 @@ const CompanyPolices = ({ accessToken, companyId }) => {
 
       const endpoint = editId
         ? `${process.env.REACT_APP_API}/company/updatePolicy/${editId}`
-        : `${process.env.REACT_APP_API}/company/addPolicy`;
+        : `${process.env.REACT_APP_API}/company/addPolicy/${companyId}`;
       const res = await axios.post(endpoint, formDataToSend, {
         headers: { Authorization: `Bearer ${accessToken}` },
       });

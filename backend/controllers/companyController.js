@@ -2,7 +2,6 @@ require('dotenv').config();
 const fs = require('fs');
 const path = require('path');
 
-// Importing models
 const CompanySchema = require('../models/companySchema/companySchema');
 const DepartmentSchema = require('../models/companySchema/departmentSchema');
 const SubDepartmentSchema = require('../models/companySchema/subdepartmentSchema');
@@ -10,7 +9,6 @@ const PolicySchema = require('../models/companySchema/policySchema');
 const AnnouncementSchema = require('../models/companySchema/announcementSchema');
 
 const companyController = {
-  // OverView
   addCompanyDetails: async (req, res) => {
     let { register_company, brand_name, company_official_email, company_official_contact, website, domain_name, industry_type, linked_in, facebook, twitter, user_id } = req.body
     try {
@@ -22,10 +20,15 @@ const companyController = {
         user_id
       });
       await overViewDetails.save();
-
-      res.status(200).send({
-        message: "Added Successfully",
-      });
+      if (overViewDetails) {
+        res.status(200).send({
+          message: "Added Successfully",
+        });
+      } else {
+        res.status(400).send({
+          message: "Added Unsuccessfully",
+        });
+      }
     } catch (error) {
       return res.status(500).send({
         message: "Internal Server Error",
@@ -34,13 +37,19 @@ const companyController = {
     }
   },
 
-  getUserDetailsByUserId: async (req, res) => {
+  getCompanyDetailsByUserId: async (req, res) => {
     try {
       const { id } = req.params;
       const company = await CompanySchema.findOne({ user_id: id })
-      return res.status(200).send({
-        company
-      });
+      if (!!company) {
+        return res.status(200).send({
+          company
+        });
+      } else {
+        return res.status(501).send({
+          message: "Couldn't find company details"
+        });
+      }
     } catch (error) {
       res.status(400).send({
         message: "Internal server error",
@@ -53,9 +62,15 @@ const companyController = {
     try {
       const { id } = req.params;
       const company = await CompanySchema.findOne({ _id: id })
-      return res.status(200).send({
-        company
-      });
+      if (company) {
+        return res.status(200).send({
+          company
+        });
+      } else {
+        return res.status(501).send({
+          message: "Company Details not found",
+        });
+      }
     } catch (error) {
       res.status(400).send({
         message: "Internal server error",
@@ -107,14 +122,12 @@ const companyController = {
   // Department
   addDepartment: async (req, res) => {
     try {
-      // Create a new department object
       const departments = req.body.map(department => ({
         company_id: department.company_id,
         department: department.department
       }));
       const savedDepartment = await DepartmentSchema.insertMany(departments);
 
-      // Create a new subdepartment object
       if (savedDepartment.length > 0) {
         let subDep = []
         savedDepartment.forEach(savedDep => {
@@ -137,11 +150,8 @@ const companyController = {
           await SubDepartmentSchema.insertMany(result)
         }
       }
-      // Send a success response
       res.status(201).json(savedDepartment);
     } catch (err) {
-      // Handle errors
-      console.error(err);
       res.status(500).json({ message: 'Server error' });
     }
   },
@@ -150,21 +160,16 @@ const companyController = {
 
   // Announcements
   addAnnouncement: async (req, res) => {
-    const companyDetails = req.companyDetails;
+    const { id } = req.params;
     try {
-      // Create a new AnnouncementSchema record if it doesn't exist
       const announcement = new AnnouncementSchema({
-        company_id: companyDetails._id,
+        company_id: id,
         announcement: req.body.announcement,
-
-        deleted_at: null
       })
       await announcement.save();
-
       res.status(200).send({
         message: "Added Successfully",
       });
-
     } catch (error) {
       return res.status(500).send({
         message: "Internal Server Error",
@@ -198,23 +203,19 @@ const companyController = {
     const { id } = req.params;
     const { announcement } = req.body;
     try {
-      const updatedField = {
-        announcement
-      }
-
       const updateAnnouncement = await AnnouncementSchema.findOneAndUpdate(
         { _id: id },
-        { $set: updatedField },
+        { $set: announcement },
         { news: true }
       );
 
       if (!updateAnnouncement) {
         return res.status(500).send({
-          error: "AnnouncementSchema Update Unsuccessful",
+          error: "Update Unsuccessful",
         });
       } else {
         return res.status(200).send({
-          message: "AnnouncementSchema Updated Successfully",
+          message: "Updated Successfully",
         });
       }
     } catch (error) {
@@ -230,10 +231,9 @@ const companyController = {
     try {
       const deleteAnnouncement = await AnnouncementSchema.findOneAndDelete({ _id: id });
       if (!deleteAnnouncement) {
-        return res.status(404).json({ message: "AnnouncementSchema not found" });
+        return res.status(404).json({ message: "Announcement not found" });
       }
-      return res.status(200).json({ message: "AnnouncementSchema deleted successfully" });
-
+      return res.status(200).json({ message: "Deleted successfully" });
     } catch (error) {
       return res.status(500).send({
         message: "Internal Server Error",
@@ -244,28 +244,24 @@ const companyController = {
 
   // Policies
   addPolicy: async (req, res) => {
-    const companyDetails = req.companyDetails;
+    const { id } = req.params;
     let { policy_title, policy_description } = req.body;
     try {
       let file = '';
       if (req.files && req.files.length > 0) {
         file = req.files[0].filename;
       }
-
-      // Create a new policy data record associated with the policy record
       const policyData = new PolicySchema({
-        company_id: companyDetails._id,
+        company_id: id,
         policy_title,
         policy_description,
         policy_file: file,
-        deleted_at: null,
       });
       await policyData.save();
       res.status(200).send({
-        message: "PolicySchema Added Successfully",
+        message: "Added Successfully",
       })
     } catch (error) {
-      console.log(error);
       return res.status(500).send({
         message: "Internal Server Error",
         error: error.message
@@ -306,19 +302,14 @@ const companyController = {
       }
       const { policy_title, policy_description } = req.body;
       let policy_file = '';
-      // Check if a new file was uploaded
       if (req.files && req.files.length > 0) {
         policy_file = req.files[0].filename;
-        // Delete the old file
         const existingPolicy = await PolicySchema.findById({ _id: policy._id });
         if (existingPolicy && existingPolicy.policy_file) {
           const filePath = path.join('images', existingPolicy.policy_file);
-          if (fs.existsSync(filePath)) {
-            fs.unlinkSync(filePath);
-          }
+          fs.existsSync(filePath) && fs.unlinkSync(filePath);
         }
       } else {
-        // No new file uploaded, keep the existing file
         const existingPolicy = await PolicySchema.findById({ _id: policy._id });
         if (existingPolicy) {
           policy_file = existingPolicy.policy_file;
@@ -336,15 +327,14 @@ const companyController = {
       )
       if (!updatedDocument) {
         return res.status(500).send({
-          error: "PolicySchema Update Unsuccessful",
+          error: "Update Unsuccessful",
         });
       } else {
         return res.status(200).send({
-          message: "PolicySchema Updated Successfully",
+          message: "Updated Successfully",
         });
       }
     } catch (error) {
-      console.log(error);
       return res.status(500).send({
         message: "Internal Server Error",
         error: error.message
@@ -365,7 +355,7 @@ const companyController = {
       if (fs.existsSync(filePath)) {
         fs.unlinkSync(filePath);
       }
-      return res.status(200).json({ success: true, message: "PolicySchema deleted successfully" });
+      return res.status(200).json({ success: true, message: "Deleted successfully" });
     } catch (error) {
       return res.status(500).send({
         message: "Internal Server Error",

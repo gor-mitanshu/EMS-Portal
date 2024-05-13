@@ -62,7 +62,7 @@ if (accessToken && !isTokenInvalid) {
   }
   if (user) {
     const response = await axios.get(
-      `${process.env.REACT_APP_API}/company/getUserDetailsByUserId/${user._id}`,
+      `${process.env.REACT_APP_API}/company/getCompanyDetailsByUserId/${user._id}`,
       {
         headers: { Authorization: `Bearer ${accessToken}` },
       }

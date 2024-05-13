@@ -5,8 +5,7 @@ const { ObjectId } = require('mongoose').Types;
 const fs = require('fs');
 const path = require('path');
 
-// Importing models
-const CommonSchema = require('../models/userSchema/userSchema').UserModel;
+const UserSchema = require('../models/userSchema/userSchema');
 const EmployeeSchema = require('../models/employeeSchema/employeeSchema');
 const EducationSchema = require('../models/userSchema/educationSchema');
 const FamilyMemberSchema = require('../models/userSchema/familyMemberSchema');
@@ -15,19 +14,15 @@ const DocumentSchema = require('../models/userSchema/documentIdSchema');
 const CertificateSchema = require('../models/userSchema/certificateSchema');
 const WorkSchema = require('../models/userSchema/workSchema');
 
-// List of the controllers
 const employeeController = {
      addEmployee: async (req, res) => {
           try {
-               // getting the body part from request
                let { name, email, phone, password, birth_date, gender, blood_group, marital_status } = req.body;
                let { company_name, register_office, company_size, employee_no, inTime, out_time, garce_time, working_hours } = req.body;
-
-               // Check if user already exists
-               const oldUser = await CommonSchema.findOne({ email })
+               const oldUser = await UserSchema.findOne({ email })
                if (!!oldUser) {
                     return res.status(409).send({
-                         message: "Already Registered",
+                         message: "User already exists",
                     });
                }
                const hashedPassword = await bcrypt.hash(password, 10);
@@ -35,31 +30,22 @@ const employeeController = {
                if (req.file) {
                     image = req.file.filename;
                }
-
-               // Create a new user in the CommonSchema
-               const newUserCommonSchema = new CommonSchema({
+               const newUserCommonSchema = new UserSchema({
                     name, email, phone, password: hashedPassword, birth_date, gender, blood_group, marital_status, image, role: "employee"
                });
                await newUserCommonSchema.save();
-
-               // Create a new user in the EmployeeSchema
                const newUserCompanyUser = new EmployeeSchema({
-                    user_id: newUserCommonSchema._id, // Assign the user ID from CommonSchema
-
+                    user_id: newUserCommonSchema._id,
                     company_name, register_office, company_size, employee_no, set_time_shift: { inTime, out_time, garce_time, working_hours }
                });
                await newUserCompanyUser.save();
-
                res.status(201).send({
                     message: "Registered Successfully",
                });
-
           } catch (error) {
-               console.error(error);
                res.status(500).send({
                     message: "Internal Server Error",
-                    success: false,
-                    data: null
+                    error: error.message
                });
           }
      },
@@ -73,16 +59,13 @@ const employeeController = {
                     employee_code, date_of_joining, probation_period, employment_type, work_location, employee_status, work_experience, role: "employee", user_id: id
                });
                await workDetails.save();
-
                res.status(200).send({
                     message: "Added Successfully",
                });
           } catch (error) {
-               console.log(error);
                return res.status(500).send({
-                    error: "Internal Server Error",
-                    success: false,
-                    technicalError: error.message
+                    message: "Internal Server Error",
+                    error: error.message
                });
           }
      },
@@ -163,11 +146,9 @@ const employeeController = {
                     });
                }
           } catch (error) {
-               console.log(error);
                return res.status(500).send({
-                    error: "Internal Server Error",
-                    success: false,
-                    technicalError: error.message
+                    message: "Internal Server Error",
+                    error: error.message
                });
           }
      },
@@ -186,8 +167,6 @@ const employeeController = {
                university_name,
           } = req.body;
           try {
-
-               // Create a new education record if it doesn't exist
                const educationDetails = new EducationSchema({
                     user_id: id,
                     qualification_type,
@@ -198,7 +177,7 @@ const employeeController = {
                     course_end_date,
                     college_name,
                     university_name,
-                    deleted_at: null
+
                });
                await educationDetails.save();
                res.status(200).send({
@@ -257,7 +236,6 @@ const employeeController = {
                     college_name,
                     university_name,
                }
-
                const updatedQualification = await EducationSchema.findOneAndUpdate(
                     {
                          _id: id,
@@ -267,11 +245,11 @@ const employeeController = {
                );
                if (!updatedQualification) {
                     return res.status(500).send({
-                         error: "Qualification Update Unsuccessful",
+                         error: "Update Unsuccessful",
                     });
                } else {
                     return res.status(200).send({
-                         message: "Qualification Updated Successfully",
+                         message: "Updated Successfully",
                     });
                }
           } catch (error) {
@@ -287,9 +265,9 @@ const employeeController = {
                const { id } = req.params;
                const deletedQualification = await EducationSchema.findByIdAndDelete({ _id: id });
                if (!deletedQualification) {
-                    return res.status(404).json({ message: "Qualification deleted unsuccessfully" });
+                    return res.status(404).json({ message: "Deleted unsuccessfully" });
                }
-               return res.status(200).json({ message: "Qualification deleted successfully" });
+               return res.status(200).json({ message: "Deleted successfully" });
           } catch (error) {
                return res.status(500).send({
                     message: "Internal Server Error",
@@ -314,11 +292,10 @@ const employeeController = {
                     family_relationship,
                     family_birth_date,
                     dependant,
-                    deleted_at: null
                });
                await familyDetails.save();
                res.status(200).send({
-                    message: "Member Added Successfully",
+                    message: "Added Successfully",
                });
           } catch (error) {
                return res.status(500).send({
@@ -373,11 +350,11 @@ const employeeController = {
                )
                if (!updatedFamilyMember) {
                     return res.status(500).send({
-                         error: "Family Member Update Unsuccessful",
+                         error: "Update Unsuccessful",
                     });
                } else {
                     return res.status(200).send({
-                         message: "Family Member Updated Successfully",
+                         message: "Updated Successfully",
                     });
                }
           } catch (error) {
@@ -395,7 +372,7 @@ const employeeController = {
                if (!deleteFamilyMemberDetails) {
                     return res.status(404).json({ message: "Family Member Details not found" });
                }
-               return res.status(200).json({ message: "Family Member Details deleted successfully" });
+               return res.status(200).json({ message: "Deleted successfully" });
 
           } catch (error) {
                return res.status(500).send({
@@ -420,11 +397,11 @@ const employeeController = {
                     family_relationship,
                     family_birth_date,
                     dependant,
-                    deleted_at: null
+
                });
                await emergencyFamilyData.save();
                res.status(200).send({
-                    message: "Member Added Successfully",
+                    message: "Added Successfully",
                });
           } catch (error) {
                return res.status(500).send({
@@ -480,11 +457,11 @@ const employeeController = {
                )
                if (!updatedFamilyMember) {
                     return res.status(500).send({
-                         error: "Family Member Update Unsuccessful",
+                         error: "Update Unsuccessful",
                     });
                } else {
                     return res.status(200).send({
-                         message: "Family Member Updated Successfully",
+                         message: "Updated Successfully",
                     });
                }
           } catch (error) {
@@ -502,7 +479,7 @@ const employeeController = {
                if (!deleteFamilyMemberDetails) {
                     return res.status(404).json({ message: "Family Member Details not found" });
                }
-               return res.status(200).json({ message: "Family Member Details deleted successfully" });
+               return res.status(200).json({ message: "Deleted successfully" });
           } catch (error) {
                return res.status(500).send({
                     message: "Internal Server Error",
@@ -513,21 +490,7 @@ const employeeController = {
 
      // Documents
      addDocuments: async (req, res) => {
-          const token = req.headers.authorization;
-          if (!token) {
-               return res.status(500).send({
-                    error: "Token not found",
-                    success: false
-               });
-          }
-          const { user } = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
-          if (!user) {
-               return res.status(404).send({
-                    message: "Unable to parse the token",
-                    success: false,
-                    error: res.message
-               });
-          }
+          const { id } = req.params;
           let {
                document_type,
                document_id,
@@ -539,97 +502,46 @@ const employeeController = {
                if (req.files && req.files.length > 0) {
                     file = req.files[0].filename;
                }
-
-               let documentDetails = await DocumentListSchema.findOne({ user_id: user._id });
-               if (!documentDetails) {
-                    // Create a new family record if it doesn't exist
-                    documentDetails = new DocumentListSchema({
-                         user_id: user._id,
-                         deleted_at: null
-                    });
-                    await documentDetails.save();
-               }
-
-               // Create a new qualification record associated with the education record
-               const newDocument = new DocumentSchema({
-                    document_list_id: documentDetails._id,
+               const documentData = new DocumentSchema({
+                    user_id: id,
                     document_type,
                     document_id,
-                    proof: {
-                         photo_id: proofObject.photo_id,
-                         date_of_birth: proofObject.date_of_birth,
-                         current_address: proofObject.current_address,
-                         permanent_address: proofObject.permanent_address
-                    },
+                    photo_id: proofObject.photo_id,
+                    date_of_birth: proofObject.date_of_birth,
+                    current_address: proofObject.current_address,
+                    permanent_address: proofObject.permanent_address,
                     document_file: file,
-                    deleted_at: null
+
                });
-               await newDocument.save();
+               await documentData.save();
                res.status(200).send({
-                    message: "Document Added Successfully",
-                    success: true,
-                    documentDetails,
-                    newDocument
+                    message: "Added Successfully",
                });
           } catch (error) {
-               console.log(error);
                return res.status(500).send({
-                    error: "Internal Server Error",
-                    success: false,
-                    technicalError: error.message
+                    message: "Internal Server Error",
+                    error: error.message
                });
           }
      },
 
      getDocuments: async (req, res) => {
           try {
-               const token = req.headers.authorization;
-               if (!token) {
-                    return res.status(500).send({
-                         error: "Token not found",
-                         success: false
-                    });
-               }
-               const { user } = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
-               if (!user) {
-                    return res.status(404).send({
-                         message: "Unable to parse the token",
-                         success: false,
-                         error: res.message
-                    });
-               }
-               const documentId = await DocumentListSchema.findOne({ user_id: user._id })
-               if (documentId) {
-                    const documentDetails = await DocumentListSchema.aggregate([
-                         {
-                              $match: { _id: new ObjectId(documentId._id) }
-                         },
-                         {
-                              $lookup: {
-                                   from: "documents",
-                                   localField: "_id",
-                                   foreignField: "document_list_id",
-                                   as: "documentDetails"
-                              }
-                         }
-                    ]);
+               const { id } = req.params;
+               const documentData = await DocumentSchema.find({ user_id: id })
+               if (documentData) {
                     return res.status(200).send({
-                         message: "Got the Document Details",
-                         success: true,
-                         documentDetails,
+                         documentData,
                     });
                } else {
                     return res.status(200).send({
                          message: "Didn't find the Document",
-                         success: false,
                     });
                }
           } catch (error) {
-               console.error('Error getting user:', error.message);
                return res.status(500).send({
                     message: "Internal server error",
                     error: error.message,
-                    success: false
                });
           }
      },
@@ -637,29 +549,6 @@ const employeeController = {
      updateDocuments: async (req, res) => {
           try {
                const { id } = req.params;
-               const token = req.headers.authorization;
-
-               if (!token) {
-                    return res.status(500).send({
-                         error: "Token not found",
-                         success: false
-                    });
-               }
-               const { user } = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
-               if (!user) {
-                    return res.status(404).send({
-                         message: "Unable to parse the token",
-                         success: false,
-                         error: res.message
-                    });
-               }
-               const documentId = await DocumentListSchema.findOne({ user_id: user._id });
-               if (!documentId) {
-                    return res.status(404).send({
-                         message: "Family Details not found",
-                         success: false,
-                    });
-               }
                const {
                     document_type,
                     document_id,
@@ -673,7 +562,7 @@ const employeeController = {
                     document_file = req.files[0].filename;
 
                     // Delete the old file
-                    const existingDocument = await DocumentSchema.findById(id);
+                    const existingDocument = await DocumentSchema.findById({ _id: id });
                     if (existingDocument && existingDocument.document_file) {
                          const filePath = path.join('images', existingDocument.document_file);
                          if (fs.existsSync(filePath)) {
@@ -682,7 +571,7 @@ const employeeController = {
                     }
                } else {
                     // No new file uploaded, keep the existing file
-                    const existingDocument = await DocumentSchema.findById(id);
+                    const existingDocument = await DocumentSchema.findById({ _id: id });
                     if (existingDocument) {
                          document_file = existingDocument.document_file;
                     }
@@ -691,12 +580,10 @@ const employeeController = {
                const updatedFields = {
                     document_type,
                     document_id,
-                    proof: {
-                         photo_id: proofObject.photo_id,
-                         date_of_birth: proofObject.date_of_birth,
-                         current_address: proofObject.current_address,
-                         permanent_address: proofObject.permanent_address
-                    },
+                    photo_id: proofObject.photo_id,
+                    date_of_birth: proofObject.date_of_birth,
+                    current_address: proofObject.current_address,
+                    permanent_address: proofObject.permanent_address,
                     document_file
                };
 
@@ -707,22 +594,17 @@ const employeeController = {
                )
                if (!updatedDocument) {
                     return res.status(500).send({
-                         error: "Family Member Update Unsuccessful",
-                         success: false,
+                         error: "Update Unsuccessful",
                     });
                } else {
                     return res.status(200).send({
-                         message: "Family Member Updated Successfully",
-                         updatedDocument,
-                         success: true,
+                         message: "Updated Successfully",
                     });
                }
           } catch (error) {
-               console.log(error);
                return res.status(500).send({
-                    error: "Internal Server Error",
-                    success: false,
-                    technicalError: error.message
+                    message: "Internal Server Error",
+                    error: error.message
                });
           }
      },
@@ -730,26 +612,7 @@ const employeeController = {
      deleteDocument: async (req, res) => {
           try {
                const { id } = req.params;
-               const token = req.headers.authorization;
-               console.log(id)
-               if (!token) {
-                    return res.status(401).json({ success: false, message: "Unauthorized: Token not found" });
-               }
-
-               const { user } = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
-               if (!user) {
-                    return res.status(401).json({ success: false, message: "Unauthorized: Invalid token" });
-               }
-
-               const documentId = await DocumentListSchema.findOne({ user_id: user._id });
-               if (!documentId) {
-                    return res.status(404).json({
-                         success: false,
-                         message: "Documents Details not found"
-                    });
-               }
-
-               const deletedDocument = await DocumentSchema.findByIdAndDelete(id);
+               const deletedDocument = await DocumentSchema.findByIdAndDelete({ _id: id });
 
                if (!deletedDocument) {
                     return res.status(404).json({ success: false, message: "Document not found" });
@@ -761,35 +624,19 @@ const employeeController = {
                     fs.unlinkSync(filePath);
                }
 
-               return res.status(200).json({ success: true, message: "Document deleted successfully" });
+               return res.status(200).json({ message: "Deleted successfully" });
 
           } catch (error) {
-               console.log(error);
                return res.status(500).send({
-                    error: "Internal Server Error",
-                    success: false,
-                    technicalError: error.message
+                    message: "Internal Server Error",
+                    error: error.message
                });
           }
      },
 
      // Certificate
      addCertificate: async (req, res) => {
-          const token = req.headers.authorization;
-          if (!token) {
-               return res.status(500).send({
-                    error: "Token not found",
-                    success: false
-               });
-          }
-          const { user } = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
-          if (!user) {
-               return res.status(404).send({
-                    message: "Unable to parse the token",
-                    success: false,
-                    error: res.message
-               });
-          }
+          const { id } = req.params;
           let {
                certificate_name,
                certificate_title,
@@ -799,91 +646,42 @@ const employeeController = {
                if (req.files && req.files.length > 0) {
                     file = req.files[0].filename;
                }
-
-               let certificateDetails = await DocumentListSchema.findOne({ user_id: user._id });
-               if (!certificateDetails) {
-                    // Create a new family record if it doesn't exist
-                    certificateDetails = new DocumentListSchema({
-                         user_id: user._id,
-                         deleted_at: null
-                    });
-                    await certificateDetails.save();
-               }
-
-               // Create a new qualification record associated with the education record
-               const newCertificate = new CertificateSchema({
-                    document_list_id: certificateDetails._id,
+               const certificateData = new CertificateSchema({
+                    user_id: id,
                     certificate_name,
                     certificate_title,
                     certificate_file: file,
-                    deleted_at: null
+
                });
-               await newCertificate.save();
+               await certificateData.save();
                res.status(200).send({
-                    message: "Certificate Added Successfully",
-                    success: true,
-                    certificateDetails,
-                    newCertificate
+                    message: "Added Successfully",
                });
           } catch (error) {
-               console.log(error);
                return res.status(500).send({
-                    error: "Internal Server Error",
-                    success: false,
-                    technicalError: error.message
+                    message: "Internal Server Error",
+                    error: error.message
                });
           }
      },
 
      getCertificate: async (req, res) => {
           try {
-               const token = req.headers.authorization;
-               if (!token) {
-                    return res.status(500).send({
-                         error: "Token not found",
-                         success: false
-                    });
-               }
-               const { user } = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
-               if (!user) {
-                    return res.status(404).send({
-                         message: "Unable to parse the token",
-                         success: false,
-                         error: res.message
-                    });
-               }
-               const certificateId = await DocumentListSchema.findOne({ user_id: user._id })
-               if (certificateId) {
-                    const certificateDetails = await DocumentListSchema.aggregate([
-                         {
-                              $match: { _id: new ObjectId(certificateId._id) }
-                         },
-                         {
-                              $lookup: {
-                                   from: "certificates",
-                                   localField: "_id",
-                                   foreignField: "document_list_id",
-                                   as: "certificateDetails"
-                              }
-                         }
-                    ]);
+               const { id } = req.params;
+               const certificateData = await CertificateSchema.find({ user_id: id })
+               if (certificateData) {
                     return res.status(200).send({
-                         message: "Got the Certificate Details",
-                         success: true,
-                         certificateDetails,
+                         certificateData,
                     });
                } else {
                     return res.status(200).send({
                          message: "Didn't find the User",
-                         success: false,
                     });
                }
           } catch (error) {
-               console.error('Error getting user:', error.message);
                return res.status(500).send({
                     message: "Internal server error",
                     error: error.message,
-                    success: false
                });
           }
      },
@@ -891,29 +689,6 @@ const employeeController = {
      updateCertificate: async (req, res) => {
           try {
                const { id } = req.params;
-               const token = req.headers.authorization;
-
-               if (!token) {
-                    return res.status(500).send({
-                         error: "Token not found",
-                         success: false
-                    });
-               }
-               const { user } = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
-               if (!user) {
-                    return res.status(404).send({
-                         message: "Unable to parse the token",
-                         success: false,
-                         error: res.message
-                    });
-               }
-               const certificateId = await DocumentListSchema.findOne({ user_id: user._id });
-               if (!certificateId) {
-                    return res.status(404).send({
-                         message: "Certificate not found",
-                         success: false,
-                    });
-               }
                const {
                     certificate_name,
                     certificate_title,
@@ -926,7 +701,7 @@ const employeeController = {
                     certificate_file = req.files[0].filename;
 
                     // Delete the old file
-                    const existingCertificate = await CertificateSchema.findById(id);
+                    const existingCertificate = await CertificateSchema.findById({ _id: id });
                     if (existingCertificate && existingCertificate.certificate_file) {
                          const filePath = path.join('images', existingCertificate.certificate_file);
                          if (fs.existsSync(filePath)) {
@@ -935,18 +710,16 @@ const employeeController = {
                     }
                } else {
                     // No new file uploaded, keep the existing file
-                    const existingCertificate = await CertificateSchema.findById(id);
+                    const existingCertificate = await CertificateSchema.findById({ _id: id });
                     if (existingCertificate) {
                          certificate_file = existingCertificate.certificate_file;
                     }
                }
-
                const updatedFields = {
                     certificate_name,
                     certificate_title,
                     certificate_file
                }
-
                const updatedDocument = await CertificateSchema.findOneAndUpdate(
                     { _id: id },
                     { $set: updatedFields },
@@ -954,22 +727,17 @@ const employeeController = {
                )
                if (!updatedDocument) {
                     return res.status(500).send({
-                         error: "Certificate Update Unsuccessful",
-                         success: false,
+                         error: "Update Unsuccessful",
                     });
                } else {
                     return res.status(200).send({
-                         message: "Certificate Updated Successfully",
-                         updatedDocument,
-                         success: true,
+                         message: "Updated Successfully",
                     });
                }
           } catch (error) {
-               console.log(error);
                return res.status(500).send({
-                    error: "Internal Server Error",
-                    success: false,
-                    technicalError: error.message
+                    message: "Internal Server Error",
+                    error: error.message
                });
           }
      },
@@ -977,28 +745,9 @@ const employeeController = {
      deleteCertificate: async (req, res) => {
           try {
                const { id } = req.params;
-               const token = req.headers.authorization;
-
-               if (!token) {
-                    return res.status(401).json({ success: false, message: "Unauthorized: Token not found" });
-               }
-
-               const { user } = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
-               if (!user) {
-                    return res.status(401).json({ success: false, message: "Unauthorized: Invalid token" });
-               }
-
-               const certificateId = await DocumentListSchema.findOne({ user_id: user._id });
-               if (!certificateId) {
-                    return res.status(404).json({
-                         success: false,
-                         message: "Family Details not found"
-                    });
-               }
-
-               const deletedCertificate = await CertificateSchema.findByIdAndDelete(id);
+               const deletedCertificate = await CertificateSchema.findByIdAndDelete({ _id: id });
                if (!deletedCertificate) {
-                    return res.status(404).json({ success: false, message: "Document not found" });
+                    return res.status(404).json({ message: "Document not found" });
                }
 
                // Delete the associated file
@@ -1006,36 +755,18 @@ const employeeController = {
                if (fs.existsSync(filePath)) {
                     fs.unlinkSync(filePath);
                }
-
-               return res.status(200).json({ success: true, message: "Certificate deleted successfully" });
-
+               return res.status(200).json({ message: "Deleted successfully" });
           } catch (error) {
-               console.log(error);
                return res.status(500).send({
-                    error: "Internal Server Error",
-                    success: false,
-                    technicalError: error.message
+                    message: "Internal Server Error",
+                    error: error.message
                });
           }
      },
 
      // Work
      addWork: async (req, res) => {
-          const token = req.headers.authorization;
-          if (!token) {
-               return res.status(500).send({
-                    error: "Token not found",
-                    success: false
-               });
-          }
-          const { user } = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
-          if (!user) {
-               return res.status(404).send({
-                    message: "Unable to parse the token",
-                    success: false,
-                    error: res.message
-               });
-          }
+          const { id } = req.params;
           let {
                work_name,
                work_description,
@@ -1045,91 +776,42 @@ const employeeController = {
                if (req.files && req.files.length > 0) {
                     file = req.files[0].filename;
                }
-
-               let workDetails = await DocumentListSchema.findOne({ user_id: user._id });
-               if (!workDetails) {
-                    // Create a new family record if it doesn't exist
-                    workDetails = new DocumentListSchema({
-                         user_id: user._id,
-                         deleted_at: null
-                    });
-                    await workDetails.save();
-               }
-
-               // Create a new qualification record associated with the education record
-               const newWork = new WorkSchema({
-                    document_list_id: workDetails._id,
+               const workData = new WorkSchema({
+                    user_id: id,
                     work_name,
                     work_description,
                     work_file: file,
-                    deleted_at: null
+
                });
-               await newWork.save();
+               await workData.save();
                res.status(200).send({
-                    message: "Work Added Successfully",
-                    success: true,
-                    workDetails,
-                    newWork
+                    message: "Added Successfully",
                });
           } catch (error) {
-               console.log(error);
                return res.status(500).send({
-                    error: "Internal Server Error",
-                    success: false,
-                    technicalError: error.message
+                    message: "Internal Server Error",
+                    error: error.message
                });
           }
      },
 
      getWork: async (req, res) => {
           try {
-               const token = req.headers.authorization;
-               if (!token) {
-                    return res.status(500).send({
-                         error: "Token not found",
-                         success: false
-                    });
-               }
-               const { user } = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
-               if (!user) {
-                    return res.status(404).send({
-                         message: "Unable to parse the token",
-                         success: false,
-                         error: res.message
-                    });
-               }
-               const workId = await DocumentListSchema.findOne({ user_id: user._id })
-               if (workId) {
-                    const workDetails = await DocumentListSchema.aggregate([
-                         {
-                              $match: { _id: new ObjectId(workId._id) }
-                         },
-                         {
-                              $lookup: {
-                                   from: "works",
-                                   localField: "_id",
-                                   foreignField: "document_list_id",
-                                   as: "workDetails"
-                              }
-                         }
-                    ]);
+               const { id } = req.params;
+               const workData = await WorkSchema.find({ user_id: id })
+               if (workData) {
                     return res.status(200).send({
-                         message: "Got the Work Details",
-                         success: true,
-                         workDetails,
+                         workData,
                     });
                } else {
                     return res.status(200).send({
                          message: "Didn't find the User",
-                         success: false,
                     });
                }
           } catch (error) {
-               console.error('Error getting user:', error.message);
                return res.status(500).send({
                     message: "Internal server error",
                     error: error.message,
-                    success: false
                });
           }
      },
@@ -1137,42 +819,18 @@ const employeeController = {
      updateWork: async (req, res) => {
           try {
                const { id } = req.params;
-               const token = req.headers.authorization;
-
-               if (!token) {
-                    return res.status(500).send({
-                         error: "Token not found",
-                         success: false
-                    });
-               }
-               const { user } = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
-               if (!user) {
-                    return res.status(404).send({
-                         message: "Unable to parse the token",
-                         success: false,
-                         error: res.message
-                    });
-               }
-               const workId = await DocumentListSchema.findOne({ user_id: user._id });
-               if (!workId) {
-                    return res.status(404).send({
-                         message: "Certificate not found",
-                         success: false,
-                    });
-               }
                const {
                     work_name,
                     work_description,
                } = req.body;
 
                let work_file = '';
-
                // Check if a new file was uploaded
                if (req.files && req.files.length > 0) {
                     work_file = req.files[0].filename;
 
                     // Delete the old file
-                    const existingWork = await WorkSchema.findById(id);
+                    const existingWork = await WorkSchema.findById({ _id: id });
                     if (existingWork && existingWork.work_file) {
                          const filePath = path.join('images', existingWork.work_file);
                          if (fs.existsSync(filePath)) {
@@ -1181,7 +839,7 @@ const employeeController = {
                     }
                } else {
                     // No new file uploaded, keep the existing file
-                    const existingWork = await WorkSchema.findById(id);
+                    const existingWork = await WorkSchema.findById({ _id: id });
                     if (existingWork) {
                          work_file = existingWork.work_file;
                     }
@@ -1200,22 +858,17 @@ const employeeController = {
                )
                if (!updatedDocument) {
                     return res.status(500).send({
-                         error: "Work Update Unsuccessful",
-                         success: false,
+                         error: "Update Unsuccessful",
                     });
                } else {
                     return res.status(200).send({
-                         message: "Work Updated Successfully",
-                         updatedDocument,
-                         success: true,
+                         message: "Updated Successfully",
                     });
                }
           } catch (error) {
-               console.log(error);
                return res.status(500).send({
-                    error: "Internal Server Error",
-                    success: false,
-                    technicalError: error.message
+                    message: "Internal Server Error",
+                    error: error.message
                });
           }
      },
@@ -1223,28 +876,9 @@ const employeeController = {
      deleteWork: async (req, res) => {
           try {
                const { id } = req.params;
-               const token = req.headers.authorization;
-
-               if (!token) {
-                    return res.status(401).json({ success: false, message: "Unauthorized: Token not found" });
-               }
-
-               const { user } = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
-               if (!user) {
-                    return res.status(401).json({ success: false, message: "Unauthorized: Invalid token" });
-               }
-
-               const certificateId = await DocumentListSchema.findOne({ user_id: user._id });
-               if (!certificateId) {
-                    return res.status(404).json({
-                         success: false,
-                         message: "Family Details not found"
-                    });
-               }
-
-               const deletedCertificate = await WorkSchema.findByIdAndDelete(id);
+               const deletedCertificate = await WorkSchema.findByIdAndDelete({ _id: id });
                if (!deletedCertificate) {
-                    return res.status(404).json({ success: false, message: "Document not found" });
+                    return res.status(404).json({ message: "Document not found" });
                }
 
                // Delete the associated file
@@ -1253,14 +887,12 @@ const employeeController = {
                     fs.unlinkSync(filePath);
                }
 
-               return res.status(200).json({ success: true, message: "Certificate deleted successfully" });
+               return res.status(200).json({ message: "Deleted successfully" });
 
           } catch (error) {
-               console.log(error);
                return res.status(500).send({
-                    error: "Internal Server Error",
-                    success: false,
-                    technicalError: error.message
+                    message: "Internal Server Error",
+                    error: error.message
                });
           }
      }

@@ -102,7 +102,7 @@ const userController = {
                          return res.status(400).send({
                               message: "Invalid Phone Number",
                               errors: {
-                                   phone: "Please enter a valid 10-digit Phone Number"
+                                   phone: "Please enter a valid Phone Number"
                               }
                          });
                     }
@@ -113,7 +113,7 @@ const userController = {
                          return res.status(400).send({
                               message: "Invalid Password",
                               errors: {
-                                   password: "Please enter a valid Password (5-10 characters, may include special characters)"
+                                   password: "Password have some special characters and maximum length 5-10 characters"
                               }
                          });
                     }
@@ -368,7 +368,6 @@ const userController = {
                     };
                     transporter.sendMail(mailOptions, (error, info) => {
                          if (error) {
-                              console.error('Error sending email:', error);
                               return res.status().send({
                                    message: 'Something went wrong',
                                    error: 'Error sending email:', error
@@ -446,7 +445,6 @@ const userController = {
                };
                transporter.sendMail(mailOptions, (error, info) => {
                     if (error) {
-                         console.error('Error sending email:', error);
                          return res.status(500).send({
                               message: "Error sending verification email",
                               error: error.message,
@@ -458,7 +456,6 @@ const userController = {
                     });
                });
           } catch (error) {
-               console.error('Error resending verification link:', error);
                return res.status(500).send({
                     message: "Internal Server Error",
                     error: error.message,
@@ -539,7 +536,6 @@ const userController = {
                     });
                } else {
                     return res.status(401).send({
-                         status: 300,
                          errors: "Email not verified. Please verify your email to log in.",
                     });
                }
@@ -579,10 +575,11 @@ const userController = {
 
                transporter.sendMail(mailOptions, function (error, info) {
                     if (error) {
-                         console.log(error.message);
-                         res.status(500).json({ message: 'Failed to send OTP' });
+                         res.status(500).json({
+                              message: "Failed to send OTP",
+                              error: error.message,
+                         });
                     } else {
-                         // console.log('Email sent: ' + info.response);
                          return res.status(200).send({
                               message: 'OTP sent successfully. Please Check your Mail',
                               data: 'Email sent: ' + info.response,
@@ -629,8 +626,10 @@ const userController = {
 
           transporter.sendMail(mailOptions, function (error, info) {
                if (error) {
-                    console.log(error.message);
-                    res.status(500).json({ message: 'OTP Not Verified' });
+                    res.status(500).json({
+                         message: "OTP not verified",
+                         error: error.message,
+                    });
                } else {
                     return res.status(200).send({
                          message: 'OTP Verified Successfully',
@@ -690,10 +689,6 @@ const userController = {
 
      updateUserDetails: async (req, res) => {
           const { id } = req.params;
-          if (!id) {
-               return res.status(404).send({ error: "ID not found" });
-          }
-
           const { firstName, lastName, birth_date, gender, blood_group, marital_status, email, phone, current_address, linked_in, facebook, twitter } = req.body;
 
           try {
@@ -728,10 +723,9 @@ const userController = {
                     });
                }
           } catch (error) {
-               console.log(error)
                return res.status(400).send({
-                    error: "Internal Server Error",
-                    technicalError: error.message
+                    message: "Internal Server Error",
+                    error: error.message
                });
           }
      },
