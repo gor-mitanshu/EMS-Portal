@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import CertificateModal from "./CertificateModal";
 import axios from "axios";
+import { toast } from 'react-toastify'
 
-const Certificate = () => {
+const Certificate = ({ userId, accessToken }) => {
   const [showModal, setShowModal] = useState(false);
   const [certificates, setCertificates] = useState([]);
   const [formData, setFormData] = useState({
@@ -58,6 +59,26 @@ const Certificate = () => {
       certificate_file: "",
     });
   };
+  const fetchCertificates = useCallback(async () => {
+    try {
+      const res = await axios.get(
+        `${process.env.REACT_APP_API}/employee/getCertificate/${userId}`,
+        {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        }
+      );
+      if (res.data) {
+        setCertificates(res.data.certificateData);
+        setFormData(res.data.certificateData);
+      }
+    } catch (error) {
+      console.error("Error fetching certificates:", error);
+    }
+  }, [accessToken, userId]);
+
+  useEffect(() => {
+    fetchCertificates();
+  }, [fetchCertificates]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -84,39 +105,19 @@ const Certificate = () => {
       formDataToSend.append("certificate_title", formData.certificate_title);
       formDataToSend.append("certificate_file", formData.certificate_file);
 
-      const accessToken = localStorage.getItem("token");
-      const accessTokenwithoutQuotes = JSON.parse(accessToken);
       const endpoint = editId
         ? `${process.env.REACT_APP_API}/employee/updateCertificate/${editId}`
-        : `${process.env.REACT_APP_API}/employee/addCertificate`;
+        : `${process.env.REACT_APP_API}/employee/addCertificate/${userId}`;
       const res = await axios.post(endpoint, formDataToSend, {
-        headers: { Authorization: `Bearer ${accessTokenwithoutQuotes}` },
+        headers: { Authorization: `Bearer ${accessToken}` },
       });
-      if (res.data.success) {
-        console.log("Submitted:", formData);
+      if (res.data) {
+        toast.success(res.data.message);
         handleClose();
         fetchCertificates();
       }
     } catch (error) {
       console.error("Error submitting form:", error);
-    }
-  };
-
-  const fetchCertificates = async () => {
-    try {
-      const accessToken = localStorage.getItem("token");
-      const accessTokenwithoutQuotes = JSON.parse(accessToken);
-      const res = await axios.get(
-        `${process.env.REACT_APP_API}/employee/getCertificate`,
-        {
-          headers: { Authorization: `Bearer ${accessTokenwithoutQuotes}` },
-        }
-      );
-      if (res.data) {
-        setCertificates(res.data.certificateDetails);
-      }
-    } catch (error) {
-      console.error("Error fetching certificates:", error);
     }
   };
 
@@ -131,26 +132,17 @@ const Certificate = () => {
     setShowModal(true);
   };
 
-  useEffect(() => {
-    fetchCertificates();
-  }, []);
-
   const handleDelete = async (certificateId) => {
     try {
-      const accessToken = localStorage.getItem("token");
-      const accessTokenwithoutQuotes = JSON.parse(accessToken);
       const res = await axios.delete(
         `${process.env.REACT_APP_API}/employee/deleteCertificate/${certificateId}`,
         {
-          headers: { Authorization: `Bearer ${accessTokenwithoutQuotes}` },
+          headers: { Authorization: `Bearer ${accessToken}` },
         }
       );
-      if (res.data.success) {
-        // Remove the deleted certificate from the state
-        const updatedCertificates = certificates[0].certificateDetails.filter(
-          (certificate) => certificate._id !== certificateId
-        );
-        setCertificates([{ certificateDetails: updatedCertificates }]);
+      if (res.data) {
+        toast.success(res.data.message);
+        fetchCertificates()
       }
     } catch (error) {
       console.error("Error deleting certificate:", error);
@@ -159,19 +151,19 @@ const Certificate = () => {
 
   return (
     <div>
-      <button className="btn btn-primary" onClick={handleShowModal}>
+      <button className="btn btn-primary" onClick={ handleShowModal }>
         Add Certificate
       </button>
       <CertificateModal
-        show={showModal}
-        handleClose={handleClose}
-        formData={formData}
-        formErrors={formErrors}
-        handleChange={handleChange}
-        handleFileChange={handleFileChange}
-        handleSubmit={handleSubmit}
+        show={ showModal }
+        handleClose={ handleClose }
+        formData={ formData }
+        formErrors={ formErrors }
+        handleChange={ handleChange }
+        handleFileChange={ handleFileChange }
+        handleSubmit={ handleSubmit }
       />
-      {certificates.length && certificates[0].certificateDetails.length > 0 ? (
+      { certificates.length > 0 ? (
         <table className="table">
           <thead>
             <tr>
@@ -181,31 +173,31 @@ const Certificate = () => {
             </tr>
           </thead>
           <tbody>
-            {certificates[0].certificateDetails.map((certificate) => (
-              <tr key={certificate._id}>
-                <td>{certificate.certificate_name}</td>
-                <td>{certificate.certificate_title}</td>
+            { certificates.map((certificate) => (
+              <tr key={ certificate._id }>
+                <td>{ certificate.certificate_name }</td>
+                <td>{ certificate.certificate_title }</td>
                 <td>
                   <button
                     className="btn btn-primary me-2"
-                    onClick={() => handleEdit(certificate)}
+                    onClick={ () => handleEdit(certificate) }
                   >
                     Edit
                   </button>
                   <button
                     className="btn btn-danger"
-                    onClick={() => handleDelete(certificate._id)}
+                    onClick={ () => handleDelete(certificate._id) }
                   >
                     Delete
                   </button>
                 </td>
               </tr>
-            ))}
+            )) }
           </tbody>
         </table>
       ) : (
         <h4>No data found</h4>
-      )}
+      ) }
     </div>
   );
 };

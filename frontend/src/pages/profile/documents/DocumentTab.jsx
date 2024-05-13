@@ -3,7 +3,7 @@ import Id from "./identification/Id";
 import Certificate from "./certificate/Certificate";
 import Work from "./work/Work";
 
-const DocumentTab = () => {
+const DocumentTab = ({ userId, accessToken }) => {
   const [subActiveTab, setSubActiveTab] = useState(() => {
     // Retrieve active tab from localStorage or default to "personal"
     return localStorage.getItem("subActiveTab") || "id";
@@ -28,25 +28,24 @@ const DocumentTab = () => {
       <div className="card text-start">
         <div className="card-header">
           <ul className="nav nav-tabs card-header-tabs">
-            {tabItems.map((tab, index) => (
-              <li className="nav-item" key={index}>
+            { tabItems.map((tab, index) => (
+              <li className="nav-item" key={ index }>
                 <button
-                  className={`nav-link sub-nav-link ${
-                    subActiveTab === tab.toLowerCase() ? "active" : ""
-                  }`}
-                  onClick={() => handleTabChange(tab.toLowerCase())}
+                  className={ `nav-link sub-nav-link ${subActiveTab === tab.toLowerCase() ? "active" : ""
+                    }` }
+                  onClick={ () => handleTabChange(tab.toLowerCase()) }
                 >
-                  {tab}
+                  { tab }
                 </button>
               </li>
-            ))}
+            )) }
           </ul>
         </div>
         <div className="card-body">
           <div className="tab-content">
-            {subActiveTab === "id" && <Id />}
-            {subActiveTab === "certificate" && <Certificate />}
-            {subActiveTab === "work" && <Work />}
+            { subActiveTab === "id" && <Id userId={ userId } accessToken={ accessToken } /> }
+            { subActiveTab === "certificate" && <Certificate userId={ userId } accessToken={ accessToken } /> }
+            { subActiveTab === "work" && <Work userId={ userId } accessToken={ accessToken } /> }
           </div>
         </div>
       </div>

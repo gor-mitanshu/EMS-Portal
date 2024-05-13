@@ -46,18 +46,18 @@ router.get('/getEmergencyFamilyDetails/:id', verifyToken, employeeController.eme
 router.put('/updateEmergencyFamilyDetails/:id', verifyToken, employeeController.emergencyupdateFamilyDetails);
 router.delete('/deleteEmergencyFamilyMemberDetails/:id', verifyToken, employeeController.emergencydeleteFamilyDetails);
 
-router.post('/addDocument', verifyToken, upload.any(), employeeController.addDocuments);
-router.get('/getDocument', verifyToken, employeeController.getDocuments);
+router.post('/addDocument/:id', verifyToken, upload.any(), employeeController.addDocuments);
+router.get('/getDocument/:id', verifyToken, employeeController.getDocuments);
 router.post('/updateDocument/:id', verifyToken, upload.any(), employeeController.updateDocuments);
 router.delete('/deleteDocument/:id', verifyToken, employeeController.deleteDocument);
 
-router.post('/addCertificate', verifyToken, upload.any(), employeeController.addCertificate);
-router.get('/getCertificate', verifyToken, employeeController.getCertificate);
+router.post('/addCertificate/:id', verifyToken, upload.any(), employeeController.addCertificate);
+router.get('/getCertificate/:id', verifyToken, employeeController.getCertificate);
 router.post('/updateCertificate/:id', verifyToken, upload.any(), employeeController.updateCertificate);
 router.delete('/deleteCertificate/:id', verifyToken, employeeController.deleteCertificate);
 
-router.post('/addWorkDocument', verifyToken, upload.any(), employeeController.addWork);
-router.get('/getWorkDocument', verifyToken, employeeController.getWork);
+router.post('/addWorkDocument/:id', verifyToken, upload.any(), employeeController.addWork);
+router.get('/getWorkDocument/:id', verifyToken, employeeController.getWork);
 router.post('/updateWorkDocument/:id', verifyToken, upload.any(), employeeController.updateWork);
 router.delete('/deleteWorkDocument/:id', verifyToken, employeeController.deleteWork);
 

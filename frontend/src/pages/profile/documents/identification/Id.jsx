@@ -1,7 +1,8 @@
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import { useState } from "react";
 import IdModal from "./IdModal";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const initialFormData = {
   document_type: "",
@@ -58,7 +59,7 @@ const checkboxes = {
     { label: "Permanent Address", name: "permanent_address" },
   ],
 };
-const Id = () => {
+const Id = ({ userId, accessToken }) => {
   const [showModal, setShowModal] = useState(false);
   const [documents, setDocuments] = useState([]);
   const [formData, setFormData] = useState(initialFormData);
@@ -118,24 +119,23 @@ const Id = () => {
     });
   };
 
-  const fetchDocuments = async () => {
+  const fetchDocuments = useCallback(async () => {
     try {
-      const accessToken = localStorage.getItem("token");
-      const accessTokenwithoutQuotes = JSON.parse(accessToken);
       const res = await axios.get(
-        `${process.env.REACT_APP_API}/employee/getDocument`,
+        `${process.env.REACT_APP_API}/employee/getDocument/${userId}`,
         {
-          headers: { Authorization: `Bearer ${accessTokenwithoutQuotes}` },
+          headers: { Authorization: `Bearer ${accessToken}` },
         }
       );
       if (res.data) {
         // console.log(res);
-        setDocuments(res.data.documentDetails);
+        setFormData(res.data.documentData);
+        setDocuments(res.data.documentData);
       }
     } catch (error) {
       console.error("Error fetching works:", error);
     }
-  };
+  }, [accessToken, userId]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -171,17 +171,15 @@ const Id = () => {
       formDataToSend.append("file", formData.file);
       formDataToSend.append("proof", JSON.stringify(proof));
 
-      const accessToken = localStorage.getItem("token");
-      const accessTokenwithoutQuotes = JSON.parse(accessToken);
       const endpoint = editId
         ? `${process.env.REACT_APP_API}/employee/updateDocument/${editId}`
-        : `${process.env.REACT_APP_API}/employee/addDocument`;
+        : `${process.env.REACT_APP_API}/employee/addDocument/${userId}`;
 
       const res = await axios.post(endpoint, formDataToSend, {
-        headers: { Authorization: `Bearer ${accessTokenwithoutQuotes}` },
+        headers: { Authorization: `Bearer ${accessToken}` },
       });
       if (res) {
-        console.log("Submitted:", formData);
+        toast.success(res.data.message)
         handleClose();
         setFormData(initialFormData);
         fetchDocuments();
@@ -192,17 +190,14 @@ const Id = () => {
   };
 
   const handleEdit = (document) => {
-    console.log(document);
     setEditId(document._id);
     setFormData({
       document_type: document.document_type,
       document_id: document.document_id,
-      proof: {
-        photo_id: document.proof.photo_id,
-        date_of_birth: document.proof.date_of_birth,
-        current_address: document.proof.current_address,
-        permanent_address: document.proof.permanent_address,
-      },
+      photo_id: document.photo_id,
+      date_of_birth: document.date_of_birth,
+      current_address: document.current_address,
+      permanent_address: document.permanent_address,
       file: document.file,
     });
     setShowModal(true);
@@ -210,7 +205,7 @@ const Id = () => {
 
   useEffect(() => {
     fetchDocuments();
-  }, []);
+  }, [fetchDocuments]);
 
   const handleDelete = async (workId) => {
     try {
@@ -222,14 +217,10 @@ const Id = () => {
           headers: { Authorization: `Bearer ${accessTokenwithoutQuotes}` },
         }
       );
-      if (res.data.success) {
+      if (res.data) {
         // Remove the deleted certificate from the state
         fetchDocuments();
-        const updatedCertificates = documents[0].documentDetails.filter(
-          (work) => work._id !== workId
-        );
-        setDocuments([{ documentDetails: updatedCertificates }]);
-        fetchDocuments();
+        toast.success(res.data.message)
       }
     } catch (error) {
       console.error("Error deleting certificate:", error);
@@ -238,21 +229,22 @@ const Id = () => {
 
   return (
     <div>
-      <button className="btn btn-primary" onClick={handleShowModal}>
+      <button className="btn btn-primary" onClick={ handleShowModal }>
         Add
       </button>
       <IdModal
-        show={showModal}
-        handleClose={handleClose}
-        formData={formData}
-        formErrors={formErrors}
-        handleChange={handleChange}
-        handleSubmit={handleSubmit}
-        checkboxes={checkboxes}
-        handleCheckboxChange={handleCheckboxChange}
-        handleFileChange={handleFileChange}
+        show={ showModal }
+        handleClose={ handleClose }
+        formData={ formData }
+        formErrors={ formErrors }
+        handleChange={ handleChange }
+        handleSubmit={ handleSubmit }
+        checkboxes={ checkboxes }
+        handleCheckboxChange={ handleCheckboxChange }
+        handleFileChange={ handleFileChange }
+        editId={ editId }
       />
-      {documents.length && documents[0].documentDetails.length > 0 ? (
+      { documents.length > 0 ? (
         <table className="table">
           <thead>
             <tr>
@@ -262,32 +254,32 @@ const Id = () => {
             </tr>
           </thead>
           <tbody>
-            {documents[0].documentDetails.map((work) => (
-              <tr key={work._id}>
-                <td>{work.document_type}</td>
-                <td>{work.document_id}</td>
-                {/* <td>{work.file}</td> */}
+            { documents.map((work) => (
+              <tr key={ work._id }>
+                <td>{ work.document_type }</td>
+                <td>{ work.document_id }</td>
+                {/* <td>{work.file}</td> */ }
                 <td>
                   <button
                     className="btn btn-primary me-2"
-                    onClick={() => handleEdit(work)}
+                    onClick={ () => handleEdit(work) }
                   >
                     Edit
                   </button>
                   <button
                     className="btn btn-danger"
-                    onClick={() => handleDelete(work._id)}
+                    onClick={ () => handleDelete(work._id) }
                   >
                     Delete
                   </button>
                 </td>
               </tr>
-            ))}
+            )) }
           </tbody>
         </table>
       ) : (
         <h4 className="pt-4">No data found</h4>
-      )}
+      ) }
     </div>
   );
 };

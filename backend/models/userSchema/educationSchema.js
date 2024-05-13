@@ -1,7 +1,4 @@
-// mongoose import
 const mongoose = require('mongoose');
-
-// Schema setup
 const educationSchema = new mongoose.Schema({
      user_id: { type: mongoose.Schema.ObjectId, ref: 'user' },
      qualification_type: { type: String },
@@ -12,11 +9,8 @@ const educationSchema = new mongoose.Schema({
      course_end_date: { type: String },
      college_name: { type: String },
      university_name: { type: String },
-     deleted_at: { type: Date }
+     deleted_at: { type: Date, default: null }
+
 }, { timestamps: true });
-
-// exports and databse collection setup
-const Education = mongoose.model('education', educationSchema);
-
-// Export the model 
-module.exports = Education;
+const EducationSchema = mongoose.model('education', educationSchema);
+module.exports = EducationSchema;

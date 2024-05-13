@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import WorkModal from "../work/WorkModal";
+import { toast } from 'react-toastify'
 
-const Work = () => {
+const Work = ({ userId, accessToken }) => {
   const [showModal, setShowModal] = useState(false);
   const [works, setWorks] = useState([]);
   const [formData, setFormData] = useState({
@@ -64,6 +65,26 @@ const Work = () => {
     });
   };
 
+  const getWorkDetails = useCallback(async () => {
+    try {
+      const res = await axios.get(
+        `${process.env.REACT_APP_API}/employee/getWorkDocument/${userId}`,
+        {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        }
+      );
+      if (res.data) {
+        setWorks(res.data.workData);
+      }
+    } catch (error) {
+      console.error("Error fetching works:", error);
+    }
+  }, [accessToken, userId]);
+
+  useEffect(() => {
+    getWorkDetails();
+  }, [getWorkDetails]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     // Error Handling
@@ -90,40 +111,19 @@ const Work = () => {
       formDataToSend.append("work_description", formData.work_description);
       formDataToSend.append("work_file", formData.work_file);
 
-      const accessToken = localStorage.getItem("token");
-      const accessTokenwithoutQuotes = JSON.parse(accessToken);
       const endpoint = editId
-        ? `${process.env.REACT_APP_API}/employee/updateWork/${editId}`
-        : `${process.env.REACT_APP_API}/employee/addWork`;
+        ? `${process.env.REACT_APP_API}/employee/updateWorkDocument/${editId}`
+        : `${process.env.REACT_APP_API}/employee/addWorkDocument/${userId}`;
       const res = await axios.post(endpoint, formDataToSend, {
-        headers: { Authorization: `Bearer ${accessTokenwithoutQuotes}` },
+        headers: { Authorization: `Bearer ${accessToken}` },
       });
-      if (res.data.success) {
-        console.log("Submitted:", formData);
+      if (res.data) {
+        toast.success(res.data.message);
         handleClose();
-        fetchCertificates();
+        getWorkDetails();
       }
     } catch (error) {
       console.error("Error submitting form:", error);
-    }
-  };
-
-  const fetchCertificates = async () => {
-    try {
-      const accessToken = localStorage.getItem("token");
-      const accessTokenwithoutQuotes = JSON.parse(accessToken);
-      const res = await axios.get(
-        `${process.env.REACT_APP_API}/employee/getWork`,
-        {
-          headers: { Authorization: `Bearer ${accessTokenwithoutQuotes}` },
-        }
-      );
-      if (res.data) {
-        // console.log(res);
-        setWorks(res.data.workDetails);
-      }
-    } catch (error) {
-      console.error("Error fetching works:", error);
     }
   };
 
@@ -138,26 +138,17 @@ const Work = () => {
     setShowModal(true);
   };
 
-  useEffect(() => {
-    fetchCertificates();
-  }, []);
-
   const handleDelete = async (workId) => {
     try {
-      const accessToken = localStorage.getItem("token");
-      const accessTokenwithoutQuotes = JSON.parse(accessToken);
       const res = await axios.delete(
-        `${process.env.REACT_APP_API}/employee/deleteWork/${workId}`,
+        `${process.env.REACT_APP_API}/employee/deleteWorkDocument/${workId}`,
         {
-          headers: { Authorization: `Bearer ${accessTokenwithoutQuotes}` },
+          headers: { Authorization: `Bearer ${accessToken}` },
         }
       );
-      if (res.data.success) {
-        // Remove the deleted certificate from the state
-        const updatedCertificates = works[0].workDetails.filter(
-          (work) => work._id !== workId
-        );
-        setWorks([{ workDetails: updatedCertificates }]);
+      if (res.data) {
+        toast.success(res.data.message)
+        getWorkDetails()
       }
     } catch (error) {
       console.error("Error deleting certificate:", error);
@@ -165,19 +156,20 @@ const Work = () => {
   };
   return (
     <div>
-      <button className="btn btn-primary" onClick={handleShowModal}>
+      <button className="btn btn-primary" onClick={ handleShowModal }>
         Add Achievements
       </button>
       <WorkModal
-        show={showModal}
-        handleClose={handleClose}
-        formData={formData}
-        formErrors={formErrors}
-        handleChange={handleChange}
-        handleFileChange={handleFileChange}
-        handleSubmit={handleSubmit}
+        show={ showModal }
+        handleClose={ handleClose }
+        formData={ formData }
+        formErrors={ formErrors }
+        handleChange={ handleChange }
+        handleFileChange={ handleFileChange }
+        handleSubmit={ handleSubmit }
+        editId={ editId }
       />
-      {works.length && works[0].workDetails.length > 0 ? (
+      { works.length > 0 ? (
         <table className="table">
           <thead>
             <tr>
@@ -187,31 +179,31 @@ const Work = () => {
             </tr>
           </thead>
           <tbody>
-            {works[0].workDetails.map((work) => (
-              <tr key={work._id}>
-                <td>{work.work_name}</td>
-                <td>{work.work_description}</td>
+            { works.map((work) => (
+              <tr key={ work._id }>
+                <td>{ work.work_name }</td>
+                <td>{ work.work_description }</td>
                 <td>
                   <button
                     className="btn btn-primary me-2"
-                    onClick={() => handleEdit(work)}
+                    onClick={ () => handleEdit(work) }
                   >
                     Edit
                   </button>
                   <button
                     className="btn btn-danger"
-                    onClick={() => handleDelete(work._id)}
+                    onClick={ () => handleDelete(work._id) }
                   >
                     Delete
                   </button>
                 </td>
               </tr>
-            ))}
+            )) }
           </tbody>
         </table>
       ) : (
         <h4 className="pt-4">No data found</h4>
-      )}
+      ) }
     </div>
   );
 };

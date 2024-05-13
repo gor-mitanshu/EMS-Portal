@@ -28,7 +28,7 @@ const menuItems = [
       { title: "Announcements", link: "/company-profile/announcements" },
       { title: "Policies", link: "/company-profile/policies" },
       { title: "Statutory", link: "/company-profile/statutory" },
-      { title: "Info", link: "/company-profile/info" },
+      // { title: "Info", link: "/company-profile/info" },
       { title: "Admins", link: "/company-profile/admin" },
       { title: "My Plan", link: "/company-profile/my-plans" },
     ],
@@ -132,127 +132,127 @@ const Sidebar = ({ open, handleDrawerOpen }) => {
 
   return (
     <div
-      className={`sidebar ${open ? "" : "sidebar-sm"}`}
-      onMouseEnter={() => {
+      className={ `sidebar ${open ? "" : "sidebar-sm"}` }
+      onMouseEnter={ () => {
         handleDrawerOpen(true);
-      }}
-      onMouseLeave={() => {
+      } }
+      onMouseLeave={ () => {
         handleDrawerOpen(false);
-      }}
+      } }
     >
-      {/* <div className={`sidebar ${open ? "" : "sidebar-sm"}`}> */}
+      {/* <div className={`sidebar ${open ? "" : "sidebar-sm"}`}> */ }
 
       <div
-        style={{ minWidth: "260px" }}
+        style={ { minWidth: "260px" } }
         className="d-flex align-items-center justify-content-between p-3"
       >
         <Link
-          onClick={() => {
+          onClick={ () => {
             handleDrawerOpen(true);
-          }}
-          style={{ width: "244px" }}
+          } }
+          style={ { width: "244px" } }
           className="d-flex align-items-center py-2"
         >
-          <img src={kLogo} width={"13%"} height={"100%"} alt="" />
+          <img src={ kLogo } width={ "13%" } height={ "100%" } alt="" />
           <img
-            src={karmLogo}
-            width={"60%"}
-            height={"100%"}
+            src={ karmLogo }
+            width={ "60%" }
+            height={ "100%" }
             alt=""
             className="ms-3 karm-logo"
           />
         </Link>
         <div>
-          {open ? (
+          { open ? (
             <div
               className="text-end d-flex d-lg-none"
-              onClick={() => {
+              onClick={ () => {
                 handleDrawerOpen(false);
-              }}
+              } }
               role="button"
             >
-              <FontAwesomeIcon icon={faTimes} size="lg" />
+              <FontAwesomeIcon icon={ faTimes } size="lg" />
             </div>
           ) : (
             ""
-          )}
+          ) }
         </div>
       </div>
 
       <div className="sidebar-content">
-        {open && (
+        { open && (
           <div className="row pe-3">
             <div className="col-xs-12 d-lg-none">
               <SearchBar />
             </div>
           </div>
-        )}
+        ) }
 
         <div className="accordion" id="sideBarMenuAccordion">
-          {menuItems.map((item) => (
-            <React.Fragment key={item.id}>
-              {item.content ? (
+          { menuItems.map((item) => (
+            <React.Fragment key={ item.id }>
+              { item.content ? (
                 <div className="accordion-item border-0 menu-item-wrapper">
                   <button
-                    className={`accordion-button collapsed menu-item ${location.pathname.includes(item.link) ? "menu-active" : ""
-                      } ${open ? "" : "collapsed"}`}
+                    className={ `accordion-button collapsed menu-item ${location.pathname.includes(item.link) ? "menu-active" : ""
+                      } ${open ? "" : "collapsed"}` }
                     // onClick={() => handleAccordionClick(item)}
-                    onClick={() => {
+                    onClick={ () => {
                       handleDrawerOpen(true);
-                    }}
+                    } }
                     type="button"
                     data-bs-toggle="collapse"
-                    data-bs-target={`#collapse${item.id}`}
-                    aria-expanded={open ? true : false}
-                    aria-controls={`collapse${item.id}`}
+                    data-bs-target={ `#collapse${item.id}` }
+                    aria-expanded={ open ? true : false }
+                    aria-controls={ `collapse${item.id}` }
                   >
-                    <i className={`bi ${item.icon}`}></i>
-                    <h6 className="m-0">{item.title}</h6>
+                    <i className={ `bi ${item.icon}` }></i>
+                    <h6 className="m-0">{ item.title }</h6>
                   </button>
                   <div
-                    id={open ? `collapse${item.id}` : ""}
-                    className={`accordion-collapse collapse ${open ? "" : "hide"
-                      } `}
-                    aria-labelledby={`heading${item.id}`}
+                    id={ open ? `collapse${item.id}` : "" }
+                    className={ `accordion-collapse collapse ${open ? "" : "hide"
+                      } ` }
+                    aria-labelledby={ `heading${item.id}` }
                     data-bs-parent="#sideBarMenuAccordion"
                   >
                     <div className="accordion-body list-item-body">
-                      {item.content.map((subItem, index) => (
+                      { item.content.map((subItem, index) => (
                         <Link
-                          onClick={() => {
+                          onClick={ () => {
                             handleDrawerOpen(false);
-                          }}
-                          key={index}
-                          to={subItem.link}
-                          className={`menu-item ${location.pathname === subItem.link
-                              ? "nav-active"
-                              : ""
-                            }`}
+                          } }
+                          key={ index }
+                          to={ subItem.link }
+                          className={ `menu-item ${location.pathname === subItem.link
+                            ? "nav-active"
+                            : ""
+                            }` }
                         >
                           <div className="sidebar-dash"></div>
-                          <h6 className="m-0">{subItem.title}</h6>
+                          <h6 className="m-0">{ subItem.title }</h6>
                         </Link>
-                      ))}
+                      )) }
                     </div>
                   </div>
                 </div>
               ) : (
                 <div className="menu-item-wrapper">
                   <Link
-                    to={item.link}
-                    onClick={() => {
+                    to={ item.link }
+                    onClick={ () => {
                       handleDrawerOpen(false);
-                    }}
-                    className={`menu-item ${location.pathname === item.link ? "nav-active" : ""
-                      }`}
+                    } }
+                    className={ `menu-item ${location.pathname === item.link ? "nav-active" : ""
+                      }` }
                   >
-                    <i className={`bi ${item.icon}`}></i>
-                    <h6 className="m-0">{item.title}</h6>
+                    <i className={ `bi ${item.icon}` }></i>
+                    <h6 className="m-0">{ item.title }</h6>
                   </Link>
                 </div>
-              )}
+              ) }
             </React.Fragment>
-          ))}
+          )) }
         </div>
       </div>
     </div>

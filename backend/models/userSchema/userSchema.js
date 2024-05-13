@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-
 const User = new mongoose.Schema({
      firstName: { type: String, required: true },
      lastName: { type: String, required: true },
@@ -20,10 +19,7 @@ const User = new mongoose.Schema({
      verification_token: { type: String },
      forget_password_otp: { type: String },
      forget_password_otp_expiry: { type: Date },
-     deleted_at: { type: Date }
+     deleted_at: { type: Date, default: null }
 }, { timestamps: true });
-
-
-const UserModel = mongoose.model('user', User);
-
-module.exports = UserModel;
+const UserSchema = mongoose.model('user', User);
+module.exports = UserSchema;
