@@ -10,8 +10,7 @@ const Department = ({ userId }) => {
   const [departments, setDepartments] = useState([]);
 
   useEffect(() => {
-    axios
-      .get("http://localhost:3001/departments")
+    axios.get("http://localhost:3001/departments")
       .then((response) => {
         setDepartments(response.data);
       })
@@ -37,8 +36,7 @@ const Department = ({ userId }) => {
     setFieldValues((prevValues) => ({
       ...prevValues,
       [id]: {
-        ...prevValues[id],
-        [fieldName]: value,
+        ...prevValues[id], [fieldName]: value,
       },
     }));
   };
@@ -66,32 +64,31 @@ const Department = ({ userId }) => {
 
   return (
     <>
-      <Card title={ "Department" }>
+      <Card title={"Department"}>
         <DepartmentForm
-          fields={ fields }
-          fieldValues={ fieldValues }
-          handleChange={ handleChange }
-          setFieldValues={ setFieldValues }
-          removeField={ removeField }
-          addField={ addField }
-          handleCancel={ handleCancel }
-          handleSubmit={ handleSubmit }
+          fields={fields}
+          fieldValues={fieldValues}
+          handleChange={handleChange}
+          setFieldValues={setFieldValues}
+          removeField={removeField}
+          addField={addField}
+          handleCancel={handleCancel}
+          handleSubmit={handleSubmit}
         />
-        { departments.map((data, index) => {
-          // console.log(data);
+        {departments.map((data, index) => {
           return (
             <div>
-              <h3>Department: { data.department }</h3>
+              <h3>Department: {data.department}</h3>
               <ul>
-                { data.subdepartments.map((subdepartment, index) => (
-                  <li key={ index }>
-                    Subdepartment { index + 1 }: { subdepartment }
+                {data.subdepartments.map((subdepartment, index) => (
+                  <li key={index}>
+                    Subdepartment {index + 1}: {subdepartment}
                   </li>
-                )) }
+                ))}
               </ul>
             </div>
           );
-        }) }
+        })}
       </Card>
     </>
   );

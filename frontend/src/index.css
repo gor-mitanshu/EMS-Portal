@@ -102,6 +102,7 @@ input[type="number"]::-webkit-outer-spin-button {
   left: 0;
   transform: translate(0, -50%);
 }
+
 .postfix-icon {
   font-size: 18px;
   position: absolute;
@@ -111,7 +112,8 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 input.form-input,
-textarea.form-input {
+textarea.form-input,
+select.form-input {
   background: transparent;
   border: none;
   color: black;
@@ -135,7 +137,8 @@ textarea.form-input {
 }
 
 input:focus-visible,
-textarea:focus-visible {
+textarea:focus-visible,
+select:focus-visible {
   outline: none;
 }
 
@@ -144,6 +147,24 @@ textarea:focus-visible {
   border-color: rgb(36 146 147) !important;
 }
 
-.overflow-ellipsis{
+.overflow-ellipsis {
   text-overflow: ellipsis;
+}
+
+.btn {
+  border-radius: 2px !important;
+}
+
+.btn-primary {
+  background: #117283 !important;
+}
+
+.btn-outline-primary{
+  border: 1px solid #117283 !important;
+  color: #117283 !important;
+}
+
+.btn-outline-primary:hover{
+  color: #fff !important;
+background: #117283 !important;
 }

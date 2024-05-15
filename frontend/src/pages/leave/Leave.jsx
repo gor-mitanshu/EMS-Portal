@@ -1,7 +1,8 @@
 import React from "react";
+import { Outlet } from "react-router-dom";
 
 const Leave = () => {
-  return <div>Leave</div>;
+  return <Outlet />;
 };
 
 export default Leave;

@@ -11,7 +11,6 @@ import {
   faTwitter,
 } from "@fortawesome/free-brands-svg-icons";
 import Swal from "sweetalert2";
-// import { useOutletContext } from "react-router-dom";
 
 const initialCompanyData = {
   company_name: "",
@@ -232,58 +231,58 @@ const Overview = ({ companyId, accessToken }) => {
                   { formData ?
                     <div className="user-details mt-2">
                       <div className="row">
-                        <h6 className="text-black fw-bold text-truncate col-12 col-md-6">
+                        <h6 className="text-black fw-bold text-truncate col-12 col-md-5">
                           Company Name
                         </h6>
-                        <h6 className="text-gray text-truncate col-12 col-md-6">
+                        <h6 className="text-gray text-truncate col-12 col-md-7">
                           { companyData.company_name }
                         </h6>
                       </div>
                       <div className="row mt-4">
-                        <h6 className="text-black fw-bold text-truncate col-12 col-md-6">
+                        <h6 className="text-black fw-bold text-truncate col-12 col-md-5">
                           Brand Name
                         </h6>
-                        <h6 className="text-gray text-truncate col-12 col-md-6">
+                        <h6 className="text-gray text-truncate col-12 col-md-7">
                           { companyData.brand_name }
                         </h6>
                       </div>
                       <div className="row mt-4">
-                        <h6 className="text-black fw-bold text-truncate col-12 col-md-6">
+                        <h6 className="text-black fw-bold text-truncate col-12 col-md-5">
                           Email
                         </h6>
-                        <h6 className="text-gray text-truncate col-12 col-md-6">
+                        <h6 className="text-gray text-truncate col-12 col-md-7">
                           { companyData.company_official_email }
                         </h6>
                       </div>
                       <div className="row mt-4">
-                        <h6 className="text-black fw-bold text-truncate col-12 col-md-6">
+                        <h6 className="text-black fw-bold text-truncate col-12 col-md-5">
                           Contact
                         </h6>
-                        <h6 className="text-gray text-truncate col-12 col-md-6">
+                        <h6 className="text-gray text-truncate col-12 col-md-7">
                           { companyData.company_official_contact }
                         </h6>
                       </div>
                       <div className="row mt-4">
-                        <h6 className="text-black fw-bold text-truncate col-12 col-md-6">
+                        <h6 className="text-black fw-bold text-truncate col-12 col-md-5">
                           Website
                         </h6>
-                        <h6 className="text-gray text-truncate col-12 col-md-6">
+                        <h6 className="text-gray text-truncate col-12 col-md-7">
                           { companyData.website }
                         </h6>
                       </div>
                       <div className="row mt-4">
-                        <h6 className="text-black fw-bold text-truncate col-12 col-md-6">
+                        <h6 className="text-black fw-bold text-truncate col-12 col-md-5">
                           Domain Name
                         </h6>
-                        <h6 className="text-gray text-truncate col-12 col-md-6">
+                        <h6 className="text-gray text-truncate col-12 col-md-7">
                           { companyData.domain_name }
                         </h6>
                       </div>
                       <div className="row mt-4">
-                        <h6 className="text-black fw-bold text-truncate col-12 col-md-6">
+                        <h6 className="text-black fw-bold text-truncate col-12 col-md-5">
                           Industry Type
                         </h6>
-                        <h6 className="text-gray text-truncate col-12 col-md-6">
+                        <h6 className="text-gray text-truncate col-12 col-md-7">
                           { companyData.industry_type }
                         </h6>
                       </div>

@@ -18,6 +18,20 @@ const DepartmentForm = ({
           <div className="d-flex border p-4 rounded-3 w-100">
             <div className="w-100 pe-3">
               <div className="form-input-wrapper me-3">
+                <select
+                  type="text"
+                  className="form-input px-0"
+                >
+                  <option value="default">Department head</option>
+                  <option value="dsdsdsdsdas">dsdsds head</option>
+                  <option value="Dsadaepartment">Dsadaepartment head</option>
+                  <option value="sadwdDepartment">sadwdDepartment head</option>
+                  <option value="Departmsdasxdsaent">Departmsdasxdsaent head</option>
+                </select>
+              </div>
+            </div>
+            <div className="w-100 pe-3">
+              <div className="form-input-wrapper me-3">
                 <input
                   type="text"
                   className="form-input px-0"
