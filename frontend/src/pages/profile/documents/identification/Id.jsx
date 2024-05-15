@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 import { useState } from "react";
 import IdModal from "./IdModal";
 import axios from "axios";
@@ -69,6 +69,11 @@ const Id = ({ userId, accessToken }) => {
     document_id: "",
     file: null,
   });
+  const initialUser = useRef({
+    document_type: "",
+    document_id: "",
+    file: null,
+  })
   const [editId, setEditId] = useState(null);
 
   const handleShowModal = () => {
@@ -132,6 +137,7 @@ const Id = ({ userId, accessToken }) => {
         // console.log(res);
         setFormData(res.data.documentData);
         setDocuments(res.data.documentData);
+        initialUser.current = res.data.documentData;
       }
     } catch (error) {
       console.error("Error fetching works:", error);
@@ -237,6 +243,14 @@ const Id = ({ userId, accessToken }) => {
     }
   };
 
+  const hasChanges = (changedData) => {
+    return (
+      changedData.document_type !== initialUser.current[0].document_type ||
+      changedData.document_id !== initialUser.current[0].document_id ||
+      changedData.file !== initialUser.current[0].file
+    );
+  };
+
   return (
     <div>
       <button className="btn btn-primary" onClick={ handleShowModal }>
@@ -253,6 +267,7 @@ const Id = ({ userId, accessToken }) => {
         handleCheckboxChange={ handleCheckboxChange }
         handleFileChange={ handleFileChange }
         editId={ editId }
+        hasChanges={ hasChanges }
       />
       { documents.length > 0 ? (
         <table className="table">

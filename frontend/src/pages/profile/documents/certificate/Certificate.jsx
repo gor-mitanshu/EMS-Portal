@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import CertificateModal from "./CertificateModal";
 import axios from "axios";
 import { toast } from 'react-toastify'
@@ -17,6 +17,10 @@ const Certificate = ({ userId, accessToken }) => {
     certificate_title: "",
     certificate_file: "",
   });
+  const initialUser = useRef({
+    certificate_name: "",
+    certificate_title: "",
+  })
   const [editId, setEditId] = useState(null);
 
   const handleShowModal = () => {
@@ -71,6 +75,7 @@ const Certificate = ({ userId, accessToken }) => {
       if (res.data) {
         setCertificates(res.data.certificateData);
         setFormData(res.data.certificateData);
+        initialUser.current = res.data.certificateData;
       }
     } catch (error) {
       console.error("Error fetching certificates:", error);
@@ -123,7 +128,6 @@ const Certificate = ({ userId, accessToken }) => {
   };
 
   const handleEdit = (certificate) => {
-    // console.log(certificate);
     setEditId(certificate._id);
     setFormData({
       certificate_name: certificate.certificate_name,
@@ -162,6 +166,14 @@ const Certificate = ({ userId, accessToken }) => {
     }
   };
 
+  const hasChanges = (changedData) => {
+    return (
+      changedData.certificate_name !== initialUser.current[0].certificate_name ||
+      changedData.certificate_title !== initialUser.current[0].certificate_title ||
+      changedData.certificate_file !== initialUser.current[0].certificate_file
+    );
+  };
+
   return (
     <div>
       <button className="btn btn-primary" onClick={ handleShowModal }>
@@ -175,6 +187,7 @@ const Certificate = ({ userId, accessToken }) => {
         handleChange={ handleChange }
         handleFileChange={ handleFileChange }
         handleSubmit={ handleSubmit }
+        hasChanges={ hasChanges }
       />
       { certificates.length > 0 ? (
         <table className="table">

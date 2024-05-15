@@ -1,6 +1,6 @@
 import React from "react";
 
-const AddressForm = ({ formData, handleInputChange, formErrors }) => {
+const AddressForm = ({ formData, handleInputChange, formErrors, handleCancel }) => {
   return (
     <>
       <div className="row">
@@ -15,26 +15,21 @@ const AddressForm = ({ formData, handleInputChange, formErrors }) => {
                 className="form-control no-focus-box-shadow"
                 placeholder="Full Address"
                 name="current_address"
-                value={formData.current_address}
-                onChange={handleInputChange}
-                style={{ height: "120px" }}
+                value={ formData.current_address }
+                onChange={ handleInputChange }
+                style={ { height: "120px" } }
               />
-              {formErrors.current_address && (
+              { formErrors.current_address && (
                 <small className="text-danger">
-                  {formErrors.current_address}
+                  { formErrors.current_address }
                 </small>
-              )}
+              ) }
             </div>
           </div>
         </div>
       </div>
-      {/* <input
-        type="text"
-        className="form-control no-focus-box-shadow"
-        placeholder="City"
-        onChange={handleInputChange}
-      /> */}
-      <button className="btn btn-primary mr-2">Save</button>
+      <button className="btn btn-danger me-2" onClick={ handleCancel } type="button">Cancel</button>
+      <button className="btn btn-primary">Save</button>
     </>
   );
 };

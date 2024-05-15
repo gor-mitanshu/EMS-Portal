@@ -205,7 +205,7 @@ const companyController = {
     try {
       const updateAnnouncement = await AnnouncementSchema.findOneAndUpdate(
         { _id: id },
-        { $set: announcement },
+        { $set: { announcement } },
         { news: true }
       );
 

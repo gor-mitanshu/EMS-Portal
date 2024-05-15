@@ -1,10 +1,9 @@
 import React from "react";
 
-const OverViewForm = ({ formData, formErrors, handleInputChange }) => {
+const OverViewForm = ({ formData, formErrors, handleInputChange, handleCancelClick }) => {
   return (
     <>
       <div className="row">
-
         <div className="col-md-4">
           <div className={ `form-input-wrapper px-0 ${formErrors.company_name ? 'error-form-input' : ''}` }>
             <label htmlFor="company_name" className="mb-1 fw-medium">
@@ -124,6 +123,9 @@ const OverViewForm = ({ formData, formErrors, handleInputChange }) => {
           <div className="input-error">{ formErrors.industry_type }</div>
         </div>
       </div >
+      <button type="button" className="btn btn-danger me-2" onClick={ handleCancelClick }>
+        Cancel
+      </button>
       <button type="submit" className="btn btn-primary ">
         Save
       </button>

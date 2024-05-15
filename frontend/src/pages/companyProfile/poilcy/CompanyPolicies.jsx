@@ -1,6 +1,7 @@
 import React, {
   useCallback,
   useEffect,
+  useRef,
   useState,
   // , useEffect
 } from "react";
@@ -20,6 +21,7 @@ const CompanyPolices = ({ accessToken, companyId }) => {
   const [policies, setPolicies] = useState([]);
   const [formData, setFormData] = useState(initialState);
   const [formErrors, setFormErrors] = useState(initialState);
+  const initialUser = useRef(initialState)
   const [editId, setEditId] = useState(null);
 
   const handleShowModal = () => {
@@ -67,6 +69,7 @@ const CompanyPolices = ({ accessToken, companyId }) => {
       );
       if (res.data) {
         setPolicies(res.data.policy);
+        initialUser.current = res.data.policy;
       }
     } catch (error) {
       console.error("Error fetching works:", error);
@@ -161,6 +164,34 @@ const CompanyPolices = ({ accessToken, companyId }) => {
       console.error("Error deleting certificate:", error);
     }
   };
+
+  const hasChanges = (changedData) => {
+    return (
+      changedData.policy_title !== initialUser.current[0].policy_title ||
+      changedData.policy_description !== initialUser.current[0].policy_description ||
+      changedData.policy_file !== initialUser.current[0].policy_file
+    )
+  }
+
+  const handleCancel = () => {
+    if (hasChanges(formData)) {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "Changes will not be saved.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Don't Save!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          handleClose();
+        }
+      });
+    } else {
+      handleClose();
+    }
+  }
   return (
     <Card title={ "Company Policies" }>
       <div>
@@ -176,6 +207,7 @@ const CompanyPolices = ({ accessToken, companyId }) => {
           handleSubmit={ handleSubmit }
           handleFileChange={ handleFileChange }
           editId={ editId }
+          handleCancel={ handleCancel }
         />
         { policies.length > 0 ? (
           <table className="table">

@@ -19,34 +19,12 @@ const FamilySection = ({
   familyList,
   handleDeleteClick,
   handleSaveEdit,
+  hasChanges
 }) => {
   // For showing and hiding the form
   const handleAddClick = () => {
     setShowForm(true);
-    // setFormData({
-    //   family_name: "Sanjay Gor",
-    //   family_relationship: "Father",
-    //   family_birth_date: "1971-12-23",
-    //   dependant: "",
-    // });
     setFormData({
-      family_name: "",
-      family_relationship: "",
-      family_birth_date: "",
-      dependant: "",
-    });
-  };
-
-  // for canceling the form
-  const handleCancel = () => {
-    setShowForm(false);
-    setFormData({
-      family_name: "",
-      family_relationship: "",
-      family_birth_date: "",
-      dependant: "",
-    });
-    setFormErrors({
       family_name: "",
       family_relationship: "",
       family_birth_date: "",
@@ -75,7 +53,6 @@ const FamilySection = ({
                 formErrors={ formErrors }
                 handleInputChange={ handleInputChange }
                 handleSubmit={ handleSubmit }
-                handleCancel={ handleCancel }
                 handleCheckboxChange={ handleCheckboxChange }
               />
             ) }
@@ -95,9 +72,9 @@ const FamilySection = ({
                         handleDeleteClick(index, family._id)
                       }
                       onSaveEdit={ handleSaveEdit }
-                      handleCancel={ handleCancel }
                       handleCheckboxChange={ handleCheckboxChange }
                       emergency={ emergency }
+                      hasChanges={ hasChanges }
                     />
                   )) }
                 </>

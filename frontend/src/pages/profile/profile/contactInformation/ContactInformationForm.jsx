@@ -4,11 +4,12 @@ const ContactInformationForm = ({
   formData,
   formErrors,
   handleInputChange,
+  handleCancel
 }) => {
   return (
     <>
       <div className="row">
-        {/* Email */}
+        {/* Email */ }
         <div className="col-md-12">
           <div className="form-group row">
             <div className="col mb-3">
@@ -20,16 +21,16 @@ const ContactInformationForm = ({
                 className="form-control no-focus-box-shadow"
                 placeholder="Enter Your Email"
                 name="email"
-                value={formData.email}
-                onChange={handleInputChange}
+                value={ formData.email }
+                onChange={ handleInputChange }
               />
-              {formErrors.email && (
-                <small className="text-danger">{formErrors.email}</small>
-              )}
+              { formErrors.email && (
+                <small className="text-danger">{ formErrors.email }</small>
+              ) }
             </div>
           </div>
         </div>
-        {/* Phone Number */}
+        {/* Phone Number */ }
         <div className="col-md-12">
           <div className="form-group row">
             <div className="col mb-3">
@@ -41,17 +42,18 @@ const ContactInformationForm = ({
                 className="form-control no-focus-box-shadow"
                 placeholder="Enter Your Phone Number"
                 name="phone"
-                value={formData.phone}
-                onChange={handleInputChange}
+                value={ formData.phone }
+                onChange={ handleInputChange }
               />
-              {formErrors.phone && (
-                <small className="text-danger">{formErrors.phone}</small>
-              )}
+              { formErrors.phone && (
+                <small className="text-danger">{ formErrors.phone }</small>
+              ) }
             </div>
           </div>
         </div>
       </div>
-      <button className="btn btn-primary mr-2">Save</button>
+      <button className="btn btn-danger me-2" type="button" onClick={ handleCancel }>Cancel</button>
+      <button className="btn btn-primary">Save</button>
     </>
   );
 };

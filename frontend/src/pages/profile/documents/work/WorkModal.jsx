@@ -1,5 +1,6 @@
 import React from "react";
 import { Modal, Button, Form, Col } from "react-bootstrap";
+import Swal from "sweetalert2";
 
 const WorkModal = ({
   show,
@@ -9,10 +10,30 @@ const WorkModal = ({
   handleChange,
   handleFileChange,
   handleSubmit,
-  editId
+  editId,
+  hasChanges
 }) => {
+  const handleCancel = () => {
+    if (hasChanges(formData)) {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "Changes will not be saved.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Don't Save!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          handleClose();
+        }
+      });
+    } else {
+      handleClose();
+    }
+  };
   return (
-    <Modal show={ show } onHide={ handleClose }>
+    <Modal show={ show } onHide={ handleCancel }>
       <Modal.Header closeButton>
         <Modal.Title>
           { " " }
@@ -68,7 +89,7 @@ const WorkModal = ({
           <Button
             variant="secondary"
             className="me-2 btn-danger"
-            onClick={ handleClose }
+            onClick={ handleCancel }
           >
             Cancel
           </Button>

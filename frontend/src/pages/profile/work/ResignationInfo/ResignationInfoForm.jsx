@@ -6,7 +6,7 @@ const initialFormData = {
   notice_period: "",
   last_working_day: "",
 };
-const ResignationInfoForm = ({ formData = initialFormData, formErrors, handleInputChange }) => {
+const ResignationInfoForm = ({ formData = initialFormData, formErrors, handleInputChange, handleCancel }) => {
   return (
     <>
       <div className="form-group">
@@ -111,7 +111,10 @@ const ResignationInfoForm = ({ formData = initialFormData, formErrors, handleInp
           </div>
         </div>
 
-        <button type="submit" className="btn btn-primary mr-2">
+        <button type="button" className="btn btn-danger me-2" onClick={ handleCancel }>
+          Cancel
+        </button>
+        <button type="submit" className="btn btn-primary">
           Save
         </button>
       </div>

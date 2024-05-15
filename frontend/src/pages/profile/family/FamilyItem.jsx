@@ -2,16 +2,16 @@ import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import FamilyForm from "./FamilyForm";
+import Swal from "sweetalert2";
 
 const FamilyItem = ({
   family,
   handleDeleteClick,
-  valueIndex,
   onSaveEdit,
   formErrors,
   setFormErrors,
   id,
-  emergency,
+  hasChanges,
 }) => {
   const formatedDate = family.family_birth_date;
   const newDate = new Date(formatedDate);
@@ -81,75 +81,103 @@ const FamilyItem = ({
   };
 
   const handleCancel = () => {
-    setFormData({
-      family_name: family.family_name,
-      family_relationship: family.family_relationship,
-      family_birth_date: family.family_birth_date,
-      dependant: family.dependant,
-    });
-    setFormErrors({
-      family_name: "",
-      family_relationship: "",
-      family_birth_date: "",
-      dependant: "",
-    });
-    setEditMode(false);
+    if (hasChanges(formData)) {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "Changes will not be saved.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Don't Save!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          setFormData({
+            family_name: family.family_name,
+            family_relationship: family.family_relationship,
+            family_birth_date: family.family_birth_date,
+            dependant: family.dependant,
+          });
+          setFormErrors({
+            family_name: "",
+            family_relationship: "",
+            family_birth_date: "",
+            dependant: "",
+          });
+          setEditMode(false);
+        }
+      });
+    } else {
+      setFormData({
+        family_name: family.family_name,
+        family_relationship: family.family_relationship,
+        family_birth_date: family.family_birth_date,
+        dependant: family.dependant,
+      });
+      setFormErrors({
+        family_name: "",
+        family_relationship: "",
+        family_birth_date: "",
+        dependant: "",
+      });
+      setEditMode(false);
+    }
   };
   return (
     <div className="card mb-3">
       <div className="card-body">
         <div className="d-flex justify-content-end">
-          {!editMode && (
+          { !editMode && (
             <>
-              <button className="btn btn-link" onClick={handleEditClick}>
-                <FontAwesomeIcon icon={faEdit} color="blue" />
+              <button className="btn btn-link" onClick={ handleEditClick }>
+                <FontAwesomeIcon icon={ faEdit } color="blue" />
               </button>
-              <button className="btn btn-link" onClick={handleDeleteClick}>
-                <FontAwesomeIcon icon={faTrash} color="red" />
+              <button className="btn btn-link" onClick={ handleDeleteClick }>
+                <FontAwesomeIcon icon={ faTrash } color="red" />
               </button>
             </>
-          )}
+          ) }
         </div>
 
-        {editMode ? (
+        { editMode ? (
           <FamilyForm
-            formData={formData}
-            formErrors={formErrors}
-            handleInputChange={handleInputChange}
-            handleSubmit={handleSaveClick}
-            handleCancel={handleCancel}
+            formData={ formData }
+            formErrors={ formErrors }
+            handleInputChange={ handleInputChange }
+            handleSubmit={ handleSaveClick }
+            handleCancel={ handleCancel }
           />
         ) : (
           <>
             <div className="row">
               <div className="col-md-3">
                 <p className="mb-1">
-                  <strong>Name:</strong> {family.family_name}
+                  <strong>Name:</strong> { family.family_name }
                 </p>
               </div>
               <div className="col-md-3">
                 <p className="mb-1">
-                  <strong>Relationship:</strong> {family.family_relationship}
+                  <strong>Relationship:</strong> { family.family_relationship }
                 </p>
               </div>
               <div className="col-md-3">
                 <p className="mb-1">
-                  <strong>Date of Birth:</strong>{" "}
-                  {newDate.toLocaleDateString("en-US", {
+                  <strong>Date of Birth:</strong>{ " " }
+                  { newDate.toLocaleDateString("en-US", {
                     day: "numeric",
                     month: "short",
                     year: "numeric",
-                  })}
+                  }) }
                 </p>
               </div>
               <div className="col-md-3">
                 <p className="mb-1">
-                  <strong>Dependant:</strong> {family.dependant}
+                  <strong>Dependant:</strong> { family.dependant }
                 </p>
               </div>
             </div>
           </>
-        )}
+        ) }
       </div>
     </div>
   );

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import EducationForm from "./EducationForm";
+import Swal from "sweetalert2";
 
 const EducationItem = ({
   education,
@@ -11,6 +12,8 @@ const EducationItem = ({
   formErrors,
   setFormErrors,
   id,
+  hasChanges,
+  handleCancel
 }) => {
   const [editMode, setEditMode] = useState(false);
   const [formData, setFormData] = useState({
@@ -104,107 +107,145 @@ const EducationItem = ({
     setEditMode(false);
   };
 
-  const handleCancel = () => {
-    setEditMode(false);
-    setFormData({
-      qualification_type: education.qualification_type,
-      course_name: education.course_name,
-      course_type: education.course_type,
-      course_stream: education.course_stream,
-      course_start_date: education.course_start_date,
-      course_end_date: education.course_end_date,
-      college_name: education.college_name,
-      university_name: education.university_name,
-    });
-    setFormErrors({
-      qualification_type: "",
-      course_name: "",
-      course_type: "",
-      course_stream: "",
-      course_start_date: "",
-      course_end_date: "",
-      college_name: "",
-      university_name: "",
-    });
+  const handleCancelButton = () => {
+    if (hasChanges(formData)) {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "Changes will not be saved.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Don't Save!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          handleCancel();
+          setEditMode(false);
+          setFormData({
+            qualification_type: education.qualification_type,
+            course_name: education.course_name,
+            course_type: education.course_type,
+            course_stream: education.course_stream,
+            course_start_date: education.course_start_date,
+            course_end_date: education.course_end_date,
+            college_name: education.college_name,
+            university_name: education.university_name,
+          });
+          setFormErrors({
+            qualification_type: "",
+            course_name: "",
+            course_type: "",
+            course_stream: "",
+            course_start_date: "",
+            course_end_date: "",
+            college_name: "",
+            university_name: "",
+          });
+        }
+      });
+    } else {
+      handleCancel();
+      setEditMode(false);
+      setFormData({
+        qualification_type: education.qualification_type,
+        course_name: education.course_name,
+        course_type: education.course_type,
+        course_stream: education.course_stream,
+        course_start_date: education.course_start_date,
+        course_end_date: education.course_end_date,
+        college_name: education.college_name,
+        university_name: education.university_name,
+      });
+      setFormErrors({
+        qualification_type: "",
+        course_name: "",
+        course_type: "",
+        course_stream: "",
+        course_start_date: "",
+        course_end_date: "",
+        college_name: "",
+        university_name: "",
+      });
+    }
   };
 
   return (
     <div className="card mb-3">
       <div className="card-body">
         <div className="d-flex justify-content-end">
-          {!editMode && (
+          { !editMode && (
             <>
-              <button className="btn btn-link" onClick={handleEditClick}>
-                <FontAwesomeIcon icon={faEdit} color="blue" />
+              <button className="btn btn-link" onClick={ handleEditClick }>
+                <FontAwesomeIcon icon={ faEdit } color="blue" />
               </button>
-              <button className="btn btn-link" onClick={handleDeleteClick}>
-                <FontAwesomeIcon icon={faTrash} color="red" />
+              <button className="btn btn-link" onClick={ handleDeleteClick }>
+                <FontAwesomeIcon icon={ faTrash } color="red" />
               </button>
             </>
-          )}
+          ) }
         </div>
 
-        {editMode ? (
+        { editMode ? (
           <EducationForm
-            formData={formData}
-            formErrors={formErrors}
-            handleInputChange={handleInputChange}
-            handleSubmit={handleSaveClick}
-            handleCancel={handleCancel}
-            isEditMode={true}
+            formData={ formData }
+            formErrors={ formErrors }
+            handleInputChange={ handleInputChange }
+            handleSubmit={ handleSaveClick }
+            handleCancel={ handleCancelButton }
+            isEditMode={ true }
           />
         ) : (
           <>
             <div className="row">
               <div className="col-md-4">
                 <p className="mb-1">
-                  <strong>Qualification Type:</strong>{" "}
-                  {education.qualification_type}
+                  <strong>Qualification Type:</strong>{ " " }
+                  { education.qualification_type }
                 </p>
               </div>
               <div className="col-md-4">
                 <p className="mb-1">
-                  <strong>Course Name:</strong> {education.course_name}
+                  <strong>Course Name:</strong> { education.course_name }
                 </p>
               </div>
               <div className="col-md-4">
                 <p className="mb-1">
-                  <strong>Course Type:</strong> {education.course_type}
-                </p>
-              </div>
-            </div>
-            <div className="row">
-              <div className="col-md-4">
-                <p className="mb-1">
-                  <strong>Stream:</strong> {education.course_stream}
-                </p>
-              </div>
-              <div className="col-md-4">
-                <p className="mb-1">
-                  <strong>Course Start Date:</strong>{" "}
-                  {education.course_start_date}
-                </p>
-              </div>
-              <div className="col-md-4">
-                <p className="mb-1">
-                  <strong>Course End Date:</strong> {education.course_end_date}
+                  <strong>Course Type:</strong> { education.course_type }
                 </p>
               </div>
             </div>
             <div className="row">
               <div className="col-md-4">
                 <p className="mb-1">
-                  <strong>College Name:</strong> {education.college_name}
+                  <strong>Stream:</strong> { education.course_stream }
                 </p>
               </div>
               <div className="col-md-4">
                 <p className="mb-1">
-                  <strong>University Name:</strong> {education.university_name}
+                  <strong>Course Start Date:</strong>{ " " }
+                  { education.course_start_date }
+                </p>
+              </div>
+              <div className="col-md-4">
+                <p className="mb-1">
+                  <strong>Course End Date:</strong> { education.course_end_date }
+                </p>
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-md-4">
+                <p className="mb-1">
+                  <strong>College Name:</strong> { education.college_name }
+                </p>
+              </div>
+              <div className="col-md-4">
+                <p className="mb-1">
+                  <strong>University Name:</strong> { education.university_name }
                 </p>
               </div>
             </div>
           </>
-        )}
+        ) }
       </div>
     </div>
   );

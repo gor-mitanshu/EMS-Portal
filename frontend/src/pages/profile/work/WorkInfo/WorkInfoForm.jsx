@@ -6,7 +6,7 @@ const initialFormData = {
   department: "",
   sub_department: "",
 };
-const WorkInfo = ({ formData = initialFormData, handleInputChange, formErrors }) => {
+const WorkInfo = ({ formData = initialFormData, handleInputChange, formErrors, handleCancel }) => {
   return (
     <>
       <div className="form-group">
@@ -107,7 +107,11 @@ const WorkInfo = ({ formData = initialFormData, handleInputChange, formErrors })
           </div>
         </div>
 
-        <button type="submit" className="btn btn-primary mr-2">
+        <button type="button" className="btn btn-danger me-2" onClick={ handleCancel }>
+          Cancel
+        </button>
+
+        <button type="submit" className="btn btn-primary">
           Save
         </button>
       </div>

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import FamilySection from "./FamilySection";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -19,7 +19,12 @@ const Family = ({ accessToken, userId }) => {
     family_birth_date: "",
     dependant: "",
   });
-
+  const initialFamilyUser = useRef({
+    family_name: "",
+    family_relationship: "",
+    family_birth_date: "",
+    dependant: "",
+  });
   const [formErrors, setFormErrors] = useState({
     family_name: "",
     family_relationship: "",
@@ -33,7 +38,12 @@ const Family = ({ accessToken, userId }) => {
     family_birth_date: "",
     dependant: "",
   });
-
+  const initialEmergencyFamilyUser = useRef({
+    family_name: "",
+    family_relationship: "",
+    family_birth_date: "",
+    dependant: "",
+  });
   const [familyList, setFamilyList] = useState([]);
   const [emergencyfamilyList, setEmergencyFamilyList] = useState([]);
 
@@ -88,6 +98,7 @@ const Family = ({ accessToken, userId }) => {
     );
     if (res) {
       setFamilyList(res.data.familyDetails);
+      initialFamilyUser.current = res.data.familyDetails
     }
   }, [accessToken, userId]);
 
@@ -104,6 +115,7 @@ const Family = ({ accessToken, userId }) => {
     );
     if (res) {
       setEmergencyFamilyList(res.data.familyDetails);
+      initialEmergencyFamilyUser.current = res.data.familyDetails
     }
   }, [accessToken, userId]);
 
@@ -297,6 +309,23 @@ const Family = ({ accessToken, userId }) => {
       }
     } catch (error) { }
   };
+
+  const hasChanges = (changedData) => {
+    return (
+      changedData.family_name !== initialFamilyUser.current.family_name ||
+      changedData.family_relationship !== initialFamilyUser.current.family_relationship ||
+      changedData.family_birth_date !== initialFamilyUser.current.family_birth_date ||
+      changedData.dependant !== initialFamilyUser.current.dependant);
+  };
+
+  const hasEmergencyChanges = (changedData) => {
+    return (
+      changedData.family_name !== initialFamilyUser.current.family_name ||
+      changedData.family_relationship !== initialFamilyUser.current.family_relationship ||
+      changedData.family_birth_date !== initialFamilyUser.current.family_birth_date ||
+      changedData.dependant !== initialFamilyUser.current.dependant
+    );
+  };
   return (
     <>
       <FamilySection
@@ -314,6 +343,7 @@ const Family = ({ accessToken, userId }) => {
         familyList={ familyList }
         handleDeleteClick={ handleDeleteClick }
         handleSaveEdit={ handleSaveEdit }
+        hasChanges={ hasChanges }
       />
       <FamilySection
         title="Emergency Contact"
@@ -330,6 +360,7 @@ const Family = ({ accessToken, userId }) => {
         familyList={ emergencyfamilyList }
         handleDeleteClick={ handleEmergencyDeleteClick }
         handleSaveEdit={ handleEmergencySaveEdit }
+        hasChanges={ hasEmergencyChanges }
       />
     </>
   );

@@ -12,6 +12,8 @@ const BasicInfoForm = ({
   formData = initialFormData,
   formErrors,
   handleInputChange,
+  handleCancel,
+  hasChanges
 }) => {
   return (
     <>
@@ -164,6 +166,9 @@ const BasicInfoForm = ({
             </div>
           </div>
         </div>
+        <button type="button" className="btn btn-danger me-2" onClick={ handleCancel }>
+          Cancel
+        </button>
 
         <button type="submit" className="btn btn-primary mr-2">
           Save
