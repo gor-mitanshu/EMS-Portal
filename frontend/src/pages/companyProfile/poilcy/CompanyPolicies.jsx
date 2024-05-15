@@ -22,7 +22,7 @@ const CompanyPolices = ({ accessToken, companyId }) => {
   const [formData, setFormData] = useState(initialState);
   const [formErrors, setFormErrors] = useState(initialState);
   const initialUser = useRef(initialState)
-  const [editId, setEditId] = useState(null);
+  const [policyId, setPolicyId] = useState(null);
 
   const handleShowModal = () => {
     setShowModal(true);
@@ -33,7 +33,7 @@ const CompanyPolices = ({ accessToken, companyId }) => {
     setShowModal(false);
     setFormErrors(initialState);
     setFormData(initialState);
-    setEditId(null);
+    setPolicyId(null);
   };
 
   const handleChange = (e) => {
@@ -106,8 +106,8 @@ const CompanyPolices = ({ accessToken, companyId }) => {
       formDataToSend.append("policy_description", formData.policy_description);
       formDataToSend.append("policy_file", formData.policy_file);
 
-      const endpoint = editId
-        ? `${process.env.REACT_APP_API}/company/updatePolicy/${editId}`
+      const endpoint = policyId
+        ? `${process.env.REACT_APP_API}/company/updatePolicy/${policyId}`
         : `${process.env.REACT_APP_API}/company/addPolicy/${companyId}`;
       const res = await axios.post(endpoint, formDataToSend, {
         headers: { Authorization: `Bearer ${accessToken}` },
@@ -124,7 +124,7 @@ const CompanyPolices = ({ accessToken, companyId }) => {
   };
 
   const handleEdit = (policy) => {
-    setEditId(policy._id);
+    setPolicyId(policy._id);
     setFormData({
       policy_title: policy.policy_title,
       policy_description: policy.policy_description,
@@ -192,12 +192,10 @@ const CompanyPolices = ({ accessToken, companyId }) => {
       handleClose();
     }
   }
+
   return (
-    <Card title={ "Company Policies" }>
+    <Card title={"Company Policies"} addBtn={true} addBtnTitle={"Add policy"} handleAdd={handleShowModal}>
       <div>
-        <button className="btn btn-primary" onClick={ handleShowModal }>
-          Add
-        </button>
         <CompanyPoliciesModal
           show={ showModal }
           handleClose={ handleClose }
@@ -206,7 +204,7 @@ const CompanyPolices = ({ accessToken, companyId }) => {
           handleChange={ handleChange }
           handleSubmit={ handleSubmit }
           handleFileChange={ handleFileChange }
-          editId={ editId }
+          policyId={ policyId }
           handleCancel={ handleCancel }
         />
         { policies.length > 0 ? (

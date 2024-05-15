@@ -64,7 +64,7 @@ const Department = ({ userId }) => {
 
   return (
     <>
-      <Card title={ "Department" }>
+      <Card title={"Department"} addBtn={true} addBtnTitle={"Add Department"} handleAdd={addField}>
         <DepartmentForm
           fields={ fields }
           fieldValues={ fieldValues }

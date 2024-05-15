@@ -3,18 +3,17 @@ import Modal from "../../../UI/modal/Modal"
 
 const CompanyPoliciesModal = ({
   show,
-  handleClose,
   formData,
   formErrors,
   handleChange,
   handleFileChange,
   handleSubmit,
-  editId,
+  policyId,
   handleCancel
 }) => {
 
   return (
-    <Modal show={ show } handleCancel={ handleCancel } title={ editId ? "Edit Policy" : "Add Policy" }>
+    <Modal show={ show } handleCancel={ handleCancel } title={policyId ? "Edit Policy" : "Add Policy" }>
       <form onSubmit={ handleSubmit }>
         <label>Title</label>
         <input
