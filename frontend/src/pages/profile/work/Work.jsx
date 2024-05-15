@@ -3,7 +3,7 @@ import BasicInfoForm from "./BasicInfo/BasicInfoForm";
 import WorkInfoForm from "./WorkInfo/WorkInfoForm";
 import ResignationInfoForm from "./ResignationInfo/ResignationInfoForm";
 import axios from "axios";
-import Card from "../../../UI/profileCards/ProfileCard";
+import Card from "../../../UI/card/Card";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 

@@ -5,7 +5,7 @@ import EducationForm from "./EducationForm";
 import EducationItem from "./EducationItem";
 import axios from "axios";
 import { toast } from "react-toastify";
-import Card from "../../../UI/profileCards/ProfileCard";
+import Card from "../../../UI/card/Card";
 import Swal from "sweetalert2";
 
 const Education = ({ userId, accessToken }) => {

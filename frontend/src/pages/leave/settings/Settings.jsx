@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Card from "../../../UI/profileCards/ProfileCard";
+import Card from "../../../UI/card/Card";
 
 const Settings = () => {
   const [isFinancialYearCycleEnabled, setIsFinancialYearCycleEnabled] =
@@ -18,7 +18,7 @@ const Settings = () => {
   return (
     <>
       <div className="col-md-12">
-        <Card title={"Annual Leave Cycle"}>
+        <Card title={ "Annual Leave Cycle" }>
           <div className="d-flex justify-content-between">
             <div>
               Enable Financial Year Cycle (Default is Calendar Year Cycle)
@@ -29,16 +29,16 @@ const Settings = () => {
                 type="checkbox"
                 role="switch"
                 id="financialYearCycle"
-                checked={isFinancialYearCycleEnabled}
-                onChange={handleFinancialYearCycleToggle}
+                checked={ isFinancialYearCycleEnabled }
+                onChange={ handleFinancialYearCycleToggle }
               />
               <label className="form-check-label" htmlFor="financialYearCycle">
-                {isFinancialYearCycleEnabled ? "On" : "Off"}
+                { isFinancialYearCycleEnabled ? "On" : "Off" }
               </label>
             </div>
           </div>
         </Card>
-        <Card title={"Multi-Level Approval"}>
+        <Card title={ "Multi-Level Approval" }>
           <div className="d-flex justify-content-between">
             <div>Enable Skip Level Approval (Your Manager's Reporter)</div>
             <div className="form-check form-switch">
@@ -47,11 +47,11 @@ const Settings = () => {
                 type="checkbox"
                 role="switch"
                 id="skipLevelApproval"
-                checked={isSkipLevelApprovalEnabled}
-                onChange={handleSkipLevelApprovalToggle}
+                checked={ isSkipLevelApprovalEnabled }
+                onChange={ handleSkipLevelApprovalToggle }
               />
               <label className="form-check-label" htmlFor="skipLevelApproval">
-                {isSkipLevelApprovalEnabled ? "On" : "Off"}
+                { isSkipLevelApprovalEnabled ? "On" : "Off" }
               </label>
             </div>
           </div>
