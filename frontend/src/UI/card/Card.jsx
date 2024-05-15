@@ -5,9 +5,11 @@ const Card = ({
   title,
   editMode,
   addBtn,
+  addBtnTitle,
   handleEditClick,
   handleCancelClick,
   children,
+  handleAdd
 }) => {
   return (
     <div className="card">
@@ -37,8 +39,8 @@ const Card = ({
           )
         ) : null}
         {addBtn ? (
-          <button className="btn btn-outline-primary">
-            <FontAwesomeIcon icon={faPlus} /> Add Designation
+          <button className="btn btn-outline-primary" onClick={handleAdd}>
+            <FontAwesomeIcon icon={faPlus} /> {addBtnTitle}
           </button>
         ) : null}
       </div>

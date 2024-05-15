@@ -7,7 +7,6 @@ const DepartmentForm = ({
   fieldValues,
   handleChange,
   removeField,
-  addField,
   handleCancel,
   handleSubmit,
 }) => {
@@ -99,11 +98,7 @@ const DepartmentForm = ({
           </div>
         </div>
       ))}
-      <div className="d-flex align-items-center justify-content-between mt-3">
-        <button className="btn btn-outline-primary" onClick={addField}>
-          <FontAwesomeIcon icon={faPlus} /> Add Department
-        </button>
-
+      <div className="d-flex align-items-center justify-content-between">
         {fields.length > 0 && (
           <div>
             <button className="btn btn-outline-danger me-3 px-4" onClick={handleCancel}>
