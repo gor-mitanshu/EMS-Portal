@@ -3,7 +3,6 @@ import axios from "axios";
 import OverViewForm from "./CompanyForm";
 import SocialProfileForm from "../../../UI/socialForm/SocialProfileForm";
 import { toast } from "react-toastify";
-import Card from "../../../UI/profileCards/ProfileCard";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faFacebook,
@@ -11,6 +10,7 @@ import {
   faTwitter,
 } from "@fortawesome/free-brands-svg-icons";
 import Swal from "sweetalert2";
+import Card from "../../../UI/card/Card";
 
 const initialCompanyData = {
   company_name: "",

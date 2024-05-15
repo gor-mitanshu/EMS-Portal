@@ -7,7 +7,7 @@ import React, {
 } from "react";
 import CompanyPoliciesModal from "./CompanyPoliciesModal";
 import axios from "axios";
-import Card from "../../../UI/profileCards/ProfileCard";
+import Card from "../../../UI/card/Card";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 

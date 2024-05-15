@@ -5,7 +5,7 @@ import ContactInformationForm from "./contactInformation/ContactInformationForm"
 import AddressForm from "./address/AddressForm";
 import SocialProfileForm from "../../../UI/socialForm/SocialProfileForm";
 import axios from "axios";
-import Card from "../../../UI/profileCards/ProfileCard";
+import Card from "../../../UI/card/Card";
 import {
   faFacebook,
   faLinkedinIn,
