@@ -24,7 +24,7 @@ const menuItems = [
     content: [
       { title: "Company", link: "/company-profile/overview" },
       { title: "Department", link: "/company-profile/department" },
-      { title: "Designations", link: "/company-profile/designations" },
+      { title: "Designations", link: "/company-profile/designation" },
       { title: "Announcements", link: "/company-profile/announcements" },
       { title: "Policies", link: "/company-profile/policies" },
       { title: "Statutory", link: "/company-profile/statutory" },

@@ -11,7 +11,7 @@ const OverViewForm = ({ formData, formErrors, handleInputChange, handleCancelCli
             </label>
             <input
               type="text"
-              className="form-input px-0"
+              className="form-input px-2"
               placeholder="Please Enter Registered Company"
               name="company_name"
               value={ formData.company_name }
@@ -28,7 +28,7 @@ const OverViewForm = ({ formData, formErrors, handleInputChange, handleCancelCli
             </label>
             <input
               type="text"
-              className="form-input px-0"
+              className="form-input px-2"
               placeholder="Please Enter Brand Name"
               name="brand_name"
               value={ formData.brand_name }
@@ -45,7 +45,7 @@ const OverViewForm = ({ formData, formErrors, handleInputChange, handleCancelCli
             </label>
             <input
               type="text"
-              className="form-input px-0"
+              className="form-input px-2"
               placeholder="Please Enter Company's Offical Email"
               name="company_official_email"
               value={ formData.company_official_email }
@@ -62,7 +62,7 @@ const OverViewForm = ({ formData, formErrors, handleInputChange, handleCancelCli
             </label>
             <input
               type="text"
-              className="form-input px-0"
+              className="form-input px-2"
               placeholder="Please Enter Company's Official Contact"
               name="company_official_contact"
               value={ formData.company_official_contact }
@@ -79,7 +79,7 @@ const OverViewForm = ({ formData, formErrors, handleInputChange, handleCancelCli
             </label>
             <input
               type="text"
-              className="form-input px-0"
+              className="form-input px-2"
               placeholder="Please Enter Registered Company"
               name="website"
               value={ formData.website }
@@ -96,7 +96,7 @@ const OverViewForm = ({ formData, formErrors, handleInputChange, handleCancelCli
             </label>
             <input
               type="text"
-              className="form-input px-0"
+              className="form-input px-2"
               placeholder="Please Enter Registered Company"
               name="domain_name"
               value={ formData.domain_name }
@@ -113,7 +113,7 @@ const OverViewForm = ({ formData, formErrors, handleInputChange, handleCancelCli
             </label>
             <input
               type="text"
-              className="form-input px-0"
+              className="form-input px-2"
               placeholder="Please Enter Industry Type"
               name="industry_type"
               value={ formData.industry_type }

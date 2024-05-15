@@ -1,9 +1,10 @@
-import { faPencilAlt, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { faPencilAlt, faPlus, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const Card = ({
   title,
   editMode,
+  addBtn,
   handleEditClick,
   handleCancelClick,
   children,
@@ -34,6 +35,11 @@ const Card = ({
               />
             </button>
           )
+        ) : null}
+        {addBtn ? (
+          <button className="btn btn-outline-primary">
+            <FontAwesomeIcon icon={faPlus} /> Add Designation
+          </button>
         ) : null}
       </div>
       <div className="card-body">{children}</div>
