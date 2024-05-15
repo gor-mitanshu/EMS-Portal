@@ -7,9 +7,9 @@ const EducationForm = ({
   isEditMode,
 }) => {
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={ handleSubmit }>
       <div className="row">
-        {/* Qualification Type */}
+        {/* Qualification Type */ }
         <div className="col-md-12">
           <div className="form-group row">
             <div className="col mb-3">
@@ -19,8 +19,8 @@ const EducationForm = ({
               <select
                 className="form-select no-focus-box-shadow"
                 name="qualification_type"
-                value={formData.qualification_type}
-                onChange={handleInputChange}
+                value={ formData.qualification_type }
+                onChange={ handleInputChange }
               >
                 <option value="">Select Qualification Type</option>
                 <option value="Graduation">Graduation</option>
@@ -31,17 +31,17 @@ const EducationForm = ({
                 <option value="Other Education">Other Education</option>
                 <option value="Certificate">Certificate</option>
               </select>
-              {formErrors.qualification_type && (
+              { formErrors.qualification_type && (
                 <div className="text-danger">
-                  {formErrors.qualification_type}
+                  { formErrors.qualification_type }
                 </div>
-              )}
+              ) }
             </div>
           </div>
         </div>
       </div>
       <div className="row">
-        {/* Course Name */}
+        {/* Course Name */ }
         <div className="col-md-4">
           <div className="form-group row">
             <div className="col mb-3">
@@ -53,16 +53,16 @@ const EducationForm = ({
                 className="form-control no-focus-box-shadow"
                 placeholder="Enter your Course Name"
                 name="course_name"
-                value={formData.course_name}
-                onChange={handleInputChange}
+                value={ formData.course_name }
+                onChange={ handleInputChange }
               />
-              {formErrors.course_name && (
-                <div className="text-danger">{formErrors.course_name}</div>
-              )}
+              { formErrors.course_name && (
+                <div className="text-danger">{ formErrors.course_name }</div>
+              ) }
             </div>
           </div>
         </div>
-        {/* Course Type */}
+        {/* Course Type */ }
         <div className="col-md-4">
           <div className="form-group row">
             <div className="col mb-3">
@@ -72,8 +72,8 @@ const EducationForm = ({
               <select
                 className="form-select no-focus-box-shadow"
                 name="course_type"
-                value={formData.course_type}
-                onChange={handleInputChange}
+                value={ formData.course_type }
+                onChange={ handleInputChange }
               >
                 <option value="">Select Employment Type</option>
                 <option value="Full Time">Full Time</option>
@@ -81,13 +81,13 @@ const EducationForm = ({
                 <option value="On Contract">Correspondance</option>
                 <option value="Intern">Certificate</option>
               </select>
-              {formErrors.course_type && (
-                <div className="text-danger">{formErrors.course_type}</div>
-              )}
+              { formErrors.course_type && (
+                <div className="text-danger">{ formErrors.course_type }</div>
+              ) }
             </div>
           </div>
         </div>
-        {/* Stream */}
+        {/* Stream */ }
         <div className="col-md-4">
           <div className="form-group row">
             <div className="col mb-3">
@@ -99,18 +99,18 @@ const EducationForm = ({
                 className="form-control no-focus-box-shadow"
                 placeholder="Enter Your Stream"
                 name="course_stream"
-                value={formData.course_stream}
-                onChange={handleInputChange}
+                value={ formData.course_stream }
+                onChange={ handleInputChange }
               />
-              {formErrors.course_stream && (
-                <div className="text-danger">{formErrors.course_stream}</div>
-              )}
+              { formErrors.course_stream && (
+                <div className="text-danger">{ formErrors.course_stream }</div>
+              ) }
             </div>
           </div>
         </div>
       </div>
       <div className="row">
-        {/* Course Start Date */}
+        {/* Course Start Date */ }
         <div className="col-md-4">
           <div className="form-group row">
             <div className="col mb-3">
@@ -122,18 +122,18 @@ const EducationForm = ({
                 className="form-control no-focus-box-shadow"
                 placeholder="Enter Your Course Start Date"
                 name="course_start_date"
-                value={formData.course_start_date}
-                onChange={handleInputChange}
+                value={ formData.course_start_date }
+                onChange={ handleInputChange }
               />
-              {formErrors.course_start_date && (
+              { formErrors.course_start_date && (
                 <div className="text-danger">
-                  {formErrors.course_start_date}
+                  { formErrors.course_start_date }
                 </div>
-              )}
+              ) }
             </div>
           </div>
         </div>
-        {/* Course End Date */}
+        {/* Course End Date */ }
         <div className="col-md-4">
           <div className="form-group row">
             <div className="col mb-3">
@@ -145,16 +145,16 @@ const EducationForm = ({
                 className="form-control no-focus-box-shadow"
                 placeholder="Enter Your Course End Date"
                 name="course_end_date"
-                value={formData.course_end_date}
-                onChange={handleInputChange}
+                value={ formData.course_end_date }
+                onChange={ handleInputChange }
               />
-              {formErrors.course_end_date && (
-                <div className="text-danger">{formErrors.course_end_date}</div>
-              )}
+              { formErrors.course_end_date && (
+                <div className="text-danger">{ formErrors.course_end_date }</div>
+              ) }
             </div>
           </div>
         </div>
-        {/* College Name*/}
+        {/* College Name*/ }
         <div className="col-md-4">
           <div className="form-group row">
             <div className="col mb-3">
@@ -166,18 +166,18 @@ const EducationForm = ({
                 className="form-control no-focus-box-shadow"
                 placeholder="Enter Your College Name"
                 name="college_name"
-                value={formData.college_name}
-                onChange={handleInputChange}
+                value={ formData.college_name }
+                onChange={ handleInputChange }
               />
-              {formErrors.college_name && (
-                <div className="text-danger">{formErrors.college_name}</div>
-              )}
+              { formErrors.college_name && (
+                <div className="text-danger">{ formErrors.college_name }</div>
+              ) }
             </div>
           </div>
         </div>
       </div>
       <div className="row">
-        {/* University Name */}
+        {/* University Name */ }
         <div className="col-md-4">
           <div className="form-group row">
             <div className="col mb-3">
@@ -189,12 +189,12 @@ const EducationForm = ({
                 className="form-control no-focus-box-shadow"
                 placeholder="Enter Your University Name"
                 name="university_name"
-                value={formData.university_name}
-                onChange={handleInputChange}
+                value={ formData.university_name }
+                onChange={ handleInputChange }
               />
-              {formErrors.university_name && (
-                <div className="text-danger">{formErrors.university_name}</div>
-              )}
+              { formErrors.university_name && (
+                <div className="text-danger">{ formErrors.university_name }</div>
+              ) }
             </div>
           </div>
         </div>
@@ -203,12 +203,12 @@ const EducationForm = ({
         <button
           type="button"
           className="btn btn-danger me-2"
-          onClick={handleCancel}
+          onClick={ handleCancel }
         >
           Cancel
         </button>
         <button type="submit" className="btn btn-primary ">
-          {isEditMode ? "Save" : "Add"}
+          { isEditMode ? "Save" : "Add" }
         </button>
       </div>
     </form>

@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import EducationForm from "./EducationForm";
 import EducationItem from "./EducationItem";
 import axios from "axios";
@@ -31,7 +31,16 @@ const Education = ({ userId, accessToken }) => {
     university_name: "",
   });
   const [educationList, setEducationList] = useState([]);
-
+  const initialUser = useRef({
+    qualification_type: "",
+    course_name: "",
+    course_type: "",
+    course_stream: "",
+    course_start_date: "",
+    course_end_date: "",
+    college_name: "",
+    university_name: "",
+  });
   // For showing and hiding the form
   const handleAddClick = () => {
     setShowForm(true);
@@ -60,6 +69,8 @@ const Education = ({ userId, accessToken }) => {
         }
       );
       setEducationList(res.data.educationData);
+      setFormData(res.data.educationData);
+      initialUser.current = res.data.educationData;
     } catch (error) {
       console.error("Error getting education details:", error);
     }
@@ -201,19 +212,42 @@ const Education = ({ userId, accessToken }) => {
   };
 
   const handleCancel = () => {
-    setShowForm(false);
-    setFormData({
-      qualification_type: "",
-      course_name: "",
-      course_type: "",
-      course_stream: "",
-      course_start_date: "",
-      course_end_date: "",
-      college_name: "",
-      university_name: "",
-    });
-    setFormErrors({});
+    if (hasChanges(formData)) {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "Changes will not be saved.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Don't Save!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          setShowForm(false);
+          setFormData(formData)
+          setFormErrors({});
+        }
+      });
+    } else {
+      setShowForm(false);
+      setFormData(formData)
+      setFormErrors({});
+    }
   };
+
+  const hasChanges = (changedData) => {
+    return (
+      changedData.qualification_type !== initialUser.current.qualification_type ||
+      changedData.course_name !== initialUser.current.course_name ||
+      changedData.course_type !== initialUser.current.course_type ||
+      changedData.course_stream !== initialUser.current.course_stream ||
+      changedData.course_start_date !== initialUser.current.course_start_date ||
+      changedData.course_end_date !== initialUser.current.course_end_date ||
+      changedData.college_name !== initialUser.current.college_name ||
+      changedData.university_name !== initialUser.current.university_name
+    );
+  };
+
   return (
     <>
       <div className="col-md-12">
@@ -256,6 +290,7 @@ const Education = ({ userId, accessToken }) => {
                         }
                         onSaveEdit={ handleSaveEdit }
                         handleCancel={ handleCancel }
+                        hasChanges={ hasChanges }
                       />
                     )
                   ) }

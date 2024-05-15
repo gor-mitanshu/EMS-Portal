@@ -192,6 +192,9 @@ const PersonalProfileForm = ({
           </div>
         </div>
 
+        <button type="button" className="btn btn-danger me-2" onClick={ handleCancel }>
+          Cancel
+        </button>
         <button type="submit" className="btn btn-primary ">
           Save
         </button>

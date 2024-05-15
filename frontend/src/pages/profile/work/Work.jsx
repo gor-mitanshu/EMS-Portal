@@ -1,10 +1,11 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import BasicInfoForm from "./BasicInfo/BasicInfoForm";
 import WorkInfoForm from "./WorkInfo/WorkInfoForm";
 import ResignationInfoForm from "./ResignationInfo/ResignationInfoForm";
 import axios from "axios";
 import Card from "../../../UI/profileCards/ProfileCard";
 import { toast } from "react-toastify";
+import Swal from "sweetalert2";
 
 const initialState = {
   employee_code: "",
@@ -31,7 +32,7 @@ const Work = ({ accessToken, userId }) => {
     workInfo: false,
     resignationInfo: false,
   });
-
+  const initialUser = useRef(initialState);
   const [formData, setFormData] = useState(initialState);
   const [employee, setEmployee] = useState({})
   const [formErrors, setFormErrors] = useState(initialState);
@@ -59,36 +60,83 @@ const Work = ({ accessToken, userId }) => {
 
   //Handle Cancel Click
   const handleCancelClick = (section) => {
-    setEditMode((prevEditMode) => ({
-      ...prevEditMode,
-      [section]: false,
-    }));
+    if (hasChanges(formData)) {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "Changes will not be saved.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Don't Save!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          setFormData(employee)
+          setEditMode((prevEditMode) => ({
+            ...prevEditMode,
+            [section]: false,
+          }));
 
-    // Reset validation errors for all fields in the specific card
-    setFormErrors((prevFormErrors) => ({
-      ...prevFormErrors,
-      ...(section === "basicInfo" && {
-        employee_code: "",
-        date_of_joining: "",
-        probation_period: "",
-        employment_type: "",
-        work_location: "",
-        employee_status: "",
-        work_experience: "",
-      }),
-      ...(section === "workInfo" && {
-        designation: "",
-        job_title: "",
-        department: "",
-        sub_department: "",
-      }),
-      ...(section === "resignationInfo" && {
-        resignation_date: "",
-        resignation_status: "",
-        notice_period: "",
-        last_working_day: "",
-      }),
-    }));
+          // Reset validation errors for all fields in the specific card
+          setFormErrors((prevFormErrors) => ({
+            ...prevFormErrors,
+            ...(section === "basicInfo" && {
+              employee_code: "",
+              date_of_joining: "",
+              probation_period: "",
+              employment_type: "",
+              work_location: "",
+              employee_status: "",
+              work_experience: "",
+            }),
+            ...(section === "workInfo" && {
+              designation: "",
+              job_title: "",
+              department: "",
+              sub_department: "",
+            }),
+            ...(section === "resignationInfo" && {
+              resignation_date: "",
+              resignation_status: "",
+              notice_period: "",
+              last_working_day: "",
+            }),
+          }));
+        }
+      });
+    } else {
+      setFormData(employee)
+      setEditMode((prevEditMode) => ({
+        ...prevEditMode,
+        [section]: false,
+      }));
+
+      // Reset validation errors for all fields in the specific card
+      setFormErrors((prevFormErrors) => ({
+        ...prevFormErrors,
+        ...(section === "basicInfo" && {
+          employee_code: "",
+          date_of_joining: "",
+          probation_period: "",
+          employment_type: "",
+          work_location: "",
+          employee_status: "",
+          work_experience: "",
+        }),
+        ...(section === "workInfo" && {
+          designation: "",
+          job_title: "",
+          department: "",
+          sub_department: "",
+        }),
+        ...(section === "resignationInfo" && {
+          resignation_date: "",
+          resignation_status: "",
+          notice_period: "",
+          last_working_day: "",
+        }),
+      }));
+    }
   };
 
   const getWorkData = useCallback(async () => {
@@ -102,6 +150,7 @@ const Work = ({ accessToken, userId }) => {
       const { workDetails } = res.data;
       setFormData(workDetails);
       setEmployee(workDetails)
+      initialUser.current = workDetails;
     }
   }, [accessToken, userId]);
 
@@ -205,6 +254,25 @@ const Work = ({ accessToken, userId }) => {
       }
     }
   };
+  const hasChanges = (changedData) => {
+    return (
+      changedData.employee_code !== initialUser.current.employee_code ||
+      changedData.date_of_joining !== initialUser.current.date_of_joining ||
+      changedData.probation_period !== initialUser.current.probation_period ||
+      changedData.employment_type !== initialUser.current.employment_type ||
+      changedData.work_location !== initialUser.current.work_location ||
+      changedData.employee_status !== initialUser.current.employee_status ||
+      changedData.work_experience !== initialUser.current.work_experience ||
+      changedData.designation !== initialUser.current.designation ||
+      changedData.job_title !== initialUser.current.job_title ||
+      changedData.department !== initialUser.current.department ||
+      changedData.sub_department !== initialUser.current.sub_department ||
+      changedData.resignation_date !== initialUser.current.resignation_date ||
+      changedData.resignation_status !== initialUser.current.resignation_status ||
+      changedData.notice_period !== initialUser.current.notice_period ||
+      changedData.last_working_day !== initialUser.current.last_working_day
+    );
+  };
   return (
     <>
       <div>
@@ -224,6 +292,7 @@ const Work = ({ accessToken, userId }) => {
                       formData={ formData }
                       formErrors={ formErrors }
                       handleInputChange={ handleInputChange }
+                      handleCancel={ () => handleCancelClick("basicInfo") }
                     />
                   </>
                 ) : (
@@ -307,6 +376,7 @@ const Work = ({ accessToken, userId }) => {
                       formData={ formData }
                       formErrors={ formErrors }
                       handleInputChange={ handleInputChange }
+                      handleCancel={ () => handleCancelClick("workInfo") }
                     />
                   </>
                 ) : (
@@ -398,6 +468,7 @@ const Work = ({ accessToken, userId }) => {
                       formData={ formData }
                       formErrors={ formErrors }
                       handleInputChange={ handleInputChange }
+                      handleCancel={ () => handleCancelClick("resignationInfo") }
                     />
                   </>
                 ) : (

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import PersonalProfileForm from "./personalProfile/PersonalProfileForm";
 import User from "../../../assets/images/user.jpg";
 import ContactInformationForm from "./contactInformation/ContactInformationForm";
@@ -13,6 +13,7 @@ import {
 } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { toast } from 'react-toastify'
+import Swal from "sweetalert2";
 
 const profileInitialState = {
   firstName: "",
@@ -42,6 +43,9 @@ const Profile = ({ accessToken, userId }) => {
     ...profileInitialState, ...socialInitialState
   });
   const [user, setUser] = useState({})
+  const initialUser = useRef({
+    ...profileInitialState, ...socialInitialState
+  });
   const [formErrors, setFormErrors] = useState(profileInitialState);
 
   // Handle Change
@@ -68,42 +72,79 @@ const Profile = ({ accessToken, userId }) => {
 
   //Handle Cancel Click
   const handleCancelClick = (section) => {
-    setEditMode((prevEditMode) => ({
-      ...prevEditMode,
-      [section]: false,
-    }));
+    if (hasChanges(formData)) {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "Changes will not be saved.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Don't Save!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          setFormData(user)
+          setEditMode((prevEditMode) => ({
+            ...prevEditMode,
+            [section]: false,
+          }));
 
-    // Reset validation errors for all fields in the specific card
-    if (section === "personalProfile") {
-      setFormErrors((prevFormErrors) => ({
-        ...prevFormErrors,
-        firstName: "",
-        lastName: "",
-        birth_date: "",
-        gender: "",
-        blood_group: "",
-        marital_status: "",
+          // Reset validation errors for all fields in the specific card
+          if (section === "personalProfile") {
+            setFormErrors((prevFormErrors) => ({
+              ...prevFormErrors,
+              firstName: "",
+              lastName: "",
+              birth_date: "",
+              gender: "",
+              blood_group: "",
+              marital_status: "",
+            }));
+          } else if (section === "contactInformation") {
+            setFormErrors((prevFormErrors) => ({
+              ...prevFormErrors,
+              email: "",
+              phone: "",
+            }));
+          } else if (section === "address") {
+            setFormErrors((prevFormErrors) => ({
+              ...prevFormErrors,
+              current_address: "",
+            }));
+          }
+        }
+      });
+    } else {
+      setFormData(user)
+      setEditMode((prevEditMode) => ({
+        ...prevEditMode,
+        [section]: false,
       }));
-    } else if (section === "contactInformation") {
-      setFormErrors((prevFormErrors) => ({
-        ...prevFormErrors,
-        email: "",
-        phone: "",
-      }));
-    } else if (section === "address") {
-      setFormErrors((prevFormErrors) => ({
-        ...prevFormErrors,
-        current_address: "",
-      }));
+
+      // Reset validation errors for all fields in the specific card
+      if (section === "personalProfile") {
+        setFormErrors((prevFormErrors) => ({
+          ...prevFormErrors,
+          firstName: "",
+          lastName: "",
+          birth_date: "",
+          gender: "",
+          blood_group: "",
+          marital_status: "",
+        }));
+      } else if (section === "contactInformation") {
+        setFormErrors((prevFormErrors) => ({
+          ...prevFormErrors,
+          email: "",
+          phone: "",
+        }));
+      } else if (section === "address") {
+        setFormErrors((prevFormErrors) => ({
+          ...prevFormErrors,
+          current_address: "",
+        }));
+      }
     }
-    //  else if (section === "socialProfiles") {
-    //   setFormErrors((prevFormErrors) => ({
-    //     ...prevFormErrors,
-    //     linked_in: "",
-    //     facebook: "",
-    //     twitter: "",
-    //   }));
-    // }
   };
 
   // Get the User
@@ -115,6 +156,7 @@ const Profile = ({ accessToken, userId }) => {
       const { userData } = res.data;
       setFormData(userData);
       setUser(userData);
+      initialUser.current = userData
     }
   }, [accessToken, userId]);
 
@@ -193,6 +235,22 @@ const Profile = ({ accessToken, userId }) => {
       }
     }
   };
+  const hasChanges = (changedData) => {
+    return (
+      changedData.firstName !== initialUser.current.firstName ||
+      changedData.lastName !== initialUser.current.lastName ||
+      changedData.birth_date !== initialUser.current.birth_date ||
+      changedData.gender !== initialUser.current.gender ||
+      changedData.blood_group !== initialUser.current.blood_group ||
+      changedData.marital_status !== initialUser.current.marital_status ||
+      changedData.email !== initialUser.current.email ||
+      changedData.phone !== initialUser.current.phone ||
+      changedData.current_address !== initialUser.current.current_address ||
+      changedData.linked_in !== initialUser.current.linked_in ||
+      changedData.facebook !== initialUser.current.facebook ||
+      changedData.twitter !== initialUser.current.twitter
+    );
+  };
 
   const formatedDate = user.birth_date;
   const newDate = new Date(formatedDate);
@@ -215,6 +273,8 @@ const Profile = ({ accessToken, userId }) => {
                     formData={ formData }
                     formErrors={ formErrors }
                     handleInputChange={ handleInputChange }
+                    hasChanges={ hasChanges }
+                    handleCancel={ () => handleCancelClick("personalProfile") }
                   />
                 </>
               ) : (
@@ -273,6 +333,7 @@ const Profile = ({ accessToken, userId }) => {
                     formData={ formData }
                     formErrors={ formErrors }
                     handleInputChange={ handleInputChange }
+                    handleCancel={ () => handleCancelClick("personalProfile") }
                   />
                 </>
               ) : (
@@ -303,6 +364,7 @@ const Profile = ({ accessToken, userId }) => {
                     formData={ formData }
                     formErrors={ formErrors }
                     handleInputChange={ handleInputChange }
+                    handleCancel={ () => handleCancelClick("address") }
                   />
                 </>
               ) : (
@@ -327,6 +389,7 @@ const Profile = ({ accessToken, userId }) => {
                     formData={ formData }
                     formErrors={ formErrors }
                     handleInputChange={ handleInputChange }
+                    handleCancel={ () => handleCancelClick("socialProfiles") }
                   />
                 </>
               ) : (

@@ -1,5 +1,6 @@
 import React from "react";
 import { Modal, Button, Form, Col } from "react-bootstrap";
+import Swal from "sweetalert2";
 
 const initialData = {
   document_type: "",
@@ -20,10 +21,30 @@ const IdModal = ({
   checkboxes,
   handleCheckboxChange,
   handleFileChange,
-  editId
+  editId,
+  hasChanges
 }) => {
+  const handleCancel = () => {
+    if (hasChanges(formData)) {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "Changes will not be saved.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Don't Save!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          handleClose();
+        }
+      });
+    } else {
+      handleClose();
+    }
+  };
   return (
-    <Modal show={ show } onHide={ handleClose }>
+    <Modal show={ show } onHide={ handleCancel }>
       <Modal.Header closeButton>
         <Modal.Title>
           { editId ? "Edit Certificate" : "Add Certificate" }
@@ -108,6 +129,13 @@ const IdModal = ({
               ) }
             </Form.Group>
           ) }
+          <Button
+            variant="secondary"
+            className="me-2 btn-danger"
+            onClick={ handleCancel }
+          >
+            Cancel
+          </Button>
           <Button variant="primary" type="submit">
             Submit
           </Button>

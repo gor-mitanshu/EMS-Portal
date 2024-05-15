@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import axios from "axios";
 import WorkModal from "../work/WorkModal";
 import { toast } from 'react-toastify'
@@ -17,6 +17,11 @@ const Work = ({ userId, accessToken }) => {
     work_description: "",
     work_file: "",
   });
+  const initialUser = useRef({
+    work_name: "",
+    work_description: "",
+    work_file: null,
+  })
   const [editId, setEditId] = useState(null);
 
   const handleShowModal = () => {
@@ -76,6 +81,7 @@ const Work = ({ userId, accessToken }) => {
       );
       if (res.data) {
         setWorks(res.data.workData);
+        initialUser.current = res.data.workData;
       }
     } catch (error) {
       console.error("Error fetching works:", error);
@@ -167,6 +173,16 @@ const Work = ({ userId, accessToken }) => {
       console.error("Error deleting certificate:", error);
     }
   };
+
+  const hasChanges = (changedData) => {
+    return (
+      changedData.work_name !== initialUser.current[0].work_name ||
+      changedData.work_description !== initialUser.current[0].work_description ||
+      changedData.work_file !== initialUser.current[0].work_file
+    );
+  };
+
+
   return (
     <div>
       <button className="btn btn-primary" onClick={ handleShowModal }>
@@ -181,6 +197,7 @@ const Work = ({ userId, accessToken }) => {
         handleFileChange={ handleFileChange }
         handleSubmit={ handleSubmit }
         editId={ editId }
+        hasChanges={ hasChanges }
       />
       { works.length > 0 ? (
         <table className="table">
