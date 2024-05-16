@@ -6,11 +6,17 @@ const verifyToken = require('../middleware/authMiddleware');
 
 // File store process
 const path = require('path');
+const fs = require('fs');
 const multer = require('multer');
 
 const storage = multer.diskStorage({
      destination: (req, file, cb) => {
-          cb(null, './images/');
+          const folderPath = './files/';
+          // Check if the folder exists, if not, create it
+          if (!fs.existsSync(folderPath)) {
+               fs.mkdirSync(folderPath);
+          }
+          cb(null, folderPath);
      },
      filename: (req, file, cb) => {
           const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
@@ -31,7 +37,12 @@ router.get('/getCompanyDetailsByUserId/:id', verifyToken, companyController.getC
 router.get('/getCompanyDetailsById/:id', verifyToken, companyController.getCompanyDetailsById);
 router.put('/updateCompanyDetails/:id', verifyToken, companyController.updateCompanyDetails);
 // Department
-router.post('/addDepartment', verifyToken, companyController.addDepartment);
+router.post('/addDepartment/:id', verifyToken, companyController.addDepartment);
+router.get('/getDepartments/:id', verifyToken, companyController.getDepartments);
+router.delete('/deleteDepartmentById/:id', verifyToken, companyController.deleteDepartmentById);
+router.delete('/deleteSubDepartmentById/:id', verifyToken, companyController.deleteSubDepartmentById);
+router.put('/updateDepartmentNameById/:id', verifyToken, companyController.updateDepartmentNameById);
+router.put('/updateSubDepartmentNameById/:id', verifyToken, companyController.updateSubDepartmentNameById);
 // Announcements
 router.post('/addAnnouncement/:id', verifyToken, companyController.addAnnouncement);
 router.get('/getAnnouncement/:id', verifyToken, companyController.getAnnouncement);

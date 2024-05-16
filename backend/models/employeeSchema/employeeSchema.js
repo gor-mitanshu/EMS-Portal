@@ -19,7 +19,6 @@ const Employee = new mongoose.Schema({
      notice_period: { type: String },
      last_working_day: { type: String },
      deleted_at: { type: Date, default: null }
-
 }, { timestamps: true });
 const EmployeeSchema = mongoose.model('employee', Employee);
 module.exports = EmployeeSchema;
