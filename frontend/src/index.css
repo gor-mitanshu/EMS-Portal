@@ -142,6 +142,15 @@ select:focus-visible {
   outline: none;
 }
 
+.upload-file{
+  border: 1px dashed #989898;
+  display: flex;
+  width: max-content;
+  padding: 1rem;
+  margin-bottom: 32px;
+  cursor: pointer;
+}
+
 .no-focus-box-shadow:focus {
   box-shadow: none !important;
   border-color: rgb(36 146 147) !important;

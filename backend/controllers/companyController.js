@@ -120,7 +120,6 @@ const companyController = {
     }
   },
 
-  // Department
   addDepartment: async (req, res) => {
     try {
       const { id } = req.params;
