@@ -51,7 +51,7 @@ router.delete('/deleteAnnouncement/:id', verifyToken, companyController.deleteAn
 // Policies
 router.post('/addPolicy/:id', verifyToken, upload.any(), companyController.addPolicy);
 router.get('/getPolicy/:id', verifyToken, companyController.getPolicy);
-router.post('/updatePolicy/:id', verifyToken, upload.any(), companyController.updatePolicy);
+router.put('/updatePolicy/:id', verifyToken, upload.any(), companyController.updatePolicy);
 router.delete('/deletePolicy/:id', verifyToken, companyController.deletePolicy);
 
 module.exports = router;

@@ -1,15 +1,19 @@
 import React, { useState, useEffect, useCallback } from "react";
-import AnnouncementList from "./AnnouncementList";
 import axios from "axios";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
+import Card from "../../../UI/card/Card";
+import Modal from "../../../UI/modal/Modal";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 
 const Announcement = ({ companyId, accessToken }) => {
-  const [isEdit, setIsEdit] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({ announcement: "" });
   const [error, setError] = useState("");
   const [announcements, setAnnouncements] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [announcementId, setAnnouncementId] = useState(null);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -22,6 +26,7 @@ const Announcement = ({ companyId, accessToken }) => {
       setError("");
     }
   };
+
   const getAnnouncementDetails = useCallback(async () => {
     try {
       const response = await axios.get(
@@ -30,7 +35,7 @@ const Announcement = ({ companyId, accessToken }) => {
           headers: { Authorization: `Bearer ${accessToken}` },
         }
       );
-      const { announcement } = response.data
+      const { announcement } = response.data;
       setAnnouncements(announcement);
     } catch (error) {
       console.error("Error fetching announcements:", error);
@@ -44,42 +49,38 @@ const Announcement = ({ companyId, accessToken }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(
-        `${process.env.REACT_APP_API}/company/addAnnouncement/${companyId}`,
-        formData,
-        {
-          headers: { Authorization: `Bearer ${accessToken}` },
-        }
-      );
+      const response = announcementId ?
+        await axios.put(`${process.env.REACT_APP_API}/company/updateAnnouncement/${announcementId}`,
+          formData,
+          {
+            headers: { Authorization: `Bearer ${accessToken}` },
+          }
+        ) : await axios.post(`${process.env.REACT_APP_API}/company/addAnnouncement/${companyId}`,
+          formData,
+          {
+            headers: { Authorization: `Bearer ${accessToken}` },
+          }
+        );
+
       if (response) {
         setFormData(formData)
         toast.success(response.data.message)
         setFormData({
           announcement: "",
         });
-        setIsEdit(false);
         getAnnouncementDetails();
+        handleCloseModal()
       }
     } catch (error) {
       console.error("Error adding announcement:", error);
     }
   };
 
-  const handleEdit = async (id, announcement) => {
-    try {
-      const res = await axios.put(`${process.env.REACT_APP_API}/company/updateAnnouncement/${id}`,
-        { announcement: announcement }, {
-        headers: { Authorization: `Bearer ${accessToken}` },
-      }
-      );
-      if (res) {
-        toast.success(res.data.message)
-        getAnnouncementDetails();
-      }
-    } catch (error) {
-      console.error("Error editing announcement:", error);
-    }
-  };
+  const handleEdit = (announcement) => {
+    setAnnouncementId(announcement._id);
+    setFormData(announcement);
+    setShowModal(true);
+  }
 
   const handleDelete = async (id) => {
     try {
@@ -109,85 +110,61 @@ const Announcement = ({ companyId, accessToken }) => {
     }
   };
 
-  const handleCancel = () => {
-    setIsEdit(false);
-    setFormData({
-      announcement: "",
-    });
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setFormData({ announcement: "" });
     setError("");
     setIsSubmitting(false);
+    setAnnouncementId(null);
   };
 
   return (
-    <div>
-      <div className="card w-100 mb-3">
-        <div className="card-body mt-2">
-          { isEdit ? (
-            <form action="" onSubmit={ handleSubmit }>
-              <div className="text-start">
-                <div
-                  className={ `form-input-wrapper ${error ? "error-form-input" : ""
-                    }` }
-                >
-                  <i className="bi bi-chat-left-quote-fill prefix-icon"></i>
-                  <textarea
-                    className="form-input"
-                    placeholder="Add Announcement"
-                    name="announcement"
-                    rows="1"
-                    value={ formData.announcement }
-                    onChange={ handleInputChange }
-                  />
-                </div>
-                <div className="input-error">{ error }</div>
-              </div>
-              <div >
-                <button className="btn btn-danger me-3" onClick={ handleCancel }>
-                  Cancel
-                </button>
-                <button
-                  className="btn btn-primary"
-                  type="submit"
-                >
-                  { isSubmitting ? "Posting..." : "Post Announcement" }
-                </button>
-              </div>
-            </form>
-          ) : (
-            <h5
-              className="d-flex align-items-center"
-              style={ { cursor: "pointer" } }
-              onClick={ () => setIsEdit(true) }
+    <>
+      <Card title='Announcements' addBtn={true} addBtnTitle={"Add Announcement"} handleAdd={() => setShowModal(true)}>
+        {announcements.map((announcement, index) => (
+          <div className="d-flex justify-content-between align-items-center py-2 border-bottom" key={announcement._id}>
+            <h5 className="m-0">{announcement.announcement}</h5>
+            <div>
+              <button className="btn btn-link" onClick={() => { handleEdit(announcement) }}>
+                <FontAwesomeIcon icon={faEdit} color="blue" />
+              </button>
+              <button className="btn btn-link" onClick={() => { handleDelete(announcement._id) }}>
+                <FontAwesomeIcon icon={faTrash} color="red" />
+              </button>
+            </div>
+          </div>
+        ))}
+      </Card>
+      <Modal show={showModal} handleCloseModal={handleCloseModal} title={announcementId ? "Edit Announcement" : "Add Announcement"}>
+        <form action="" onSubmit={handleSubmit}>
+          <div className="text-start">
+            <div
+              className={`form-input-wrapper ${error ? "error-form-input" : ""
+                }`}
             >
-              {/* <FontAwesomeIcon icon={faMessage} className="pe-2" size="lg" /> */ }
-              <i className="bi bi-chat-left-quote-fill me-2 fs-4"></i>
-              Click here to add an announcement
-            </h5>
-          ) }
-        </div>
-      </div>
-
-      <div className="card w-100">
-        <div className="card-body">
-          <h5 className="card-title">Live Announcements</h5>
-          <hr />
-          { announcements.map((announcement, index) => (
-            <AnnouncementList
-              key={ announcement._id }
-              announcements={ announcement }
-              error={ error }
-              setError={ setError }
-              handleInputChange={ handleInputChange }
-              index={ index }
-              id={ announcement.id }
-              handleDelete={ () => handleDelete(announcement._id) }
-              handleEdit={ handleEdit }
-              handleCancel={ handleCancel }
-            />
-          )) }
-        </div>
-      </div>
-    </div>
+              <i className="bi bi-chat-left-quote-fill prefix-icon"></i>
+              <textarea
+                className="form-input"
+                placeholder="Add Announcement"
+                name="announcement"
+                rows="1"
+                value={formData.announcement}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div className="input-error">{error}</div>
+          </div>
+          <div >
+            <button className="btn btn-danger me-3" type="button" onClick={handleCloseModal}>
+              Cancel
+            </button>
+            <button className="btn btn-primary" type="submit">
+              {isSubmitting ? "Posting..." : "Post Announcement"}
+            </button>
+          </div>
+        </form>
+      </Modal>
+    </>
   );
 };
 
