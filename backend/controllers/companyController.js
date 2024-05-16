@@ -1,6 +1,7 @@
 require('dotenv').config();
 const fs = require('fs');
 const path = require('path');
+const { ObjectId } = require('mongoose').Types;
 
 const CompanySchema = require('../models/companySchema/companySchema');
 const DepartmentSchema = require('../models/companySchema/departmentSchema');
@@ -122,43 +123,134 @@ const companyController = {
   // Department
   addDepartment: async (req, res) => {
     try {
-      const departments = req.body.map(department => ({
-        company_id: department.company_id,
-        department: department.department
-      }));
-      const savedDepartment = await DepartmentSchema.insertMany(departments);
+      const { id } = req.params;
+      const { department, sub_departments } = req.body;
 
-      if (savedDepartment.length > 0) {
-        let subDep = []
-        savedDepartment.forEach(savedDep => {
-          req.body.forEach(departments => {
-            departments.sub_departments.forEach(subDepartments => {
-              subDep.push({
-                department_id: savedDep._id,
-                sub_departments: subDepartments
-              })
-            })
-          });
-        })
-        if (subDep.length > 0) {
-          var result = subDep.reduce((unique, o) => {
-            if (!unique.some(obj => obj.sub_departments === o.sub_departments)) {
-              unique.push(o);
-            }
-            return unique;
-          }, []);
-          await SubDepartmentSchema.insertMany(result)
-        }
+      // Create the department
+      const savedDepartment = await DepartmentSchema.create({ company_id: id, department });
+
+      // Create sub-departments if provided
+      if (sub_departments && sub_departments.length > 0) {
+        const subDep = sub_departments.map(sub_department => ({
+          department_id: savedDepartment._id,
+          sub_departments: sub_department
+        }));
+
+        // Ensure only unique sub-departments are inserted
+        const uniqueSubDep = subDep.reduce((unique, o) => {
+          if (!unique.some(obj => obj.sub_departments === o.sub_departments)) {
+            unique.push(o);
+          }
+          return unique;
+        }, []);
+
+        await SubDepartmentSchema.insertMany(uniqueSubDep);
       }
+
       res.status(201).json(savedDepartment);
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ message: 'Server error' });
+    }
+  },
+
+  getDepartments: async (req, res) => {
+    try {
+      const { id } = req.params;
+      const departments = await DepartmentSchema.aggregate([
+        {
+          $match: { company_id: new ObjectId(id) }
+        },
+        {
+          $lookup: {
+            from: "subdepartments",
+            localField: "_id",
+            foreignField: "department_id",
+            as: "subdepartments"
+          }
+        },
+        // {
+        //   $project: {
+        //     _id: 1,
+        //     department: 1,
+        //     subdepartments: {
+        //       $map: {
+        //         input: "$subdepartments",
+        //         as: "subdepartment",
+        //         in: "$$subdepartment"
+        //       }
+        //     }
+        //   }
+        // }
+      ]);
+
+      res.status(200).json(departments);
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ message: 'Server error' });
+    }
+  },
+
+  deleteDepartmentById: async (req, res) => {
+    try {
+      const { id } = req.params;
+      const department = await DepartmentSchema.findByIdAndDelete(id);
+      const subDepartment = await SubDepartmentSchema.deleteMany({ department_id: id });
+      if (department && subDepartment) {
+        res.status(200).json({ message: 'Department and its sub-departments deleted successfully' });
+      } else {
+        res.status(401).json({ message: 'Department and its sub-departments deleted Unsuccessfully' });
+      }
     } catch (err) {
       res.status(500).json({ message: 'Server error' });
     }
   },
 
-  // Designation 
+  deleteSubDepartmentById: async (req, res) => {
+    try {
+      const { id } = req.params;
+      const deleteSubDepartment = await SubDepartmentSchema.findByIdAndDelete(id);
+      if (deleteSubDepartment) {
+        res.status(200).json({ message: 'Sub-department deleted successfully' });
+      } else {
+        res.status(401).json({ message: 'Sub-departments deleted Unsuccessfully' });
+      }
+    } catch (err) {
+      res.status(500).json({ message: 'Server error' });
+    }
+  },
 
-  // Announcements
+  updateDepartmentNameById: async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { department } = req.body;
+
+      // Update the department name
+      await DepartmentSchema.findByIdAndUpdate(id, { department });
+
+      res.status(200).json({ message: 'Department name updated successfully' });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ message: 'Server error' });
+    }
+  },
+
+  updateSubDepartmentNameById: async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { sub_departments } = req.body;
+
+      // Update the sub-department name
+      await SubDepartmentSchema.findByIdAndUpdate(id, { sub_departments });
+
+      res.status(200).json({ message: 'Sub-department name updated successfully' });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ message: 'Server error' });
+    }
+  },
+
+  // Announcement
   addAnnouncement: async (req, res) => {
     const { id } = req.params;
     try {
@@ -296,7 +388,7 @@ const companyController = {
       const policy = await PolicySchema.findOne({ _id: id })
       if (!policy) {
         return res.status(404).send({
-          message: "PolicySchema not found",
+          message: "Policy not found",
           success: false,
         });
       }
@@ -306,7 +398,7 @@ const companyController = {
         policy_file = req.files[0].filename;
         const existingPolicy = await PolicySchema.findById({ _id: policy._id });
         if (existingPolicy && existingPolicy.policy_file) {
-          const filePath = path.join('images', existingPolicy.policy_file);
+          const filePath = path.join('files', existingPolicy.policy_file);
           fs.existsSync(filePath) && fs.unlinkSync(filePath);
         }
       } else {
@@ -351,7 +443,7 @@ const companyController = {
         return res.status(404).json({ success: false, message: "Document not found" });
       }
       //  Delete the associated file
-      const filePath = path.join(__dirname, 'images', deletePolicy.policy_file);
+      const filePath = path.join('files', deletePolicy.policy_file);
       if (fs.existsSync(filePath)) {
         fs.unlinkSync(filePath);
       }

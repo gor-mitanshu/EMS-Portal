@@ -12,6 +12,7 @@
 /build
 
 /images
+/files
 # misc
 /.env
 .env

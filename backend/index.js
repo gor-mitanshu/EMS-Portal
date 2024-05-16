@@ -1,8 +1,8 @@
-// imports
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const path = require('path');
+const fs = require('fs');
 const app = express();
 require('dotenv').config();
 require('./config/database');
@@ -17,8 +17,12 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// configuration files
-app.use("./images", express.static(path.join(__dirname, 'images')));
+// Serve static files from the 'files' directory
+const staticFilesPath = path.join(__dirname, 'files');
+if (!fs.existsSync(staticFilesPath)) {
+     fs.mkdirSync(staticFilesPath);
+}
+app.use('/files', express.static(staticFilesPath));
 
 // use of routes
 app.use('/user', userRoutes);

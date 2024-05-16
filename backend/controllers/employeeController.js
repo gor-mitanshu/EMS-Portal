@@ -110,7 +110,6 @@ const employeeController = {
                     notice_period,
                     last_working_day
                } = req.body;
-
                const updateFields = {
                     employee_code,
                     date_of_joining,
@@ -136,13 +135,10 @@ const employeeController = {
                if (!updatedEmployee) {
                     return res.status(500).send({
                          error: "Update Unsuccessful",
-                         success: false,
                     });
                } else {
                     return res.status(200).send({
                          message: "Update Successful",
-                         updatedEmployee,
-                         success: true,
                     });
                }
           } catch (error) {
@@ -564,7 +560,7 @@ const employeeController = {
                     // Delete the old file
                     const existingDocument = await DocumentSchema.findById({ _id: id });
                     if (existingDocument && existingDocument.document_file) {
-                         const filePath = path.join('images', existingDocument.document_file);
+                         const filePath = path.join('files', existingDocument.document_file);
                          if (fs.existsSync(filePath)) {
                               fs.unlinkSync(filePath);
                          }
@@ -619,7 +615,7 @@ const employeeController = {
                }
 
                // Delete the associated file
-               const filePath = path.join(__dirname, 'images', deletedDocument.document_file);
+               const filePath = path.join('files', deletedDocument.document_file);
                if (fs.existsSync(filePath)) {
                     fs.unlinkSync(filePath);
                }
@@ -703,7 +699,7 @@ const employeeController = {
                     // Delete the old file
                     const existingCertificate = await CertificateSchema.findById({ _id: id });
                     if (existingCertificate && existingCertificate.certificate_file) {
-                         const filePath = path.join('images', existingCertificate.certificate_file);
+                         const filePath = path.join('files', existingCertificate.certificate_file);
                          if (fs.existsSync(filePath)) {
                               fs.unlinkSync(filePath);
                          }
@@ -749,9 +745,8 @@ const employeeController = {
                if (!deletedCertificate) {
                     return res.status(404).json({ message: "Document not found" });
                }
-
                // Delete the associated file
-               const filePath = path.join(__dirname, 'images', deletedCertificate.certificate_file);
+               const filePath = path.join('files', deletedCertificate.certificate_file);
                if (fs.existsSync(filePath)) {
                     fs.unlinkSync(filePath);
                }
@@ -832,7 +827,7 @@ const employeeController = {
                     // Delete the old file
                     const existingWork = await WorkSchema.findById({ _id: id });
                     if (existingWork && existingWork.work_file) {
-                         const filePath = path.join('images', existingWork.work_file);
+                         const filePath = path.join('files', existingWork.work_file);
                          if (fs.existsSync(filePath)) {
                               fs.unlinkSync(filePath);
                          }
@@ -882,7 +877,7 @@ const employeeController = {
                }
 
                // Delete the associated file
-               const filePath = path.join(__dirname, 'images', deletedCertificate.work_file);
+               const filePath = path.join('files', deletedCertificate.work_file);
                if (fs.existsSync(filePath)) {
                     fs.unlinkSync(filePath);
                }

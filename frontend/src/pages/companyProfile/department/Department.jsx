@@ -46,8 +46,7 @@ const Department = ({ userId }) => {
     setSubmittedData([...submittedData, ...data]);
     setFields([]);
     setFieldValues({});
-    axios
-      .post("http://localhost:3001/departments", data)
+    axios.post("http://localhost:3001/departments", data)
       .then((response) => {
         setDepartments([...departments, ...data]);
       })
@@ -64,7 +63,7 @@ const Department = ({ userId }) => {
 
   return (
     <>
-      <Card title={"Department"} addBtn={true} addBtnTitle={"Add Department"} handleAdd={addField}>
+      <Card title={ "Department" } addBtn={ true } addBtnTitle={ "Add Department" } handleAdd={ addField }>
         <DepartmentForm
           fields={ fields }
           fieldValues={ fieldValues }

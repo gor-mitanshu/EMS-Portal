@@ -5,11 +5,17 @@ const employeeController = require('../controllers/employeeController');
 const verifyToken = require('../middleware/authMiddleware');
 // File store process
 const path = require('path');
+const fs = require('fs');
 const multer = require('multer');
 
 const storage = multer.diskStorage({
      destination: (req, file, cb) => {
-          cb(null, './images/');
+          const folderPath = './files/';
+          // Check if the folder exists, if not, create it
+          if (!fs.existsSync(folderPath)) {
+               fs.mkdirSync(folderPath);
+          }
+          cb(null, folderPath);
      },
      filename: (req, file, cb) => {
           const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
