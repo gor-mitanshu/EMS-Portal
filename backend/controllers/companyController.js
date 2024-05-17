@@ -120,6 +120,7 @@ const companyController = {
     }
   },
 
+  // Department
   addDepartment: async (req, res) => {
     try {
       const { id } = req.params;
@@ -183,7 +184,7 @@ const companyController = {
         // }
       ]);
 
-      res.status(200).json(departments);
+      res.status(200).send({ departments: departments });
     } catch (err) {
       console.error(err);
       res.status(500).json({ message: 'Server error' });
@@ -196,11 +197,12 @@ const companyController = {
       const department = await DepartmentSchema.findByIdAndDelete(id);
       const subDepartment = await SubDepartmentSchema.deleteMany({ department_id: id });
       if (department && subDepartment) {
-        res.status(200).json({ message: 'Department and its sub-departments deleted successfully' });
+        res.status(200).json({ message: 'Deleted successfully' });
       } else {
-        res.status(401).json({ message: 'Department and its sub-departments deleted Unsuccessfully' });
+        res.status(401).json({ message: 'Deleted Unsuccessfully' });
       }
     } catch (err) {
+      console.error('Error deleting department:', err);
       res.status(500).json({ message: 'Server error' });
     }
   },
@@ -210,11 +212,12 @@ const companyController = {
       const { id } = req.params;
       const deleteSubDepartment = await SubDepartmentSchema.findByIdAndDelete(id);
       if (deleteSubDepartment) {
-        res.status(200).json({ message: 'Sub-department deleted successfully' });
+        res.status(200).json({ message: 'Deleted successfully' });
       } else {
-        res.status(401).json({ message: 'Sub-departments deleted Unsuccessfully' });
+        res.status(401).json({ message: 'Deleted Unsuccessfully' });
       }
     } catch (err) {
+      console.error('Error deleting sub-department:', err);
       res.status(500).json({ message: 'Server error' });
     }
   },
@@ -225,12 +228,15 @@ const companyController = {
       const { department } = req.body;
 
       // Update the department name
-      await DepartmentSchema.findByIdAndUpdate(id, { department });
-
-      res.status(200).json({ message: 'Department name updated successfully' });
+      const updatedDepartment = await DepartmentSchema.findByIdAndUpdate(id, { department }, { new: true });
+      if (updatedDepartment) {
+        res.status(200).json({ message: 'Department name updated successfully' });
+      } else {
+        res.status(404).json({ message: 'Department not found' });
+      }
     } catch (err) {
-      console.error(err);
-      res.status(500).json({ message: 'Server error' });
+      console.error('Error updating department name:', err);
+      res.status(500).json({ message: 'Server error while updating department name' });
     }
   },
 
@@ -240,12 +246,16 @@ const companyController = {
       const { sub_departments } = req.body;
 
       // Update the sub-department name
-      await SubDepartmentSchema.findByIdAndUpdate(id, { sub_departments });
+      const updatedSubDepartment = await SubDepartmentSchema.findByIdAndUpdate(id, { sub_departments }, { new: true });
 
-      res.status(200).json({ message: 'Sub-department name updated successfully' });
+      if (updatedSubDepartment) {
+        res.status(200).json({ message: 'Sub-department name updated successfully' });
+      } else {
+        res.status(404).json({ message: 'Sub-department not found' });
+      }
     } catch (err) {
-      console.error(err);
-      res.status(500).json({ message: 'Server error' });
+      console.error('Error updating sub-department name:', err);
+      res.status(500).json({ message: 'Server error while updating sub-department name' });
     }
   },
 

@@ -12,103 +12,114 @@ const DepartmentForm = ({
 }) => {
   return (
     <>
-      {fields.map((field) => (
-        <div key={field.id} className="d-flex align-items-center mb-4">
-          <div className="d-flex border p-4 rounded-3 w-100">
-            <div className="w-100 pe-3">
-              <div className="form-input-wrapper me-3">
-                <select
-                  type="text"
-                  className="form-input px-0"
-                >
-                  <option value="default">Department head</option>
-                  <option value="dsdsdsdsdas">dsdsds head</option>
-                  <option value="Dsadaepartment">Dsadaepartment head</option>
-                  <option value="sadwdDepartment">sadwdDepartment head</option>
-                  <option value="Departmsdasxdsaent">Departmsdasxdsaent head</option>
-                </select>
-              </div>
+      { fields.map((field) => (
+        <div key={ field.id } className="department-field">
+          <div className="department-field-inner">
+            <div className="department-select">
+              <select
+                className="form-input"
+              >
+                <option value="default">Department head</option>
+                <option value="dsdsdsdsdas">dsdsds head</option>
+                <option value="Dsadaepartment">Dsadaepartment head</option>
+                <option value="sadwdDepartment">sadwdDepartment head</option>
+                <option value="Departmsdasxdsaent">Departmsdasxdsaent head</option>
+              </select>
             </div>
-            <div className="w-100 pe-3">
-              <div className="form-input-wrapper me-3">
-                <input
-                  type="text"
-                  className="form-input px-0"
-                  placeholder="Department"
-                  value={fieldValues[field.id]?.department || ""}
-                  onChange={(e) =>
-                    handleChange(field.id, "department", e.target.value)
-                  }
-                />
-              </div>
+            <div className="department-input">
+              <input
+                type="text"
+                className="form-input"
+                placeholder="Department"
+                value={ fieldValues[field.id]?.department || "" }
+                onChange={ (e) =>
+                  handleChange(field.id, "department", e.target.value)
+                }
+              />
             </div>
-            <div className="w-100">
-              {fieldValues[field.id]?.subdepartments?.map(
+            <div className="department-subdepartments">
+              { fieldValues[field.id]?.subdepartments?.map(
                 (subdepartment, index) => (
-                  <div className="d-flex">
-                    <div className="form-input-wrapper me-4 w-100">
-                      <input
-                        type="text"
-                        className="form-input px-0"
-                        placeholder={`Subdepartment ${index + 1}`}
-                        value={subdepartment}
-                        onChange={(e) => {
-                          const newSubdepartments = [
-                            ...fieldValues[field.id].subdepartments,
-                          ];
-                          newSubdepartments[index] = e.target.value;
-                          handleChange(
-                            field.id,
-                            "subdepartments",
-                            newSubdepartments
-                          );
-                        }}
-                      />
-                    </div>
-                    <div>
-                      <FontAwesomeIcon icon={faTrash} className="mt-2 fs-5 text-danger" role="button"
-                        onClick={() => {
-                          const newSubdepartments = [
-                            ...fieldValues[field.id].subdepartments,
-                          ];
-                          newSubdepartments.splice(index, 1);
-                          handleChange(
-                            field.id,
-                            "subdepartments",
-                            newSubdepartments
-                          );
-                        }} />
-                    </div>
+                  <div key={ index } className="subdepartment">
+                    <input
+                      type="text"
+                      className="form-input"
+                      placeholder={ `Subdepartment ${index + 1}` }
+                      value={ subdepartment }
+                      onChange={ (e) => {
+                        const newSubdepartments = [
+                          ...fieldValues[field.id].subdepartments,
+                        ];
+                        newSubdepartments[index] = e.target.value;
+                        handleChange(
+                          field.id,
+                          "subdepartments",
+                          newSubdepartments
+                        );
+                      } }
+                    />
+                    <FontAwesomeIcon
+                      icon={ faTrash }
+                      className="delete-subdepartment"
+                      onClick={ () => {
+                        const newSubdepartments = [
+                          ...fieldValues[field.id].subdepartments,
+                        ];
+                        newSubdepartments.splice(index, 1);
+                        handleChange(
+                          field.id,
+                          "subdepartments",
+                          newSubdepartments
+                        );
+                      } }
+                    />
                   </div>
-                ))}
-              <button className="btn btn-outline-primary"
-                onClick={() => {
+                )
+              ) }
+              <button
+                className="btn btn-outline-primary add-subdepartment"
+                onClick={ () => {
                   const newSubdepartments = [
                     ...(fieldValues[field.id]?.subdepartments || []),
                     "",
                   ];
-                  handleChange(field.id, "subdepartments", newSubdepartments);
-                }}>
-                <FontAwesomeIcon icon={faPlus} /> Add Subdepartment
+                  handleChange(
+                    field.id,
+                    "subdepartments",
+                    newSubdepartments
+                  );
+                } }
+              >
+                <FontAwesomeIcon icon={ faPlus } /> Add Subdepartment
               </button>
             </div>
           </div>
-          <div className="ms-3">
-            <FontAwesomeIcon icon={faTrash} className="text-danger fs-5 px-3" role="button" onClick={() => removeField(field.id)} />
+          <div className="delete-department">
+            <FontAwesomeIcon
+              icon={ faTrash }
+              className="delete-department-icon"
+              onClick={ () => removeField(field.id) }
+            />
           </div>
         </div>
-      ))}
-      <div className="d-flex align-items-center justify-content-between">
-        {fields.length > 0 && (
+      )) }
+      <div className="department-buttons">
+        { fields.length > 0 && (
           <div>
-            <button className="btn btn-outline-danger me-3 px-4" onClick={handleCancel}>
+            <button
+              className="btn btn-outline-danger cancel-button"
+              onClick={ handleCancel }
+            >
               Cancel
             </button>
-            <button className="btn btn-primary px-4" onClick={handleSubmit}>
+            <button
+              className="btn btn-primary submit-button"
+              onClick={ handleSubmit }
+            >
               Submit
             </button>
           </div>
-        )}
+        ) }
       </div>
     </>
   );
