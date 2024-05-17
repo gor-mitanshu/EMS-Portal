@@ -228,7 +228,6 @@ const CompanyPolices = ({ accessToken, companyId }) => {
                 onChange={handleFileChange} className="d-none" />
               <div className="input-error">{formErrors.file}</div>
             </div>
-
             <div className="d-flex align-items-center justify-content-end mt-3">
               <button className="me-2 btn btn-danger" type="button" onClick={handleCancel}>
                 Cancel

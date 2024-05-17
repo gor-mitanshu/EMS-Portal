@@ -26,6 +26,7 @@ const initialState = {
   notice_period: "",
   last_working_day: "",
 }
+
 const Work = ({ accessToken, userId }) => {
   const [editMode, setEditMode] = useState({
     basicInfo: false,
@@ -37,7 +38,6 @@ const Work = ({ accessToken, userId }) => {
   const [employee, setEmployee] = useState({})
   const [formErrors, setFormErrors] = useState(initialState);
 
-  // Handle Change
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -50,7 +50,6 @@ const Work = ({ accessToken, userId }) => {
     });
   };
 
-  // Handle Edit Click
   const handleEditClick = (section) => {
     setEditMode((prevEditMode) => ({
       ...prevEditMode,
@@ -58,7 +57,6 @@ const Work = ({ accessToken, userId }) => {
     }));
   };
 
-  //Handle Cancel Click
   const handleCancelClick = (section) => {
     if (hasChanges(formData)) {
       Swal.fire({
@@ -77,7 +75,6 @@ const Work = ({ accessToken, userId }) => {
             [section]: false,
           }));
 
-          // Reset validation errors for all fields in the specific card
           setFormErrors((prevFormErrors) => ({
             ...prevFormErrors,
             ...(section === "basicInfo" && {
@@ -111,7 +108,6 @@ const Work = ({ accessToken, userId }) => {
         [section]: false,
       }));
 
-      // Reset validation errors for all fields in the specific card
       setFormErrors((prevFormErrors) => ({
         ...prevFormErrors,
         ...(section === "basicInfo" && {
@@ -148,9 +144,9 @@ const Work = ({ accessToken, userId }) => {
     );
     if (res && res.status === 200) {
       const { workDetails } = res.data;
-      setFormData(workDetails);
-      setEmployee(workDetails)
-      initialUser.current = workDetails;
+      setFormData(workDetails ? workDetails : initialState);
+      setEmployee(workDetails ? workDetails : initialState);
+      initialUser.current = workDetails ? workDetails : initialState;
     }
   }, [accessToken, userId]);
 
@@ -160,10 +156,7 @@ const Work = ({ accessToken, userId }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Error Handling
     let errors = {};
-    // Validate each field based on the section
-    // Basic Info Section
     if (editMode.basicInfo) {
       if (!formData.employee_code) {
         errors.employee_code = "Employee Id is required";
@@ -184,7 +177,6 @@ const Work = ({ accessToken, userId }) => {
         errors.probation_period = "Probation Period is required";
       }
     }
-    // Work Info Section
     if (editMode.workInfo) {
       if (!formData.designation) {
         errors.designation = "Designation is required";
@@ -199,7 +191,6 @@ const Work = ({ accessToken, userId }) => {
         errors.sub_department = "Sub-Department is required";
       }
     }
-    // Address Section
     if (editMode.resignationInfo) {
       if (!formData.resignation_date) {
         errors.resignation_date = "Resignation Info is required";
@@ -216,7 +207,6 @@ const Work = ({ accessToken, userId }) => {
     }
 
     setFormErrors(errors);
-    // If there are no errors, you can submit the form
     if (Object.keys(errors).length === 0) {
       try {
         if (!!employee) {
@@ -254,7 +244,9 @@ const Work = ({ accessToken, userId }) => {
       }
     }
   };
+
   const hasChanges = (changedData) => {
+    console.log(changedData);
     return (
       changedData.employee_code !== initialUser.current.employee_code ||
       changedData.date_of_joining !== initialUser.current.date_of_joining ||
@@ -275,240 +267,233 @@ const Work = ({ accessToken, userId }) => {
   };
   return (
     <>
-      <div>
-        <form onSubmit={ handleSubmit }>
-          <div className="row">
-            {/* Card 1 */ }
-            <div className="col-md-7">
-              <Card
-                title="Basic Info"
-                editMode={ editMode.basicInfo }
-                handleEditClick={ () => handleEditClick("basicInfo") }
-                handleCancelClick={ () => handleCancelClick("basicInfo") }
-              >
-                { editMode.basicInfo ? (
-                  <>
-                    <BasicInfoForm
-                      formData={ formData }
-                      formErrors={ formErrors }
-                      handleInputChange={ handleInputChange }
-                      handleCancel={ () => handleCancelClick("basicInfo") }
-                    />
-                  </>
-                ) : (
-                  <>
-                    <div className="user-details">
-                      { employee ?
-                        <>
-                          <div className="row">
-                            <div className="col-md-4">
-                              <p>
-                                <strong>Employee ID:</strong>
-                                { employee.employee_code || "" }
-                              </p>
-                            </div>
-
-                            <div className="col-md-4">
-                              <p>
-                                <strong>Date of Joining:</strong>
-                                { employee.date_of_joining || "" }
-                              </p>
-                            </div>
-
-                            <div className="col-md-4">
-                              <p>
-                                <strong>Probation Period:</strong>
-                                { employee.probation_period || "" }
-                              </p>
-                            </div>
-                          </div>
-
-                          <div className="row">
-                            <div className="col-md-4">
-                              <p>
-                                <strong>Employee Type:</strong>
-                                { employee.employment_type || "" }
-                              </p>
-                            </div>
-
-                            <div className="col-md-4">
-                              <p>
-                                <strong>Work Location:</strong>
-                                { employee.work_location || "" }
-                              </p>
-                            </div>
-
-                            <div className="col-md-4">
-                              <p>
-                                <strong>Employee Status:</strong>
-                                { employee.employee_status || "" }
-                              </p>
-                            </div>
-                          </div>
-
-                          <div className="row">
-                            <div className="col-md-6">
-                              <p>
-                                <strong>Work Experience:</strong>
-                                { employee.work_experience || "" }
-                              </p>
-                            </div>
-                          </div>
-                        </> : <h3>No Data Found</h3>
-                      }
-                    </div>
-                  </>
-                ) }
-              </Card>
-            </div>
-
-            {/* Card 2 */ }
-            <div className="col-md-5">
-              <Card
-                title="Work Info"
-                editMode={ editMode.workInfo }
-                handleEditClick={ () => handleEditClick("workInfo") }
-                handleCancelClick={ () => handleCancelClick("workInfo") }
-              >
-                { editMode.workInfo ? (
-                  <>
-                    <WorkInfoForm
-                      formData={ formData }
-                      formErrors={ formErrors }
-                      handleInputChange={ handleInputChange }
-                      handleCancel={ () => handleCancelClick("workInfo") }
-                    />
-                  </>
-                ) : (
-                  <div className="user-details">
-                    { employee ?
-                      <>
-                        <div className="row">
-                          <div className="col-md-6">
-                            <p>
-                              <strong>Designation:</strong>
-                              { employee.designation || "" }
-                            </p>
-                          </div>
-                          <div className="col-md-6">
-                            <p>
-                              <strong>Job Title:</strong> { employee.job_title || "" }
-                            </p>
-                          </div>
-                        </div><div className="row">
-                          <div className="col-md-6">
-                            <p>
-                              <strong>Department:</strong>
-                              { employee.department || "" }
-                            </p>
-                          </div>
-                          <div className="col-md-6">
-                            <p>
-                              <strong>Sub Department:</strong>
-                              { employee.sub_department || "" }
-                            </p>
-                          </div>
-                        </div>
-                      </> :
-                      <h3>No Data Found</h3>
-                    }
-
-                  </div>
-                ) }
-              </Card>
-            </div>
-          </div >
-
-          {/* Card 3 */ }
-          < div className="row" >
-            <div className="col-md-12">
-              <Card title="Work History">
+      <form onSubmit={handleSubmit}>
+        <div className="row">
+          <div className="col-md-7">
+            <Card
+              title="Basic Info"
+              editMode={editMode.basicInfo}
+              handleEditClick={() => handleEditClick("basicInfo")}
+              handleCancelClick={() => handleCancelClick("basicInfo")}
+            >
+              {editMode.basicInfo ? (
+                <>
+                  <BasicInfoForm
+                    formData={formData}
+                    formErrors={formErrors}
+                    handleInputChange={handleInputChange}
+                    handleCancel={() => handleCancelClick("basicInfo")}
+                  />
+                </>
+              ) : (
                 <>
                   <div className="user-details">
-                    <div className="row">
-                      <div className="col-md-3">
-                        <p>
-                          <strong>Department</strong>
-                        </p>
-                      </div>
-                      <div className="col-md-3">
-                        <p>
-                          <strong>Designation</strong>
-                        </p>
-                      </div>
-                      <div className="col-md-3">
-                        <p>
-                          <strong>From</strong>
-                        </p>
-                      </div>
-                      <div className="col-md-3">
-                        <p>
-                          <strong>To</strong>
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </>
-              </Card>
-            </div>
-          </div >
-
-          {/* Card 4 */ }
-          <div div className="row" >
-            <div className="col-md-12">
-              <Card
-                title="Resignation Info"
-                editMode={ editMode.resignationInfo }
-                handleEditClick={ () => handleEditClick("resignationInfo") }
-                handleCancelClick={ () => handleCancelClick("resignationInfo") }
-              >
-                { editMode.resignationInfo ? (
-                  <>
-                    <ResignationInfoForm
-                      formData={ formData }
-                      formErrors={ formErrors }
-                      handleInputChange={ handleInputChange }
-                      handleCancel={ () => handleCancelClick("resignationInfo") }
-                    />
-                  </>
-                ) : (
-                  <div className="user-details">
-                    { employee ?
-
+                    {employee ?
                       <>
                         <div className="row">
-                          <div className="col-md-6">
+                          <div className="col-md-4">
                             <p>
-                              <strong>Resignation Date:</strong> { formData.resignation_date || "" }
+                              <strong>Employee ID:</strong>
+                              {employee.employee_code || ""}
                             </p>
                           </div>
-                          <div className="col-md-6">
+
+                          <div className="col-md-4">
                             <p>
-                              <strong>Resignation Status:</strong> { formData.resignation_status || "" }
+                              <strong>Date of Joining:</strong>
+                              {employee.date_of_joining || ""}
                             </p>
                           </div>
-                        </div><div className="row">
-                          <div className="col-md-6">
+
+                          <div className="col-md-4">
                             <p>
-                              <strong>Notice Period:</strong> { formData.notice_period || "" }
-                            </p>
-                          </div>
-                          <div className="col-md-6">
-                            <p>
-                              <strong>Last Working Day:</strong> { formData.last_working_day || "" }
+                              <strong>Probation Period:</strong>
+                              {employee.probation_period || ""}
                             </p>
                           </div>
                         </div>
-                      </> : <h3>
-                        No data found</h3>
+
+                        <div className="row">
+                          <div className="col-md-4">
+                            <p>
+                              <strong>Employee Type:</strong>
+                              {employee.employment_type || ""}
+                            </p>
+                          </div>
+
+                          <div className="col-md-4">
+                            <p>
+                              <strong>Work Location:</strong>
+                              {employee.work_location || ""}
+                            </p>
+                          </div>
+
+                          <div className="col-md-4">
+                            <p>
+                              <strong>Employee Status:</strong>
+                              {employee.employee_status || ""}
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="row">
+                          <div className="col-md-6">
+                            <p>
+                              <strong>Work Experience:</strong>
+                              {employee.work_experience || ""}
+                            </p>
+                          </div>
+                        </div>
+                      </> : <h3>No Data Found</h3>
                     }
                   </div>
-                ) }
-              </Card>
-            </div>
-          </div >
-        </form >
-      </div >
+                </>
+              )}
+            </Card>
+          </div>
+
+          <div className="col-md-5">
+            <Card
+              title="Work Info"
+              editMode={editMode.workInfo}
+              handleEditClick={() => handleEditClick("workInfo")}
+              handleCancelClick={() => handleCancelClick("workInfo")}
+            >
+              {editMode.workInfo ? (
+                <WorkInfoForm
+                  formData={formData}
+                  formErrors={formErrors}
+                  handleInputChange={handleInputChange}
+                  handleCancel={() => handleCancelClick("workInfo")}
+                />
+              ) : (
+                <div className="user-details">
+                  {employee ?
+                    <>
+                      <div className="row">
+                        <div className="col-md-6">
+                          <p>
+                            <strong>Designation:</strong>
+                            {employee.designation || ""}
+                          </p>
+                        </div>
+                        <div className="col-md-6">
+                          <p>
+                            <strong>Job Title:</strong> {employee.job_title || ""}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="row">
+                        <div className="col-md-6">
+                          <p>
+                            <strong>Department:</strong>
+                            {employee.department || ""}
+                          </p>
+                        </div>
+                        <div className="col-md-6">
+                          <p>
+                            <strong>Sub Department:</strong>
+                            {employee.sub_department || ""}
+                          </p>
+                        </div>
+                      </div>
+                    </> :
+                    <h3>No Data Found</h3>
+                  }
+
+                </div>
+              )}
+            </Card>
+          </div>
+        </div >
+
+        < div className="row" >
+          <div className="col-md-12">
+            <Card title="Work History">
+              <>
+                <div className="user-details">
+                  <div className="row">
+                    <div className="col-md-3">
+                      <p>
+                        <strong>Department</strong>
+                      </p>
+                    </div>
+                    <div className="col-md-3">
+                      <p>
+                        <strong>Designation</strong>
+                      </p>
+                    </div>
+                    <div className="col-md-3">
+                      <p>
+                        <strong>From</strong>
+                      </p>
+                    </div>
+                    <div className="col-md-3">
+                      <p>
+                        <strong>To</strong>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </>
+            </Card>
+          </div>
+        </div >
+
+        <div className="row" >
+          <div className="col-md-12">
+            <Card
+              title="Resignation Info"
+              editMode={editMode.resignationInfo}
+              handleEditClick={() => handleEditClick("resignationInfo")}
+              handleCancelClick={() => handleCancelClick("resignationInfo")}
+            >
+              {editMode.resignationInfo ? (
+                <>
+                  <ResignationInfoForm
+                    formData={formData}
+                    formErrors={formErrors}
+                    handleInputChange={handleInputChange}
+                    handleCancel={() => handleCancelClick("resignationInfo")}
+                  />
+                </>
+              ) : (
+                <div className="user-details">
+                  {employee ?
+                    <>
+                      <div className="row">
+                        <div className="col-md-6">
+                          <p>
+                            <strong>Resignation Date:</strong> {formData.resignation_date || ""}
+                          </p>
+                        </div>
+                        <div className="col-md-6">
+                          <p>
+                            <strong>Resignation Status:</strong> {formData.resignation_status || ""}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="row">
+                        <div className="col-md-6">
+                          <p>
+                            <strong>Notice Period:</strong> {formData.notice_period || ""}
+                          </p>
+                        </div>
+                        <div className="col-md-6">
+                          <p>
+                            <strong>Last Working Day:</strong> {formData.last_working_day || ""}
+                          </p>
+                        </div>
+                      </div>
+                    </> : <h3>
+                      No data found</h3>
+                  }
+                </div>
+              )}
+            </Card>
+          </div>
+        </div >
+      </form >
     </>
   );
 };

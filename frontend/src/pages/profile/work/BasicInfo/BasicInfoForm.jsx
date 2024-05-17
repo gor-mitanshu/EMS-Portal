@@ -28,6 +28,7 @@ const BasicInfoForm = ({
                 </label>
                 <input
                   type="text"
+                  id="employee_code"
                   className="form-control no-focus-box-shadow"
                   placeholder="Employee ID"
                   name="employee_code"
@@ -52,6 +53,7 @@ const BasicInfoForm = ({
                 <select
                   className="form-select no-focus-box-shadow"
                   name="employment_type"
+                  id="employee_type"
                   value={ formData.employment_type }
                   onChange={ handleInputChange }
                 >
@@ -78,6 +80,7 @@ const BasicInfoForm = ({
                 </label>
                 <input
                   type="date"
+                  id="date_of_joining"
                   className="form-control no-focus-box-shadow"
                   placeholder="Date of Joining"
                   name="date_of_joining"
@@ -99,10 +102,11 @@ const BasicInfoForm = ({
           <div className="col-md-4">
             <div className="form-group row">
               <div className="col mb-3">
-                <label htmlFor="employee_type" className="font-weight-bold">
+                <label htmlFor="work_location" className="font-weight-bold">
                   Work Location:
                 </label>
                 <select
+                  id="work_location"
                   className="form-select no-focus-box-shadow"
                   name="work_location"
                   value={ formData.work_location }
@@ -127,6 +131,7 @@ const BasicInfoForm = ({
                   Work Experience:
                 </label>
                 <input
+                  id="work_experience"
                   type="text"
                   className="form-control no-focus-box-shadow"
                   placeholder="Experience in months"
@@ -151,6 +156,7 @@ const BasicInfoForm = ({
                 </label>
                 <input
                   type="number"
+                  id="probation_period"
                   className="form-control no-focus-box-shadow"
                   placeholder="Date of Joining"
                   name="probation_period"
