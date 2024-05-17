@@ -336,7 +336,7 @@ const companyController = {
   // Policies
   addPolicy: async (req, res) => {
     const { id } = req.params;
-    let { policy_title, policy_description } = req.body;
+    let { title, description } = req.body;
     try {
       let file = '';
       if (req.files && req.files.length > 0) {
@@ -344,9 +344,9 @@ const companyController = {
       }
       const policyData = new PolicySchema({
         company_id: id,
-        policy_title,
-        policy_description,
-        policy_file: file,
+        title,
+        description,
+        file: file,
       });
       await policyData.save();
       res.status(200).send({
@@ -391,25 +391,26 @@ const companyController = {
           success: false,
         });
       }
-      const { policy_title, policy_description } = req.body;
-      let policy_file = '';
+      const { title, description } = req.body;
+      let file = '';
+      console.log(req.files)
       if (req.files && req.files.length > 0) {
-        policy_file = req.files[0].filename;
+        file = req.files[0].filename;
         const existingPolicy = await PolicySchema.findById({ _id: policy._id });
-        if (existingPolicy && existingPolicy.policy_file) {
-          const filePath = path.join('files', existingPolicy.policy_file);
+        if (existingPolicy && existingPolicy.file) {
+          const filePath = path.join('files', existingPolicy.file);
           fs.existsSync(filePath) && fs.unlinkSync(filePath);
         }
       } else {
         const existingPolicy = await PolicySchema.findById({ _id: policy._id });
         if (existingPolicy) {
-          policy_file = existingPolicy.policy_file;
+          file = existingPolicy.file;
         }
       }
       const updatedFields = {
-        policy_title,
-        policy_description,
-        policy_file,
+        title,
+        description,
+        file,
       }
       const updatedDocument = await PolicySchema.findOneAndUpdate(
         { _id: id },
@@ -442,7 +443,7 @@ const companyController = {
         return res.status(404).json({ success: false, message: "Document not found" });
       }
       //  Delete the associated file
-      const filePath = path.join('files', deletePolicy.policy_file);
+      const filePath = path.join('files', deletePolicy.file);
       if (fs.existsSync(filePath)) {
         fs.unlinkSync(filePath);
       }
